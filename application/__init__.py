@@ -2,6 +2,8 @@ import requests
 import os
 from flask import Flask, render_template, jsonify, url_for, request
 
+
+
 def create_app(test_config=None):
     # Create and configure the app
     application = Flask(__name__, instance_relative_config=True)
@@ -23,6 +25,13 @@ def create_app(test_config=None):
         os.makedirs(application.instance_path)
     except OSError:
         pass
+    
+    
+    
+    # Import modules
+    from .modules.codeskills import dictionaries
+    application.register_blueprint(dictionaries.bpapp)
+    
 
     @application.route('/')
     def index():
@@ -32,5 +41,7 @@ def create_app(test_config=None):
     @application.route("/test")
     def hello():
         return "<h2>Hello, this a test </h2>"
+    
+   
     
     return application
