@@ -20,7 +20,7 @@ def create_application(test_config=None):
         return  f"My name is {name}"
     
     @app.route('/blog', methods=['GET'])
-    def blog(name):
+    def blog():
         return  render_template('index.html')
 
     return app
