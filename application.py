@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+""" from flask import Flask, jsonify
 
 
 app = Flask("Test")
@@ -14,3 +14,9 @@ def person(name):
 if __name__ == '__main__':
     app.run(debug=True)
 
+"""
+
+
+import core
+app = core.create_application()
+app.run(debug=True)
