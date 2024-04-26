@@ -4,7 +4,7 @@ from flask import Flask, render_template, jsonify, url_for, request
 
 
 
-def create_app(test_config=None):
+def create_application(test_config=None):
     # Create and configure the app
     application = Flask(__name__, instance_relative_config=True)
     application.config.from_mapping(
