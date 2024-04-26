@@ -1,6 +1,8 @@
 
 import os
-from flask import Flask, jsonify
+from flask import (
+    Flask, jsonify, render_template
+)
 
 def create_application(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -16,6 +18,10 @@ def create_application(test_config=None):
     @app.route('/person/<name>', methods=['GET'])
     def person(name):
         return  f"My name is {name}"
+    
+    @app.route('/blog', methods=['GET'])
+    def blog(name):
+        return  render_template('index.html')
 
     return app
 
