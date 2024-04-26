@@ -1,4 +1,4 @@
-import os
+"""import os
 from flask import Flask, jsonify
 
 
@@ -16,6 +16,12 @@ def index():
 def person(name):
     return  f"My name is {name}"
 
+
+
+"""
+
+import core
+
+app=core.create_application()
 if __name__ == '__main__':
     app.run(debug=True)
-
