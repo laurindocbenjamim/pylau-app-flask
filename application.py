@@ -1,7 +1,12 @@
+import os
 from flask import Flask, jsonify
 
 
-app = Flask("Test")
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_mapping(
+    SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9",
+    DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+)
 
 @app.route('/', methods=['GET'])
 def index():
