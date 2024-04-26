@@ -35,7 +35,8 @@ def create_application(test_config=None):
 
     @application.route('/')
     def index():
-        return render_template('index.html')
+        #return render_template('index.html')
+        return jsonify({"message": "Ola Mundo"})
    
     # Simple page that say hello
     @application.route("/test")
