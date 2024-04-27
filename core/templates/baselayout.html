@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="en" data-bs-theme="auto">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="txt/javascript" src="{{ url_for('static', filename='assets/js/color-modes.js')}}"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Laurindo">
     <title>{% block title %} {% endblock %} PyLau</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
   <style>
     .bd-placeholder-img {
@@ -86,6 +97,11 @@
       display: block !important;
     }
   </style>
+
+  <!-- Custom styles for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link type="txt/css" href="{{ url_for('static', filename='assets/css/blog.css')}}" rel="stylesheet">
 </head>
 <body>
 
