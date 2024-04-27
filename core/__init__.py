@@ -13,7 +13,7 @@ def create_application(test_config=None):
 
     @app.route('/', methods=['GET'])
     def index():
-        return jsonify({"sms": "Ola mundo"})
+        return  render_template('index.html')
 
     @app.route('/person/<name>', methods=['GET'])
     def person(name):
