@@ -5,7 +5,7 @@ from flask import (
 )
 
 def create_application(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, static_folder="static", static_url_path="static", instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9",
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -16,7 +16,9 @@ def create_application(test_config=None):
     app.register_blueprint(dictionaries.bpapp)
 
 
-
+    @app.route('/api', methods=['GET', 'POST'])
+    def api():
+        return render_template('fetchapi/api.html')
 
     @app.route('/', methods=['GET'])
     def index():

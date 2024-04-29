@@ -5,3 +5,4 @@ mysql-connector-python
 psycopg2
 requests
 seaborn
+flask_sqlalchemy
