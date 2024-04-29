@@ -1,11 +1,11 @@
 
 import os
 from flask import (
-    Flask, jsonify, render_template
+    Flask, jsonify, render_template, request, json
 )
 
 def create_application(test_config=None):
-    app = Flask(__name__, static_folder="static", static_url_path="static", instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9",
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -24,9 +24,16 @@ def create_application(test_config=None):
     def index():
         return  render_template('index.html')
 
-    @app.route('/person/<name>', methods=['GET'])
-    def person(name):
-        return  f"My name is {name}"
+    @app.route('/person', methods=['GET', 'POST'])
+    def person():
+        peoples=[]
+        
+        if request.method =='GET':            
+            return jsonify({"object": peoples})
+        if request.method == 'POST':
+            code = request.form['code']
+            peoples.append({"name": "new", "age": code})
+            return jsonify({"object": peoples})
     
     @app.route('/blog', methods=['GET'])
     def blog():

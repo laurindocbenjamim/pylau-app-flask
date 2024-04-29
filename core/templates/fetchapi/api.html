@@ -226,9 +226,9 @@
                         </li>
                     </ul>
 
-                    <form class="card p-2">
+                    <form  id="form-code" class="card p-2">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Promo code">
+                            <input type="text" class="form-control" name="code" id="code" placeholder="Promo code">
                             <button type="submit" class="btn btn-secondary">Redeem</button>
                         </div>
                     </form>
@@ -410,6 +410,9 @@
     crossorigin="anonymous"></script>
 
     <script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='script/form-payment.js') }}"></script>
+
 </body>
 
 </html>
