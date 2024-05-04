@@ -49,3 +49,40 @@ body {
   color: #fff;
   border-bottom-color: #fff;
 }
+
+
+.cover-container{
+  .container{
+    .col{
+      
+      .box-container{
+        margin: 0;
+        padding: 1rem ;
+        display: flex;
+
+
+        .box{
+          padding: 1rem 2.5rem;
+          margin-left: 2;
+          border: 1px solid #1b1b1b;
+
+          .ch-box{
+            padding: 1rem 1.5rem;
+            
+            border-top: 1px solid #1b1b1b;
+              border-left: 1px solid #1b1b1b;
+              border-bottom: 1px solid #1b1b1b;
+
+            .n-box{
+              padding: 0.5rem 1rem;
+              margin: 0;
+              border-top: 1px solid #1b1b1b;
+              border-left: 1px solid #1b1b1b;
+              border-bottom: 1px solid #1b1b1b;
+            }
+          }
+        }
+      }
+    }
+  }
+}
