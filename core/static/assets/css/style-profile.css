@@ -87,6 +87,12 @@ body {
                 border-radius: 4rem;
             }
         }
+
+        .description{
+            display: flex;
+
+           
+        }
     }
     header{
         div{
