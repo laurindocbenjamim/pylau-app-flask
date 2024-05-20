@@ -7,13 +7,19 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.118.2">
-    <title>Tuning</title>
+    <title>{% block title %} {% endblock %} Tuning</title>
 
+    <link href="{{ url_for('static', filename='assets/img/favicon/favicon.ico')}}" rel="icon">
+    
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cover/">
 
     
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -221,7 +227,7 @@ body {
 
   <main class="px-3">
     <h1>Thinking to inovate.</h1>
-    <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+    <p class="lead">A company's treasure lies in the data generated through its activities. Managing this data responsibly is a priority; otherwise, business failure is inevitable.</p>
     <p class="lead">
       <div class="">
         <a href="#" class="btn btn-lg btn-primary fw-bold border-white ">Learn more</a>
@@ -233,31 +239,78 @@ body {
   </main>
 
   <div class="container">
-    <div class="col">
+
+    <hr>
+
+    <div class="col-etl">
       <div class="box-container col-12">
         
         <div class="box">
-          <div class="ch-box">
-            <span>Logic</span>
-            <div class="n-box">
-              <span>Thinking</span>
-            </div>
-            <span>Sense</span>
+          <div class="etl">
+           <img src="{{ url_for('static', filename='assets/img/ETL PROCESS DIAGRAM_white.gif')}}" alt="">
           </div>
         </div>
 
-        <div class="box-2">
-          <div class="ch-box">
-            <span>Abstraction</span>
-            <div class="n-box">
-              <span>Algorithm</span>
+        <div class="box">
+          <div class="etl-detail">
+           <h1>Data Pipeline Process</h1>
+            <div class="content">
+              <span>
+                The process of Extract, Transform and Load data require to hard techniques and 
+                knowledge about the data you want to handle
+              </span>
             </div>
-            <span>Deployment</span>
           </div>
         </div>
 
       </div>
     </div>
+
+    <hr>
+
+    <div class="col-editor">
+      <div class="box-container col-12">
+        
+        <div class="editor">
+          <div class="top-bar">
+            <div class="points" style="margin-left: 2%;">
+              <i class="fa-solid fa-code"></i>
+              <i class="fa-solid fa-circle"></i>
+            </div>
+            <span style="margin-left: 3%;">Program Fundamental</span>
+          </div>
+
+          <div class="content">
+            <p>
+              >design your own Projects
+            </p>
+          </div>
+          
+        </div>
+
+        <div class="box-2">
+          <h3>Techologies</h3>
+          <div class="ch-box">
+            
+            <div class="item1">
+              <span>PL</span>
+            </div>
+
+            <div class="item2">
+              <span>Md</span>
+            </div>
+
+            <div class="item3">
+              <span>Alg</span>
+            </div>
+
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <footer class="mt-auto text-white-50">
