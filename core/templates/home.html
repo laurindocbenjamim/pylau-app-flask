@@ -1,0 +1,122 @@
+
+
+{% extends 'index.html' %}
+
+{% block header %}
+ <h1></h1> {% block title %} Home - {% endblock %}</h1>
+{% endblock %}  
+
+{% block content %}
+
+  <main class="px-3">
+    <h1>Thinking to inovate.</h1>
+    <p class="lead">A company's treasure lies in the data generated through its activities. Managing this data responsibly is a priority; otherwise, business failure is inevitable.</p>
+    <p class="lead">
+      <div class="">
+        <a href="#" class="btn btn-lg btn-primary fw-bold border-white ">Request Service</a>
+        <a href="#" class="btn btn-lg btn-light fw-bold border-white bg-white">Create a Data Pipeline</a>
+      </div>
+    </p>
+
+    
+  </main>
+
+  <div class="container">
+
+    <hr>
+
+    <div class="col-etl">
+      <div class="box-container col-12">
+        
+        <div class="box">
+          <div class="etl">
+           <img src="{{ url_for('static', filename='assets/img/ETL PROCESS DIAGRAM_white.gif')}}" alt="">
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="etl-detail">
+           <h1>Data Pipeline Process</h1>
+            <div class="content">
+              <span>
+                The process of Extract, Transform and Load data require to hard techniques and 
+                knowledge about the data you want to handle
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="col-editor">
+      <div class="box-container col-12">
+        
+        <div class="editor">
+          <div class="top-bar">
+            <div class="points" style="margin-left: 2%;">
+              <i class="fa-solid fa-code"></i>
+              <i class="fa-solid fa-circle"></i>
+            </div>
+            <span style="margin-left: 3%;">Program Fundamental</span>
+          </div>
+
+          <div class="content">
+            <p>
+              >design your own Projects
+            </p>
+          </div>
+          
+        </div>
+
+        <div class="box-2">
+          <h3>Techologies</h3>
+          <div class="ch-box">
+            
+            <div class="item1">
+              <span>PL</span>
+            </div>
+
+            <div class="item2">
+              <span>Md</span>
+            </div>
+
+            <div class="item3">
+              <span>Alg</span>
+            </div>
+
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-dev">
+      <div class="box-container col-12">
+        
+        <div class="profile">
+          <div class="photo">
+           <img src="{{ url_for('static', filename='assets/img/Laurindo-03-removebg-preview-edited-v1.png') }}" alt="developer-image">
+          </div>
+
+          <div class="detail">
+            <h3 class="name">Laurindo C.Benjmaim</h3>
+            <p>
+              Laurindo C.Benjamim is Data Engineer certificated by IBM, and Software Developer.
+            </p>
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+  {% endblock %}
+

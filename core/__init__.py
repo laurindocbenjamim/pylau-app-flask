@@ -1,7 +1,7 @@
 
 import os
 from flask import (
-    Flask, jsonify, render_template, request, json
+    Flask, jsonify, render_template, url_for, request, json
 )
 
 def create_application(test_config=None):
@@ -15,6 +15,9 @@ def create_application(test_config=None):
     from . modules.codeskill import dictionaries
     app.register_blueprint(dictionaries.bpapp)
 
+    from . modules.authmodule import auth
+    app.register_blueprint(auth.bpapp)
+
 
     @app.route('/api', methods=['GET', 'POST'])
     def api():
@@ -22,7 +25,11 @@ def create_application(test_config=None):
 
     @app.route('/', methods=['GET'])
     def index():
-        return  render_template('index.html')
+        return  render_template('home.html')
+
+    @app.route('/home', methods=['GET'])
+    def home():
+        return  render_template('home.html')
 
     @app.route('/person', methods=['GET', 'POST'])
     def person():
