@@ -219,5 +219,41 @@ body {
         }
       }
     }
+
+    .col-dev{
+      
+      .box-container{
+        margin: 0;
+        padding: 1rem ;
+        display: flex;
+        justify-content: center;
+
+        .profile{
+               
+          padding: .1rem .2rem;
+          display: flex;
+          border-radius: 10rem;
+          
+          .photo{
+            img{
+              width: 140px;   
+              height: 150px; 
+              border-radius: 6rem;
+              box-shadow: 5px 2px #616161;
+            }
+          }
+
+          .detail{
+            padding: .5rem 0;
+            h3{
+              font-size: 1.5rem;
+              margin-top: 6%;
+            }
+          }
+
+        }
+
+      }
+    }
   }
 }
