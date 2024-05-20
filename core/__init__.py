@@ -29,7 +29,7 @@ def create_application(test_config=None):
 
     @app.route('/home', methods=['GET'])
     def home():
-        return  render_template('home.html')
+        return render_template('laurindo-c-benjamim.html')
 
     @app.route('/person', methods=['GET', 'POST'])
     def person():
@@ -42,9 +42,9 @@ def create_application(test_config=None):
             peoples.append({"name": "new", "age": code})
             return jsonify({"object": peoples})
     
-    @app.route('/blog', methods=['GET'])
+    @app.route('/laurindo', methods=['GET'])
     def blog():
-        return  render_template('index.html')
+        return jsonify({"msms": 1222})
 
     return app
 
