@@ -3,9 +3,13 @@ import os
 from flask import (
     Flask, jsonify, render_template, url_for, request, json
 )
+from flask_cors import CORS
 
 def create_application(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+
+    CORS(app)
+
     app.config.from_mapping(
         SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9",
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -17,6 +21,9 @@ def create_application(test_config=None):
 
     from . modules.authmodule import auth
     app.register_blueprint(auth.bpapp)
+
+    from . modules.authmodule import authapi
+    from . modules.authmodule import register
 
 
     @app.route('/api', methods=['GET', 'POST'])

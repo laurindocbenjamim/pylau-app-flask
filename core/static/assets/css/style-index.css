@@ -270,6 +270,158 @@ body {
 /* Implement responsive style */
 
 
-@media (min-width: 768px) {
-  .h-md-250 { height: 250px; }
+@media (min-width: 412px) {
+  /*
+  .cover-container{
+    
+
+    header{
+      
+    
+
+      div{
+          
+        
+        h3{
+          color: #a72121;
+        }
+
+        nav{
+          a{
+            color: #555555;
+          }
+        }
+      }
+    }
+
+    .container{
+  
+      .col-etl{
+        .box-container{
+          flex-direction: column;
+
+          .box{
+          
+            .etl{
+              width: 100px;
+              img{
+                width: 220px;
+                height: 200px;
+              }           
+            }
+  
+            .etl-detail{
+              width: 220px;
+              h1{
+                
+              }
+  
+              .content{
+                
+                
+              }
+            }
+            
+          }
+        }
+      }
+  
+  
+      .col-editor{
+
+        .box-container{     
+          padding: 2rem 1rem;  
+          flex-direction: column;
+          display: contents;
+          justify-content: center;
+  
+          .editor{
+            width: 220px;
+  
+            .top-bar{
+  
+              span{
+                
+              }
+            }
+            .content{
+              
+            }
+          }
+  
+          .box-2{
+            width: 200px;
+            
+  
+            .ch-box{
+        
+  
+              .item1{
+                
+  
+                span{
+                  
+                }
+              }
+  
+              .item2{
+               
+  
+                span{
+                  color: #fff;
+                }
+                img{
+                  
+                }
+              }
+  
+              .item3{
+                span{
+                  
+                }
+              }
+            }
+          }
+  
+          .box-3{
+  
+            .ch-box{            
+              
+  
+              .n-box{       
+              }
+            }
+          }
+        }
+      }
+  
+      .col-dev{
+        
+        .box-container{
+         
+  
+          .profile{
+            flex-direction: column; 
+            
+            .photo{
+              img{
+               
+              }
+            }
+  
+            .detail{
+              
+              h3{
+                
+              }
+            }
+  
+          }
+  
+        }
+      }
+    }
+  }
+*/
+  
 }
