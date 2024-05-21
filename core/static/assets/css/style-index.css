@@ -112,16 +112,17 @@ body {
 
 
     .col-editor{
-      
+      width: 100%;
       .box-container{
         margin: 0;
+        width: 1000px;
         padding: 1rem ;
         display: flex;
         justify-content: center;
 
 
         .editor{
-          width: 400px;         
+          width: 500px;         
           padding: .1rem .2rem;
           border: 1.5px solid #1b1b1b;
           border-radius: .6rem;
@@ -151,6 +152,7 @@ body {
         }
 
         .box-2{
+          width: 600px;
           padding: .5rem 2.5rem;
           margin-left: 2;
           
@@ -159,6 +161,8 @@ body {
             margin-top: 50px;            
             display: flex;
             flex-direction: row;
+            text-align: center;
+            justify-content: center;
 
             .item1{
               padding: 1rem 0;
@@ -175,11 +179,14 @@ body {
             .item2{
               padding: 1rem 0;
              
-              background-color: #000;
+              background-color: transparent;
               border-radius: 10rem;
 
               span{
                 color: #fff;
+              }
+              img{
+                
               }
             }
 
@@ -187,7 +194,7 @@ body {
               padding: 1rem 0;
               width: 100px;
               height: 70px;
-              background-color: #a81212;
+              background-color: #000;
               border-radius: 10rem;
 
               span{
@@ -236,7 +243,7 @@ body {
           
           .photo{
             img{
-              width: 140px;   
+              width: 120px;   
               height: 150px; 
               border-radius: 6rem;
               box-shadow: 5px 2px #616161;
@@ -256,4 +263,13 @@ body {
       }
     }
   }
+}
+
+
+
+/* Implement responsive style */
+
+
+@media (min-width: 768px) {
+  .h-md-250 { height: 250px; }
 }
