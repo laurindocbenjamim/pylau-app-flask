@@ -82,7 +82,7 @@ body {
         .image{
             
             img{
-                width: 150px;
+                width: 110px;
                 height: 150px;
                 border-radius: 4rem;
             }
@@ -91,6 +91,9 @@ body {
         .description{
             display: flex;
 
+            .info{
+              text-align: justify;
+            }
            
         }
     }
