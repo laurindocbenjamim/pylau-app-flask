@@ -1,0 +1,196 @@
+
+
+
+{% extends 'index2.html' %}
+
+{% block header %}
+ <h1></h1> {% block title %} Home - {% endblock %}</h1>
+{% endblock %}  
+
+{% block content %}
+
+<style>
+  .center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.col-auto .data-processing{
+  width: 180px;
+  height: 130px;
+  margin-top: 20%;
+  margin-right: 5%;
+  border-radius: 7rem;
+}
+
+.col-auto .learn-code{
+  width: 180px;
+  height: 130px;
+  margin-top: 20%;
+  margin-right: 5%;
+  border-radius: 7rem;
+}
+</style>
+  <!--<div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="col-lg-6 px-0">
+      <h1 class="display-4 fst-italic welcome-info">Title of a longer featured blog post</h1>
+      <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+      <p class="lead mb-0"><a href="#" class="text-body-emphasis fw-bold">Continue reading...</a></p>
+    </div>
+  </div>-->
+
+  <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
+    <div class="col-lg-6 px-0">
+     
+      <h1 class="welcome-info">Thinking to inovate.</h1>
+      <p class="lead">A company's treasure lies in the data generated through its activities. Managing this data responsibly is a priority; otherwise, business failure is inevitable.</p>
+      <p class="lead">
+        <div class="">
+          <a href="#" class="btn btn-lg btn-primary fw-bold border-white ">Request Service</a>
+          
+        </div>
+      </p>
+
+    </div>
+</div>
+
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary-emphasis">World</strong>
+          <h3 class="mb-0">Featured post</h3>
+          <div class="mb-1 text-body-secondary">Nov 12</div>
+          <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Continue reading
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <img class="learn-code" src="https://s3-us-west-2.amazonaws.com/robogarden-new/Articles/upload/blogs/lg-leverage-of-coding.jpg" width="180" height="130" alt="" srcset="">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success-emphasis">Design</strong>
+          <h3 class="mb-0">Post title</h3>
+          <div class="mb-1 text-body-secondary">Nov 11</div>
+          <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Continue reading
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+       
+        <div class="col-auto d-none d-lg-block">
+          <img class="data-processing" src="https://i.pinimg.com/736x/bc/6b/df/bc6bdf5e8fd8f76d4b55d226a2a193b6.jpg" width="180" height="130" alt="" srcset="">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success-emphasis">Design</strong>
+          <h3 class="mb-0">Post title</h3>
+          <div class="mb-1 text-body-secondary">Nov 11</div>
+          <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Continue reading
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row g-5">
+    
+    <div class="col-md-8">
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">
+        From the Firehose
+      </h3>
+
+      <div class="col-etl col-md-2">
+        <div class="box-container col-md-2">
+          
+          <div class="box">
+            <div class="etl">
+             <img src="{{ url_for('static', filename='assets/img/ETL PROCESS DIAGRAM_white.gif')}}" alt="">
+            </div>
+          </div>
+  
+          <div class="box">
+            <div class="etl-detail">
+             <h1>Data Pipeline Process</h1>
+              <div class="content">
+                <span>
+                  The process of Extract, Transform and Load data require to hard techniques and 
+                  knowledge about the data you want to handle
+                </span>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+      
+
+      <nav class="blog-pagination" aria-label="Pagination">
+        <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
+        <a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
+      </nav>
+
+    </div>
+
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-md-2">
+      <div class="row g-0 overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+       
+        <div class="col-auto d-none d-lg-block">
+          <img src="{{ url_for('static', filename='assets/img/Laurindo-03-removebg-preview-edited-v1.png') }}" width="100" height="100" alt="developer-image">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row g-0 rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success-emphasis">Design</strong>
+          <h3 class="mb-0">Laurindo C.Benjmaim</h3>
+          <div class="mb-1 text-body-secondary">Nov 11</div>
+          <p class="mb-auto">Laurindo C.Benjamim is Data Engineer certificated by IBM, and Software Developer.
+            </p>
+          <a href="{{ url_for('home') }}" class="icon-link gap-1 icon-link-hover stretched-link">
+            Contact
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+  
+{% endblock %}
