@@ -19,11 +19,11 @@
 }
 
 .col-auto .data-processing{
-  width: 180px;
-  height: 130px;
+  width: 400px;
+  height: 300px;
   margin-top: 20%;
   margin-right: 5%;
-  border-radius: 7rem;
+  
 }
 
 .col-auto .learn-code{
@@ -61,10 +61,17 @@
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary-emphasis">World</strong>
-          <h3 class="mb-0">Featured post</h3>
-          <div class="mb-1 text-body-secondary">Nov 12</div>
-          <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+          
+          <strong class="d-inline-block mb-2 text-primary-emphasis">
+            <h3 class="mb-0">Training</h3>
+          </strong>
+          
+          <p class="card-text mb-auto">
+            <p class="card-text mb-auto">
+              We offer comprehensive training programs to help individuals and 
+              organizations enhance their skills and knowledge in various areas. 
+            </p></p>
+          </p>
           <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
             Continue reading
             <svg class="bi"><use xlink:href="#chevron-right"/></svg>
@@ -78,14 +85,22 @@
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success-emphasis">Design</strong>
-          <h3 class="mb-0">Post title</h3>
-          <div class="mb-1 text-body-secondary">Nov 11</div>
-          <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+
+          <strong class="d-inline-block mb-2 text-primary-emphasis">
+            <h3 class="mb-0">Consulting</h3>
+          </strong>
+
+          <p class="mb-auto">
+            We provide consulting services for companies that need to improve their data management and analysis processes
+          </p>
           <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
             Continue reading
             <svg class="bi"><use xlink:href="#chevron-right"/></svg>
           </a>
+        </div>
+
+        <div class="col-auto d-one d-lg-block">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlqko9M7c5zilUBHNhsJrjvpcgMnW7MH_xiQalkDiFUw&s" alt="" class="lean-code">
         </div>
         
       </div>
@@ -97,7 +112,7 @@
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
        
         <div class="col-auto d-none d-lg-block">
-          <img class="data-processing" src="https://i.pinimg.com/736x/bc/6b/df/bc6bdf5e8fd8f76d4b55d226a2a193b6.jpg" width="180" height="130" alt="" srcset="">
+          <img class="data-processing" src="{{ url_for('static', filename='assets/img/Data-processing-cyrcle.gif')}}" width="300" height="200" alt="" srcset="">
         </div>
       </div>
     </div>
