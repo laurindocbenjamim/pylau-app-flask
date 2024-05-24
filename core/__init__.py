@@ -22,8 +22,8 @@ def create_application(test_config=None):
     from . modules.authmodule import auth
     app.register_blueprint(auth.bpapp)
 
-    from . modules.authmodule import authapi
-    from . modules.authmodule import register
+    #from . modules.authmodule import authapi
+    #from . modules.authmodule import register
 
 
     @app.route('/api', methods=['GET', 'POST'])
@@ -32,7 +32,7 @@ def create_application(test_config=None):
 
     @app.route('/', methods=['GET'])
     def index():
-        return  render_template('home2.html')
+        return  render_template('home.html')
 
     @app.route('/home', methods=['GET'])
     def home():

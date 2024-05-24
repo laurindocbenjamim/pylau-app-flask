@@ -4,7 +4,7 @@ gunicorn
 matplotlib
 mysql-connector-python
 #psycopg2
-psycopg2-binary
+#psycopg2-binary
 requests
 seaborn
 flask_sqlalchemy
