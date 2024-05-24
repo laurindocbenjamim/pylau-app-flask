@@ -32,7 +32,7 @@ def create_application(test_config=None):
 
     @app.route('/', methods=['GET'])
     def index():
-        return  render_template('home.html')
+        return  render_template('home2.html')
 
     @app.route('/home', methods=['GET'])
     def home():
