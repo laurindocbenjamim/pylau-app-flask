@@ -1,21 +1,27 @@
 /* stylelint-disable stylistic/selector-list-comma-newline-after */
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Arimo:ital,wght@1,400;1,600&family=Bricolage+Grotesque&family=Jaro:opsz@6..72&family=Jersey+25+Charted&family=Pacifico&family=Roboto:ital,wght@0,500;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@1,300;1,400;1,500;1,600;1,800;1,900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Arimo:ital,wght@1,400;1,600&family=Bricolage+Grotesque&family=Jaro:opsz@6..72&family=Jersey+25+Charted&family=Pacifico&family=Roboto:ital,wght@0,500;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@1,300;1,400;1,500;1,600;1,800;1,900&display=swap");
 
 body {
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
   align-items: center;
   text-align: justify;
+  background: rgb(9, 9, 32);
+  color: #fff;
 }
 
+.main-section {
+  background-image: radial-gradient(rgb(14, 16, 48) 6px, transparent 6px);
+  background-size: 40px 40px;
+  border-radius: 100% 0.1% 0.1% 0.1%;
+}
 
 .blog-header-logo {
-  /*font-family: "Playfair Display", Georgia, "Times New Roman", serif; *//*rtl:Amiri, Georgia, "Times New Roman", serif*/
+  /*font-family: "Playfair Display", Georgia, "Times New Roman", serif; */ /*rtl:Amiri, Georgia, "Times New Roman", serif*/
   font-family: "Jaro", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
   font-size: 2.25rem;
 }
 
@@ -23,17 +29,27 @@ body {
   text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif/*rtl:Amiri, Georgia, "Times New Roman", serif*/;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Playfair Display", Georgia, "Times New Roman",
+    serif /*rtl:Amiri, Georgia, "Times New Roman", serif*/;
 }
 
 .flex-auto {
   flex: 0 0 auto;
 }
 
-.h-250 { height: 250px; }
+.h-250 {
+  height: 250px;
+}
 @media (min-width: 768px) {
-  .h-md-250 { height: 250px; }
+  .h-md-250 {
+    height: 250px;
+  }
 }
 
 /* Pagination */
@@ -52,14 +68,32 @@ h1, h2, h3, h4, h5, h6 {
   color: #727272;
 }
 
-.welcome-info{
-  font-family: "Jaro", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-size: 4rem;
-        font-style: normal;
+.welcome {
+  overflow: hidden;
+  position: relative;
+
+  .welcome-title {
+    font-family: "Jaro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 4rem;
+    font-style: normal;
+    color: #0aec4e;
+  }
+
+  p {
+    color: #fff;
+  }
 }
 
+.welcome:after {
+  content: "";
+  background-color: #f00;
+  width: 254%;
+  height: 254%;
+  position: absolute;
+  transform: rotate(45deg) translate(-60%, 0);
+}
 
 .bd-placeholder-img {
   font-size: 1.125rem;
@@ -78,10 +112,11 @@ h1, h2, h3, h4, h5, h6 {
 .b-example-divider {
   width: 100%;
   height: 3rem;
-  background-color: rgba(0, 0, 0, .1);
-  border: solid rgba(0, 0, 0, .15);
+  background-color: rgba(0, 0, 0, 0.1);
+  border: solid rgba(0, 0, 0, 0.15);
   border-width: 1px 0;
-  box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
 }
 
 .b-example-vr {
@@ -91,16 +126,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bi {
-  vertical-align: -.125em;
+  vertical-align: -0.125em;
   fill: currentColor;
 }
 
 .nav-scroller {
   position: relative;
   z-index: 2;
-  
   height: 2.75rem;
   overflow-y: hidden;
+  background-color: #ffffff;
+  clip-path: polygon(0 0, 98% 0, 100% 90%, 0 100%);
+}
+
+.nav-item {
+  color: #000000;
 }
 
 .nav-scroller .nav {
@@ -114,20 +154,26 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-overflow-scrolling: touch;
 }
 
-
 .black-bg {
-  padding: .2rem 1rem;
+  padding: 0.2rem 1rem;
   width: 20px;
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-  border-radius: .3rem;
+
+  background-color: #0aec4e;
+  margin-top: 0.2%;
+  clip-path: polygon(0 0, 98% 0, 100% 100%, 0 97%);
+
+  .nav-item {
+    color: #fff;
+  }
 }
 
-.white-text{
-  color:#FFF;
-  
+.white-text {
+  color: #fff;
 }
 
+.active {
+  color: #1782da;
+}
 
 .fixed-nav {
   position: fixed;
@@ -160,4 +206,3 @@ h1, h2, h3, h4, h5, h6 {
 .bd-mode-toggle .dropdown-menu .active .bi {
   display: block !important;
 }
-
