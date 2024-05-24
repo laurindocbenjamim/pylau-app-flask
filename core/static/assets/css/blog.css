@@ -64,6 +64,10 @@ h6 {
   color: #727272;
 }
 
+.container{
+  width: 60%;
+}
+
 .welcome {
   overflow: hidden;
   position: relative;
@@ -231,8 +235,6 @@ h6 {
 }
 
 
-
-
 .featurette{
 
   div{
@@ -268,7 +270,6 @@ h6 {
   padding-top:40px;
   color:inherit;
 }
-
 
 
 .team-boxed .intro {
@@ -351,7 +352,136 @@ h6 {
   box-shadow: 0 0 6px #f7f7f7;
 }
 
+.mobile-menu{        
+  display: none;
+  width: 100%;
+  
+}
+
+.blog-header-logo{
+  color: #a1a0a0; 
+}
 /*------------ resposive css */
+
+@media (max-width:412px) {
+  .container{
+    header{
+      padding: 1rem;
+      flex-direction: column;
+      
+      .mobile-menu{
+        display: flex;
+        border-bottom: 1px solid #313437;
+
+        div{
+          width: 80%;
+          text-align: left;
+          a{
+            color: #ffffff; 
+          }
+        }
+        .button{
+          width: 20%;
+          text-align: right;
+          i{       
+            margin-left: 55%;
+          }
+        }
+      }
+
+      .row{
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        
+        .text-center{
+          display: none;
+          
+        }
+
+        .buttons{
+          width: 70%;
+          margin-top: 4%;
+        }
+      }
+
+    }
+
+    .nav-scroller{
+      height: 250px;
+      display: none;
+      .nav{
+        flex-direction: column;
+        
+        a:hover{
+          color: rgb(0, 255, 76);
+          background-color: #161757;
+        }
+      }
+    }
+
+  }
+}
+
+@media (max-width:430px) {
+  .container{
+    header{
+      padding: 1rem;
+      flex-direction: column;
+      
+      .mobile-menu{
+        display: flex;
+        border-bottom: 1px solid #313437;
+
+        div{
+          width: 80%;
+          text-align: left;
+          a{
+            color: #ffffff; 
+          }
+        }
+        .button{
+          width: 20%;
+          text-align: right;
+          i{       
+            margin-left: 55%;
+          }
+        }
+      }
+
+      .row{
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        
+        .text-center{
+          display: none;
+          
+        }
+
+        .buttons{
+          width: 70%;
+          margin-top: 4%;
+        }
+      }
+
+    }
+
+    .nav-scroller{
+      height: 250px;
+      display: none;
+      .nav{
+        flex-direction: column;
+        
+        a:hover{
+          color: rgb(0, 255, 76);
+          background-color: #161757;
+        }
+      }
+    }
+
+  }
+}
 
 @media (max-width:767px) {
   .team-boxed h2 {

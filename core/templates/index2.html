@@ -44,14 +44,25 @@
 
 <body>
 
-    <div class="container ">
+    <div class="container navbar-top">
         <header class="border-bottom lh-1 py-3">
-            <div class="row flex-nowrap justify-content-between align-items-center">
+
+            <div class="mobile-menu">
+                <div>
+                    <a class="blog-header-logo text-decoration-none" href="{{ url_for('index') }}">Tuning</a>
+                </div>
+                <div class="button">
+                    <i class="fa-solid fa-bars fa-2x" onclick="mobileMenu()" id="mobile-button"></i>
+                </div>
+                
+            </div>
+
+            <div class="row flex-nowrap justify-content-between align-items-center button-top">
 
                 <div class="col-4 text-center">
-                    <a class="blog-header-logo text-decoration-none" style="color: #686868;" href="{{ url_for('index') }}">Tuning</a>
+                    <a class="blog-header-logo text-decoration-none" href="{{ url_for('index') }}">Tuning</a>
                 </div>
-                <div class="col-4 d-flex justify-content-end align-items-center">
+                <div class="col-4 d-flex justify-content-end align-items-center buttons">
                     <a class="link-secondary" href="#" aria-label="Search">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img"
@@ -64,6 +75,7 @@
                     <a class="btn btn-sm btn-outline-secondary"  href="{{ url_for( 'Auth.login' ) }}">Sign in</a>
                 </div>
             </div>
+            
         </header>
 
         <div class="nav-scroller py-1 mb-3 border-bottom">
