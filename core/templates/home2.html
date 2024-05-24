@@ -120,6 +120,12 @@
       }
     }
   }
+
+  .etl{
+    img{
+      border-radius: 1rem;
+    }
+  }
 </style>
 <div class="row mb-2">
 
@@ -142,47 +148,23 @@
 
 <hr class="featurette-divider">
 
-<div class="row g-5">
 
-  <div class="col-md-8">
-    <h3 class="pb-4 mb-4 fst-italic border-bottom">
-      From the Firehose
-    </h3>
+<div class="row mb-2">
 
-    <div class="col-etl col-md-2">
-      <div class="box-container col-md-2">
-
-        <div class="box">
-          <div class="etl">
-            <img src="{{ url_for('static', filename='assets/img/ETL PROCESS DIAGRAM_white.gif')}}" alt="">
-          </div>
-        </div>
-
-        <div class="box">
-          <div class="etl-detail">
-            <h1>Data Pipeline Process</h1>
-            <div class="content">
-              <span>
-                The process of Extract, Transform and Load data require to hard techniques and
-                knowledge about the data you want to handle
-              </span>
-            </div>
-          </div>
-        </div>
-
-      </div>
+  <div class="row featurette">
+    <div class="col-md-7">
+      <h2 class="featurette-heading fw-normal lh-1"><span>Data Pipeline Process.</span></h2>
+      <p class="lead">The process of Extract, Transform and Load data require to hard techniques and
+        knowledge about the data you want to handle.
+      </p>
     </div>
-
-
-    <nav class="blog-pagination" aria-label="Pagination">
-      <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-      <a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
-    </nav>
-
+    <div class="col-md-5">
+      <img src="{{ url_for('static', filename='assets/img/ETL PROCESS DIAGRAM_white.gif')}}" width="600" height="360" alt="">
+      
+    </div>
   </div>
 
 </div>
-
 
 
 <!--  Team cards -->
@@ -244,6 +226,8 @@
   }
   
   .team-boxed .item .name {
+    font-family: "Jaro", sans-serif;
+    font-optical-sizing: auto;
     font-weight:bold;
     margin-top:28px;
     margin-bottom:8px;
@@ -265,7 +249,7 @@
   }
   
   .team-boxed .item img {
-    max-width:160px;
+    max-width:140px;
   }
   
   .team-boxed .social {
@@ -307,17 +291,14 @@
                   <p class="title">Data Engineer & Backend Developer</p>
                   <p class="description">
                     I'm passionate about technology, I'm curious and like trying new things.
+                    <a href="{{ url_for('home') }}" target="_blank" rel="noopener noreferrer">Make contact</a>
                   </p>
                   <div class="social">
-                    <a href="{{ url_for('home') }}">
-                      <i class="fa fa-facebook-official"></i>
-                    </a>
-                    <a href="#">
-                      <i class="fa fa-twitter"></i>
-                    </a>
-                    <a href="#">
-                      <i class="fa fa-instagram"></i>
-                    </a>
+                    <a class="nav-link fw-bold py-1 px-0" href="https://www.linkedin.com/in/laurindocbenjamim" target="_blank" style="color: #333;"><i class="fa-brands fa-linkedin"></i></a>
+        <a class="nav-link fw-bold py-1 px-0" href="https://github.com/laurindocbenjamim" target="_blank" style="color: #333;"><i class="fa-brands fa-github-alt"></i></a>
+        <a class="nav-link fw-bold py-1 px-0" href="#" target="_blank" style="color: #333;"><i class="fa-brands fa-square-x-twitter"></i></a>
+        <a class="nav-link fw-bold py-1 px-0" href="#" style="color: #333;"><i class="fa-brands fa-facebook"></i></a>
+        <a class="nav-link fw-bold py-1 px-0" href="https://youtu.be/2els0GTfHmI" target="_blank" style="color: #333;"><i class="fa-brands fa-square-youtube" style="color: red;"></i></a>
                   </div>
               </div>
           </div>
