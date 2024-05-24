@@ -6,35 +6,6 @@
 
 {% block content %}
 
-<style>
-  .center-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .col-auto .data-processing {
-    width: 400px;
-    height: 300px;
-    margin-top: 20%;
-    margin-right: 5%;
-
-  }
-
-  .col-auto .learn-code {
-    width: 180px;
-    height: 130px;
-    margin-top: 20%;
-    margin-right: 5%;
-    border-radius: 7rem;
-  }
-
-
-  
-
-</style>
 
 
 <section class="main-section">
@@ -105,39 +76,18 @@
 
 </section>
 
-<style>
-  .text-body-secondary{
-    
-  }
-  .featurette{
 
-    div{
-      h2{
-        margin-top: 20%;
-        span{
-          color: #0aec4e;
-        }
-      }
-    }
-  }
-
-  .etl{
-    img{
-      border-radius: 1rem;
-    }
-  }
-</style>
 <div class="row mb-2">
 
   <div class="row featurette">
-    <div class="col-md-7">
+    <div class="col-md-6">
       <h2 class="featurette-heading fw-normal lh-1">Your Data <span>Your Power.</span></h2>
       <p class="lead">We help you to manage your data and transform it into valuable insights that can drive your business
         forward. Our team of experts will work with you to develop a data strategy that aligns with your business goals
         and objectives.
       </p>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
       <img class="data-processing" src="{{ url_for('static', filename='assets/img/Data-processing-cyrcle.gif')}}"
           width="400" height="400" alt="" srcset="">
       
@@ -148,18 +98,17 @@
 
 <hr class="featurette-divider">
 
-
 <div class="row mb-2">
 
   <div class="row featurette">
-    <div class="col-md-7">
+    <div class="col-md-4">
       <h2 class="featurette-heading fw-normal lh-1"><span>Data Pipeline Process.</span></h2>
       <p class="lead">The process of Extract, Transform and Load data require to hard techniques and
         knowledge about the data you want to handle.
       </p>
     </div>
-    <div class="col-md-5">
-      <img src="{{ url_for('static', filename='assets/img/ETL PROCESS DIAGRAM_white.gif')}}" width="600" height="360" alt="">
+    <div class="col-md-8 data-pipeline">
+      <img src="{{ url_for('static', filename='assets/img/ETL-PROCESS-DIAGRAM_blueblack.gif')}}" width="600" height="360" alt="">
       
     </div>
   </div>
@@ -170,107 +119,6 @@
 <!--  Team cards -->
 
 
-<style>
-
-  .team-boxed {
-    color:#313437;
- 
-  }
-  
-  .team-boxed p {
-    color:#7d8285;
-  }
-  
-  .team-boxed h2 {
-    font-weight:bold;
-    margin-bottom:40px;
-    padding-top:40px;
-    color:inherit;
-  }
-  
-  @media (max-width:767px) {
-    .team-boxed h2 {
-      margin-bottom:25px;
-      padding-top:25px;
-      font-size:24px;
-    }
-  }
-  
-  .team-boxed .intro {
-    font-size:16px;
-    max-width:500px;
-    margin:0 auto;
-  }
-  
-  .team-boxed .intro p {
-    margin-bottom:0;
-  }
-  
-  .team-boxed .people {
-    padding:50px 0;
-    justify-content: center;
-  }
-  
-  .team-boxed .item {
-    text-align:center;
-    
-  }
-  
-  .team-boxed .item .box {
-    text-align:center;
-    padding:30px;
-    background-color:#ffffff;
-    margin-bottom:30px;
-   
-
-  }
-  
-  .team-boxed .item .name {
-    font-family: "Jaro", sans-serif;
-    font-optical-sizing: auto;
-    font-weight:bold;
-    margin-top:28px;
-    margin-bottom:8px;
-    color:inherit;
-  }
-  
-  .team-boxed .item .title {
-    text-transform:uppercase;
-    font-weight:bold;
-    color:#d0d0d0;
-    letter-spacing:2px;
-    font-size:13px;
-  }
-  
-  .team-boxed .item .description {
-    font-size:15px;
-    margin-top:15px;
-    margin-bottom:20px;
-  }
-  
-  .team-boxed .item img {
-    max-width:140px;
-  }
-  
-  .team-boxed .social {
-    font-size:18px;
-    color:#a2a8ae;
-  }
-  
-  .team-boxed .social a {
-    color:inherit;
-    margin:0 10px;
-    display:inline-block;
-    opacity:0.7;
-  }
-  
-  .team-boxed .social a:hover {
-    opacity:1;
-  }
-  
-
-  
-</style>
 
 <hr>
 <div class="team-boxed">
