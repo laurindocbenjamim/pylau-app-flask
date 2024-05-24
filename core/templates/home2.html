@@ -8,10 +8,10 @@
 
 
 
-<section class="main-section">
+<section class="welcome-section">
 
   <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
-    <div class="col-lg-6 px-0">
+    <div class="col-lg-6 px-0 information" >
   
       <h1 class="welcome-title">Thinking to inovate.</h1>
       <p class="lead">A company's treasure lies in the data generated through its activities. Managing this data
@@ -44,11 +44,13 @@
           </p>
   
         </div>
-        <div class="col-auto d-none d-lg-block">
-          <img class="learn-code"
-            src="https://s3-us-west-2.amazonaws.com/robogarden-new/Articles/upload/blogs/lg-leverage-of-coding.jpg"
-            width="180" height="130" alt="" srcset="">
+        
+        <div class="col-auto d-one d-lg-block">
+          <img class="learn-code" src="https://s3-us-west-2.amazonaws.com/robogarden-new/Articles/upload/blogs/lg-leverage-of-coding.jpg"
+          width="250" height="130" alt="" srcset=""
+            >
         </div>
+        
       </div>
     </div>
     <div class="col-md-6">
@@ -77,7 +79,7 @@
 </section>
 
 
-<div class="row mb-2">
+<div class="row mb-2 data-processing-section">
 
   <div class="row featurette">
     <div class="col-md-6">
@@ -87,7 +89,7 @@
         and objectives.
       </p>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 image">
       <img class="data-processing" src="{{ url_for('static', filename='assets/img/Data-processing-cyrcle.gif')}}"
           width="400" height="400" alt="" srcset="">
       
@@ -98,7 +100,7 @@
 
 <hr class="featurette-divider">
 
-<div class="row mb-2">
+<div class="row mb-2 data-pipeline">
 
   <div class="row featurette">
     <div class="col-md-4">
@@ -107,7 +109,7 @@
         knowledge about the data you want to handle.
       </p>
     </div>
-    <div class="col-md-8 data-pipeline">
+    <div class="col-md-8 data-pipeline-diagram">
       <img src="{{ url_for('static', filename='assets/img/ETL-PROCESS-DIAGRAM_blueblack.gif')}}" width="600" height="360" alt="">
       
     </div>

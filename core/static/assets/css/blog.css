@@ -10,7 +10,7 @@ body {
   color: #fff;
 }
 
-.main-section {
+.welcome-section {
   background-image: radial-gradient(rgb(14, 16, 48) 6px, transparent 6px);
   background-size: 40px 40px;
   border-radius: 100% 0.1% 0.1% 0.1%;
@@ -43,9 +43,6 @@ h6 {
   flex: 0 0 auto;
 }
 
-.h-250 {
-  height: 250px;
-}
 
 
 /* Pagination */
@@ -64,26 +61,37 @@ h6 {
   color: #727272;
 }
 
-.container{
-  width: 60%;
+.container, .nav-scroller{
+  max-width: 990px;
+}
+
+.navbar-top{
+  width: 90%;
 }
 
 .welcome {
   overflow: hidden;
   position: relative;
 
-  .welcome-title {
-    font-family: "Jaro", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-size: 4rem;
-    font-style: normal;
-    color: #0aec4e;
+  .information{
+    z-index: 1;
+
+    .welcome-title {
+      font-family: "Jaro", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-size: 4rem;
+      font-style: normal;
+      color: #0aec4e;
+    }
+  
+    p {
+      color: #fff;
+    }
+    
   }
 
-  p {
-    color: #fff;
-  }
+  
 }
 
 .welcome:after {
@@ -131,6 +139,7 @@ h6 {
   position: relative;
   z-index: 2;
   height: 2.75rem;
+  
   overflow-y: hidden;
   background-color: #ffffff;
   clip-path: polygon(0 0, 98% 0, 100% 90%, 0 100%);
@@ -346,7 +355,7 @@ h6 {
 }
 
 
-.data-pipeline{
+.data-pipeline-diagram{
   border-radius: 1rem;
   border: 1px solid #161757;
   box-shadow: 0 0 6px #f7f7f7;
@@ -364,7 +373,12 @@ h6 {
 /*------------ resposive css */
 
 @media (max-width:412px) {
+
+  .container, .nav-scroller{
+    width: 370px;
+  }
   .container{
+
     header{
       padding: 1rem;
       flex-direction: column;
@@ -421,6 +435,85 @@ h6 {
     }
 
   }
+
+  main{
+    .welcome-section{
+      .welcome{       
+       
+        .information{
+          z-index: 1;
+   
+        }
+
+
+      }
+      
+      .welcome:after {
+        
+      }
+
+      .row{
+        justify-content: center;
+        div{
+
+          
+        }
+      }
+      
+    }
+  }
+
+  .col-auto .learn-code {
+    width: 300px;
+    height: 200px;
+    margin-top: 2%;
+  }
+
+  .col-auto img{
+    margin: 0;
+    margin-bottom: 2%;
+  }
+
+  .data-processing-section{
+    .featurette{
+      flex-direction: column;
+      justify-content: center;
+
+      div{
+        width: 100%;
+      }
+
+      .image{
+        background-color: #0aec4e;
+
+        img{
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .data-pipeline{
+    .featurette{
+      flex-direction: column;
+      justify-content: center;
+
+      div{
+        width: 100%;
+      }
+
+      .data-pipeline-diagram{
+
+        img{
+          width: 320px;
+          height: 200px;
+        }
+      }
+    }
+  }
+
+ 
+
 }
 
 @media (max-width:430px) {
