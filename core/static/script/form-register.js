@@ -2,7 +2,9 @@
 
 const form = document.getElementById('form-register');
 
-form.addEventListener("submit", async event => {
+let register = (form) => {
+
+  form.addEventListener("submit", async event => {
     event.preventDefault();
 
   const data = new FormData(form);
@@ -32,3 +34,8 @@ form.addEventListener("submit", async event => {
   }
   
 });
+
+
+}
+
+register(form);
