@@ -8,10 +8,12 @@ form.addEventListener("submit", async event => {
   const data = new FormData(form);
 
   console.log(Array.from(data));
+  const baseUrl = window.location.origin;
+  //alert("base url" +baseUrl);
 
   try {
     const res = await fetch(
-      'http://localhost:5000/auth/register',
+      baseUrl + '/auth/register',
       {
         method: 'POST',
         body: data
@@ -19,12 +21,14 @@ form.addEventListener("submit", async event => {
     );
 
     const resData = await res.json();
- 
+    
+    
+
     console.log(resData[0].object);
     if(resData){
       console.log(resData[0].object);
       //alert(resData[0].object)
-      window.open('http://localhost:5000/auth/login', '_self');
+      window.open(baseUrl + '/auth/login', '_self');
     }
   } catch (err) { 
     //alert("Erro ao realizar o cadastro, tente novamente mais tarde " + err.message);

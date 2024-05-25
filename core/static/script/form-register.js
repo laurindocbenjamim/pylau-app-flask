@@ -21,7 +21,9 @@ let register = (form) => {
     );
 
     const resData = await res.json();
- 
+
+    const baseUrl = window.location.origin;
+    alert("base url" +baseUrl);
     console.log(resData[0].object);
     if(resData){
       console.log(resData[0].object);
