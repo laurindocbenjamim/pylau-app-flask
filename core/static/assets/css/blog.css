@@ -731,7 +731,7 @@ h6 {
       height: 250px;
       
       .nav{
-       
+        flex-direction: column;
         
         a:hover{
           color: rgb(0, 255, 76);
