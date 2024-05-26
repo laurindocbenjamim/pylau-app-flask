@@ -17,7 +17,7 @@ def chek_code():
 
     otp = get_otp(secret)
 
-    return jsonify([{'otpstatus': otpstatus, 'otp': otp}])
+    return jsonify([{'otpstatus': otpstatus, 'otpcode': otp}])
    
 
 

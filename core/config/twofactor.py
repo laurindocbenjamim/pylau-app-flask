@@ -44,7 +44,7 @@ def get_otp(secret):
     #code = int(input("Enter the OTP: "))
 
     #print(verify_otp(secret, code))
-    return secret
+    return codenow
 
 def check_otp(secret, code):
     resp = verify_otp(secret, code)
