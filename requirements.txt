@@ -8,4 +8,5 @@ psycopg2
 requests
 seaborn
 flask_sqlalchemy
-#jwt
+jwt
+pyotp
