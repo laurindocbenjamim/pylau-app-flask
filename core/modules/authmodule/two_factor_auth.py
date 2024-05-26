@@ -9,17 +9,15 @@ from flask import (
 
 bpapp = Blueprint("2TFA", __name__, url_prefix='/2fa')
 
-@bpapp.route('/gcode', methods=['GET', 'POST'])
+@bpapp.route('/check', methods=['GET', 'POST'])
 def chek_code():
     secret = generate_secret()
-    """secret = session.get('secret')
     otp = None
     otpstatus = False
 
     otp = get_otp(secret)
-    """
 
-    return jsonify([{'otpstatus': secret}])
+    return jsonify([{'otpstatus': otpstatus, 'otp': otp}])
    
 
 
