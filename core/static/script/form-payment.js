@@ -1,8 +1,10 @@
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 
 const form = document.getElementById('form-register');
+const divalert = document.querySelector('.alert');
 const alertmessage = document.querySelector('.alert p');
 alertmessage.style.color = "red";
+divalert.style.display = "none";
 
 form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -30,6 +32,7 @@ form.addEventListener("submit", async event => {
     if(resData){
       console.log(resData[0].object);
       //alert(resData[0].object)
+      divalert.style.display = "block";
       alertmessage.textContent = "Username or password wrong!";
       window.open(baseUrl + '/auth/login', '_self');
     }

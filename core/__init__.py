@@ -22,6 +22,9 @@ def create_application(test_config=None):
     from . modules.authmodule import auth
     app.register_blueprint(auth.bpapp)
 
+    from . modules.authmodule import two_factor_auth
+    app.register_blueprint(two_factor_auth.bpapp)
+
     #from . modules.authmodule import authapi
     #from . modules.authmodule import register
 
