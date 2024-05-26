@@ -1,5 +1,5 @@
 import pyotp
-import time
+import datetime
 
 """ The  generate_secret  function generates a random secret key 
     that is used to generate the OTP. The  generate_otp  function 
@@ -18,8 +18,8 @@ def hex_encoded(secret):
 
 # Generate OTP using the secret key
 def generate_otp(secret):
-    totp = pyotp.TOTP(secret)
-    return totp.now()
+    totp = pyotp.TOTP(secret,name='Laurindo', interval=30)
+    return totp
 
 # Verify OTP using the secret key
 def verify_otp(secret, otp):
@@ -29,15 +29,25 @@ def verify_otp(secret, otp):
 # Get time remaining for OTP to expire
 def get_time_remaining(secret):
     totp = pyotp.TOTP(secret)
-    return 30 - (int(time.time()) % 30) 
+    time_remaining = totp.interval - datetime.datetime.now().timestamp() % totp.interval
+    return time_remaining 
 
 
-secret = generate_secret()
+def get_otp(secret):
+    #secret = generate_secret()
 
-otp = generate_otp(secret)
-print(otp)
+    otp = generate_otp(secret)
 
-#time.sleep(30)
-print(f" Time: {get_time_remaining(secret)}")
-print(verify_otp(secret, otp))
+    codenow = otp.now()
+    #print(codenow)
+
+    #code = int(input("Enter the OTP: "))
+
+    #print(verify_otp(secret, code))
+    return otp
+
+def check_otp(secret, code):
+    resp = verify_otp(secret, code)
+    return resp
+   
 
