@@ -75,14 +75,14 @@
 
           <div class=" col-lg-8">
             <h2>{{ title }} </h2>
-            <form class="needs-validation" novalidate>
+            <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
               <div class="row g-3">             
     
                 <div class="col-12">
-                  <label for="code" class="form-label">Provide the code </label>
+                  <label for="otpcode" class="form-label">Provide the code </label>
                   <div class="input-group has-validation">
                     
-                    <input type="text" class="form-control" id="code" placeholder="code" required>
+                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" required>
                     <div class="invalid-feedback">
                       The code is required.
                     </div>
