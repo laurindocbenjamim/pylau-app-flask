@@ -17,8 +17,8 @@ def hex_encoded(secret):
     return pyotp.random_hex()  
 
 # Generate OTP using the secret key
-def generate_otp(secret):
-    totp = pyotp.TOTP(secret,name='Laurindo', interval=30)
+def generate_otp(secret, accountname='username', interval=40):
+    totp = pyotp.TOTP(secret,name=accountname, interval=interval)
     return totp
 
 # Verify OTP using the secret key
@@ -33,12 +33,10 @@ def get_time_remaining(secret):
     return time_remaining 
 
 
-def get_otp(secret):
-    #secret = generate_secret()
+def get_otp_code(secret, accountname='username', interval=40):
+    totp = pyotp.TOTP(secret,name=accountname, interval=interval)
 
-    otp = generate_otp(secret)
-
-    codenow = otp.now()
+    codenow = totp.now()
     #print(codenow)
 
     #code = int(input("Enter the OTP: "))
@@ -46,8 +44,9 @@ def get_otp(secret):
     #print(verify_otp(secret, code))
     return codenow
 
-def check_otp(secret, code):
-    resp = verify_otp(secret, code)
+def check_otp_code(secret, code):
+    totp = pyotp.TOTP(secret)
+    resp = totp.verify(code)
     return resp
    
 

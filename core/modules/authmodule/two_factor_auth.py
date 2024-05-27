@@ -1,5 +1,5 @@
 
-from ...config import get_otp, check_otp, generate_secret
+from ...config import get_otp_code, check_otp_code, generate_secret
 
 from flask import session
 
@@ -9,15 +9,26 @@ from flask import (
 
 bpapp = Blueprint("2TFA", __name__, url_prefix='/2fa')
 
-@bpapp.route('/check', methods=['GET', 'POST'])
-def chek_code():
+totp = None
+
+@bpapp.route('/get', methods=['GET', 'POST'])
+def get_code():
     secret = generate_secret()
-    otp = None
+    session['secret'] = secret
+
     otpstatus = False
 
-    otp = get_otp(secret)
+    code = get_otp_code(session['secret'])
 
-    return jsonify([{'otpstatus': otpstatus, 'otpcode': otp}])
+    return jsonify([{'otpstatus': otpstatus, "code": code, "secret": session['secret']}])
+
+@bpapp.route('/<code>/check', methods=['GET', 'POST'])
+def chek_code(code):
+    otpstatus = False
+
+    otpstatus = check_otp_code(session['secret'], code)
+
+    return jsonify([{'otpstatus': otpstatus, 'otpcode': code, 'secret': session['secret']}])
    
 
 
