@@ -10,3 +10,4 @@ seaborn
 flask_sqlalchemy
 jwt
 pyotp
+qrcode

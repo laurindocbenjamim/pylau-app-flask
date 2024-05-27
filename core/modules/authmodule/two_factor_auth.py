@@ -1,4 +1,7 @@
 
+import pyotp
+import datetime
+
 from ...config import get_otp_code, check_otp_code, generate_secret
 
 from flask import session
@@ -13,22 +16,29 @@ totp = None
 
 @bpapp.route('/get', methods=['GET', 'POST'])
 def get_code():
-    secret = generate_secret()
+    secret = '37TKWDR724Z3RY7Q7B4OZDOQQWWR4A42'
     session['secret'] = secret
 
+    totp = get_otp(session['secret'])
+    OTP = totp.now()
+
+    return jsonify([{"OTP": OTP}])
+
+@bpapp.route('/<OTP>/check', methods=['GET', 'POST'])
+def chek_code(OTP):
     otpstatus = False
 
-    code = get_otp_code(session['secret'])
-
-    return jsonify([{'otpstatus': otpstatus, "code": code, "secret": session['secret']}])
-
-@bpapp.route('/<code>/check', methods=['GET', 'POST'])
-def chek_code(code):
-    otpstatus = False
-
-    otpstatus = check_otp_code(session['secret'], code)
-
-    return jsonify([{'otpstatus': otpstatus, 'otpcode': code, 'secret': session['secret']}])
+    totp = get_otp(session['secret'])
+    otpstatus =  totp.verify(OTP)
+    return jsonify([{'otpstatus': otpstatus, 'otpcode': OTP}])
    
 
+def get_otp(secret, accountname='username', interval=40):
+    totp = pyotp.TOTP(secret,name=accountname, interval=interval)
+
+    return totp
+
+def check_otp(OTP):
+    resp = totp.verify(OTP)
+    return resp
 
