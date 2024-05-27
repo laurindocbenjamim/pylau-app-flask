@@ -95,8 +95,11 @@
     
               <button class="w-100 btn btn-primary btn-lg" type="submit">Send</button>
               <p>
-                {{otpcode}} - {{otpstatus}}
+                Statu: {{otpstatus}}
               </p>
+              {% if otpqrcode %}
+              <img src="{{ url_for('static', filename='qrcode_gen/') + otpqrcode }}" height="100" width="100" alt="" srcset="">
+              {% endif %}
             </form>
             <p>
               Are you not registered yet? 

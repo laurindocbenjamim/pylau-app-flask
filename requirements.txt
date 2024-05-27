@@ -11,3 +11,4 @@ flask_sqlalchemy
 jwt
 pyotp
 qrcode
+Flask-Mail

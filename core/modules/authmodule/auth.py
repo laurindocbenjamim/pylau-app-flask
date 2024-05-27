@@ -17,7 +17,8 @@ def login():
              return redirect(url_for('dashboard'))
          else:
              return redirect(url_for('Auth.register'), 200, [{'Content-Type': 'application/json'}])
-    return render_template('auth/auth.html', title='Sign In')
+    if  request.method == 'GET':
+        return render_template('auth/auth.html', title='Sign In')
 
 # Register function
 @bpapp.route('/register', methods=['GET', 'POST'])
@@ -44,5 +45,5 @@ def register():
             'phone': phone
         }
         if email == 'rocketmc2009@gmail.com' and password == 'admin':
-            return jsonify({'Content-Type': 'application/json', "object": data }, 200)
+            return jsonify({'Content-Type': 'application/json', "object": data, "redirectUrl": "2fa/google-get" }, 200)
     return render_template('auth/register.html', title='Sign Up')
