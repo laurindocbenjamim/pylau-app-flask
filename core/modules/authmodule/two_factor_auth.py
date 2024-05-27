@@ -22,7 +22,8 @@ def get_code():
     totp = get_otp(session['secret'])
     OTP = totp.now()
 
-    return jsonify([{"OTP": OTP}])
+    #return jsonify([{"OTP": OTP}])
+    return render_template('auth/2fa.html', otpstatus=False, otpcode=OTP)
 
 @bpapp.route('/<OTP>/check', methods=['GET', 'POST'])
 def chek_code(OTP):
@@ -30,7 +31,8 @@ def chek_code(OTP):
 
     totp = get_otp(session['secret'])
     otpstatus =  totp.verify(OTP)
-    return jsonify([{'otpstatus': otpstatus, 'otpcode': OTP}])
+    #return jsonify([{'otpstatus': otpstatus, 'otpcode': OTP}])
+    return render_template('auth/2fa.html', otpstatus=otpstatus, otpcode=OTP)
    
 
 def get_otp(secret, accountname='username', interval=40):
