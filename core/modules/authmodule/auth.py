@@ -51,7 +51,7 @@ def register():
             'phone': phone
         }
         if email == 'rocketmc2009@gmail.com' and password == 'admin':
-            return jsonify({'Content-Type': 'application/json', "object": data, "redirectUrl": "TWOFA/appverify" }, 200)
+            return jsonify({'Content-Type': 'application/json', "object": data, "redirectUrl": "2fapp/verify" }, 200)
         else:
             return jsonify({"object": data, "redirectUrl": "auth/register" }, 200)
     return render_template('auth/register.html', title='Sign Up')
