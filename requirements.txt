@@ -12,3 +12,6 @@ jwt
 pyotp
 qrcode
 Flask-Mail
+flask-login
+flask-bcrypt
+Flask-SQLAlchemy

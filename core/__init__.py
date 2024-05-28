@@ -15,6 +15,8 @@ def create_application(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
+   
+
 
     from . modules.codeskill import dictionaries
     app.register_blueprint(dictionaries.bpapp)
