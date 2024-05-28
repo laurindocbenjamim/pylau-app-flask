@@ -38,8 +38,8 @@ def create_application(test_config=None):
     #sendemail.mail.init_app(app)
     #app.register_blueprint(sendemail.bpapp)
 
-    from . modules.authmodule import two_factor_google_auth
-    app.register_blueprint(two_factor_google_auth.bpapp)
+    from .modules.authmodule import two_factor_app_auth
+    app.register_blueprint(two_factor_app_auth.bpapp)
 
 
 

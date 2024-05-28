@@ -1,13 +1,18 @@
 
 import os
+
 from flask import (
     Blueprint, render_template, url_for, request, redirect, jsonify
 )
 
+from flask_cors import CORS, cross_origin
+
 bpapp = Blueprint("Auth", __name__, url_prefix='/auth')
+CORS(bpapp)
 
 # Login function
 @bpapp.route('/login', methods=['GET', 'POST'])
+@cross_origin(methods=['GET', 'POST'])
 def login():
      
     if request.method == 'POST':
@@ -22,6 +27,7 @@ def login():
 
 # Register function
 @bpapp.route('/register', methods=['GET', 'POST'])
+@cross_origin(methods=['GET', 'POST'])
 def register():
     
     if request.method == 'POST':
@@ -45,5 +51,7 @@ def register():
             'phone': phone
         }
         if email == 'rocketmc2009@gmail.com' and password == 'admin':
-            return jsonify({'Content-Type': 'application/json', "object": data, "redirectUrl": "2fa/google-get" }, 200)
+            return jsonify({'Content-Type': 'application/json', "object": data, "redirectUrl": "TWOFA/appverify" }, 200)
+        else:
+            return jsonify({"object": data, "redirectUrl": "auth/register" }, 200)
     return render_template('auth/register.html', title='Sign Up')

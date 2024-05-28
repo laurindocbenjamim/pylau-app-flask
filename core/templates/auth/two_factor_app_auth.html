@@ -1,0 +1,166 @@
+{% extends 'index2.html' %}
+
+{% block header %}
+<h1></h1> {% block title %} {{title}} - {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+  .title{
+    font-family: "Kode Mono", monospace;
+    font-optical-sizing: auto;
+    
+    font-weight: bold;
+    font-style: normal;
+    color: #3266f5;
+  }
+</style>
+
+
+<!--  Welcome section -->
+<section class="welcome-section">
+
+  <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
+    <div class="col-lg-6 px-0 information">
+
+      <h3 class="title" >
+        Welcome to Data Management and Analysis Consulting
+      </h3>
+      <p class="lead">
+        We are a company that provides consulting and training services in data management and analysis. We help
+        companies to improve their data management and analysis processes.
+      </p>
+      
+
+    </div>
+  </div>
+
+  <!--  Services section -->
+  <div class="row mb-2 services" style="justify-content: center;">
+
+    
+
+    <!-- Training -->
+    <div class="col-md-6 chield">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+
+          <div class=" col-lg-12" style="text-align: center;">
+            <h2>{{ title }} </h2>
+            {% if otpqrcode %}
+
+            <div class="row g-3" style="justify-content: center;">             
+    
+              <div class="col-12" style="justify-content: center;">
+                
+                <p>
+                  Scan the QR code with your authenticator app
+                </p>
+                <div class="input-group has-validation" style="justify-content: center;">
+                  
+                  <img src="{{ url_for('static', filename='qrcode_gen/') + otpqrcode }}" height="150" width="150" alt="" srcset="">
+
+                </div>
+                
+              </div>
+
+              <a class="w-50 btn btn-primary btn-lg" href="{{ url_for('2FApp.chek_code', code=1)}}" rel="noopener noreferrer">I have a code 3</a>
+  
+            </div>
+
+            {% elif verify_code %}
+            <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
+              <div class="row g-3">             
+    
+                <div class="col-12">
+                  <label for="otpcode" class="form-label">Provide the code </label>
+                  <div class="input-group has-validation">
+                    
+                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" required>
+                    <div class="invalid-feedback">
+                      The code is required.
+                    </div>
+                  </div>
+                </div>
+    
+              </div>
+    
+              <hr class="my-2">
+    
+              <button class="w-100 btn btn-primary btn-lg" type="submit">Send</button>
+              <p>
+                Statu: {{otpstatus}}
+              </p>
+              
+              
+            </form>
+
+            {% elif otpstatus %}
+            
+            <div class="row g-3" style="justify-content: center;">             
+              <p>
+                You have been authenticated.
+              </p>
+              <div class="col-12" style="justify-content: center;">
+                
+                
+                <div class="input-group has-validation" style="justify-content: center;">
+                  
+                  <img src="{{ url_for('static', filename='assets/img/icons8-success.gif') }}" height="150" width="150"
+                   alt="success-icon" style="border-radius: 6rem;" srcset="">
+
+                </div>
+                
+              </div>
+  
+            </div>
+
+            {% elif otpstatus == false %}
+            
+            <div class="row g-3" style="justify-content: center;">             
+              <p>
+                Failed to authenticate. 
+                <a class="w-50 btn-primary btn-lg" href="{{ url_for('2FApp.chek_code', code=1)}}" rel="noopener noreferrer">Try again.</a>
+                
+              </p>
+              <div class="col-12" style="justify-content: center;">                
+                
+                <div class="input-group has-validation" style="justify-content: center;">
+                  
+                  <img src="{{ url_for('static', filename='assets/img/icons8-wrong-96.png') }}" height="150" width="150" alt="" srcset="">
+                  
+                </div>
+                
+              </div>
+  
+            </div>
+
+            {% endif %}
+            <p>
+              Are you not registered yet? 
+              <a href="{{ url_for('Auth.register')}}" rel="noopener noreferrer">Create your account.</a>
+            </p>
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+
+    <!-- End Training -->
+
+    
+
+  </div>
+
+  <!--  End Services section -->
+
+</section>
+
+<!--  End welcome section -->
+
+
+{% endblock %}

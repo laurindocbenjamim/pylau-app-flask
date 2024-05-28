@@ -28,7 +28,7 @@ let register = (form) => {
     if(resData){
       console.log(resData[0].object);
       //alert(resData[0].object)
-      window.open('http://localhost:5000/auth/login', '_self');
+      //window.open('http://localhost:5000/auth/login', '_self');
     }
   } catch (err) { 
     //alert("Erro ao realizar o cadastro, tente novamente mais tarde " + err.message);

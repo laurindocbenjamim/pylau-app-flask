@@ -14,6 +14,7 @@ form.addEventListener("submit", async event => {
 
   console.log(Array.from(data));
   const baseUrl = window.location.origin;
+  
   //alert("base url" +baseUrl);
 
   try {
@@ -27,14 +28,14 @@ form.addEventListener("submit", async event => {
 
     const resData = await res.json();
     
-
-    console.log(resData[0].object);
+    console.log(resData);
+    
     if(resData){
       console.log(resData[0].object);
-      //alert(resData[0].object)
+      
       divalert.style.display = "block";
       alertmessage.textContent = "Username or password wrong!";
-      window.open(baseUrl + '/auth/login', '_self');
+      window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
     }
   } catch (err) { 
     //alert("Erro ao realizar o cadastro, tente novamente mais tarde " + err.message);
