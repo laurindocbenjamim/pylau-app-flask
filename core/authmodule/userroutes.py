@@ -12,6 +12,9 @@ from core import create_user, get_users, get_user_by_id, update_user, delete_use
 bp = Blueprint('users', __name__, url_prefix='/users')    # Create a Blueprint object
 CORS(bp)
 
+from core.authmodule.getalluser import get_allusers
+get_allusers(bp, db)
+
 @bp.route('/create', methods=['GET', 'POST'])   # Define a route for the login page
 @cross_origin(methods=['GET', 'POST'])
 def create_user():

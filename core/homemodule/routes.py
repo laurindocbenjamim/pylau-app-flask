@@ -14,5 +14,9 @@ def home_routes(app, db):
     @app.route('/', methods=['GET'])
     def index():
         return  render_template('home2.html')
+    
+    @app.route('/admin', methods=['GET'])
+    def adminpanel():
+        return  render_template('home2.html')
 
 
