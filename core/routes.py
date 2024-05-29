@@ -11,7 +11,7 @@ from core import create_person, get_all_people, get_person_by_id
 
 # Import all routes
 from core.homemodule.routes import home_routes
-from core.personmodule.routes import person_routes
+from core.personmodule.personroutes import person_routes
 from core.devmodule.routes import dev_routes
 
 def run_routes(app, db):

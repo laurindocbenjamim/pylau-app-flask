@@ -1,0 +1,8 @@
+
+
+
+
+
+TO INITIATE THE DATABASE RUN THE COMMAND BELOW
+Step 1: `flask db init` or `python -m flask db init`
+Step 2: `flask db migrate` or `python -m flask db init`

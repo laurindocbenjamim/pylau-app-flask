@@ -5,7 +5,7 @@ from core import db
 
 class Person(db.Model):
     __tablename__ = 'person'
-    personID:Mapped[int] = db.Column(db.Integer, primary_key=True)
+    personID:Mapped[int] = db.Column(db.Integer, primary_key=True, nullable=False)
     firstname:Mapped[str] = db.Column(db.String(100), nullable=False)
     lastname:Mapped[str] = db.Column(db.String(100), nullable=False)
     age:Mapped[int] = db.Column(db.Integer, nullable=False)

@@ -27,7 +27,7 @@ app=__init__2.create_application()
 if __name__ == '__main__':
     app.run(debug=True)"""
 
-flask_app = create_application('postgres')
+flask_app = create_application()
 
 if __name__ == '__main__':
     flask_app.run(host='0.0.0.0', debug=True)

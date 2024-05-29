@@ -67,5 +67,9 @@ def create_application(type_db=None,test_config=None):
     from core.routes import run_routes
     run_routes(app, db)
 
+    # Imporst later
+
+    Migrate(app, db)
+
     return app
 
