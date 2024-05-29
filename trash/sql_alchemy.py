@@ -3,6 +3,7 @@ from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.ext.declarative import DeclaredBase
 from sqlalchemy.orm import DeclarativeBase
+from ..modules.factory.create_dbAlchemy_tables import create_dbAlchemy_tables
 
 
 class Base(DeclarativeBase):
@@ -37,5 +38,5 @@ def init_db(type_db=None):
         raise ValueError("Invalid database type")
     # initialize the database
     dbAlch.init_app(current_app)
-    
-    return dbAlch.create_all()
+    res = create_dbAlchemy_tables()
+    return res

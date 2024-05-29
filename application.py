@@ -20,8 +20,14 @@ def person(name):
 
 """
 
-import core
-
-app=core.create_application()
+#import core.__init__2 as __init__2
+from core import create_application
+"""
+app=__init__2.create_application()
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)"""
+
+flask_app = create_application('postgres')
+
+if __name__ == '__main__':
+    flask_app.run(host='0.0.0.0', debug=True)

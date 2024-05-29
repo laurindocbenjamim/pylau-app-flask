@@ -2,7 +2,7 @@
 from sqlalchemy import Integer, String, Column, ForeignKey
 from sqlalchemy.orm import Mapped,mapped_column, relationship
 
-from core.config.sql_alchemy import init_db, dbAlch
+from core.config import init_db, dbAlch
 
 init_db()
 
