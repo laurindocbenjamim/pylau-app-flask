@@ -1,7 +1,7 @@
 
 from flask import Blueprint, request, jsonify, render_template
 from core import db
-from core import create_user, get_users, get_user_by_id
+from core import create_user, get_users, get_user_by_id, update_user, delete_user
 
 bp = Blueprint('users', __name__, url_prefix='/users')    # Create a Blueprint object
 
@@ -11,9 +11,13 @@ def loginuser():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user = create_user(db, username='faria', password='123')
-    
-    #all_people = get_all_people(db)
+    #user = create_user(db, username='faria', password='123')
+    delete_user(db, id=8)
+    users = get_users(db)
     #return render_template('index.html', people=all_people) 
-    #return jsonify({'message': 'User logged in successfully', 'data': user})
-    return f"User logged in successfully: {user.username}"
+
+    obj = update_user(db, username='Gamba', password='roooooooooot', id=1)
+
+    
+    return jsonify({'message': 'User created successfully', 'data': users, 'obj': obj})
+    #return f"User logged in successfully: {user.username}"

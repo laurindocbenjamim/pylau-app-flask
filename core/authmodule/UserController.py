@@ -1,7 +1,7 @@
 
 from core import User
 
-# create a person
+# create a User
 def create_user(db, username, password):
     object = User(username=username, password=password)
     db.session.add(object)
@@ -17,14 +17,28 @@ def get_users(db):
 
 # filter people by id
 def get_user_by_id(db,id):
-    #pers = db.session.execute(db.select(Person).order_by(Person.firstname)).scalars()
-    """person = Person.query.filter_by(personID=id).first()
-    user = db.get_or_404(Person, id)
-    return person.to_dict()"""
+    #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
+    user = User.query.filter_by(userID=id).first()
+    user = db.get_or_404(User, id)
+    return user.to_dict()
 
-# update a person
-def update_user(db, firstname, lastname, age):
-    """person = Person(firstname=firstname, lastname=lastname, age=age)
-    db.session.merge(person)
-    db.session.commit()
-    return person"""
+# update a User
+def update_user(db, username, password, id):
+    user = User.query.get(id)
+    if user:
+        user.username = username
+        user.password = password
+        db.session.commit()
+        return user.to_dict()
+    else:
+        return None
+
+# delete a User
+def delete_user(db, id):
+    user = User.query.get(id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return user.to_dict()
+    else:
+        return None
