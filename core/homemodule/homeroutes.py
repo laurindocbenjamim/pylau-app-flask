@@ -17,6 +17,9 @@ def home_routes(app, db):
     
     @app.route('/admin', methods=['GET'])
     def adminpanel():
-        return  render_template('home2.html')
+
+        all_people = get_all_people(db)
+        #people = get_person_by_id(db, 1)    
+        return  render_template('admin/index.html', people=all_people)
 
 

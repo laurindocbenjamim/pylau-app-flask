@@ -18,9 +18,9 @@ def person_routes(app, db):
       
         all_people = get_all_people(db)
         #people = get_person_by_id(db, 1)
-        #return render_template('index.html', people=all_people)   
+        return render_template('index.html', people=all_people)   
     
-        return f'Person module {all_people}'
+        #return f'Person module {all_people}'
 
 
 

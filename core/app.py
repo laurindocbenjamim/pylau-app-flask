@@ -34,6 +34,9 @@ def create_application(type_db=None,test_config=None):
     # Init the db
     db.init_app(app)
 
+    with app.app_context():
+        db.create_all()
+
     """from . modules.codeskill import dictionaries
     app.register_blueprint(dictionaries.bpapp)
 
