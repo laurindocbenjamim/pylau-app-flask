@@ -2,10 +2,10 @@
 from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.ext.declarative import DeclaredBase
-from sqlalchemy.orm import DeclaredBase
+from sqlalchemy.orm import DeclarativeBase
 
 
-class Base(DeclaredBase):
+class Base(DeclarativeBase):
     pass
 
 dbAlch = SQLAlchemy(model_class=Base)
@@ -26,8 +26,8 @@ def postgres_db():
     
 
 # initialize the database by default to SQLite
-def init_db(type_db="sqlite" | None):
-    if type_db == "sqlite":
+def init_db(type_db=None):
+    if type_db is None:
         sqlite_db()
     elif type_db == "mysql":
         mysql_db()
