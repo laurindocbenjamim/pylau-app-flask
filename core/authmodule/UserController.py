@@ -4,8 +4,7 @@ from datetime import datetime
 
 # create a User
 def create_user(db, firstname, lastname, email, country,
-        country_code, phone, password, two_factor_auth_code
-        ):
+        country_code, phone, password, two_factor_auth_code):
     object = User( 
         firstname = firstname,
         lastname = lastname,
