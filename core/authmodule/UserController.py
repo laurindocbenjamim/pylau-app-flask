@@ -33,6 +33,20 @@ def get_user_by_id(db,id):
     user = db.get_or_404(User, id)
     return user.to_dict()
 
+def check_email_exists(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return True
+    return False
+
+def check_phone_exists(uphone):
+    #exists = lambda phone: User.query.filter_by(phone=phone).first() is not None
+    #return exists
+    user = User.query.filter_by(phone=uphone).first()
+    if user:
+        return True
+    return False
+
 # update a User
 def update_user(db, firstname, lastname, email, country,
         country_code, phone, password, two_factor_auth_code, 

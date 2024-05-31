@@ -22,6 +22,12 @@ def get_user_by_id(db,id):
     user = db.get_or_404(User, id)
     return user.to_dict()
 
+def check_email_exist(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return True
+    return False
+
 # update a User
 def update_user(db, username, password, id):
     user = User.query.get(id)

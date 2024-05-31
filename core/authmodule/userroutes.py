@@ -8,7 +8,8 @@ from flask import (
 from flask_cors import CORS, cross_origin
 from werkzeug.security import check_password_hash, generate_password_hash
 from core import db
-from core import create_user, get_users, get_user_by_id, update_user, delete_user
+from core import create_user, get_users, get_user_by_id, update_user, delete_user, check_email_exists, check_phone_exists
+from core.config import get_otp_code, check_otp_code, generate_secret, generate_provisioning_uri, verify_provisioning_uri
 
 bp = Blueprint('users', __name__, url_prefix='/users')    # Create a Blueprint object
 CORS(bp)
@@ -18,9 +19,15 @@ import requests
 # Loading block of routes
 get_allusers(bp, db)
 
+
+
 @bp.route('/create', methods=['GET', 'POST'])   # Define a route for the login page
 @cross_origin(methods=['GET', 'POST'])
 def sign_up():
+
+    message = None
+    user_secret_code = None
+    otpqrcode = None
 
     if request.method == 'POST':
         firstname = request.form.get('firstname')
@@ -33,27 +40,62 @@ def sign_up():
         password = request.form.get('password')
         confirm = request.form.get('confirm')
 
+        two_factor_auth_code = '123456'
+
+        # validate the fields
         validate_for(firstname, lastname, email, country,
             country_code, phone, password, confirm, two_factor_auth_code)
         
-        email_isvalid = 'invalid'
-        if is_valid_email(email):
-            email_isvalid = 'valid'
+        # check if email is valid
+        if is_valid_email(email) == False:
+            return jsonify({'message': 'Invalid email address', 'status': 'error', "redirectUrl": "users/create"}, 400)
+        
+        # check if email exists
+        if check_email_exists(email):
+            return jsonify({'message': 'Email already exists', 'status': 'error', "redirectUrl": "users/create"}, 400)
+        
+        # check if phone exists
+        if check_phone_exists(phone):
+            return jsonify({'message': 'Phone already exists', 'status': 'error', "redirectUrl": "users/create"}, 400)
         
         # hash the password
         password_hash = generate_password_hash(password)
 
+        # check if the passwords match
         if not check_password_hash(password_hash, confirm):
-            return jsonify({'message': 'The passwords do not match', 'status': 'error', "redirectUrl": "users/create"}, 400)
-        # create a user
-        user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
-        # get all users
-        users = get_users(db)
+            return jsonify({'message': 'The passwords do not match', 'status': 'error', "object": [], "redirectUrl": "users/create"}, 400)
+        
+        if user_secret_code is None and otpqrcode is None:
+            user_secret_code = generate_secret()
+            session['user_secret_code'] = user_secret_code            
+            otpqrcode = generate_provisioning_uri(session['user_secret_code'], email)
+            session['otpqrcode'] = otpqrcode
+            return jsonify({'message': 'The OTP QrCode has been generated successfully! Scan the QR code to get the OTP code', 
+                            'status': 2, "object": [], "redirectUrl": "users/create",
+                            "otpqrcode": session['otpqrcode'],
+                            "otpqrcode_uri": str(session['otpqrcode'])
+                            }, 200)
+        
+        elif session['user_secret_code'] is not None and otpqrcode is not None:
+            if not two_factor_auth_code or not isinstance(two_factor_auth_code, str):
+                return jsonify({'message': 'Two-factor authentication code is required', 'status': 'error', "redirectUrl": "users/create"}, 400)
+            else:
+                return jsonify({'message': 'User is read to be created successfully!', 'status': 'success', "object": [], "redirectUrl": "users/create"}, 200)
+
+
+
+        
+            # create a user
+            """user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
+            # get all users
+            users = get_users(db)
+             
         
         if email == 'rocketmc2009@gmail.com' and password == 'admin':
             return jsonify({'message': "User created successfully!",'Content-Type': 'application/json', "object": users, "redirectUrl": "2fapp/verify" }, 200)
         else:
-            return jsonify({'message': "Something went wrong! Email is " + user,"object": users, "redirectUrl": "users/create" }, 400)
+            return jsonify({'message': message, "user_created": user, "object": users, "redirectUrl": "users/create" }, 400)
+            """
     return render_template('auth/register.html', title='Sign Up')
 
 # get all users
