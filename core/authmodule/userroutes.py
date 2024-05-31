@@ -60,11 +60,12 @@ def sign_up():
         # hash the password
         password_hash = generate_password_hash(password)
 
+        if not check_password_hash(password_hash, confirm):
+            return jsonify({'message': 'The passwords do not match', 'status': 'error', "object": [], "redirectUrl": "users/create"}, 400)
+
         # check if the passwords match
         if two_factor_auth_code == '':
-            if not check_password_hash(password_hash, confirm):
-                return jsonify({'message': 'The passwords do not match', 'status': 'error', "object": [], "redirectUrl": "users/create"}, 400)
-            
+                        
             if session.get('user_secret_code') is None and session.get('otpqrcode') is None:
                 session['user_secret_code'] = generate_secret()
                         
@@ -72,16 +73,30 @@ def sign_up():
             
                 return jsonify({'message': 'The OTP QrCode has been generated successfully! Scan the QR code to get the OTP code', 
                                 'status': 2, "object": [], "redirectUrl": "users/create",
+                                'secret': session.get('user_secret_code'),
                                 "otpqrcode": session['otpqrcode'],
                                 "otpqrcode_uri": 'static/otp_qrcode_images/' + str(session['otpqrcode'])
                                 }, 200)            
 
         else:
-            if not two_factor_auth_code or not isinstance(two_factor_auth_code, str):
-                return jsonify({'message': 'Two-factor authentication code is required', 'status': 'error', "redirectUrl": "users/create"}, 400)
+            if len(two_factor_auth_code) != 6:
+                return jsonify({'message': 'Maximum digits required for the 2FA code is 6.', 'status': 'error', "redirectUrl": "users/create"}, 400)
             else:
-                return jsonify({'message': 'User is read to be created successfully!', 'status': 3, "object": [], "redirectUrl": "users/create"}, 200)
 
+                OTP = request.form.get('two_factor_auth_code')
+                secret = request.form.get('secret')
+                otpstatus = False
+                if OTP is not None and secret is not None:
+                    otpstatus = verify_provisioning_uri(secret, OTP)
+
+                    user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
+                    if user.userID is not None:
+                        return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':otpstatus, 
+                                        "object": request.form, "redirectUrl": "auth/2fapp/login"}, 200)
+                    else:              
+                        return jsonify({'message': 'Failed to regist user', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                else:                 
+                    return jsonify({'message': 'Invalid OTP code', 'status': 'error', "redirectUrl": "users/create"}, 400)
 
         
             # create a user

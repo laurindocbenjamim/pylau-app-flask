@@ -11,38 +11,50 @@ var two_FA_div = document.getElementById('two-FA-div');
 let divalert = document.querySelector('.alert');
 let alertmessage = document.querySelector('.alert p');
 let otpimage = document.getElementById('otpimage'); 
-alertmessage.style.color = "red";
+let code_alert = document.getElementById('code-alert'); 
+alertmessage.style.color = "#f5324c";
 divalert.style.display = "none";
 
 form.addEventListener("submit", async event => {
     event.preventDefault();
 
-  const data = new FormData(form);
+  const dataForm = new FormData(form);
 
-  const password = data.get('password');
-  const confirmPassword = data.get('confirm');
+  const password = dataForm.get('password');
+  const confirmPassword = dataForm.get('confirm');
 
   if (password !== confirmPassword) {
     divalert.style.display = "block";
     alertmessage.textContent = "The passwords do not match!";
     return;
   }else{
-    divalert.style.display = "none";
+    
     alertmessage.textContent = "";
   }
 
-  //console.log(Array.from(data));
+  //console.log(Array.from(dataForm));
   const baseUrl = window.location.origin;
   
   //alert("base url" +baseUrl);
 
   try {
+
+    if(localStorage.getItem('otpqrcode')){
+      dataForm.append('otpqrcode', localStorage.getItem('otpqrcode'));
+      dataForm.append('otpqrcode_uri', localStorage.getItem('otpqrcode_uri'));
+      dataForm.append('secret', localStorage.getItem('secret'));
+
+      localStorage.removeItem('secret');
+      localStorage.removeItem('otpqrcode_uri');
+      localStorage.removeItem('otpqrcode');
+      localStorage.clear();
+    }
     const res = await fetch(
       //baseUrl + '/auth/register',
       baseUrl + '/users/create',
       {
         method: 'POST',
-        body: data
+        body: dataForm
       },
     );
 
@@ -55,6 +67,7 @@ form.addEventListener("submit", async event => {
 
         console.log(resData[0].object);      
         divalert.style.display = "block";
+        alertmessage.style.color = "#f5324c";
         alertmessage.textContent = resData[0].message;
 
       }else if(resData[1] == 200){
@@ -68,11 +81,23 @@ form.addEventListener("submit", async event => {
           //qrcodeImage.setAttribute('src', baseUrl + "/" + resData[0].otpqrcode);
           submit.style.display = "none";
           getcode.style.display = "block";
-          alert(baseUrl + "/" + resData[0].otpqrcode_uri);
+          
+          localStorage.setItem('secret', resData[0].secret);
+          localStorage.setItem('otpqrcode', resData[0].otpqrcode);
+          localStorage.setItem('otpqrcode_uri', resData[0].otpqrcode_uri);
+          localStorage.setItem('dataForm', dataForm);
+
         }else if(resData[0].status == 3){
+
+          divalert.style.display = "none";
           submit.textContent = "Submit";
           boxqrcode.style.display = "none";
           getcode.style.display = "none";
+          two_FA_div.style.display = "block";
+          localStorage.clear();
+          setTimeout(() => {
+            window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
+          });
         }
         
         //alert("QRCODE! " + baseUrl + "/static/qrcode_images/" + resData[0].otpqrcode);

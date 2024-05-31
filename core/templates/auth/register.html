@@ -185,33 +185,31 @@
                       <div class="input-group has-validation" id="otpimage" style="justify-content: center;background-color:#fff; border-radius: 2rem; margin: 2%;">
                         
                         <img id="qrcodeImage" src="https://th.bing.com/th/id/R.dcf4b6e228aef80dd1a58f4c76f07128?rik=Qj2LybacmBALtA&riu=http%3a%2f%2fpngimg.com%2fuploads%2fqr_code%2fqr_code_PNG25.png&ehk=eKH2pdoegouCUxO1rt6BJXt4avVYywmyOS8biIPp5zc%3d&risl=&pid=ImgRaw&r=0" height="150" width="150" alt="" srcset="">
-                       
-                        
+                                               
                       </div>
                       
                   </div>
 
                 </div>
 
-                <div class="col-11 alert" >                  
+                <div class="col-11 alert" style="font-size: .8rem;">                  
                     <p></p>
-
-                    <div id="two-FA-div">
-                      <label for="password" class="form-label">2-Fatcor authentication </label>                    
-                      <input type="text" class="form-control" id="two_factor_auth_code" name="two_factor_auth_code" placeholder="2 Factor auth code">
-                      <div class="invalid-feedback code-alert">
-                        Please confirm the 2-Factor auth code.
-                      </div>
-                    </div>
-
-                </div>                
+                </div> 
+                
+                <div class="col-11" id="two-FA-div">
+                  <label for="two_factor_auth_code" class="form-label">2-Fatcor authentication </label>                    
+                  <input type="number" class="form-control" max="6" id="two_factor_auth_code" name="two_factor_auth_code" placeholder="2 Factor auth code">
+                  <div class="invalid-feedback code-alert" id="code-alert">
+                    <p></p>
+                  </div>
+                </div>
     
               </div>
               
 
               <hr class="my-2">
               
-              <div class="buttons" style="padding:2rem 0;">
+              <div class="buttons" style="padding:.6rem 0;">
                 <a class="w-100 btn btn-primary btn-lg" id="get_code" onclick="getqrcode()" rel="noopener noreferrer">I have already have a code</a>
                 
                 <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Next</button>

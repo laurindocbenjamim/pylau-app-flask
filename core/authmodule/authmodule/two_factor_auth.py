@@ -44,7 +44,7 @@ def chek_code():
         OTP = request.form.get('otpcode')
         otpstatus = False
 
-        totp = get_otp(session['secret'])
+        totp = get_otp(secret)
         otpstatus =  totp.verify(OTP)
         #return jsonify([{'otpstatus': otpstatus, 'otpcode': OTP}])
         return render_template('auth/2fa.html', otpstatus=otpstatus, otpcode=OTP)

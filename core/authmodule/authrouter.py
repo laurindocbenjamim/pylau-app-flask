@@ -26,6 +26,32 @@ def login():
         return render_template('auth/auth.html', title='Sign In')
     
 
+@bpapp.route('/2fapp/login', methods=['GET', 'POST'])
+@cross_origin(methods=['GET', 'POST'])
+def two_fa_app_login():
+     
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        if email == 'admin' and password == 'admin':
+            return redirect(url_for('dashboard'))
+        else:
+            return redirect(url_for('Auth.register'), 200, [{'Content-Type': 'application/json'}])
+    if  request.method == 'GET':
+        return render_template('auth/auth.html', title='Sign In', two_fa=True)
+
+def two_fa_login():
+     
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        if email == 'admin' and password == 'admin':
+            return redirect(url_for('dashboard'))
+        else:
+            return redirect(url_for('Auth.register'), 200, [{'Content-Type': 'application/json'}])
+    if  request.method == 'GET':
+        return render_template('auth/auth.html', title='Sign In')
+    
 # Register function
 @bpapp.route('/register', methods=['GET', 'POST'])
 @cross_origin(methods=['GET', 'POST'])
