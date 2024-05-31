@@ -10,6 +10,7 @@ var getcode = document.getElementById('get_code');
 var two_FA_div = document.getElementById('two-FA-div');
 let divalert = document.querySelector('.alert');
 let alertmessage = document.querySelector('.alert p');
+let otpimage = document.getElementById('otpimage'); 
 alertmessage.style.color = "red";
 divalert.style.display = "none";
 
@@ -58,13 +59,21 @@ form.addEventListener("submit", async event => {
 
       }else if(resData[1] == 200){
         
-        divalert.style.display = "block";
-        alertmessage.textContent = resData[0].message;
-        alertmessage.style.color = "green";
-        boxqrcode.style.display = "block";
-        qrcodeImage.src = baseUrl + "/static/qrcode_images/" + resData[0].otpqrcode;
-        submit.style.display = "none";
-        getcode.style.display = "block";
+        if(resData[0].status == 2){
+          divalert.style.display = "block";
+          alertmessage.textContent = resData[0].message;
+          alertmessage.style.color = "green";
+          boxqrcode.style.display = "block";
+          qrcodeImage.src = baseUrl + "/" + resData[0].otpqrcode_uri;
+          //qrcodeImage.setAttribute('src', baseUrl + "/" + resData[0].otpqrcode);
+          submit.style.display = "none";
+          getcode.style.display = "block";
+          alert(baseUrl + "/" + resData[0].otpqrcode_uri);
+        }else if(resData[0].status == 3){
+          submit.textContent = "Submit";
+          boxqrcode.style.display = "none";
+          getcode.style.display = "none";
+        }
         
         //alert("QRCODE! " + baseUrl + "/static/qrcode_images/" + resData[0].otpqrcode);
         setTimeout(() => {
@@ -141,6 +150,6 @@ function setImage(url) {
   img.style.color = "red";
 }
 
-setImage('https://th.bing.com/th/id/R.dcf4b6e228aef80dd1a58f4c76f07128?rik=Qj2LybacmBALtA&riu=http%3a%2f%2fpngimg.com%2fuploads%2fqr_code%2fqr_code_PNG25.png&ehk=eKH2pdoegouCUxO1rt6BJXt4avVYywmyOS8biIPp5zc%3d&risl=&pid=ImgRaw&r=0')
+//setImage('https://th.bing.com/th/id/R.dcf4b6e228aef80dd1a58f4c76f07128?rik=Qj2LybacmBALtA&riu=http%3a%2f%2fpngimg.com%2fuploads%2fqr_code%2fqr_code_PNG25.png&ehk=eKH2pdoegouCUxO1rt6BJXt4avVYywmyOS8biIPp5zc%3d&risl=&pid=ImgRaw&r=0')
 
 
