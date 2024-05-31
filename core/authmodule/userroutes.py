@@ -1,6 +1,9 @@
 
 import functools
 
+import re
+from datetime import date
+
 from flask import (
     Blueprint, flash, g, redirect, render_template, make_response, request, session, url_for,jsonify,
     abort
@@ -9,7 +12,7 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import check_password_hash, generate_password_hash
 from core import db
 from core import create_user, get_users, get_user_by_id, update_user, delete_user, check_email_exists, check_phone_exists
-from core.config import get_otp_code, check_otp_code, generate_secret, generate_provisioning_uri, verify_provisioning_uri
+from core.config import generate_secret, generate_provisioning_uri, verify_provisioning_uri, update_imagename
 
 bp = Blueprint('users', __name__, url_prefix='/users')    # Create a Blueprint object
 CORS(bp)
@@ -85,18 +88,28 @@ def sign_up():
 
                 OTP = request.form.get('two_factor_auth_code')
                 secret = request.form.get('secret')
+                
                 otpstatus = False
                 if OTP is not None and secret is not None:
                     otpstatus = verify_provisioning_uri(secret, OTP)
 
-                    user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
-                    if user.userID is not None:
-                        return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':otpstatus, 
-                                        "object": request.form, "redirectUrl": "auth/2fapp/login"}, 200)
-                    else:              
-                        return jsonify({'message': 'Failed to regist user', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                    if otpstatus:
+                        user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
+                        if user.userID is not None:
+                            img = request.form.get('otpqrcode')
+                            current_date = date.today()
+                            new_image_name = secret +'-otpqrcode-done-'+current_date.strftime("%Y-%m-%d")
+                            update_imagename('core/static/otp_qrcode_images/' + img, new_image_name)
+
+                            return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':otpstatus, 
+                                            "object": request.form, "redirectUrl": "auth/2fapp/login"}, 200)
+                        else:              
+                            return jsonify({'message': 'Failed to regist user', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                    else:
+                        return jsonify({'message': '2FA OTP code is invalid.', 'status': 'error', "redirectUrl": "users/create"}, 400)
                 else:                 
-                    return jsonify({'message': 'Invalid OTP code', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                    return jsonify({'message': '2FA OTP code not found.', 'status': 'error', 'otpstatus':otpstatus, 
+                                            "object": request.form, "redirectUrl": "users/create"}, 400)
 
         
             # create a user
@@ -210,7 +223,7 @@ def validate_for(firstname, lastname, email, country,
         if any(char not in authorized_chars for char in confirm):
             return jsonify({'message': 'Invalid characters in confirm password', 'status': 'error', "redirectUrl": "users/create"}, 400)
         
-import re
+
 
 def is_valid_email(email):
     if not email or not isinstance(email, str):
@@ -219,6 +232,6 @@ def is_valid_email(email):
     email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
     if re.match(email_regex, email) is not None:
         domain = email.split('@')[1]
-        if domain.endswith('gmail.com') or domain.endswith('outlook.com') or domain.endswith('hotmail.com') or domain.endswith('live.com'):
+        if domain.endswith('gmail.com') or domain.endswith('outlook.com') or domain.endswith('hotmail.com') or domain.endswith('live.com') or domain.endswith('icloud.com'):
             return True
     return False

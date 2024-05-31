@@ -1,6 +1,7 @@
 import pyotp
 import datetime
 import qrcode
+import os
 from flask import url_for
 
 """ The  generate_secret  function generates a random secret key 
@@ -62,6 +63,21 @@ def verify_provisioning_uri(secret, code):
     totp = pyotp.TOTP(secret)
     resp = totp.verify(code)
     return resp
+
+def update_imagename(image_path, new_imagename):
+    # Get the directory path of the image
+    directory = os.path.dirname(image_path)
+            
+    # Get the extension of the image
+    extension = os.path.splitext(image_path)[1]
+            
+            # Create the new image path with the updated imagename
+    new_image_path = os.path.join(directory, new_imagename + extension)
+            
+    # Rename the image file
+    os.rename(image_path, new_image_path)
+            
+    return new_image_path
    
    
 

@@ -85,3 +85,4 @@ def delete_user(db, id):
         return user.to_dict()
     else:
         return None
+
