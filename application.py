@@ -28,7 +28,7 @@ if __name__ == '__main__':
     app.run(debug=True)"""
 
 # This atribute `app` fits with the heroku's requirements
-app = create_application()
+app = create_application('postgres')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

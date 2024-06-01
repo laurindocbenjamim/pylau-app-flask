@@ -14,6 +14,7 @@ def get_bp_components(app, db):
 
     from . authmodule.authmodule import two_factor_auth
     app.register_blueprint(two_factor_auth.bpapp)
+    #app.add_url_rule('/two_factor_auth', view_func=two_factor_auth.two_factor_auth, methods=['GET', 'POST'])    
 
     from . authmodule import userroutes
     app.register_blueprint(userroutes.bp)

@@ -13,7 +13,7 @@ def connect_to_server_db(app,type_db=None):
     if type_db == 'mysql':
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:123@localhost/testdb"
     elif type_db == 'postgres':
-        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:root@localhost:5432/softcart"
+        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:root@localhost:5432/test"
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///testdb.db"
 

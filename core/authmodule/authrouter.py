@@ -38,6 +38,9 @@ def two_fa_app_login():
 
     error = None
     status=None
+    
+    if session.get('token') is not None:
+        return redirect(url_for('public_projects'))    
 
     if request.method == 'POST':
         email = request.form.get('username')
@@ -85,6 +88,7 @@ def two_fa_app_login():
                                 'date_added': user['date_added'],
                                 'date_updated': user['date_updated'],
                             }
+                            session['user_logged'] = True
                             session['user_dataframe'] = dataframe 
                             token = generate_token(user['email'])
                             session['token'] = token 
@@ -149,3 +153,10 @@ def register():
         else:
             return jsonify({"object": data, "redirectUrl": "auth/register" }, 200)
     return render_template('auth/register.html', title='Sign Up')
+
+
+@bpapp.route('/logout', methods=['GET'])
+@cross_origin(methods=['GET'])
+def logout():
+    session.clear()
+    return redirect(url_for('Auth.two_fa_app_login'))

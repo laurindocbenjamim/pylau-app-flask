@@ -31,7 +31,7 @@ def sign_up():
     message = None
     session['user_secret_code'] = None 
     session['otpqrcode'] = None
-
+    
     if request.method == 'POST':
         firstname = request.form.get('firstname')
         lastname = request.form.get('lastname')
