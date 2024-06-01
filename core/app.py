@@ -27,9 +27,13 @@ def create_application(type_db=None,test_config=None):
     CORS(app)
 
     app.config.from_mapping(
+        SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9"
+    )
+
+    """app.config.from_mapping(
         SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9",
         #DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+    )"""
 
     # Set the database URI
     connect_to_server_db(app,type_db)
