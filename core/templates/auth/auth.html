@@ -1,7 +1,7 @@
 {% extends 'index2.html' %}
 
 {% block header %}
-<h1></h1> {% block title %} Login - {% endblock %}</h1>
+<h1></h1> {% block title %} {{ title }} - {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -17,6 +17,10 @@
     font-style: normal;
     color: #3266f5;
   }
+
+  #box-qrcode{
+
+  }
 </style>
 
 
@@ -26,7 +30,7 @@
   <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
     <div class="col-lg-6 px-0 information">
 
-      <h3 class="title" style="">
+      <h3 class="title" >
         Welcome to Data Management and Analysis Consulting
       </h3>
       <p class="lead">
@@ -73,39 +77,72 @@
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
 
-          <div class=" col-lg-8">
-            <h2>Login </h2>
-            <form class="needs-validation" novalidate>
+          <div class=" col-lg-12">
+            <h2> {{ title }} </h2>
+            <form class="needs-validation" method="post" id="" novalidate>
               <div class="row g-3">             
     
                 <div class="col-12">
                   <label for="username" class="form-label">Username</label>
                   <div class="input-group has-validation">
                     <span class="input-group-text">@</span>
-                    <input type="email" class="form-control" id="username" placeholder="Username" required>
+                    <input type="email" class="form-control" id="username" name="username" placeholder="example@gmail.com" required>
+                    
                     <div class="invalid-feedback">
                       Your username is required.
                     </div>
                   </div>
                 </div>
-    
+
                 <div class="col-12">
-                  <label for="password" class="form-label">Password </label>
-                  <input type="password" class="form-control" id="password" required>
-                  <div class="invalid-feedback">
-                    Please enter a valid password address for shipping updates.
+
+                  <label for="password" class="form-label">Password</label>
+
+                  <div class="input-group has-validation">
+
+                    <span class="input-group-text">@</span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="" required>
+
+                    <div class="invalid-feedback">
+                      Your password is required.
+                    </div>
+
                   </div>
                 </div>
+
+                <div class="row">
+
+                  {% if status == 0 %}
+                    <div class="form-group col-md-8">
+                      <label for="otpcode">2FA-Code</label>
+                      <input type="text" class="form-control" max="6" id="otpcode" name="otpcode">
+                    </div>
+                  {% endif %}
+
+                </div>
+                
+    
+                <div class="col-11 alert" style="font-size: .8rem;">                  
+                    <p></p>
+                </div> 
+                
     
               </div>
-    
+              
+
               <hr class="my-2">
-    
-              <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
+              
+              <div class="buttons" style="padding:.6rem 0;">
+               
+                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Next</button>
+               
+              </div>
+
             </form>
+
             <p>
-              Are you not registered yet? 
-              <a href="{{ url_for('Auth.register')}}" rel="noopener noreferrer">Create your account.</a>
+              Are you already registered? Click to 
+              <a href="{{ url_for('Auth.login')}}" rel="noopener noreferrer">Sign In</a>
             </p>
           </div>
           
@@ -123,6 +160,7 @@
   <!--  End Services section -->
 
 </section>
+
 
 <!--  End welcome section -->
 

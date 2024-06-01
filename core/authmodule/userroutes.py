@@ -94,7 +94,7 @@ def sign_up():
                     otpstatus = verify_provisioning_uri(secret, OTP)
 
                     if otpstatus:
-                        user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
+                        user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, secret)
                         if user.userID is not None:
                             img = request.form.get('otpqrcode')
                             current_date = date.today()

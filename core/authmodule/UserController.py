@@ -4,7 +4,7 @@ from datetime import datetime
 
 # create a User
 def create_user(db, firstname, lastname, email, country,
-        country_code, phone, password, two_factor_auth_code):
+        country_code, phone, password, two_factor_auth_secret):
     object = User( 
         firstname = firstname,
         lastname = lastname,
@@ -13,7 +13,7 @@ def create_user(db, firstname, lastname, email, country,
         country_code = country_code,
         phone = phone,
         password = password,
-        two_factor_auth_code = two_factor_auth_code
+        two_factor_auth_secret = two_factor_auth_secret
     )
     db.session.add(object)
     db.session.commit()
@@ -39,6 +39,11 @@ def check_email_exists(email):
         return True
     return False
 
+# filter user by email
+def get_user_by_email(email):
+    user = User.query.filter_by(email=email).first() 
+    return user.to_dict() if user else None
+
 def check_phone_exists(uphone):
     #exists = lambda phone: User.query.filter_by(phone=phone).first() is not None
     #return exists
@@ -49,7 +54,7 @@ def check_phone_exists(uphone):
 
 # update a User
 def update_user(db, firstname, lastname, email, country,
-        country_code, phone, password, two_factor_auth_code, 
+        country_code, phone, password, two_factor_auth_secret, 
         USER_ID):
     # get the user
     user = User.query.get(USER_ID)
@@ -63,7 +68,7 @@ def update_user(db, firstname, lastname, email, country,
         user.country_code = country_code
         user.phone = phone
         user.password = password
-        user.two_factor_auth_code = two_factor_auth_code
+        user.two_factor_auth_secret = two_factor_auth_secret
         user.date_updated = datetime.now()   
         # commit the changes
         db.session.commit()

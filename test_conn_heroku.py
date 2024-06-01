@@ -1,5 +1,5 @@
 
-#import os
+import os
 #import psycopg2
 
 PWD = 'ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883'
@@ -12,3 +12,18 @@ DATABASE_URL = "jdbc:postgresql://ec2-52-31-2-97.eu-west-1.compute.amazonaws.com
 #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 #print(conn)
+
+from werkzeug.security import check_password_hash, generate_password_hash
+# Encrypt password
+def encrypt_password(password):
+    return generate_password_hash(password)
+
+# Decrypt password
+def decrypt_password(encrypted_password, password):
+    return check_password_hash(encrypted_password, password)
+
+password = 'admin'
+#pwd = encrypt_password(password)
+#print(pwd)
+
+#print(decrypt_password(pwd, 'password'))

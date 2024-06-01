@@ -1,31 +1,21 @@
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 
-const form = document.getElementById('form-register');
+const form = document.getElementById('two-fa-login-form');
 
 //const form2fa = document.getElementById('form-check-2fa');
-var boxqrcode = document.getElementById('box-qrcode');
-var qrcodeImage = document.getElementById('qrcodeImage');
-var submit = document.getElementById('submit');
-var getcode = document.getElementById('get_code');
-var two_FA_div = document.getElementById('two-FA-div');
-let divalert = document.querySelector('.alert');
-let alertmessage = document.querySelector('.alert p');
-let otpimage = document.getElementById('otpimage'); 
-let code_alert = document.getElementById('code-alert'); 
-alertmessage.style.color = "#f5324c";
-divalert.style.display = "none";
+
 
 form.addEventListener("submit", async event => {
     event.preventDefault();
-
+  alert("submit");
   const dataForm = new FormData(form);
 
   const password = dataForm.get('password');
-  const confirmPassword = dataForm.get('confirm');
+  const username = dataForm.get('username');
 
-  if (password !== confirmPassword) {
+  if (username == '' || password == '') {
     divalert.style.display = "block";
-    alertmessage.textContent = "The passwords do not match!";
+    
     return;
   }else{
     
@@ -39,19 +29,9 @@ form.addEventListener("submit", async event => {
 
   try {
 
-    if(localStorage.getItem('otpqrcode')){
-      dataForm.append('otpqrcode', localStorage.getItem('otpqrcode'));
-      dataForm.append('otpqrcode_uri', localStorage.getItem('otpqrcode_uri'));
-      dataForm.append('secret', localStorage.getItem('secret'));
-
-      localStorage.removeItem('secret');
-      localStorage.removeItem('otpqrcode_uri');
-      localStorage.removeItem('otpqrcode');
-      localStorage.clear();
-    }
+ 
     const res = await fetch(
-      //baseUrl + '/auth/register',
-      baseUrl + '/users/create',
+      baseUrl + '/auth/2fapp/login',
       {
         method: 'POST',
         body: dataForm
@@ -66,38 +46,18 @@ form.addEventListener("submit", async event => {
       if(resData[1] == 400){
 
         console.log(resData[0].object);      
-        divalert.style.display = "block";
-        alertmessage.style.color = "#f5324c";
-        alertmessage.textContent = resData[0].message;
+       
 
       }else if(resData[1] == 200){
         
-        if(resData[0].status == 2){
-          divalert.style.display = "block";
-          alertmessage.textContent = resData[0].message;
-          alertmessage.style.color = "green";
-          boxqrcode.style.display = "block";
-          qrcodeImage.src = baseUrl + "/" + resData[0].otpqrcode_uri;
-          //qrcodeImage.setAttribute('src', baseUrl + "/" + resData[0].otpqrcode);
-          submit.style.display = "none";
-          getcode.style.display = "block";
-          
-          localStorage.setItem('secret', resData[0].secret);
-          localStorage.setItem('otpqrcode', resData[0].otpqrcode);
-          localStorage.setItem('otpqrcode_uri', resData[0].otpqrcode_uri);
-          localStorage.setItem('dataForm', dataForm);
+        if(resData[0].status == 1){
+ 
 
-        }else if(resData[0].status == 3){
+        }else if(resData[0].status == 2){
 
-          divalert.style.display = "none";
-          submit.textContent = "Submit";
-          boxqrcode.style.display = "none";
-          getcode.style.display = "none";
-          two_FA_div.style.display = "block";
-          localStorage.clear();
-          form.reset();
+         
           setTimeout(() => {
-            window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
+            //window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
           });
         }
         

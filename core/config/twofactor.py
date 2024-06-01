@@ -3,6 +3,7 @@ import datetime
 import qrcode
 import os
 from flask import url_for
+import os
 
 """ The  generate_secret  function generates a random secret key 
     that is used to generate the OTP. The  generate_otp  function 
@@ -78,6 +79,22 @@ def update_imagename(image_path, new_imagename):
     os.rename(image_path, new_image_path)
             
     return new_image_path
+
+def remove_files_from_root_folder():
+    root_folder = os.getcwd()
+    files = os.listdir(root_folder)
+        
+    for file in files:
+        file_path = os.path.join(root_folder, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+        
+    return "Files removed from root folder."
+
+
+
+    
+
    
    
 
