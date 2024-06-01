@@ -14,7 +14,7 @@ def connect_to_server_db(app,type_db=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:123@localhost/testdb"
     elif type_db == 'postgres':
         local_db = "postgresql://postgres:root@localhost:5432/test"
-        cloud_db = "postgres://fiysuzvofhprpp:ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883@ec2-52-31-2-97.eu-west-1.compute.amazonaws.com:5432/db5veivij96r5u"
+        cloud_db = "postgres://fiysuzvofhprpp:ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883@ec2-52-31-2-97.eu-west-1.compute.amazonaws.com:5432/db5veivij96r5u?sslmode=require"
         app.config["SQLALCHEMY_DATABASE_URI"] = cloud_db
         
     else:
