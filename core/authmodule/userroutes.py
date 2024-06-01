@@ -94,17 +94,22 @@ def sign_up():
                     otpstatus = verify_provisioning_uri(secret, OTP)
 
                     if otpstatus:
-                        user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, secret)
-                        if user.userID is not None:
-                            img = request.form.get('otpqrcode')
-                            current_date = date.today()
-                            new_image_name = secret +'-otpqrcode-done-'+current_date.strftime("%Y-%m-%d")
-                            update_imagename('core/static/otp_qrcode_images/' + img, new_image_name)
+                        
+                        try:
+                            user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, secret)
+                            if user.userID is not None:
+                                img = request.form.get('otpqrcode')
+                                current_date = date.today()
+                                new_image_name = secret +'-otpqrcode-done-'+current_date.strftime("%Y-%m-%d")
+                                update_imagename('core/static/otp_qrcode_images/' + img, new_image_name)
 
-                            return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':otpstatus, 
-                                            "object": request.form, "redirectUrl": "auth/2fapp/login"}, 200)
-                        else:              
-                            return jsonify({'message': 'Failed to regist user', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                                return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':otpstatus, 
+                                                "object": request.form, "redirectUrl": "auth/2fapp/login"}, 200)
+                            else:              
+                                return jsonify({'message': 'Failed to regist user', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                        except Exception as e:
+                            return jsonify({'message': 'Error: '+e, 'status': 'error', "redirectUrl": "users/create"}, 400) 
+                    
                     else:
                         return jsonify({'message': '2FA OTP code is invalid.', 'status': 'error', "redirectUrl": "users/create"}, 400)
                 else:                 

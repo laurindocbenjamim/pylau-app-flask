@@ -13,7 +13,10 @@ def connect_to_server_db(app,type_db=None):
     if type_db == 'mysql':
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:123@localhost/testdb"
     elif type_db == 'postgres':
-        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:root@localhost:5432/test"
+        local_db = "postgresql://postgres:root@localhost:5432/test"
+        cloud_db = "postgres://fiysuzvofhprpp:ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883@ec2-52-31-2-97.eu-west-1.compute.amazonaws.com:5432/db5veivij96r5u"
+        app.config["SQLALCHEMY_DATABASE_URI"] = cloud_db
+        
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///testdb.db"
 
@@ -37,15 +40,6 @@ def create_application(type_db=None,test_config=None):
     with app.app_context():
         db.create_all()
 
-    """from . modules.codeskill import dictionaries
-    app.register_blueprint(dictionaries.bpapp)
-
-    from .modules.authmodule import authcontroller
-    app.register_blueprint(authcontroller.bpapp)
-
-    from . modules.authmodule import two_factor_auth
-    app.register_blueprint(two_factor_auth.bpapp)
-"""
     #from . modules.smtp import sendemail
 
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
