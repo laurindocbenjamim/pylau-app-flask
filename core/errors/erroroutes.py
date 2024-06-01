@@ -22,7 +22,8 @@ def handle_errors(app):
     
     @app.errorhandler(Exception)
     def handle_generic_error(e):
-        image=image='https://media.giphy.com/media/3o7aTskHEUdgCQAXde/giphy.gif'
+        app.logger.error('Internal Server Error: %s', e)
+        image=image='https://miro.medium.com/v2/resize:fit:1400/1*2Z41mMgjOxkUUuvIwd7Djw.png'
         resp = make_response(render_template('errors/generic.html', message="An error occurred", image=image, error=500), 500)
         resp.headers['X-Something'] = 'Generic Error'
         return resp

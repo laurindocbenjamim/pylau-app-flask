@@ -11,10 +11,10 @@ from flask import (
 from flask_cors import CORS, cross_origin
 from werkzeug.security import check_password_hash, generate_password_hash
 from core import db
-from core import create_user, get_users, get_user_by_id, update_user, delete_user, check_email_exists, check_phone_exists
+from core import create_user, get_users, get_user_by_id, get_user_by_email, update_user, delete_user, check_email_exists, check_phone_exists
 from core.config import generate_secret, generate_provisioning_uri, verify_provisioning_uri, update_imagename
 
-bp = Blueprint('users', __name__, url_prefix='/users')    # Create a Blueprint object
+bp = Blueprint('Users', __name__, url_prefix='/users')    # Create a Blueprint object
 CORS(bp)
 
 from core.authmodule.getalluser import get_allusers
@@ -135,10 +135,18 @@ def get_all_users():
     #return f"User logged in successfully: {user.username}"
 
 # get user by id
-@bp.route('/<userid>/get', methods=['GET'])    # Define a route for the login page
+@bp.route('/<int:userid>/get', methods=['GET'])    # Define a route for the login page
 @cross_origin(methods=['GET'])
 def getuser_by_id(userid):
     users = get_user_by_id(db, userid)
+    
+    return jsonify([{'message': 'User found', 'data': users}])
+    #return f"User logged in successfully: {user.username}"
+
+@bp.route('/get/<email>', methods=['GET'])    # Define a route for the login page
+@cross_origin(methods=['GET'])
+def getuser_by_email(email=None):
+    users = get_user_by_email(db, email)
     
     return jsonify([{'message': 'User found', 'data': users}])
     #return f"User logged in successfully: {user.username}"
@@ -158,7 +166,7 @@ def update_user():
     return jsonify([{'message': 'User updated successfully', 'data': users}])
 
 # Delete a usergit 
-@bp.route('/<userid>/delete', methods=['GET'])    #
+@bp.route('/<int:userid>/delete', methods=['GET'])    #
 @cross_origin(methods=['GET'])
 def deleteuser(userid):
     

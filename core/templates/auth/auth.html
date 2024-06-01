@@ -79,6 +79,17 @@
 
           <div class=" col-lg-12">
             <h2> {{ title }} </h2>
+
+            {%  if status == 400 %}
+            <div class="my-alert" style="color: #f5324c;font-size:.9rem">
+              <p>{{ message }}</p>             
+            </div>
+            {%else %}
+            <div class="my-alert" style="color: #2ae643;font-size:.9rem">
+              <p>{{ message }}</p>             
+            </div>
+            {% endif %}
+            
             <form class="needs-validation" method="post" id="" novalidate>
               <div class="row g-3">             
     
@@ -86,7 +97,8 @@
                   <label for="username" class="form-label">Username</label>
                   <div class="input-group has-validation">
                     <span class="input-group-text">@</span>
-                    <input type="email" class="form-control" id="username" name="username" placeholder="example@gmail.com" required>
+                    <input type="email" class="form-control" id="username" name="username"
+                    value="{{ request.form.get('username', '') }}" placeholder="example@gmail.com" required>
                     
                     <div class="invalid-feedback">
                       Your username is required.
@@ -94,6 +106,7 @@
                   </div>
                 </div>
 
+                
                 <div class="col-12">
 
                   <label for="password" class="form-label">Password</label>
@@ -101,27 +114,39 @@
                   <div class="input-group has-validation">
 
                     <span class="input-group-text">@</span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="" required>
-
+                    {% if status != 1 %}
+                    <input type="password" class="form-control" value="" id="password" name="password" placeholder="" required>
+                    {% else %}
+                    <input type="password" class="form-control" readonly value="{{ request.form.get('password', '') }}" id="password" name="password" placeholder="" required>
+                    {% endif %}
                     <div class="invalid-feedback">
                       Your password is required.
                     </div>
 
                   </div>
                 </div>
-
-                <div class="row">
-
-                  <!--{% if status == 0 %}-->
-                    <div class="form-group col-md-8">
-                      <label for="otpcode">2FA-Code</label>
-                      <input type="text" class="form-control" max="6" id="otpcode" name="otpcode">
-                    </div>
-                  <!--{% endif %}-->
-
-                </div>
                 
-    
+
+                <div class="col-12">
+
+                  <label for="otpcode" class="form-label">Code</label>
+                  
+                  <div class="input-group has-validation">
+
+                    <span class="input-group-text">@</span>
+                    {% if status == 1 %}
+                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="" >
+                    
+                    {% else %}
+                    <input type="text" readonly class="form-control" id="otpcode" name="otpcode" placeholder="" required>
+                    {% endif %}
+                    <div class="invalid-feedback">
+                      Your otpcode is required.
+                    </div>
+
+                  </div>
+                </div>
+
                 <div class="col-11 alert" style="font-size: .8rem;">                  
                     <p></p>
                 </div> 
@@ -142,7 +167,7 @@
 
             <p>
               Are you already registered? Click to 
-              <a href="{{ url_for('Auth.login')}}" rel="noopener noreferrer">Sign In</a>
+              <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Sign In</a>
             </p>
           </div>
           

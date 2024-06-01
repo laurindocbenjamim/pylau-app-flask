@@ -10,6 +10,8 @@ from flask_cors import CORS, cross_origin
 from core.config import verify_provisioning_uri
 from core import get_user_by_email, check_email_exists
 from core import db
+from core.config import token_required, generate_token, decode_token, token_required
+from functools import wraps
 
 bpapp = Blueprint("Auth", __name__, url_prefix='/auth')
 CORS(bpapp)
@@ -33,56 +35,77 @@ def login():
 @bpapp.route('/2fapp/login', methods=['GET', 'POST'])
 @cross_origin(methods=['GET', 'POST'])
 def two_fa_app_login():
-     
+
+    error = None
+    status=None
+
     if request.method == 'POST':
         email = request.form.get('username')
         password = request.form.get('password')
         code = request.form.get('otpcode')
-        error = None
+
         if email == '':
-             
-            return render_template('auth/auth.html', title='Sign In', status=400, message= 'Email is required.')
-            #return jsonify({'message': 'Email is required.', 'status': 'error', 'otpstatus': False, 
-            #                                "object": [], "redirectUrl": "auth/2fapp/login"}, 400)
+            status = 400 
+            error = 'Email is required.'
         if password == '':
-            error = 'Password is required.'
-            abort(400)
-            
+            status = 400
+            error = 'Password is required.'            
         
         if email != '' and password != '':
             user = get_user_by_email(email)
             user = [] if user is None else user
             
-            if user is None:
-                error = 'Usernam not found.'
-                abort(400)
+            if len(user) == 0:
+                status = 400
+                error = 'Username not found.'
                 
             else:
                 
                 if check_password_hash(user['password'], password) == False:
+                    status = 400
                     error = 'Password is wrong.'
-                    abort(400)
-                                    
-                if code == '':
+
+                elif code == '':
                     error = 'Enter the code provided by your auth app.'
-                    abort(400) 
+                    status = 1
                 else:
                     if user['two_factor_auth_secret']:
                         if verify_provisioning_uri(user['two_factor_auth_secret'], code):
-                            return jsonify({'message': 'User logged successfull.', 'status': 1, 'otpstatus': True, 
-                                                "object": user, "redirectUrl": "dashboard"}, 200)
+                            status = 0
+                            error = 'Login successful.'
+                            session.clear()
+                            dataframe =  {
+                                'userID': user['userID'],
+                                'email': user['email'],
+                                'firstname': user['firstname'],
+                                'lastname': user['lastname'],
+                                'country': user['country'],
+                                'phone': user['phone'],
+                                'country_code': user['country_code'],
+                                'date_added': user['date_added'],
+                                'date_updated': user['date_updated'],
+                            }
+                            session['user_dataframe'] = dataframe 
+                            token = generate_token(user['email'])
+                            session['token'] = token 
+                            
+                            return redirect(url_for('public_projects'))
+                            
                         else:
+                            status = 1
                             error = 'The 2FA-code is invalid.'
-                            abort(400)
                     else:
+                        status = 400
                         error = 'The 2FA-code not exists for this user.'
-                        abort(400)
+                        #abort(400)
+                        #return jsonify({'message': error, 'status': 'error', 'otpstatus': False, 
+                                            #"object": [], "redirectUrl": "auth/2fapp/login"}, 400)
         flash(error)
-        return render_template('auth/auth.html', title='Sign In', status=400, message=error)
+        return render_template('auth/auth.html', title='Sign In', status=status, message= error)
                                                         
         
     if request.method == 'GET':
-        return render_template('auth/auth.html', title='Sign In', two_fa=True)
+        return render_template('auth/auth.html', title='Sign In', two_fa=True, status=0, message= '')
 
 def two_fa_login():
      
