@@ -11,13 +11,13 @@ from flask import (
     Blueprint, render_template, url_for, request, redirect, jsonify
 )
 
-bpapp = Blueprint("2TFA", __name__, url_prefix='/2fa')
-CORS(bpapp)
+bp = Blueprint("2TFA", __name__, url_prefix='/2fa')
+CORS(bp)
 
 totp = None
 secret = '37TKWDR724Z3RY7Q7B4OZDOQQWWR4A42'
 
-@bpapp.route('/get', methods=['GET', 'POST'])
+@bp.route('/get', methods=['GET', 'POST'])
 @cross_origin(methods=['GET'])
 def get_code():
     
@@ -33,7 +33,7 @@ def get_code():
         #return render_template('auth/2fa.html', otpstatus=False, otpcode=OTP)
     
 
-@bpapp.route('/verify', methods=['GET', 'POST'])
+@bp.route('/verify', methods=['GET', 'POST'])
 @cross_origin(methods=['GET', 'POST'])
 def chek_code():
 

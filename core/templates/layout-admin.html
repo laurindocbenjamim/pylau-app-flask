@@ -190,13 +190,15 @@
       </li>
       <li class="breadcrumb-item">
         <a class="link-body-emphasis fw-semibold text-decoration-none" href="{{ url_for('Users.get_allusers')}}">Users</a>
-      </li>
+      </li> 
       <li class="breadcrumb-item">
         <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">News</a>
       </li>
+      {% if g.user %}
       <li class="breadcrumb-item active" aria-current="page">
-        Data
+        Users
       </li>
+      {% endif %}
     </ol>
   </nav>
 </div>

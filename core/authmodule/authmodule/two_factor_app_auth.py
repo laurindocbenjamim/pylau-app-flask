@@ -11,8 +11,8 @@ from flask import (
     Blueprint, render_template, url_for, request, redirect, jsonify
 )
 
-bpapp = Blueprint("2FApp", __name__, url_prefix='/2fapp')
-CORS(bpapp)
+bp = Blueprint("2FApp", __name__, url_prefix='/2fapp')
+CORS(bp)
 
 totp = None
 user_secret_code = '37TKWDR724Z3RY7Q7B4OZDOQQWWR4A42'
@@ -21,7 +21,7 @@ user_secret_code = '37TKWDR724Z3RY7Q7B4OZDOQQWWR4A42'
 """
 
 # Google 2FA
-@bpapp.route('/get', methods=['GET', 'POST'])
+@bp.route('/get', methods=['GET', 'POST'])
 @cross_origin(methods=['GET'])
 def get_code():
         
@@ -32,8 +32,8 @@ def get_code():
     
 
 # Google 2FA
-@bpapp.route('/verify/<code>', methods=['GET', 'POST'])
-@bpapp.route('/verify', methods=['GET', 'POST'])
+@bp.route('/verify/<code>', methods=['GET', 'POST'])
+@bp.route('/verify', methods=['GET', 'POST'])
 @cross_origin(methods=['GET', 'POST'])
 def chek_code(code=None):
 

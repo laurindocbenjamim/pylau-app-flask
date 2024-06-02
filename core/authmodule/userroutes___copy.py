@@ -17,7 +17,7 @@ from core.config import generate_secret, generate_provisioning_uri, verify_provi
 bp = Blueprint('users', __name__, url_prefix='/users')    # Create a Blueprint object
 CORS(bp)
 
-from core.authmodule.getalluser import get_allusers
+from core.authmodule.route_blocks._user_get_all_route import get_allusers
 import requests
 # Loading block of routes
 get_allusers(bp, db)
@@ -126,7 +126,7 @@ def sign_up():
     return render_template('auth/register.html', title='Sign Up')
 
 # get all users
-@bp.route('/get-all', methods=['GET'])    # Define a route for the login page
+@bp.route('/get-aall', methods=['GET'])    # Define a route for the login page
 @cross_origin(methods=['GET'])
 def get_all_users():
     users = get_users(db)

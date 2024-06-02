@@ -33,6 +33,14 @@ def get_user_by_id(db,id):
     user = db.get_or_404(User, id)
     return user.to_dict()
 
+def _get_user_by_id(id):
+    try:
+        #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
+        user = User.query.filter_by(userID=id).first()
+        return user.to_dict()
+    except:
+        return None
+
 def check_email_exists(email):
     user = User.query.filter_by(email=email).first()
     if user:
