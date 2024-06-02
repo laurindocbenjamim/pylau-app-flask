@@ -41,8 +41,11 @@ def check_email_exists(email):
 
 # filter user by email
 def get_user_by_email(email):
-    user = User.query.filter_by(email=email).first() 
-    return user.to_dict() if user else None
+    try:
+        user = User.query.filter_by(email=email).first()
+        return user.to_dict()
+    except:
+        return None
 
 def check_phone_exists(uphone):
     #exists = lambda phone: User.query.filter_by(phone=phone).first() is not None

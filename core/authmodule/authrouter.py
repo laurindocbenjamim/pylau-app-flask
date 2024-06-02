@@ -47,14 +47,14 @@ def two_fa_app_login():
         password = request.form.get('password')
         code = request.form.get('otpcode')
 
-        if email == '':
+        if not email:
             status = 400 
             error = 'Email is required.'
-        if password == '':
+        if not password:
             status = 400
             error = 'Password is required.'            
         
-        if email != '' and password != '':
+        if email and password != '':
             user = get_user_by_email(email)
             user = [] if user is None else user
             
