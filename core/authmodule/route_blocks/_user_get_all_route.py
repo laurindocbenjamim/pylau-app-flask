@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_cors import cross_origin
-from core.authmodule.UserController import get_users
+from core.authmodule.controllers.UserController import get_users
 def get_all_users(bp, db):
     @bp.route('/get-all', methods=['GET'])    # Define a route for the login page
     @cross_origin(methods=['GET'])

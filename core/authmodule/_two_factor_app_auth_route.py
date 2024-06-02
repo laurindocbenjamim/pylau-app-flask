@@ -2,7 +2,7 @@
 import pyotp
 import datetime
 
-from ...config import get_otp_code, check_otp_code, generate_secret, generate_provisioning_uri, verify_provisioning_uri
+from core.config import generate_provisioning_uri, verify_provisioning_uri
 
 from flask import session
 from flask_cors import CORS, cross_origin

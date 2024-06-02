@@ -88,8 +88,8 @@
     
     <h2>Public projects</h2>
     <h3 style="color: aquamarine;">Welcome 
-      {% if user_dataframe %}
-        <Span>{{user_dataframe['firstname']}}</Span>
+      {% if g.user %}
+        <Span>{{g.user['firstname']}}</Span>
       {% endif %}
         
     </h3>
