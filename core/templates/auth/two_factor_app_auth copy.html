@@ -50,7 +50,28 @@
 
           <div class=" col-lg-12" style="text-align: center;">
             <h2>{{ title }} </h2>
-                 
+            {% if otpqrcode %}
+
+            <div class="row g-3" style="justify-content: center;">             
+    
+              <div class="col-12" style="justify-content: center;">
+                
+                <p>
+                  Scan the QR code with your authenticator app
+                </p>
+                <div class="input-group has-validation" style="justify-content: center;">
+                  
+                  <img src="{{ url_for('static', filename='qrcode_gen/') + otpqrcode }}" height="150" width="150" alt="" srcset="">
+
+                </div>
+                
+              </div>
+
+              <a class="w-50 btn btn-primary btn-lg" href="{{ url_for('2FApp.chek_code', code=1)}}" rel="noopener noreferrer">I have a code 3</a>
+  
+            </div>
+
+            {% elif verify_code %}
             <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
               <div class="row g-3">             
     
@@ -77,9 +98,9 @@
               
             </form>
 
-            {% if otpstatus %}
+            {% elif otpstatus %}
             
-            <!--<div class="row g-3" style="justify-content: center;">             
+            <div class="row g-3" style="justify-content: center;">             
               <p>
                 You have been authenticated.
               </p>
@@ -95,11 +116,11 @@
                 
               </div>
   
-            </div>-->
+            </div>
 
             {% elif otpstatus == false %}
             
-            <!--<div class="row g-3" style="justify-content: center;">             
+            <div class="row g-3" style="justify-content: center;">             
               <p>
                 Failed to authenticate. 
                 <a class="w-50 btn-primary btn-lg" href="{{ url_for('2FApp.chek_code', code=1)}}" rel="noopener noreferrer">Try again.</a>
@@ -115,7 +136,7 @@
                 
               </div>
   
-            </div>-->
+            </div>
 
             {% endif %}
             <p>

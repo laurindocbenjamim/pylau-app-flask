@@ -55,7 +55,7 @@ def send_simple_email(subject, recipients, body, is_file=False) -> None:
     s.send_message(msg)
     s.quit()
 
-def send_simple_email_with_yandex(subject, recipients, body, is_file=False) -> None:
+def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -> None:
      # Create the container email message.
 
     context = ssl.create_default_context()

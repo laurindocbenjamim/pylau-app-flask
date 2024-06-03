@@ -6,7 +6,7 @@ from flask_cors import CORS, cross_origin
 # Import the email modules we'll need
 from email.message import EmailMessage
 
-from core.smtpmodule.emailcontroller import send_simple_email, send_simple_email_with_yandex
+from core.smtpmodule.emailcontroller import send_simple_email, send_simple_email_mime_multipart
 
 bp = Blueprint("email", __name__, url_prefix='/email')
 CORS(bp)
@@ -84,6 +84,6 @@ def smtp_send_simple_email():
     if request.method == 'GET':
         textfile = "core/static/email_templates/email_.txt"
         body = "Hello brother"
-        res = send_simple_email_with_yandex('Testing with SSL', "lucindadiasbenjamim@gmail.com", textfile, False)
+        res = send_simple_email_mime_multipart('Testing with SSL', "lucindadiasbenjamim@gmail.com", textfile, False)
         #res = send_simple_email('Testing with SSL', "lucindadiasbenjamim@gmail.com", textfile, False)
         return jsonify([{'emailstatus': res, 'emailcode': 0 }])

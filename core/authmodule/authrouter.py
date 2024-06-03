@@ -12,7 +12,9 @@ bp = Blueprint("Auth", __name__, url_prefix='/auth')
 CORS(bp)
 
 # Importing the route blocks
-from core.authmodule.route_blocks._auth_two_fa_route import route_two_fa_login
+from core.authmodule.route_blocks._auth_two_fa_app_route import route_two_fa_login
+from core.authmodule.route_blocks._auth_route import route_auth
+route_auth(bp, db)
 route_two_fa_login(bp, db)
 
 # logout route

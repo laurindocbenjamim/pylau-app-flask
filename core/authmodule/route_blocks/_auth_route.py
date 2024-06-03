@@ -15,10 +15,10 @@ from core.config import token_required, generate_token, decode_token, token_requ
 from functools import wraps
 
 
-def route_two_fa_login(bpapp, db):
-    @bpapp.route('/2fapp/login', methods=['GET', 'POST'])
+def route_auth(bp, db):
+    @bp.route('/login', methods=['GET', 'POST'])
     @cross_origin(methods=['GET', 'POST'])
-    def two_fa_app_login():
+    def signin():
 
         error = None
         status=None
@@ -29,7 +29,6 @@ def route_two_fa_login(bpapp, db):
         if request.method == 'POST':
             email = request.form.get('username')
             password = request.form.get('password')
-            code = request.form.get('otpcode')
 
             if not email:
                 status = 400 
@@ -51,44 +50,13 @@ def route_two_fa_login(bpapp, db):
                     if check_password_hash(user['password'], password) == False:
                         status = 400
                         error = 'Password is wrong.'
-
-                    elif code == '':
-                        error = 'Enter the code provided by your auth app.'
-                        status = 1
                     else:
-                        if user['two_factor_auth_secret']:
-                            if verify_provisioning_uri(user['two_factor_auth_secret'], code):
-                                status = 0
-                                error = 'Login successful.'
-                                session.clear()
-                                dataframe =  {
-                                    'userID': user['userID'],
-                                    'email': user['email'],
-                                    'firstname': user['firstname'],
-                                    'lastname': user['lastname'],
-                                    'country': user['country'],
-                                    'phone': user['phone'],
-                                    'country_code': user['country_code'],
-                                    'date_added': user['date_added'],
-                                    'date_updated': user['date_updated'],
-                                }
-                                session['user_logged'] = True
-                                session['user_id'] = user['userID']
-                                session['user_dataframe'] = dataframe 
-                                token = generate_token(user['email'])
-                                session['token'] = token 
-                                
-                                return redirect(url_for('public_projects'))
-                                
-                            else:
-                                status = 1
-                                error = 'The 2FA-code is invalid.'
-                        else:
-                            status = 400
-                            error = 'The 2FA-code not exists for this user.'
-                            #abort(400)
-                            #return jsonify({'message': error, 'status': 'error', 'otpstatus': False, 
-                                                #"object": [], "redirectUrl": "auth/2fapp/login"}, 400)
+                        session.clear()
+                        session['user_id'] = user['userID']
+                        #session['secret'] = user['two_factor_auth_secret']
+                        session['email'] = user['email']
+                        return redirect(url_for('Auth.two_fa_app_login'))
+                       
             flash(error)
             return render_template('auth/auth.html', title='Sign In', status=status, message= error)
                                                             
@@ -98,7 +66,7 @@ def route_two_fa_login(bpapp, db):
     
 
     # Load logged in user to verify if the user id is stored in a session
-    @bpapp.before_app_request
+    @bp.before_app_request
     def load_logged_in_user():
         user_id = session.get('user_id')
 
