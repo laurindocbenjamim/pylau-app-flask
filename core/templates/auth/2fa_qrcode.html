@@ -1,7 +1,7 @@
 {% extends 'index2.html' %}
 
 {% block header %}
-<h1></h1> {% block title %} {{title}} - {% endblock %}</h1>
+<h1></h1> {% block title %} {{ title }} - {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -17,12 +17,8 @@
     font-style: normal;
     color: #3266f5;
   }
-  .flash_error{
-    margin: 2%;
-    color: rgb(236, 72, 72);
-    font-size: 1rem;
-    font-weight: normal;
-  }
+
+  
 </style>
 
 
@@ -65,20 +61,23 @@
                  
             <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
               <div class="row g-3">             
-    
-                <div class="col-12">
-                  <label for="otpcode" class="form-label">Provide the code </label>
-                  <div class="input-group has-validation">
                     
-                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" required>
+
+                <div class="col-12 " id="box-qrcode"  style="justify-content: center;">
+
+                    <p>
+                      Scan the QR code with your authenticator app
+                    </p>
+                    <div class="input-group has-validation" id="otpimage" style="justify-content: center;
+                    background-color:#fff; border-radius: 2rem; margin: 2%;">
+                      {% if otpqrcode_uri %}
+                      <img src="{{ url_for('static', filename='/') + otpqrcode_uri }}" height="150" width="150" alt="" srcset="">
+                      {% endif %}
+                                            
+                    </div>
                     
-                  </div>
-
-                  {% for message in get_flashed_messages() %}
-                      <div class="flash_error">{{ message }}</div>
-                    {% endfor %}
-
                 </div>
+
     
               </div>
     
@@ -155,6 +154,8 @@
   <!--  End Services section -->
 
 </section>
+
+
 
 <!--  End welcome section -->
 

@@ -2,7 +2,8 @@ from core.app import db, create_application
 from core.models.personmodel import Person
 from core.authmodule.models.UserModel import User
 from core.authmodule.controllers.UserController import (
-    create_user, get_users, get_user_by_id, 
+    create_user, get_users, get_user_by_id,
+    get_user_by_id_limited_dict, 
     update_user, delete_user, get_user_by_email,
     check_email_exists, check_phone_exists
 )

@@ -113,12 +113,8 @@
 
                   <div class="input-group has-validation">
 
-                    <span class="input-group-text">@</span>
-                    {% if status != 1 %}
-                    <input type="password" class="form-control" value="" id="password" name="password" placeholder="" required>
-                    {% else %}
-                    <input type="password" class="form-control" readonly value="{{ request.form.get('password', '') }}" id="password" name="password" placeholder="" required>
-                    {% endif %}
+                    <span class="input-group-text">@</span>                   
+                    <input type="password" class="form-control" value="" id="password" name="password" placeholder="" required>                    
                     <div class="invalid-feedback">
                       Your password is required.
                     </div>
@@ -126,26 +122,6 @@
                   </div>
                 </div>
                 
-
-                <div class="col-12">
-
-                  <label for="otpcode" class="form-label">Code</label>
-                  
-                  <div class="input-group has-validation">
-
-                    <span class="input-group-text">@</span>
-                    {% if status == 1 %}
-                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="" >
-                    
-                    {% else %}
-                    <input type="text" readonly class="form-control" id="otpcode" name="otpcode" placeholder="" required>
-                    {% endif %}
-                    <div class="invalid-feedback">
-                      Your otpcode is required.
-                    </div>
-
-                  </div>
-                </div>
 
                 <div class="col-11 alert" style="font-size: .8rem;">                  
                     <p></p>
@@ -166,8 +142,8 @@
             </form>
 
             <p>
-              Are you already registered? Click to 
-              <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Sign In</a>
+              You are not registered yet? Click to 
+              <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Sign Up</a>
             </p>
           </div>
           

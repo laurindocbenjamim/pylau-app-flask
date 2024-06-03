@@ -29,58 +29,51 @@ def route_two_fa_login(bp, db):
         if request.method == 'POST':
             code = request.form.get('otpcode')
             
-            if g.user is not None:
-                id = g.user['user_id']
+            if g.user is None:
+                error = 'User not identified.'
+                flash(error)
+                return render_template('auth/two_factor_app_auth.html', title='2FA-Authentication', status=status, message= error)                                       
+            else:
+                id = g.user['userID']
 
             if not code:
                 status = 400 
-                error = 'Email is required.'          
-            
-            if id is not None:
-                user = get_user_by_id(id)
+                error = 'The 2-factor authentication code is required.'          
+
+            elif id is not None:
+                user = get_user_by_id(db,id)
                 user = [] if user is None else user
                 
                 if len(user) == 0:
                     status = 400
                     error = 'Username not found.'
                     
-                else:
-                    if code == '':
-                        error = 'Enter the code provided by your auth app.'
-                        status = 1
+                elif user['two_factor_auth_secret']:
+                    if verify_provisioning_uri(user['two_factor_auth_secret'], code):
+                        status = 0
+                        error = 'Login successful.'
+                        session.clear()
+                        dataframe =  {
+                            'email': user['email'],
+                            'firstname': user['firstname'],
+                            'lastname': user['lastname'],
+                        }
+                        session['user_logged'] = True
+                        session['user_id'] = user['userID']
+                        session['user_dataframe'] = dataframe 
+                        token = generate_token(user['email'])
+                        session['token'] = token 
+                                
+                        return redirect(url_for('public_projects'))
+                                
                     else:
-                        if user['two_factor_auth_secret']:
-                            if verify_provisioning_uri(user['two_factor_auth_secret'], code):
-                                status = 0
-                                error = 'Login successful.'
-                                session.clear()
-                                dataframe =  {
-                                    'userID': user['userID'],
-                                    'email': user['email'],
-                                    'firstname': user['firstname'],
-                                    'lastname': user['lastname'],
-                                    'country': user['country'],
-                                    'phone': user['phone'],
-                                    'country_code': user['country_code'],
-                                    'date_added': user['date_added'],
-                                    'date_updated': user['date_updated'],
-                                }
-                                session['user_logged'] = True
-                                session['user_id'] = user['userID']
-                                session['user_dataframe'] = dataframe 
-                                token = generate_token(user['email'])
-                                session['token'] = token 
-                                
-                                return redirect(url_for('public_projects'))
-                                
-                            else:
-                                status = 1
-                                error = 'The 2FA-code is invalid.'
-                        else:
-                            status = 400
-                            error = 'The 2FA-code not exists for this user.'
-                            #abort(400)
-                            return jsonify({'message': error, 'status': 'error', 'otpstatus': False, 
+                        status = 1
+                        error = 'The 2FA-code provided is invalid.'
+                else:
+                    status = 400
+                    error = 'The 2FA-code not exists for this user.'
+                    #abort(400)
+                    return jsonify({'message': error, 'status': 'error', 'otpstatus': False, 
                                                 "object": [], "redirectUrl": "auth/2fapp/login"}, 400)
                     
             flash(error)
@@ -89,7 +82,8 @@ def route_two_fa_login(bp, db):
             
         if request.method == 'GET':
             if g.user is not None:
-                return render_template('auth/two_factor_app_auth.html', title='2FA-Authentication', two_fa=True, status=0, message= '')
+                id = g.user['userID']
+                return render_template('auth/two_factor_app_auth.html', title='2FA-Authentication', two_fa=True, status=0, message= 'ID: '+str(id)+' is logged in.')
             else:
                 return redirect(url_for('Auth.signin'))
                 #return jsonify({'message': 'Unauthorized access', 'status': 'error', 'otpstatus': False, 

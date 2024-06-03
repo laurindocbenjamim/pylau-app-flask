@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash
 
 from flask_cors import cross_origin
 from core.config import verify_provisioning_uri
-from core import get_user_by_email, get_user_by_id
+from core import get_user_by_email, get_user_by_id, get_user_by_id_limited_dict
 from core.config import token_required, generate_token, decode_token, token_required
 from functools import wraps
 
@@ -44,7 +44,6 @@ def route_auth(bp, db):
                 if len(user) == 0:
                     status = 400
                     error = 'Username not found.'
-                    
                 else:
                     
                     if check_password_hash(user['password'], password) == False:
@@ -73,7 +72,7 @@ def route_auth(bp, db):
         if user_id is None:
             g.user = None
         else:
-            g.user = get_user_by_id(db,user_id) 
+            g.user = get_user_by_id_limited_dict(db,user_id) 
 
     
     # REQUIRE A UTHENTICATION IN OTHER VIEWS 

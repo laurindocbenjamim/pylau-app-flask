@@ -1,6 +1,7 @@
 
 from core import User
 from datetime import datetime
+from flask import jsonify
 
 # create a User
 def create_user(db, firstname, lastname, email, country,
@@ -33,6 +34,12 @@ def get_user_by_id(db,id):
     user = db.get_or_404(User, id)
     return user.to_dict()
 
+def get_user_by_id_limited_dict(db,id):
+    #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
+    user = User.query.filter_by(userID=id).first()
+    user = db.get_or_404(User, id)
+    return user.to_limited_dict()
+
 def _get_user_by_id(id):
     try:
         #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
@@ -49,11 +56,10 @@ def check_email_exists(email):
 
 # filter user by email
 def get_user_by_email(email):
-    try:
-        user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email).first()
+    if user:
         return user.to_dict()
-    except:
-        return None
+    return None
 
 def check_phone_exists(uphone):
     #exists = lambda phone: User.query.filter_by(phone=phone).first() is not None

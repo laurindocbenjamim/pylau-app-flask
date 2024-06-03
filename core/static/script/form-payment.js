@@ -86,6 +86,9 @@ form.addEventListener("submit", async event => {
           localStorage.setItem('otpqrcode', resData[0].otpqrcode);
           localStorage.setItem('otpqrcode_uri', resData[0].otpqrcode_uri);
           localStorage.setItem('dataForm', dataForm);
+          setTimeout(() => {
+            window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
+          });
 
         }else if(resData[0].status == 3){
 

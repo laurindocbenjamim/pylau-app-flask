@@ -1,6 +1,5 @@
 
 from sqlalchemy.orm import Mapped,mapped_column, relationship
-from flask import jsonify
 from core import db
 from datetime import datetime
 
@@ -15,6 +14,7 @@ class User(db.Model):
     phone:Mapped[str] = db.Column(db.String(100), nullable=False)
     password:Mapped[str] = db.Column(db.String(255), nullable=False)
     two_factor_auth_secret:Mapped[str] = db.Column(db.String(200), nullable=False)
+    status = db.Column(db.String(10), default='0', nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.now())
     date_updated = db.Column(db.DateTime, nullable=True)
 
@@ -31,7 +31,22 @@ class User(db.Model):
             'country': self.country,
             'country_code': self.country_code,
             'phone': self.phone,
+            'status': self.status,
             'two_factor_auth_secret': self.two_factor_auth_secret,
+            'date_added': self.date_added,
+            'date_updated': self.date_updated
+        }
+    
+    def to_limited_dict(self):
+        return {
+            'userID': self.userID,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'email': self.email,
+            'country': self.country,
+            'country_code': self.country_code,
+            'phone': self.phone,
+            'status': self.status,
             'date_added': self.date_added,
             'date_updated': self.date_updated
         }

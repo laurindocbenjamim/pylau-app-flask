@@ -5,12 +5,14 @@ import re
 import requests
 
 from datetime import date
-from flask import jsonify, session, request, render_template
+from flask import jsonify, g, session, request, render_template, redirect, url_for
 from flask_cors import cross_origin
 from core import (
     validate_form_fields, is_valid_email,
     check_email_exists, check_phone_exists, create_user
 )
+
+from core import get_user_by_email, get_user_by_id
 from werkzeug.security import check_password_hash, generate_password_hash
 from core.config import generate_secret, generate_provisioning_uri, verify_provisioning_uri, update_imagename
 
@@ -64,10 +66,18 @@ def create_new_user(bp, db):
                 if session.get('user_secret_code') is None and session.get('otpqrcode') is None:
                     session['user_secret_code'] = generate_secret()
                             
-                    session['otpqrcode'] = generate_provisioning_uri(session['user_secret_code'], email)
-                
+                    #session['otpqrcode'] = generate_provisioning_uri(session['user_secret_code'], email)
+
+                    g.user = {
+                        'secret': session['user_secret_code'],
+                        'password': password_hash,
+                        'firstname': firstname,
+                        'lastname': lastname,
+                        'email': email,
+                        }
+
                     return jsonify({'message': 'The OTP QrCode has been generated successfully! Scan the QR code to get the OTP code', 
-                                    'status': 2, "object": [], "redirectUrl": "users/create",
+                                    'status': 2, "object": [], "redirectUrl": "2fapp/qrcode/get",
                                     'secret': session.get('user_secret_code'),
                                     "otpqrcode": session['otpqrcode'],
                                     "otpqrcode_uri": 'static/otp_qrcode_images/' + str(session['otpqrcode'])
@@ -122,7 +132,32 @@ def create_new_user(bp, db):
                 """
         return render_template('auth/register.html', title='Sign Up')
 
+    # Load logged in user to verify if the user id is stored in a session
+    @bp.after_app_request
+    def load_created_in_user(response):
+        email = session.get('email')
 
+        if email is None:
+            g.user = None
+        else:
+            g.user = {'email': email}
+        return response
+    
+    # REQUIRE A UTHENTICATION IN OTHER VIEWS 
+    """
+    def login_not_required(view):
+        @functools.wraps(view)
+        def wrapped_view(**kwargs):
+            if g.user is not None:
+                #return redirect(url_for('Auth.signin'))
+                return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':None, 
+                                                    "object": [], "redirectUrl": "2fapp/qrcode/get"}, 200)
+
+            return view(**kwargs)
+
+        return wrapped_view
+    """
+    
 def capture_user_info():
     # Get User IP
     user_ip = request.remote_addr
