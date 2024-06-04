@@ -76,16 +76,17 @@ form.addEventListener("submit", async event => {
           divalert.style.display = "block";
           alertmessage.textContent = resData[0].message;
           alertmessage.style.color = "green";
-          boxqrcode.style.display = "block";
-          qrcodeImage.src = baseUrl + "/" + resData[0].otpqrcode_uri;
+          //boxqrcode.style.display = "block";
+          //qrcodeImage.src = baseUrl + "/" + resData[0].otpqrcode_uri;
           //qrcodeImage.setAttribute('src', baseUrl + "/" + resData[0].otpqrcode);
-          submit.style.display = "none";
-          getcode.style.display = "block";
+          //submit.style.display = "none";
+          //getcode.style.display = "block";
           
           localStorage.setItem('secret', resData[0].secret);
           localStorage.setItem('otpqrcode', resData[0].otpqrcode);
           localStorage.setItem('otpqrcode_uri', resData[0].otpqrcode_uri);
           localStorage.setItem('dataForm', dataForm);
+          //alert(baseUrl + '/' + resData[0].redirectUrl);
           setTimeout(() => {
             window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
           });

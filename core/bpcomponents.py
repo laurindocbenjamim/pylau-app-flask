@@ -3,8 +3,8 @@
 
 def get_bp_components(app, db):
     
-    from .authmodule import _two_factor_app_auth_route
-    app.register_blueprint(_two_factor_app_auth_route.bp)
+    from .authmodule import two_factor_app_auth_route
+    app.register_blueprint(two_factor_app_auth_route.bp)
 
     from .authmodule import authrouter
     app.register_blueprint(authrouter.bp)

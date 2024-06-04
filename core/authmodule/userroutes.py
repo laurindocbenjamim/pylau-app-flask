@@ -1,9 +1,9 @@
 
-
+import functools
 from datetime import date
 
 from flask import (
-    Blueprint,request,jsonify,
+    Blueprint,request,jsonify,session,g, render_template, redirect, url_for
     
 )
 from markupsafe import escape
@@ -65,7 +65,38 @@ def deleteuser(userid):
     users = get_users(db)
     return jsonify([{'message': 'User deleted successfully', 'data': users}])
 
+@bp.route('/created', methods=['GET', 'POST'])
+def success_registration():
 
+    if session['firstname'] and session['lastname'] is not None:
+        return render_template('auth/success_registration.html', title="User created successfull", firstname=session['firstname'], 
+                           lastname=session['lastname'])
+    return redirect(url_for('Auth.signin'))
+   
+
+ # Load logged in user to verify if the user id is stored in a session
+@bp.before_app_request
+def load_created_in_user():
+    email = session.get('email')
+
+    if email is None:
+        g.user = None
+    else:
+        g.user = {'email': email}
+    
+# REQUIRE A UTHENTICATION IN OTHER VIEWS 
+
+def login_not_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is not None:
+            #return redirect(url_for('Auth.signin'))
+            return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':None, 
+                                                "object": [], "redirectUrl": "2fapp/qrcode/get"}, 200)
+
+        return view(**kwargs)
+
+    return wrapped_view
 
     
 

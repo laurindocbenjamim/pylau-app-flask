@@ -64,6 +64,7 @@ def route_auth(bp, db):
             return render_template('auth/auth.html', title='Sign In', two_fa=True, status=0, message= '')
     
 
+    """
     # Load logged in user to verify if the user id is stored in a session
     @bp.before_app_request
     def load_logged_in_user():
@@ -85,4 +86,5 @@ def route_auth(bp, db):
             return view(**kwargs)
 
         return wrapped_view
+    """
     

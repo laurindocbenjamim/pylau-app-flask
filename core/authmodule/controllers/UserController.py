@@ -5,7 +5,7 @@ from flask import jsonify
 
 # create a User
 def create_user(db, firstname, lastname, email, country,
-        country_code, phone, password, two_factor_auth_secret):
+        country_code, phone, password, two_factor_auth_secret=None, status='inactive'):
     object = User( 
         firstname = firstname,
         lastname = lastname,
@@ -18,7 +18,7 @@ def create_user(db, firstname, lastname, email, country,
     )
     db.session.add(object)
     db.session.commit()
-    return object
+    return object.to_dict()
 
 # select all people
 def get_users(db):

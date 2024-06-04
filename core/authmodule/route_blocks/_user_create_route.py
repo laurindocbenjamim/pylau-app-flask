@@ -13,6 +13,7 @@ from core import (
 )
 
 from core import get_user_by_email, get_user_by_id
+from core.authmodule.repositories.create_user_final import create_final_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from core.config import generate_secret, generate_provisioning_uri, verify_provisioning_uri, update_imagename
 
@@ -36,7 +37,10 @@ def create_new_user(bp, db):
             two_factor_auth_code = request.form.get('two_factor_auth_code')
             password = request.form.get('password')
             confirm = request.form.get('confirm')
+            two_fa_auth_method = request.form.get('two_fa_auth_method')
 
+            if two_fa_auth_method is None:
+                return jsonify({'message': 'The 2FA auth method is required.', 'status': 'error', "redirectUrl": "users/create"}, 400)
             
             # validate the fields
             validate_form_fields(firstname, lastname, email, country,
@@ -65,26 +69,28 @@ def create_new_user(bp, db):
                             
                 if session.get('user_secret_code') is None and session.get('otpqrcode') is None:
                     session['user_secret_code'] = generate_secret()
+                    session['two_fa_auth_method'] = two_fa_auth_method
                             
                     #session['otpqrcode'] = generate_provisioning_uri(session['user_secret_code'], email)
+                    obj = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash)
+                    #obj = obj.to_dict()
+                    session['user_df'] = obj
+                    g.user = obj
 
-                    g.user = {
-                        'secret': session['user_secret_code'],
-                        'password': password_hash,
-                        'firstname': firstname,
-                        'lastname': lastname,
-                        'email': email,
-                        }
+                    
 
                     return jsonify({'message': 'The OTP QrCode has been generated successfully! Scan the QR code to get the OTP code', 
-                                    'status': 2, "object": [], "redirectUrl": "2fapp/qrcode/get",
+                                    'status': 2, "object": [], "redirectUrl": "2fapp/qrcode/generate",
                                     'secret': session.get('user_secret_code'),
                                     "otpqrcode": session['otpqrcode'],
                                     "otpqrcode_uri": 'static/otp_qrcode_images/' + str(session['otpqrcode'])
                                     }, 200)            
 
             else:
-                if len(two_factor_auth_code) != 6:
+
+                #create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, session['user_secret_code'])
+
+                """if len(two_factor_auth_code) != 6:
                     return jsonify({'message': 'Maximum digits required for the 2FA code is 6.', 'status': 'error', "redirectUrl": "users/create"}, 400)
                 else:
 
@@ -117,7 +123,7 @@ def create_new_user(bp, db):
                     else:                 
                         return jsonify({'message': '2FA OTP code not found.', 'status': 'error', 'otpstatus':otpstatus, 
                                                 "object": request.form, "redirectUrl": "users/create"}, 400)
-
+                """
             
                 # create a user
                 """user = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash, two_factor_auth_code)
@@ -132,31 +138,7 @@ def create_new_user(bp, db):
                 """
         return render_template('auth/register.html', title='Sign Up')
 
-    # Load logged in user to verify if the user id is stored in a session
-    @bp.after_app_request
-    def load_created_in_user(response):
-        email = session.get('email')
-
-        if email is None:
-            g.user = None
-        else:
-            g.user = {'email': email}
-        return response
-    
-    # REQUIRE A UTHENTICATION IN OTHER VIEWS 
-    """
-    def login_not_required(view):
-        @functools.wraps(view)
-        def wrapped_view(**kwargs):
-            if g.user is not None:
-                #return redirect(url_for('Auth.signin'))
-                return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':None, 
-                                                    "object": [], "redirectUrl": "2fapp/qrcode/get"}, 200)
-
-            return view(**kwargs)
-
-        return wrapped_view
-    """
+   
     
 def capture_user_info():
     # Get User IP

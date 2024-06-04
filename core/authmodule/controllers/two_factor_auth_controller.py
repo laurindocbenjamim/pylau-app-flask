@@ -3,7 +3,7 @@ import datetime
 import qrcode
 import os
 from flask import url_for
-import os
+from core import TwoFAModel
 
 """ The  generate_secret  function generates a random secret key 
     that is used to generate the OTP. The  generate_otp  function 
@@ -11,6 +11,18 @@ import os
     verifies the OTP using the secret key. The  get_time_remaining  
     function returns the time remaining for the OTP to expire.
 """
+
+# create a User
+def save_data(db, user_id, two_factor_auth_secret, method_auth):
+    object = TwoFAModel( 
+        userID = user_id,
+        two_factor_auth_secret = two_factor_auth_secret, 
+        method_auth = method_auth 
+    )
+    db.session.add(object)
+    db.session.commit()
+    return object
+
 
 # Generate a random secret key
 def generate_secret():

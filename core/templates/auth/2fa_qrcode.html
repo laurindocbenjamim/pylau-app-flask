@@ -58,7 +58,7 @@
 
           <div class=" col-lg-12" style="text-align: center;">
             <h4>{{ title }} </h4>
-                 
+            {% if otpqrcode_uri %}
             <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
               <div class="row g-3">             
                     
@@ -70,12 +70,26 @@
                     </p>
                     <div class="input-group has-validation" id="otpimage" style="justify-content: center;
                     background-color:#fff; border-radius: 2rem; margin: 2%;">
-                      {% if otpqrcode_uri %}
+                     
                       <img src="{{ url_for('static', filename='/') + otpqrcode_uri }}" height="150" width="150" alt="" srcset="">
-                      {% endif %}
+                      
                                             
                     </div>
                     
+                </div>
+
+                <div class="col-12">
+                  <label for="otpcode" class="form-label">Enter the code provided by the app</label>
+                  <div class="input-group has-validation">
+                    
+                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" required>
+                    
+                  </div>
+
+                  {% for message in get_flashed_messages() %}
+                      <div class="flash_error">{{ message }}</div>
+                    {% endfor %}
+
                 </div>
 
     
@@ -83,52 +97,15 @@
     
               <hr class="my-2">
     
-              <button class="w-100 btn btn-primary btn-lg" type="submit">Send</button>
+              <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
                          
               
             </form>
-
-            {% if otpstatus %}
-            
-            <!--<div class="row g-3" style="justify-content: center;">             
-              <p>
-                You have been authenticated.
-              </p>
-              <div class="col-12" style="justify-content: center;">
-                
-                
-                <div class="input-group has-validation" style="justify-content: center;">
-                  
-                  <img src="{{ url_for('static', filename='assets/img/icons8-success.gif') }}" height="150" width="150"
-                   alt="success-icon" style="border-radius: 6rem;" srcset="">
-
-                </div>
-                
-              </div>
-  
-            </div>-->
-
-            {% elif otpstatus == false %}
-            
-            <!--<div class="row g-3" style="justify-content: center;">             
-              <p>
-                Failed to authenticate. 
-                <a class="w-50 btn-primary btn-lg" href="{{ url_for('2FApp.chek_code', code=1)}}" rel="noopener noreferrer">Try again.</a>
-                
-              </p>
-              <div class="col-12" style="justify-content: center;">                
-                
-                <div class="input-group has-validation" style="justify-content: center;">
-                  
-                  <img src="{{ url_for('static', filename='assets/img/icons8-wrong-96.png') }}" height="150" width="150" alt="" srcset="">
-                  
-                </div>
-                
-              </div>
-  
-            </div>-->
-
             {% endif %}
+            
+            
+
+          
             <p>
               Are you not registered yet? 
               <a href="{{ url_for('Auth.two_fa_app_login')}}" rel="noopener noreferrer">Create your account.</a>

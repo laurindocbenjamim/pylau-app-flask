@@ -191,12 +191,12 @@
                   </p>
                   <div class="my-3">
                     <div class="form-check">
-                      <input id="two_fa_auth_method" name="two_fa_auth_method" type="radio" class="form-check-input" checked required>
+                      <input id="two_fa_auth_method" name="two_fa_auth_method" type="radio" value="app" class="form-check-input" checked required>
                       <label class="form-check-label" for="two_fa_auth_method" style="color: #bebdbd;">By using a 2-FA authenticator application</label>
                       <p style="font-size: .8rem; color: #bebdbd;">(Google Authenticator, Microsoft Authenticator, Salesforce Authenticator, etc.)</p>
                     </div>
                     <div class="form-check">
-                      <input id="two_fa_auth_method" name="two_fa_auth_method" type="radio" class="form-check-input" required>
+                      <input id="two_fa_auth_method" name="two_fa_auth_method" type="radio" value="email" class="form-check-input" required>
                       <label class="form-check-label" for="two_fa_auth_method" style="color: #bebdbd;">Receive code by email or cell phone</label>
                     </div>
                   </div>
@@ -205,7 +205,7 @@
 
                 
 
-                <div class="row">                  
+                <!--<div class="row">                  
 
                   <div class="col-12 " id="box-qrcode"  style="justify-content: center;">
                 
@@ -220,7 +220,7 @@
                       
                   </div>
 
-                </div>
+                </div>-->
 
                 <div class="col-11 alert" style="font-size: .8rem;">                  
                     <p></p>
@@ -240,7 +240,8 @@
               <hr class="my-2">
               
               <div class="buttons" style="padding:.6rem 0;">
-                <a class="w-100 btn btn-primary btn-lg" id="get_code" onclick="getqrcode()" rel="noopener noreferrer">I have already have a code</a>
+                <!--<a class="w-100 btn btn-primary btn-lg" id="get_code" 
+                  onclick="getqrcode()" rel="noopener noreferrer">I have already have a code</a>-->
                 
                 <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Next</button>
                 

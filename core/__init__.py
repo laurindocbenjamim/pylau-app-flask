@@ -1,6 +1,7 @@
 from core.app import db, create_application
 from core.models.personmodel import Person
 from core.authmodule.models.UserModel import User
+from core.authmodule.models.TwoFAModel import TwoFAModel
 from core.authmodule.controllers.UserController import (
     create_user, get_users, get_user_by_id,
     get_user_by_id_limited_dict, 

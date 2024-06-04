@@ -13,8 +13,8 @@ class User(db.Model):
     country_code:Mapped[str] = db.Column(db.String(6), nullable=False)
     phone:Mapped[str] = db.Column(db.String(100), nullable=False)
     password:Mapped[str] = db.Column(db.String(255), nullable=False)
-    two_factor_auth_secret:Mapped[str] = db.Column(db.String(200), nullable=False)
-    status = db.Column(db.String(10), default='0', nullable=True)
+    two_factor_auth_secret:Mapped[str] = db.Column(db.String(200), nullable=True)
+    status = db.Column(db.String(10), default='inactive', nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.now())
     date_updated = db.Column(db.DateTime, nullable=True)
 
