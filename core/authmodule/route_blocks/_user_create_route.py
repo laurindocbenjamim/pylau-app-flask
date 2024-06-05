@@ -77,8 +77,6 @@ def create_new_user(bp, db):
                     session['user_df'] = obj
                     g.user = obj
 
-                    
-
                     return jsonify({'message': 'The OTP QrCode has been generated successfully! Scan the QR code to get the OTP code', 
                                     'status': 2, "object": [], "redirectUrl": "2fapp/qrcode/generate",
                                     'secret': session.get('user_secret_code'),

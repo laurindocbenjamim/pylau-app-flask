@@ -31,13 +31,13 @@ def get_users(db):
 def get_user_by_id(db,id):
     #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
     user = User.query.filter_by(userID=id).first()
-    user = db.get_or_404(User, id)
+    
     return user.to_dict()
 
 def get_user_by_id_limited_dict(db,id):
     #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
     user = User.query.filter_by(userID=id).first()
-    user = db.get_or_404(User, id)
+   
     return user.to_limited_dict()
 
 def _get_user_by_id(id):
@@ -91,6 +91,25 @@ def update_user(db, firstname, lastname, email, country,
         db.session.commit()
         return user.to_dict()
     else:
+        return None
+
+
+# update a User
+def update_user_status(db,  USER_ID, status):
+    # get the user
+    try:
+        user = User.query.get(USER_ID)
+
+        # update the user if it exists
+        if user:
+            user.status = status        
+            user.date_updated = datetime.now()   
+            # commit the changes
+            db.session.commit()
+            return user.to_dict()
+        else:
+            return None
+    except Exception as e:
         return None
 
 # delete a User

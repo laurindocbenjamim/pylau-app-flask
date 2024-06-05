@@ -60,8 +60,8 @@
             {% if firstname %}
             
             <div class="row g-3" style="justify-content: center;">             
-              <p>
-                You have been authenticated.
+              <p style="color: #4afc53;">
+                Before you can access your account, please check your email to activate it.
               </p>
               <div class="col-12" style="justify-content: center;">
                 
@@ -80,7 +80,7 @@
             {% endif %}
             
             <p>
-              Please check your email to activate your account.
+              <span>To access your account please </span>
               <a href="{{ url_for('Auth.two_fa_app_login')}}" rel="noopener noreferrer">Sign Up.</a>
             </p>
 

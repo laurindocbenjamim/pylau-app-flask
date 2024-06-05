@@ -18,6 +18,11 @@
     color: #3266f5;
   }
 
+  .flash_error {
+    color: #ee4242;
+    font-size: 1rem;
+    font-weight: normal;
+  }
   
 </style>
 
@@ -79,6 +84,9 @@
                 </div>
 
                 <div class="col-12">
+                  {% if message %}
+                    <div class="flash_error"><p>{{ message }}</p></div>
+                  {% endif %}
                   <label for="otpcode" class="form-label">Enter the code provided by the app</label>
                   <div class="input-group has-validation">
                     
@@ -87,8 +95,8 @@
                   </div>
 
                   {% for message in get_flashed_messages() %}
-                      <div class="flash_error">{{ message }}</div>
-                    {% endfor %}
+                  <div class="flash_error"><p>{{ message }}</p></div>
+                  {% endfor %}
 
                 </div>
 
@@ -108,13 +116,9 @@
           
             <p>
               Are you not registered yet? 
-              <a href="{{ url_for('Auth.two_fa_app_login')}}" rel="noopener noreferrer">Create your account.</a>
+              <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Create your account.</a>
             </p>
 
-            <p>
-              Try to authenticate using other methods.
-              <a href="{{ url_for('Auth.logout')}}" rel="noopener noreferrer">Try again.</a>
-            </p>
           </div>
           
         </div>

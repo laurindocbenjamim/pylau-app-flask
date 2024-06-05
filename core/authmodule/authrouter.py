@@ -26,6 +26,7 @@ def logout():
     session.clear()
     return redirect(url_for('Auth.two_fa_app_login'))
 
+
 # Load logged in user to verify if the user id is stored in a session
 @bp.before_app_request
 def load_logged_in_user():

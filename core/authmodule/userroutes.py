@@ -11,7 +11,7 @@ from flask_cors import CORS, cross_origin
 from core import db
 from core import (get_users, 
                   get_user_by_id, get_user_by_email, 
-                  update_user, delete_user
+                  update_user, update_user_status, delete_user
                   )
 
 bp = Blueprint('Users', __name__, url_prefix='/users')    # Create a Blueprint object
@@ -34,6 +34,24 @@ def getuser_by_id(userid):
     
     return jsonify([{'message': 'User found', 'data': users}])
     #return f"User logged in successfully: {user.username}"
+
+# get user by id
+@bp.route('/activate/<int:userid>', methods=['GET'])    # Define a route for the login page
+@cross_origin(methods=['GET'])
+def activate_user_account(userid):
+    try:
+        #users = get_user_by_id(db, escape(userid))
+        resp = update_user_status(db, escape(userid), 'active')
+
+        if resp is not None:
+            #return jsonify([{'message': 'User found', 'data': resp['email']}])
+            return redirect(url_for('Auth.signin'))
+    except Exception as e:
+        #return jsonify([{'message': 'User not found ', 'data': []}])
+        return render_template('errors/generic.html', title="Activate Account", 
+                               message="Account activation failed. "+type(e).__name__, status=0)
+    
+    return redirect(url_for('Users.sign_up'))
 
 @bp.route('/get/<string:email>', methods=['GET'])    # Define a route for the login page
 @cross_origin(methods=['GET'])

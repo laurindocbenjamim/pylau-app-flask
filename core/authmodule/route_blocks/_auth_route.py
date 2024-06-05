@@ -51,10 +51,16 @@ def route_auth(bp, db):
                         error = 'Password is wrong.'
                     else:
                         session.clear()
+                        g.user = user
                         session['user_id'] = user['userID']
+                        session['firstname'] = user['firstname']
+                        session['lastname'] = user['lastname']
                         #session['secret'] = user['two_factor_auth_secret']
                         session['email'] = user['email']
+                        session['user_status'] = user['status']
                         return redirect(url_for('Auth.two_fa_app_login'))
+                        #return jsonify({'message': 'User is ready to be created successfully!', 'status': 3, 'otpstatus':None, 
+                                        #"object": g.user, "redirectUrl": "2fapp/qrcode/get"}, 200)
                        
             flash(error)
             return render_template('auth/auth.html', title='Sign In', status=status, message= error)

@@ -24,6 +24,13 @@ def save_data(db, user_id, two_factor_auth_secret, method_auth):
     return object
 
 
+# filter people by id
+def get_two_fa_by_user_id(db,id):
+    #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
+    user = TwoFAModel.query.filter_by(userID=id).first()
+    
+    return user.to_dict()
+
 # Generate a random secret key
 def generate_secret():
     return pyotp.random_base32()

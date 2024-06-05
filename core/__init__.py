@@ -5,8 +5,12 @@ from core.authmodule.models.TwoFAModel import TwoFAModel
 from core.authmodule.controllers.UserController import (
     create_user, get_users, get_user_by_id,
     get_user_by_id_limited_dict, 
-    update_user, delete_user, get_user_by_email,
+    update_user, update_user_status, delete_user, get_user_by_email,
     check_email_exists, check_phone_exists
 )
+from core.authmodule.controllers.two_factor_auth_controller import get_two_fa_by_user_id
+
+from core.smtpmodule.emailcontroller import send_simple_email, send_simple_email_mime_multipart
+
 from core.authmodule.repositories.uservalidation import validate_form_fields, is_valid_email
 from core.controller.personController import create_person, get_all_people, get_person_by_id

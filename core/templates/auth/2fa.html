@@ -26,7 +26,7 @@
   <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
     <div class="col-lg-6 px-0 information">
 
-      <h3 class="title" style="">
+      <h3 class="title" >
         Welcome to Data Management and Analysis Consulting
       </h3>
       <p class="lead">
@@ -94,16 +94,16 @@
               <hr class="my-2">
     
               <button class="w-100 btn btn-primary btn-lg" type="submit">Send</button>
-              <p>
-                Statu: {{otpstatus}}
-              </p>
+              {% for message in get_flashed_messages() %}
+                      <div class="flash_error">{{ message }}</div>
+              {% endfor %}
               {% if otpqrcode %}
               <img src="{{ url_for('static', filename='qrcode_gen/') + otpqrcode }}" height="100" width="100" alt="" srcset="">
               {% endif %}
             </form>
             <p>
               Are you not registered yet? 
-              <a href="{{ url_for('Auth.register')}}" rel="noopener noreferrer">Create your account.</a>
+              <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Create your account.</a>
             </p>
           </div>
           
