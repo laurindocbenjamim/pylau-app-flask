@@ -22,7 +22,7 @@ CORS(bp)
 
 # Importing the route blocks
 from core.authmodule.route_blocks._user_get_all_route import get_all_users
-from core.authmodule.route_blocks._user_create_route import create_new_user
+from core.authmodule.registration_process._user_create_route import create_new_user
 
 # Loading block of routes
 create_new_user(bp, db)
@@ -39,16 +39,16 @@ def getuser_by_id(userid):
     #return f"User logged in successfully: {user.username}"
 
 # get user by id
-@bp.route('/activate/<string:token>', methods=['GET'])    # Define a route for the login page
+@bp.route('/activate/<string:actoken>', methods=['GET'])    # Define a route for the login page
 @cross_origin(methods=['GET'])
-def activate_user_account(token):
+def activate_user_account(actoken):
     
-    if token is None:
+    if actoken is None:
         #return jsonify([{'message': 'Token is required', 'data': []}])
         error = 'Token is required'
     else:
         session.clear()
-        user_token = get_token_by_token(escape(token))
+        user_token = get_token_by_token(escape(actoken))
         
         if user_token is None:
             flash('Token has not found', 'error')
@@ -56,14 +56,14 @@ def activate_user_account(token):
         elif len(user_token) == 0:
             flash('Token has not found. Maybe not registered', 'danger')
             #return redirect(url_for('Users.sign_up'))
-            return jsonify([{'message': 'Token is required', 'data': [user_token, escape(token)]}])
+            return jsonify([{'message': 'Token has not found. Maybe not registered', 'data': [user_token, escape(actoken)]}])
         else:
             
             user = [user for user in user_token][0]
             user_id = user['userID']
             u_token = user['token']
 
-            if u_token != escape(token):
+            if u_token != escape(actoken):
                 flash('Invalid token detected', 'danger')
                 return redirect(url_for('Users.sign_up'))
             

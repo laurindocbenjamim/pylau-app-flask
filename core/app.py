@@ -1,7 +1,8 @@
 
 import os
-from flask import Flask
+from flask import Flask, request, session, jsonify
 from flask_cors import CORS
+from flask_cors import cross_origin
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -68,6 +69,17 @@ def create_application(type_db=None,test_config=None):
     from core.routes import run_routes
     run_routes(app, db)
 
+
+    @app.route('/hello', methods=['GET'])
+    @cross_origin(methods=['GET'])
+    def hello():
+        
+        return {'message': 'Hello World'}
+
+
+
+    
+    
     # Imporst later
 
     Migrate(app, db)

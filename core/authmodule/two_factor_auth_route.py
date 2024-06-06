@@ -108,10 +108,12 @@ def send_code_to_user_email():
             totp = get_otp(session['user_secret_code'], user_df['email'], otp_time_interval)
             otpstatus =  totp.verify(code)
             if otpstatus:
-                message = f"Code verified successfully"
+                message = f"Code verified successfully. Check your email to activate your account."
                 type_error = 'success'
                 time_remaining = "You have 14 days to activate your account. After that, you will need to request a new code."
-                html2 = get_activate_account_message_html(str(user_df['firstname'])+" "+str(user_df['lastname']), session['activate_token'], time_remaining)
+                fullname = str(user_df['firstname'])+" "+str(user_df['lastname'])
+                
+                html2 = get_activate_account_message_html(fullname, session['activate_token'], time_remaining)
                 res = send_simple_email_mime_multipart('Activate your account', str(user_df['email']), html2, False)
                 
                 clear_all_sessions()

@@ -22,7 +22,7 @@ def route_auth(bp, db):
     def signin():
 
         error = None
-        type_error = 'error'
+        type_error = None
         status=None
         
         if session.get('token') is not None:

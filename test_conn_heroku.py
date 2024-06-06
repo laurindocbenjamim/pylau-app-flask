@@ -1,6 +1,7 @@
 
 import os
 #import psycopg2
+from flask import url_for, session
 
 PWD = 'ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883'
 USER='fiysuzvofhprpp'
@@ -28,4 +29,5 @@ password = 'admin'
 
 #print(decrypt_password(pwd, 'password'))
 
+print(url_for('Users.activate_user_account', token=session['activate_token']) )
 
