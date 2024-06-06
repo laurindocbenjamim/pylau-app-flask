@@ -19,7 +19,7 @@ from flask import (
     Blueprint, render_template, url_for, request, redirect, jsonify
 )
 
-bp = Blueprint("2FApp", __name__, url_prefix='/2fapp')
+bp = Blueprint("R", __name__, url_prefix='/2fapp')
 CORS(bp)
 
 totp = None
