@@ -1,17 +1,11 @@
 
 
-import pyotp
-import datetime
 
 from datetime import date
 
-from core.config import generate_provisioning_uri, verify_provisioning_uri, update_imagename
-from core.authmodule.repositories.create_user_final import create_final_user
-from core.authmodule.controllers.two_factor_auth_controller import save_two_fa_data
-from core.smtpmodule.send_html_email import send_an_html_email
-from core.smtpmodule.emailcontroller import send_simple_email, send_simple_email_mime_multipart
-from core.smtpmodule.html_content.activate_account_message_html import get_activate_account_message_html
-from core.user_registration_module._user_create_route import create_new_user
+from core.user_registration_module._user_create_route import _create_new_user
+from core.user_registration_module.app_auth.generate_two_factor_app_auth_route import _generate_two_factor_app_auth_route
+from core.user_registration_module.email_auth.send_code_to_user_email_route import _send_code_to_user_email
 from core import db, clear_all_sessions
 
 from flask import session, g, flash
@@ -24,9 +18,19 @@ from flask import (
 bp = Blueprint("Register", __name__, url_prefix='/register')
 CORS(bp)
 
-totp = None
-user_secret_code = '37TKWDR724Z3RY7Q7B4OZDOQQWWR4A42'
+"""
+"""
+# Fisrt step in the user registration process
+# Create a new user
+_create_new_user(bp, db)
 
-"""
-"""
-create_new_user(bp, db)
+# Second step in the user registration process
+# Depending on the 2FA method chosen by the user,
+# generate the QR code for the 2FA
+# or send the OTP to the user's phone or email
+_generate_two_factor_app_auth_route(bp, db)
+
+# Send the OTP to the user's email
+_send_code_to_user_email(bp, db)
+
+# Third step in the user registration process

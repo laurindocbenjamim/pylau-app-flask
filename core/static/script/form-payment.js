@@ -51,7 +51,7 @@ form.addEventListener("submit", async event => {
     }
     const res = await fetch(
       //baseUrl + '/auth/register',
-      baseUrl + '/users/create',
+      baseUrl + '/register/user/create',
       {
         method: 'POST',
         body: dataForm

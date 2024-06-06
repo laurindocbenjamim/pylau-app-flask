@@ -135,7 +135,7 @@
                         <li class="{{ category }}">{{ message }}</li>
                         {% if category =='error' %}
                         <a href="{{ url_for(redirectUrl)}}" rel="noopener noreferrer"
-                         style="color: #ffffff;">Send me a code again.</a>                        
+                         style="color: #eeeeee;">Send me a code again.</a>                        
                         {% endif %}
 
                       {% endfor %}
@@ -149,7 +149,7 @@
             </form>
             <p>
               Are you not registered yet? 
-              <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Create your account.</a>
+              <a href="{{ url_for('Register.sign_up')}}" rel="noopener noreferrer">Create your account.</a>
             </p>
             
           </div>

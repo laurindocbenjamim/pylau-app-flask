@@ -3,6 +3,9 @@
 
 def get_bp_components(app, db):
     
+    from .user_registration_module import u_r_app
+    app.register_blueprint(u_r_app.bp)
+
     from .maintenance_module import routes
     app.register_blueprint(routes.bp)
     from .authmodule import two_factor_app_auth_route
@@ -21,4 +24,6 @@ def get_bp_components(app, db):
 
     from core.smtpmodule import send_email_routes
     app.register_blueprint(send_email_routes.bp)
+
+
     

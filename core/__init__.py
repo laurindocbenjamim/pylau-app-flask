@@ -2,6 +2,7 @@ from core.app import db, create_application
 from core.config import token_required, generate_token, decode_token, token_required
 from core.config.clear_sessions import clear_all_sessions
 
+from core.factory.two_factor_auth_factory import generate_simple_otp, check_simple_otp
 from core.models.personmodel import Person
 from core.authmodule.models.UserModel import User
 from core.authmodule.models.TwoFAModel import TwoFAModel
