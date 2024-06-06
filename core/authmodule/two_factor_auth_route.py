@@ -1,6 +1,7 @@
 
 import pyotp
 
+
 from core.config import get_otp_code, check_otp_code, generate_secret
 
 from flask import session, flash
@@ -9,7 +10,7 @@ from core import db, clear_all_sessions
 from core import (
     validate_form_fields, is_valid_email,
     check_email_exists, check_phone_exists, create_user,
-    generate_token, cach_user_device_info
+    generate_token, cach_user_device_info, cach_user_device_info_with_api
 )
 
 from core.authmodule.controllers.two_factor_auth_controller import save_two_fa_data
@@ -201,9 +202,10 @@ def get_code_by_email():
             lastname = session['lastname']
 
             # Save the user authentication data
-            hostname, ip_address, mac_address, location = cach_user_device_info()
             
-            regist_user_auth(db, session['user_id'], session['email'], 'email', hostname, ip_address, mac_address, location)
+            #hostname, ip_address, mac_address, location = cach_user_device_info_with_api()
+    
+            regist_user_auth(db, session['user_id'], session['email'], 'hostname', '', 'mac_address', 'location')
 
             flash('Code verified successfully', 'success')
 
