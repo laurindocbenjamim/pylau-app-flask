@@ -78,8 +78,9 @@ def route_two_fa_login(bp, db):
                             session['user_dataframe'] = dataframe 
                             token = generate_token(user['email'])
                             session['token'] = token 
-                                    
-                            return  render_template('public/projects.html', token=token, user_dataframe=dataframe)
+                            g.user = dataframe
+                            return redirect(url_for('public_projects'))
+                            #return  render_template('public/projects.html', token=token, user_dataframe=dataframe)
                                     
                         else:
                             status = 1
