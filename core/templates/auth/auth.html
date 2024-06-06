@@ -78,17 +78,7 @@
         <div class="col p-4 d-flex flex-column position-static">
 
           <div class=" col-lg-12">
-            <h2> {{ title }} </h2>
-
-            {%  if status == 400 %}
-            <div class="my-alert" style="color: #f5324c;font-size:.9rem">
-              <p>{{ message }}</p>             
-            </div>
-            {%else %}
-            <div class="my-alert" style="color: #2ae643;font-size:.9rem">
-              <p>{{ message }}</p>             
-            </div>
-            {% endif %}
+            <h2> {{ title }} </h2>            
             
             <form class="needs-validation" method="post" id="" novalidate>
               <div class="row g-3">             
@@ -126,6 +116,19 @@
                 <div class="col-11 alert" style="font-size: .8rem;">                  
                     <p></p>
                 </div> 
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    
+                  <div class="flash-alert">
+                      <ul class=flashes>
+                      {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }} {{ redirectUrl }}</li>                       
+                      {% endfor %}
+                      </ul>
+                  </div>
+                  {% endif %}
+              {% endwith %}
                 
     
               </div>

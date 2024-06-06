@@ -8,7 +8,7 @@ psycopg2
 requests
 seaborn
 flask_sqlalchemy
-jwt
+pyjwt
 pyotp
 qrcode
 Flask-Mail

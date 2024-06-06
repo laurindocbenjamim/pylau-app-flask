@@ -39,6 +39,46 @@
 
 <style>
    
+    .info{
+        font-family: "Kode Mono", monospace;
+        font-optical-sizing: auto;
+        font-weight: normal;
+        font-style: normal;
+        color: #aad7fc;
+        font-size: 1rem;
+      }
+    
+      .error{
+        font-family: "Kode Mono", monospace;
+        font-optical-sizing: auto;
+        font-weight: normal;
+        font-style: normal;
+        color: #f83939;
+        font-size: .9rem;
+      }
+    
+      .success{
+        font-family: "Kode Mono", monospace;
+        font-optical-sizing: auto;
+        font-weight: normal;
+        font-style: normal;
+        color: #33c74e;
+        font-size: .9rem;
+      }
+
+      .danger{
+        font-family: "Kode Mono", monospace;
+        font-optical-sizing: auto;
+        font-weight: normal;
+        font-style: normal;
+        color: #f86639;
+        font-size: .9rem;
+      }
+      
+      ul, li{
+        list-style-type: none;
+      }
+
     
 </style>
 
@@ -72,7 +112,12 @@
                             <path d="M21 21l-5.2-5.2" />
                         </svg>
                     </a>
+                    {% if 'email' not in session %}
                     <a class="btn btn-sm btn-outline-secondary"  href="{{ url_for( 'Auth.two_fa_app_login' ) }}">Sign in</a>
+                    {% else %}
+                    <a class="btn btn-sm btn-outline-secondary"  href="{{ url_for( 'Auth.logout' ) }}">Logout</a>
+                    {% endif %}
+                    
                 </div>
             </div>
             

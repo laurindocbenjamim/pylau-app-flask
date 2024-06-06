@@ -87,7 +87,7 @@
   <div class="py-5 text-center">
     
     <h2>Public projects</h2>
-    <h3 style="color: aquamarine;">Welcome 
+    <h3 style="color: aquamarine;">Welcome <Span>{{user_dataframe['firstname']}} {{user_dataframe['lastname']}} </Span>
       {% if g.user %}
         <Span>{{g.user['firstname']}}</Span>
       {% endif %}

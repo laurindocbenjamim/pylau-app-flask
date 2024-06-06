@@ -1,8 +1,9 @@
 
 from sqlalchemy.orm import Mapped,mapped_column, relationship
 from core import db
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
+# default=datetime.now(tz=timezone.utc)
 class User(db.Model):
     __tablename__ = 'users'
     userID:Mapped[int] = db.Column(db.Integer, primary_key=True, nullable=False)   
@@ -15,7 +16,7 @@ class User(db.Model):
     password:Mapped[str] = db.Column(db.String(255), nullable=False)
     two_factor_auth_secret:Mapped[str] = db.Column(db.String(200), nullable=True)
     status = db.Column(db.String(10), default='inactive', nullable=True)
-    date_added = db.Column(db.DateTime, default=datetime.now())
+    date_added = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc))
     date_updated = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):

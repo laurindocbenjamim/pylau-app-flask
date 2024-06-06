@@ -14,7 +14,8 @@ def create_user(db, firstname, lastname, email, country,
         country_code = country_code,
         phone = phone,
         password = password,
-        two_factor_auth_secret = two_factor_auth_secret
+        two_factor_auth_secret = two_factor_auth_secret,
+        date_updated = datetime.now()
     )
     db.session.add(object)
     db.session.commit()

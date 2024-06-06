@@ -1,3 +1,8 @@
+
+"""
+To use this module you need to install the following libraries:
+pip install pyjwt
+"""
 import jwt
 import json
 import requests
@@ -53,7 +58,7 @@ def decode_token(token):
 def generate_token(user):
     token = None
     try:
-        date = datetime.utcnow() + timedelta(seconds=1800) # 1800 seconds is equal 30 minutes
+        date = datetime.now() + timedelta(seconds=1800) # 1800 seconds is equal 30 minutes
         #date_serialized = json.dumps(date, default=str)   
         date_serialized = datetime.now(tz=timezone.utc) + timedelta(seconds=1800)
 

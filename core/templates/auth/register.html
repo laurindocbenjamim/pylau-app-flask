@@ -225,6 +225,19 @@
                 <div class="col-11 alert" style="font-size: .8rem;">                  
                     <p></p>
                 </div> 
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    
+                  <div class="flash-alert">
+                      <ul class=flashes>
+                      {% for category, message in messages %}
+                        <li class="{{ category }}"> {{ message }}</li>                       
+                      {% endfor %}
+                      </ul>
+                  </div>
+                  {% endif %}
+              {% endwith %}
                 
                 <div class="col-11" id="two-FA-div">
                   <label for="two_factor_auth_code" class="form-label">2-Fatcor authentication </label>                    

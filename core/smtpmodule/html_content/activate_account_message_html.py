@@ -1,6 +1,6 @@
 
 
-def get_activate_account_message_html(name = 'Subscriber', user_id = 0):
+def get_activate_account_message_html(name = 'Subscriber', user_token='', time_remaining=''):
    
     html = """\
 
@@ -32,6 +32,18 @@ def get_activate_account_message_html(name = 'Subscriber', user_id = 0):
             text-align: center;
             color: #888888;
         }
+
+        .btn{
+            background-color: #098edb;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn:hover{
+            background-color: #0a6ebd;
+        }
+
         img{
             max-width: 60%;
             border-radius: 30rem;
@@ -60,7 +72,7 @@ def get_activate_account_message_html(name = 'Subscriber', user_id = 0):
             
             <div class="row">
                 <div class="box-image">
-                    <img src="https://media.istockphoto.com/id/1253903573/vector/glowing-neon-line-musical-tuning-fork-for-tuning-musical-instruments-icon-isolated-on-black.jpg?s=612x612&w=0&k=20&c=OWksrvIypSsWsghC5uNXYLhuflLArq2qJC9oCKhqpTU=" 
+                    <img src="https://th.bing.com/th/id/OIG3.yf0p6Gj8f9kiKZKgGA6V?pid=ImgGn" 
             alt="Company Logo" >
                 </div>
                 <div class="box-content">
@@ -69,7 +81,10 @@ def get_activate_account_message_html(name = 'Subscriber', user_id = 0):
                         Please click in the link below to verify your email address and complete your registration.
                     </p>
                     <p>
-                        <p><a href='http://localhost:5000/users/activate/""" +str(user_id)+"""'>Activate my account</a>.</p>
+                        <p><a class="btn" style="font-size: 1.7rem;" href='http://localhost:5000/users/activate/""" +str(user_token)+"""'>Activate my account</a>.</p>
+                        <strong style="color: #098edb;">
+                            <p style="margin-top: 20px;font-size:1.2rem;">""" + time_remaining + """</p>
+                        </strong>
                     </p>
                 </div>
             </div>
@@ -85,7 +100,7 @@ def get_activate_account_message_html(name = 'Subscriber', user_id = 0):
             </ul>
         </div>
         <div class="footer">            
-            <p>&copy;2024 Laurindo C.Benjamim (<i>TuningD</i>). All rights reserved.</p>
+            <p>&copy;2024 Laurindo C.Benjamim (<i>DTuning</i>). All rights reserved.</p>
         </div>
     </div>
 </body>

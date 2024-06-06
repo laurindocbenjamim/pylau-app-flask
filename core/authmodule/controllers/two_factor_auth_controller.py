@@ -2,8 +2,7 @@ import pyotp
 import datetime
 import qrcode
 import os
-from flask import url_for
-from core import TwoFAModel
+from core.authmodule.models.TwoFAModel import TwoFAModel
 
 """ The  generate_secret  function generates a random secret key 
     that is used to generate the OTP. The  generate_otp  function 
@@ -13,15 +12,15 @@ from core import TwoFAModel
 """
 
 # create a User
-def save_data(db, user_id, two_factor_auth_secret, method_auth):
-    object = TwoFAModel( 
+def save_two_fa_data(db, user_id, two_factor_auth_secret, method_auth):
+    obj = TwoFAModel( 
         userID = user_id,
         two_factor_auth_secret = two_factor_auth_secret, 
         method_auth = method_auth 
     )
-    db.session.add(object)
+    db.session.add(obj)
     db.session.commit()
-    return object
+    return obj.to_dict()
 
 
 # filter people by id
@@ -85,19 +84,22 @@ def verify_provisioning_uri(secret, code):
     return resp
 
 def update_imagename(image_path, new_imagename):
-    # Get the directory path of the image
-    directory = os.path.dirname(image_path)
-            
-    # Get the extension of the image
-    extension = os.path.splitext(image_path)[1]
-            
-            # Create the new image path with the updated imagename
-    new_image_path = os.path.join(directory, new_imagename + extension)
-            
-    # Rename the image file
-    os.rename(image_path, new_image_path)
-            
-    return new_image_path
+    try:
+        # Get the directory path of the image
+        directory = os.path.dirname(image_path)
+                
+        # Get the extension of the image
+        extension = os.path.splitext(image_path)[1]
+                
+                # Create the new image path with the updated imagename
+        new_image_path = os.path.join(directory, new_imagename + extension)
+                
+        # Rename the image file
+        os.rename(image_path, new_image_path)
+                
+        return new_image_path
+    except Exception as e:
+        return False
 
 def remove_files_from_root_folder():
     root_folder = os.getcwd()

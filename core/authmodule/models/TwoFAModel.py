@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Mapped,mapped_column, relationship
 from flask import jsonify
 from core import db
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 class TwoFAModel(db.Model):
     __tablename__ = 'two_fa_auth'

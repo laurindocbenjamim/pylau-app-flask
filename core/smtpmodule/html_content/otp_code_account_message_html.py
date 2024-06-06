@@ -1,8 +1,9 @@
 
 
-def get_simple_html(name = 'Subscriber'):
+def get_otp_code_message_html(name = 'Subscriber', otpcode=0, time_remaining=0):
    
     html = """\
+
 
 <!DOCTYPE html>
 <html>
@@ -25,12 +26,32 @@ def get_simple_html(name = 'Subscriber'):
             text-align: center;
             margin-bottom: 20px;
         }
+
+        .header img {
+            max-width: 200px;
+            border-radius: 50%;
+        }
         .content {
             margin-bottom: 20px;
         }
         .footer {
             text-align: center;
             color: #888888;
+        }
+        button{
+            padding: 2rem 4rem;
+            border: none;
+            font-size: 2.3rem;
+        }
+        .btn{
+            background-color: #098edb;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn:hover{
+            background-color: #0a6ebd;
         }
         img{
             max-width: 60%;
@@ -41,7 +62,16 @@ def get_simple_html(name = 'Subscriber'):
             justify-content: space-between;
         }
         .box-image{
+            
             width: 45%;
+        }
+        .box-content{
+            width: 100%;
+        }
+        .box-content div{
+            justify-content: center;
+            text-align: center;
+            margin-top: 20px;
         }
         ul{
             list-style: none;
@@ -52,25 +82,32 @@ def get_simple_html(name = 'Subscriber'):
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to our Webpage!</h1>
+            <img src="https://th.bing.com/th/id/OIG3.yf0p6Gj8f9kiKZKgGA6V?pid=ImgGn" 
+            alt="Company Logo" >
+
+            <h1 style="color: #098edb; font-size:2.5rem;">
+                <strong>Verify Your Identity</strong>
+            </h1>
         </div>
         <div class="content">
-            <h3>Dear <span style="color: #098edb;">Subscriber</span></h3>
-            <p>We are excited to share with you the latest updates and news from our company.</p>
+            <h3>Hi <span style="color: #098edb;">""" + name + """</span></h3>
+            <p>Welcome to DTuning</p>
             
             <div class="row">
-                <div class="box-image">
-                    <img src="https://media.istockphoto.com/id/1253903573/vector/glowing-neon-line-musical-tuning-fork-for-tuning-musical-instruments-icon-isolated-on-black.jpg?s=612x612&w=0&k=20&c=OWksrvIypSsWsghC5uNXYLhuflLArq2qJC9oCKhqpTU=" 
-            alt="Company Logo" >
-                </div>
+                
                 <div class="box-content">
                     <p>
-                        This is the last step in the process of creating your account.
-                        Please click in the link below to verify your email address and complete your registration.
+                        You probably have registered to receive a 2FA authentication code by email.
                     </p>
-                    <p>
-                        <p><a href="http://localhost:5000/users/activate/1">Activate my account</a>.</p>
-                    </p>
+                    <p>Here's your verification code to complete the authentication.</p>
+                    <div>
+                        <button class="btn" >""" + otpcode + """</button>
+
+                        <strong style="color: #098edb;">
+                            <p style="margin-top: 20px;font-size:1.2rem;">""" + time_remaining + """</p>
+                        </strong>
+
+                    </div>
                 </div>
             </div>
             <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
@@ -85,7 +122,7 @@ def get_simple_html(name = 'Subscriber'):
             </ul>
         </div>
         <div class="footer">            
-            <p>&copy;2024 Laurindo C.Benjamim (<i>TuningD</i>). All rights reserved.</p>
+            <p>&copy;2024 Laurindo C.Benjamim (<i>DTuning</i>). All rights reserved.</p>
         </div>
     </div>
 </body>

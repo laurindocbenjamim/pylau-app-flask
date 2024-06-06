@@ -17,6 +17,38 @@
     font-style: normal;
     color: #3266f5;
   }
+
+  .flash-aler{
+    margin-top: 5%;
+  }
+  .info{
+    font-family: "Kode Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    color: #3266f5;
+  }
+
+  .error{
+    font-family: "Kode Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    color: #f83939;
+  }
+
+  .success{
+    font-family: "Kode Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    color: #33c74e;
+  }
+  ul, li {
+    list-style: none;
+  }
+  
+  
 </style>
 
 
@@ -73,7 +105,7 @@
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
 
-          <div class=" col-lg-8">
+          <div class=" col-lg-12">
             <h2>{{ title }} </h2>
             <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
               <div class="row g-3">             
@@ -94,9 +126,23 @@
               <hr class="my-2">
     
               <button class="w-100 btn btn-primary btn-lg" type="submit">Send</button>
-              {% for message in get_flashed_messages() %}
-                      <div class="flash_error">{{ message }}</div>
-              {% endfor %}
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    
+                  <div class="flash-alert" style="margin-top: 4%;">
+                      <ul class=flashes>
+                      {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                        {% if category =='error' %}
+                        <a href="{{ url_for(redirectUrl)}}" rel="noopener noreferrer"
+                         style="color: #ffffff;">Send me a code again.</a>                        
+                        {% endif %}
+
+                      {% endfor %}
+                      </ul>
+                  </div>
+                  {% endif %}
+              {% endwith %}
               {% if otpqrcode %}
               <img src="{{ url_for('static', filename='qrcode_gen/') + otpqrcode }}" height="100" width="100" alt="" srcset="">
               {% endif %}
@@ -105,6 +151,7 @@
               Are you not registered yet? 
               <a href="{{ url_for('Users.sign_up')}}" rel="noopener noreferrer">Create your account.</a>
             </p>
+            
           </div>
           
         </div>

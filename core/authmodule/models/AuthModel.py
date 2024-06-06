@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Mapped,mapped_column, relationship
 from flask import jsonify
 from core import db
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 class AuthUser(db.Model):
     __tablename__ = 'auth_user'
@@ -12,7 +12,7 @@ class AuthUser(db.Model):
     device_ip:Mapped[str] = db.Column(db.String(100), nullable=True)
     device_mac:Mapped[str] = db.Column(db.String(100), nullable=True)
     #date_access = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    date_access = db.Column(db.DateTime, nullable=False, default=datetime.now(datetime.UTC))
+    date_access = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
     def __repr__(self):

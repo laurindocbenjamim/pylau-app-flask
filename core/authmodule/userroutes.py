@@ -1,14 +1,17 @@
 
 import functools
-from datetime import date
+from datetime import date, datetime, timedelta
+
 
 from flask import (
-    Blueprint,request,jsonify,session,g, render_template, redirect, url_for
+    Blueprint,request,jsonify,session,g, render_template, redirect, url_for,
+    flash
     
 )
 from markupsafe import escape
 from flask_cors import CORS, cross_origin
 from core import db
+from core import get_token_by_token
 from core import (get_users, 
                   get_user_by_id, get_user_by_email, 
                   update_user, update_user_status, delete_user
@@ -36,21 +39,64 @@ def getuser_by_id(userid):
     #return f"User logged in successfully: {user.username}"
 
 # get user by id
-@bp.route('/activate/<int:userid>', methods=['GET'])    # Define a route for the login page
+@bp.route('/activate/<string:token>', methods=['GET'])    # Define a route for the login page
 @cross_origin(methods=['GET'])
-def activate_user_account(userid):
-    try:
-        #users = get_user_by_id(db, escape(userid))
-        resp = update_user_status(db, escape(userid), 'active')
-
-        if resp is not None:
-            #return jsonify([{'message': 'User found', 'data': resp['email']}])
-            return redirect(url_for('Auth.signin'))
-    except Exception as e:
-        #return jsonify([{'message': 'User not found ', 'data': []}])
-        return render_template('errors/generic.html', title="Activate Account", 
-                               message="Account activation failed. "+type(e).__name__, status=0)
+def activate_user_account(token):
     
+    if token is None:
+        #return jsonify([{'message': 'Token is required', 'data': []}])
+        error = 'Token is required'
+    else:
+        session.clear()
+        user_token = get_token_by_token(escape(token))
+        
+        if user_token is None:
+            flash('Token has not found', 'error')
+            return redirect(url_for('Users.sign_up'))
+        elif len(user_token) == 0:
+            flash('Token has not found. Maybe not registered', 'danger')
+            #return redirect(url_for('Users.sign_up'))
+            return jsonify([{'message': 'Token is required', 'data': [user_token, escape(token)]}])
+        else:
+            
+            user = [user for user in user_token][0]
+            user_id = user['userID']
+            u_token = user['token']
+
+            if u_token != escape(token):
+                flash('Invalid token detected', 'danger')
+                return redirect(url_for('Users.sign_up'))
+            
+            created_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')#user['created_date']
+            created_date = datetime.strftime(user['created_date'],'%Y-%m-%d %H:%M:%S')            
+            date_obj = datetime.strptime(created_date, '%Y-%m-%d %H:%M:%S')
+            date_created_int = int(date_obj.timestamp())
+            
+            date_now_int = int(datetime.now().timestamp())
+            expire_time = user['expire_time']
+            
+            #date_obj = datetime.strptime(str(created_date), '%a, %d %b %Y %H:%M:%S %Z')
+            
+
+            expiration_date = date_obj + timedelta(days=expire_time)
+
+            time_remaining = expiration_date - datetime.now()
+            #time_remaining_int = int(datetime.strptime(str(time_remaining), '%Y-%m-%d %H:%M:%S').timestamp())
+            total_seconds = int(time_remaining.total_seconds())
+            total_minutes = total_seconds // 60
+            total_hours = total_minutes // 60
+            time_left_days = total_hours // 24
+            
+            if total_seconds == 0:
+                flash('Token has expired', 'danger')
+                return render_template('auth/success_registration.html', title="Expired token")
+            else:
+                resp = update_user_status(db, user_id, 'active')
+                
+                if resp is not None:
+                    #return jsonify([{'message': 'User found', 'data': resp['email']}])
+                    return redirect(url_for('Auth.signin'))
+    flash('Token has not found', 'danger')
     return redirect(url_for('Users.sign_up'))
 
 @bp.route('/get/<string:email>', methods=['GET'])    # Define a route for the login page
@@ -86,10 +132,18 @@ def deleteuser(userid):
 @bp.route('/created', methods=['GET', 'POST'])
 def success_registration():
 
-    if session['firstname'] and session['lastname'] is not None:
+    if 'firstname' and 'lastname' not in session:
+        flash('Failed to create user', 'error')
+        return redirect(url_for('Auth.signin'))                
+    elif 'lastname' not in session:
+        flash('Failed to create user', 'error')
+        return redirect(url_for('Auth.signin'))       
+    else:
+        flash('User created successfully', 'success')
         return render_template('auth/success_registration.html', title="User created successfull", firstname=session['firstname'], 
                            lastname=session['lastname'])
-    return redirect(url_for('Auth.signin'))
+    
+    
    
 
  # Load logged in user to verify if the user id is stored in a session

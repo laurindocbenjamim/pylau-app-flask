@@ -7,7 +7,7 @@ from flask import (
 )
 
 from flask_cors import CORS, cross_origin
-from core import db
+from core import db, clear_all_sessions
 from core import get_user_by_email, get_user_by_id, get_user_by_id_limited_dict
 
 bp = Blueprint("Auth", __name__, url_prefix='/auth')
@@ -24,6 +24,7 @@ route_two_fa_login(bp, db)
 @cross_origin(methods=['GET'])
 def logout():
     session.clear()
+    clear_all_sessions()
     return redirect(url_for('Auth.two_fa_app_login'))
 
 

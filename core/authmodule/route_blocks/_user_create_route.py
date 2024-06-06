@@ -9,11 +9,13 @@ from flask import jsonify, g, session, request, render_template, redirect, url_f
 from flask_cors import cross_origin
 from core import (
     validate_form_fields, is_valid_email,
-    check_email_exists, check_phone_exists, create_user
+    check_email_exists, check_phone_exists, create_user,
+    generate_token
 )
 
 from core import get_user_by_email, get_user_by_id
 from core.authmodule.repositories.create_user_final import create_final_user
+from core import create_token
 from werkzeug.security import check_password_hash, generate_password_hash
 from core.config import generate_secret, generate_provisioning_uri, verify_provisioning_uri, update_imagename
 
@@ -23,7 +25,10 @@ def create_new_user(bp, db):
     @cross_origin(methods=['GET', 'POST'])
     def sign_up():
 
-        message = None
+        error = None
+        redirectURL = None
+        url_status = 400
+        status = 'error'
         session['user_secret_code'] = None 
         session['otpqrcode'] = None
         
@@ -40,7 +45,7 @@ def create_new_user(bp, db):
             two_fa_auth_method = request.form.get('two_fa_auth_method')
 
             if two_fa_auth_method is None:
-                return jsonify({'message': 'The 2FA auth method is required.', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                return jsonify({'message': 'The 2FA auth method is required.', 'status': 'error', "redirectUrl": "users/create"}, url_status)
             
             # validate the fields
             validate_form_fields(firstname, lastname, email, country,
@@ -52,17 +57,17 @@ def create_new_user(bp, db):
             
             # check if email exists
             if check_email_exists(email):
-                return jsonify({'message': 'Email already exists', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                return jsonify({'message': 'Email already exists', 'status': 'error', "redirectUrl": "users/create"}, url_status)
             
             # check if phone exists
             if check_phone_exists(phone):
-                return jsonify({'message': 'Phone already exists', 'status': 'error', "redirectUrl": "users/create"}, 400)
+                return jsonify({'message': 'Phone already exists', 'status': 'error', "redirectUrl": "users/create"}, url_status)
             
             # hash the password
             password_hash = generate_password_hash(password)
 
             if not check_password_hash(password_hash, confirm):
-                return jsonify({'message': 'The passwords do not match', 'status': 'error', "object": [], "redirectUrl": "users/create"}, 400)
+                return jsonify({'message': 'The passwords do not match', 'status': 'error', "object": [], "redirectUrl": "users/create"}, url_status)
 
             # check if the passwords match
             if two_factor_auth_code == '':
@@ -73,16 +78,40 @@ def create_new_user(bp, db):
                             
                     #session['otpqrcode'] = generate_provisioning_uri(session['user_secret_code'], email)
                     obj = create_user(db,firstname, lastname, email, country,country_code, phone, password_hash)
-                    #obj = obj.to_dict()
-                    session['user_df'] = obj
-                    g.user = obj
+                    
+                    if obj is not None:
+                        session['user_df'] = obj
+                        #g.user = obj
+                        token = generate_token(obj['email'])
+                        url_status = 400 
+                        response = create_token(db, obj['userID'], token, 14)
 
-                    return jsonify({'message': 'The OTP QrCode has been generated successfully! Scan the QR code to get the OTP code', 
-                                    'status': 2, "object": [], "redirectUrl": "2fapp/qrcode/generate",
-                                    'secret': session.get('user_secret_code'),
-                                    "otpqrcode": session['otpqrcode'],
-                                    "otpqrcode_uri": 'static/otp_qrcode_images/' + str(session['otpqrcode'])
-                                    }, 200)            
+                        if response is None:
+                            error = 'Failed to create user. Please try again later.'
+                            redirectURL = "users/create"
+                            url_status = 400                            
+                        else:
+                            url_status = 200
+                            status = 2
+                            error = 'User created successfully!: '
+                            error = 'The user has been generated successfully!'
+                            session['activate_token'] = response['token']
+                            if two_fa_auth_method == 'app':
+                                redirectURL = "2fapp/qrcode/generate"
+                            else:
+                                redirectURL = "2fa/opt/send"
+                                error = 'The user code has been generated successfully! Please check your email to activate your account.'
+                            
+                    else:
+                        error = 'Failed to create user. Please try again later.'
+                        redirectURL = "users/create"
+                    
+                    return jsonify({'message': error, 
+                                            'status': status, "object": [], "redirectUrl": redirectURL,
+                                            'secret': '',
+                                            "otpqrcode": session['otpqrcode'],
+                                            "otpqrcode_uri": 'static/otp_qrcode_images/' + str(session['otpqrcode'])
+                                            }, url_status)            
 
             else:
 
