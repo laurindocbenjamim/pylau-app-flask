@@ -5,6 +5,7 @@ from core.config.clear_sessions import clear_all_sessions
 from core.factory.two_factor_auth_factory import generate_simple_otp, check_simple_otp
 from core.models.personmodel import Person
 from core.authmodule.models.UserModel import User
+from core.authmodule.models.AuthUserRegisterModel import AuthUserRegisterModel
 from core.authmodule.models.TwoFAModel import TwoFAModel
 from core.tokenmodule.tokenmodel import Token
 from core.tokenmodule.tokencontroller import create_token, get_token_by_id, get_token_by_token, delete_token
@@ -14,6 +15,10 @@ from core.authmodule.controllers.UserController import (
     get_user_by_id_limited_dict, 
     update_user, update_user_status, delete_user, get_user_by_email,
     check_email_exists, check_phone_exists
+)
+
+from core.authmodule.controllers.AuthUserRegisterController import (
+    regist_user_auth, get_user_auth_hists, get_user_auth_hist_by_id, update_auth_status, delete_user_auth_hist
 )
 from core.authmodule.controllers.two_factor_auth_controller import get_two_fa_by_user_id
 
