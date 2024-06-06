@@ -17,3 +17,4 @@ flask-bcrypt
 Flask-SQLAlchemy
 flask-migrate
 pycryptodome
+geocoder

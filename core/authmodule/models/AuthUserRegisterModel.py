@@ -12,7 +12,8 @@ class AuthUserRegisterModel(db.Model):
     device:Mapped[str] = db.Column(db.String(100), nullable=True)
     device_ip:Mapped[str] = db.Column(db.String(100), nullable=True)
     device_mac:Mapped[str] = db.Column(db.String(100), nullable=True)
-    date_access = db.Column(db.DateTime, nullable=False, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    location:Mapped[str] = db.Column(db.String(200), nullable=True)
+    date_access = db.Column(db.DateTime, nullable=False, default=datetime.now())
     time_logout = db.Column(db.DateTime, nullable=True)
 
 
@@ -28,6 +29,7 @@ class AuthUserRegisterModel(db.Model):
             'date_access': self.date_access,
             'time_logout': self.time_logout,
             'device_ip': self.device_ip,
-            'device_mac': self.device_mac
+            'device_mac': self.device_mac,
+            'location': self.location
         }
     

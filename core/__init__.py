@@ -1,3 +1,4 @@
+from core.utils.device_info import cach_user_device_info
 from core.app import db, create_application
 from core.config import token_required, generate_token, decode_token, token_required
 from core.config.clear_sessions import clear_all_sessions

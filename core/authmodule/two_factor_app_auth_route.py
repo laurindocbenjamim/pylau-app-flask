@@ -22,8 +22,6 @@ from flask import (
 bp = Blueprint("2FApp", __name__, url_prefix='/2fapp')
 CORS(bp)
 
-totp = None
-user_secret_code = '37TKWDR724Z3RY7Q7B4OZDOQQWWR4A42'
 
 """
 """
@@ -127,7 +125,7 @@ def chek_code(code=None):
         if code is not None:
             return render_template('auth/two_factor_app_auth.html', title="2FA-Authentication", otpstatus=False, qrcodeotp=None, verify_code=1)
         else:            
-            session['user_secret_code'] = user_secret_code
+            #session['user_secret_code'] = user_secret_code
             otpqrcode = generate_provisioning_uri(session['user_secret_code'])
             return render_template('auth/two_factor_app_auth.html', title="2FA-Authentication", otpstatus=False, qrcodeotp=None, otpqrcode=otpqrcode)
     

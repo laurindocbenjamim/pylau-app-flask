@@ -9,13 +9,14 @@ from core import db, clear_all_sessions
 from core import (
     validate_form_fields, is_valid_email,
     check_email_exists, check_phone_exists, create_user,
-    generate_token
+    generate_token, cach_user_device_info
 )
 
 from core.authmodule.controllers.two_factor_auth_controller import save_two_fa_data
 from core.smtpmodule.emailcontroller import send_simple_email, send_simple_email_mime_multipart
 from core.smtpmodule.html_content.activate_account_message_html import get_activate_account_message_html
 from core.smtpmodule.html_content.otp_code_account_message_html import get_otp_code_message_html
+from core import regist_user_auth
 
 from flask import (
     Blueprint, render_template, url_for, request, redirect, jsonify
@@ -198,8 +199,16 @@ def get_code_by_email():
         if otpstatus:
             firstname = session['firstname']
             lastname = session['lastname']
+
+            # Save the user authentication data
+            hostname, ip_address, mac_address, location = cach_user_device_info()
+            
+            regist_user_auth(db, session['user_id'], session['email'], 'email', hostname, ip_address, mac_address, location)
+
             flash('Code verified successfully', 'success')
+
             return redirect(url_for('public_projects'))
+        
         return redirect(url_for('2TFA.get_code_by_email'))       
 
 def get_otp(secret, accountname, interval):
@@ -209,4 +218,8 @@ def get_otp(secret, accountname, interval):
 def check_otp(OTP, secret, user, otp_time_interval):
     totp = get_otp(secret, user, otp_time_interval)     
     return totp.verify(OTP)
+
+
+
+
 

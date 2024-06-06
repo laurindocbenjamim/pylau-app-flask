@@ -2,14 +2,14 @@
 from core import AuthUserRegisterModel
 
 # create a User
-def regist_user_auth(db, user_id, username, device, device_ip, device_mac):
+def regist_user_auth(db, user_id, username, device, device_ip, device_mac, location):
     object = AuthUserRegisterModel(
         user_id = user_id,
         username = username,    
         device = device,
         device_ip = device_ip,
-        device_mac = device_mac
-    
+        device_mac = device_mac,
+        location = location    
         )
     db.session.add(object)
     db.session.commit()
