@@ -28,7 +28,7 @@ from flask import (
 def _send_code_to_user_email(bp, db):
     @bp.route('/send/opt/email', methods=['GET', 'POST'])
     @cross_origin(methods=['GET', 'POST'])
-    def send_code_to_user_email():
+    def _send_code_to_user_email():
         
         otp_time_interval=300
         type_message = message=OTP = redirectUrl = ''
@@ -113,7 +113,7 @@ def check_the_user_email_with_otp(otp_time_interval):
             # if true, save the 2FA data to the database
             res = save_two_fa_data(db, user_id, secret, auth_method)
 
-            message = "Enter the code sent to your email to verify your account"
+            message = f"Enter the code sent to your email <<{str(user_df['email'])}>> to verify your account"
             type_message = 'success'
                     
         else:
