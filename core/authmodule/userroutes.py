@@ -22,10 +22,10 @@ CORS(bp)
 
 # Importing the route blocks
 from core.authmodule.route_blocks._user_get_all_route import get_all_users
-from core.authmodule.registration_process._user_create_route import create_new_user
+#from core.authmodule.registration_process._user_create_route import create_new_user
 
 # Loading block of routes
-create_new_user(bp, db)
+#create_new_user(bp, db)
 get_all_users(bp, db)
 
 

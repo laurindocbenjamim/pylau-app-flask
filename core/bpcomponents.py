@@ -5,11 +5,15 @@ def get_bp_components(app, db):
     
     from .maintenance_module import routes
     app.register_blueprint(routes.bp)
+    
     from .authmodule import two_factor_app_auth_route
     app.register_blueprint(two_factor_app_auth_route.bp)
 
     from .authmodule import authrouter
     app.register_blueprint(authrouter.bp)
+
+    from .user_registration_module import user_registration_app
+    app.register_blueprint(user_registration_app.bp)
 
     from .authmodule import two_factor_auth_route
     app.register_blueprint(two_factor_auth_route.bp)
