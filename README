@@ -1,5 +1,21 @@
 
 
+To merge the code from the dev branch to the main branch in Git, you can use the following steps:
+
+Make sure you are on the main branch by running the command:
+    git checkout main
+Pull the latest changes from the remote repository:
+    git pull origin main
+Merge the dev branch into the main branch:
+    git merge dev
+Resolve any merge conflicts that may arise. Git will automatically attempt to merge the changes, but if there are conflicts, you will need to manually resolve them.
+
+Once the conflicts are resolved, commit the changes:
+    git commit -m "Merge dev branch into main"
+Finally, push the changes to the remote repository:
+    git push origin main
+These steps will merge the code from the dev branch into the main branch in Git.
+
 
 
 
