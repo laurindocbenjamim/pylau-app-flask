@@ -24,3 +24,5 @@ class User():
             },
         ]
     
+    def get_item_by_id(id):
+        return next((item for item in User.list_users() if item['id'] == id), None)
