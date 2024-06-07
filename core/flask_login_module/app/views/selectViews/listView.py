@@ -1,6 +1,6 @@
 from flask.views import View
 from flask import render_template, redirect, url_for, request, flash, session, jsonify
-from flask_login import login_required
+#from flask_login import login_required
 #from flask_caching import cache
 
 class ListView(View):
@@ -21,4 +21,4 @@ class ListView(View):
 
     def dispatch_request(self):
         listItems = self.model.list_users()
-        return render_template(self.template, items=listItems)
+        return render_template(self.template, title="List Users", items=listItems)

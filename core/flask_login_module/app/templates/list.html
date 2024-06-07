@@ -1,33 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User List</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1>User List</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in items %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>   
-                    <td>{{ user.name }}</td>                 
-                    <td>{{ user.email }}</td>
-                    
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+
+{%extends 'layout.html'%}
+{%block title%}
+{%if title%}{{title}}{%endif%}
+{%endblock%}
+{%block content%}
+
+<div class="container">
+    <h1>User List</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in items %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>   
+                <td>{{ user.name }}</td>                 
+                <td>{{ user.email }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{%endblock%}
