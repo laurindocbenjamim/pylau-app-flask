@@ -13,8 +13,15 @@ def init_app(login_manager, db):
     from ..model.users import Users
 
     @login_manager.user_loader
-    def load_user(user_id):
-        return Users.query.get(user_id)
+    def load_user(email):
+        #return Users.query.get(email)
+        users = Users.testList()
+        if len(users) > 0:
+            user = [u for u in users if u['email'] == email]
+            if not user:
+                return 
+            return user[0]
+        return  
 
     bp.add_url_rule('/new', view_func=CreateView.as_view('create', Users,  template='create.html'))
 # Last block of code in the file

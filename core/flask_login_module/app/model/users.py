@@ -2,6 +2,8 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 from ..app import db
 
+from datetime import datetime
+
 class Users(UserMixin, db.Model):
     __tablename__ = 'users'
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -56,3 +58,50 @@ class Users(UserMixin, db.Model):
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }
+    
+
+    def testList():
+        return [
+            {
+            'id': 1,
+            'username': 'Maurice',
+            'email': 'maurice@email.com',
+            'phone': '111111',
+            'role': 'user',
+            'active': 'active',
+            'two_factor': False,
+            'two_factor_secret': 'self.two_factor_secret',
+            'two_factor_recovery': True,
+            'two_factor_recovery_codes': 'self.two_factor_recovery_codes',
+            'created_at': datetime.now(),
+            'updated_at': datetime.now()
+        },
+        {
+            'id': 2,
+            'username': 'Clarice',
+            'email': 'clarice@email.com',
+            'phone': '333333',
+            'role': 'user',
+            'active': 'inactive',
+            'two_factor': True,
+            'two_factor_secret': 'self.two_factor_secret',
+            'two_factor_recovery': True,
+            'two_factor_recovery_codes': 'self.two_factor_recovery_codes',
+            'created_at': datetime.now(),
+            'updated_at': datetime.now()
+        },
+        {
+            'id': 3,
+            'username': 'Afonso',
+            'email': 'afonso@email.com',
+            'phone': '4444',
+            'role': 'user',
+            'active': 'active',
+            'two_factor': False,
+            'two_factor_secret': 'self.two_factor_secret',
+            'two_factor_recovery': False,
+            'two_factor_recovery_codes': 'self.two_factor_recovery_codes',
+            'created_at': datetime.now(),
+            'updated_at': datetime.now()
+        }
+        ]

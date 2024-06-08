@@ -58,6 +58,10 @@ def create_app(config_filename, type_db=None, silent=True):
     init_app(login_manger, db=db)
     app.register_blueprint(create_bp)
 
+    from . views.bp_view_auth import bp as auth_bp, init_app
+    init_app(login_manger, db=db)
+    app.register_blueprint(auth_bp)
+
     
     
     #from model.usermodel import User

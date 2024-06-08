@@ -24,7 +24,19 @@ class CreateView(View):
         #if request.method == 'POST' and form.validate():
         if request.method == 'POST':
             if validate_user_form(request.form):
-                username = request.form.get('username')
+                
+                obj = {
+                    'username': request.form.get('username'),
+                    'email': request.form.get('email'),
+                    'phone': request.form.get('phone'),
+                    'role': 'user',
+                    'active': 'active',
+                    'two_factor': False,
+                    'two_factor_secret': request.form.get('two_factor_secret'),
+                    'two_factor_recovery': request.form.get('two_factor_recovery'),
+                    'two_factor_recovery_codes': request.form.get('two_factor_recovery_codes'),
+                }
+
                 #self.model.create_user(form)
                 flash('User created successfully', 'success')
                 #return redirect(url_for('create'))
