@@ -19,10 +19,10 @@ def connect_to_server_db(app,type_db=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = cloud_db
         
     else:
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///testdb.db"
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test2.db"
 
 def create_app(config_filename, type_db=None, silent=True):
-    app = Flask(__name__, template_folder='templates')
+    app = Flask(__name__, instance_relative_config=True, template_folder='templates')
     app.config.from_pyfile(config_filename, silent=silent)
     app.config.from_mapping(
         SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9"
@@ -33,17 +33,18 @@ def create_app(config_filename, type_db=None, silent=True):
 
     # Login Manager is needed for the the application 
     # to be able to log in and log out users
-    
-    #login_manger = LoginManager()
-    #login_manger.init_app(app)
+
+    login_manger = LoginManager()
+    login_manger.init_app(app)
 
     #from model.usermodel import db
 
-    # Init the db
-    #db.init_app(app)
-
-    #with app.app_context():
-        #db.create_all()
+    # Initialize the application extension
+    db.init_app(app)
+    
+    # Create the database within the app context
+    with app.app_context():
+        db.create_all()
 
     
     # Integrating the blueprints into the application
@@ -52,6 +53,10 @@ def create_app(config_filename, type_db=None, silent=True):
 
     from . views.bp_view_select import bp as select_bp
     app.register_blueprint(select_bp)
+
+    from . views.bp_create_user_view import bp as create_bp, init_app
+    init_app(login_manger, db=db)
+    app.register_blueprint(create_bp)
 
     
     
@@ -72,6 +77,6 @@ def create_app(config_filename, type_db=None, silent=True):
 
     # Init the migration
 
-    #migrate = Migrate(app, db)
+    migrate = Migrate(app, db)
 
     return app

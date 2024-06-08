@@ -1,21 +1,21 @@
 from flask_login import UserMixin
-from sqlalchemy.orm import Mapped,mapped_column, relationship
-from core.flask_login_module.app.app import db
+from sqlalchemy.orm import Mapped
+from ..app import db
 
 class Users(UserMixin, db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    email = db.Column(db.String(100), unique=True)
-    phone = db.Column(db.String(100), unique=True)
-    role = db.Column(db.String(100))
-    active = db.Column(db.Boolean())
-    two_factor = db.Column(db.Boolean())
-    two_factor_secret = db.Column(db.String(100))
-    two_factor_recovery = db.Column(db.String(100))
-    two_factor_recovery_codes = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime())
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    username: Mapped[str] = db.Column(db.String(100), unique=True)
+    password: Mapped[str] = db.Column(db.String(100))
+    email:Mapped[str] = db.Column(db.String(100), unique=True)
+    phone:Mapped[str] = db.Column(db.String(100), unique=True)
+    role:Mapped[str] = db.Column(db.String(100), default='user')
+    active = db.Column(db.Boolean(), default=False)
+    two_factor = db.Column(db.Boolean(), default=False)
+    two_factor_secret:Mapped[str] = db.Column(db.String(100))
+    two_factor_recovery:Mapped[str] = db.Column(db.String(100))
+    two_factor_recovery_codes:Mapped[str] = db.Column(db.String(100))
+    created_at = db.Column(db.DateTime(), default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime())
     #last_login = db.Column(db.DateTime())
     #last_login_ip = db.Column(db.String(100))
