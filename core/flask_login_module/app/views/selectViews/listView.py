@@ -20,5 +20,5 @@ class ListView(View):
         self.template = template
 
     def dispatch_request(self):
-        listItems = self.model.list_users()
+        listItems = self.model.query.all()
         return render_template(self.template, title="List Users", items=listItems)

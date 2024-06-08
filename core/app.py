@@ -1,5 +1,6 @@
 
 import os
+import secrets
 from flask import Flask, request, session, jsonify
 from flask_cors import CORS
 from flask_cors import cross_origin
@@ -26,9 +27,12 @@ def create_application(type_db=None,test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     CORS(app)
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
+    foo = secrets.token_urlsafe(16)
+    #app.secret_key = foo
     app.config.from_mapping(
-        SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9"
+        SECRET_KEY= foo
     )
 
     """app.config.from_mapping(
@@ -69,12 +73,14 @@ def create_application(type_db=None,test_config=None):
     from core.routes import run_routes
     run_routes(app, db)
 
-
-    @app.route('/hello', methods=['GET'])
+    
+    @app.route('/get/secret-key', methods=['GET'])
     @cross_origin(methods=['GET'])
     def hello():
         
-        return {'message': 'Hello World'}
+        foo = secrets.token_urlsafe(16)
+        
+        return {'secret': foo}
 
 
 

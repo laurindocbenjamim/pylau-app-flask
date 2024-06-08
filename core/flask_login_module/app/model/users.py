@@ -1,74 +1,86 @@
 from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 from ..app import db
+from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
+from werkzeug.security import check_password_hash
 
 from datetime import datetime
 
 class Users(UserMixin, db.Model):
     __tablename__ = 'users'
-    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
-    username: Mapped[str] = db.Column(db.String(100), unique=True)
-    password: Mapped[str] = db.Column(db.String(100))
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True, nullable=False)
+    username: Mapped[str] = db.Column(db.String(100), unique=True)    
     email:Mapped[str] = db.Column(db.String(100), unique=True)
-    phone:Mapped[str] = db.Column(db.String(100), unique=True)
+    password: Mapped[str] = db.Column(db.String(100))
     role:Mapped[str] = db.Column(db.String(100), default='user')
-    active = db.Column(db.Boolean(), default=False)
-    two_factor = db.Column(db.Boolean(), default=False)
-    two_factor_secret:Mapped[str] = db.Column(db.String(100))
-    two_factor_recovery:Mapped[str] = db.Column(db.String(100))
-    two_factor_recovery_codes:Mapped[str] = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(), default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime())
-    #last_login = db.Column(db.DateTime())
-    #last_login_ip = db.Column(db.String(100))
-    #last_login_location = db.Column(db.String(100))
-    #last_login_device = db.Column(db.String(100))
-    #last_login_browser = db.Column(db.String(100))
-    #last_login_os = db.Column(db.String(100))
 
-    def __init__(self, username, password, email, phone, role, active, two_factor, two_factor_secret, two_factor_recovery, two_factor_recovery_codes, created_at, updated_at):
-        self.username = username
-        self.password = password
-        self.email = email
-        self.phone = phone
-        self.role = role
-        self.active = active
-        self.two_factor = two_factor
-        self.two_factor_secret = two_factor_secret
-        self.two_factor_recovery = two_factor_recovery
-        self.two_factor_recovery_codes = two_factor_recovery_codes
-        self.created_at = created_at
-        self.updated_at = updated_at
-    
     def __repr__(self):
         return '<User %r>' % self.username
+    
+    """ 
+    This following property return True if the user is authenticated, i.e. 
+    they have provided valid credentials. (Only authenticated users will fulfill the criteria of login_required.)
+    """
+    def is_authenticated(self):
+        return True
+    
+    """
+    This following property return True if this is an active user - in addition to being authenticated, they also 
+    have activated their account, not been suspended, 
+    or any condition your application has for rejecting an account. 
+    Inactive accounts may not log in (without being forced of course).
+    """
+    def is_active(self):
+        return True
+    
+
+    """
+    This following property return True if this is an anonymous user. (Actual users should return False instead.)
+    """
+    def is_anonymous(self):
+        return False
+    
+    """
+    This method must return a str that uniquely identifies this user, and can be used to load the user from the user_loader callback. 
+    Note that this must be a str - if the ID is natively an int or some other type, you will need to convert it to str.
+    """
+    def get_id(self):
+        return self.id
+    
     
     def to_dict(self):
         return {
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'phone': self.phone,
             'role': self.role,
-            'active': self.active,
-            'two_factor': self.two_factor,
-            'two_factor_secret': self.two_factor_secret,
-            'two_factor_recovery': self.two_factor_recovery,
-            'two_factor_recovery_codes': self.two_factor_recovery_codes,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
         }
     
+    def create_user(user_object):        
+        try:
+            db.session.add(user_object)
+            db.session.commit()
+            return 1
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return str(e)
+        except Exception as e:
+            db.session.rollback()
+            return str(e)
 
-    def testList():
+
+    def list_users():
         return [
             {
             'id': 1,
             'username': 'Maurice',
             'email': 'maurice@email.com',
+            'password': '1211',
             'phone': '111111',
             'role': 'user',
-            'active': 'active',
+            'is_active': True,
             'two_factor': False,
             'two_factor_secret': 'self.two_factor_secret',
             'two_factor_recovery': True,
@@ -80,9 +92,10 @@ class Users(UserMixin, db.Model):
             'id': 2,
             'username': 'Clarice',
             'email': 'clarice@email.com',
+            'password': '1211',
             'phone': '333333',
             'role': 'user',
-            'active': 'inactive',
+            'is_active': False,
             'two_factor': True,
             'two_factor_secret': 'self.two_factor_secret',
             'two_factor_recovery': True,
@@ -94,9 +107,10 @@ class Users(UserMixin, db.Model):
             'id': 3,
             'username': 'Afonso',
             'email': 'afonso@email.com',
+            'password': '1211',
             'phone': '4444',
             'role': 'user',
-            'active': 'active',
+            'is_active': True,
             'two_factor': False,
             'two_factor_secret': 'self.two_factor_secret',
             'two_factor_recovery': False,
@@ -105,3 +119,11 @@ class Users(UserMixin, db.Model):
             'updated_at': datetime.now()
         }
         ]
+
+    def get_item_by_id(self,id):
+        return next((item for item in self.list_users() if item['id'] == id), None)
+    
+    def check_password(self, password):
+        # Implement password checking logic here
+        # For example, you can compare the provided password with the stored password hash
+        return check_password_hash(self.password,password)

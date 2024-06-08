@@ -16,5 +16,7 @@ flask-login
 flask-bcrypt
 Flask-SQLAlchemy
 flask-migrate
+Flask-WTF
+bootstrap-flask
 pycryptodome
 geocoder

@@ -6,7 +6,7 @@ from flask_login import LoginManager
 
 
 
-bp = flask.Blueprint('main', __name__, url_prefix='/create', template_folder='templates')
+bp = flask.Blueprint('createUser', __name__, url_prefix='/create-user', template_folder='templates')
 
 def init_app(login_manager, db):
     
@@ -14,8 +14,7 @@ def init_app(login_manager, db):
 
     @login_manager.user_loader
     def load_user(email):
-        #return Users.query.get(email)
-        users = Users.testList()
+        return Users.query.get(email)
         if len(users) > 0:
             user = [u for u in users if u['email'] == email]
             if not user:
@@ -23,7 +22,7 @@ def init_app(login_manager, db):
             return user[0]
         return  
 
-    bp.add_url_rule('/new', view_func=CreateView.as_view('create', Users,  template='create.html'))
+    bp.add_url_rule('/new-user', view_func=CreateView.as_view('newUser', Users,  template='create.html'))
 # Last block of code in the file
 """
 

@@ -15,7 +15,7 @@ def init_app(login_manager, db):
     @login_manager.user_loader
     def load_user(email):
         #return Users.query.get(email)
-        users = Users.testList()
+        users = Users.list_users()
         if len(users) > 0:
             user = [u for u in users if u['email'] == email]
             if not user:
@@ -26,17 +26,17 @@ def init_app(login_manager, db):
     @login_manager.request_loader
     def request_loader(request):
         email = request.form.get('username')
-        users = Users.testList()
+        users = Users.list_users()
         user = [u for u in users if u['email'] == email]
         if not user:
             return
         user = user[0]
-        user.id = email
+        #user.id = email
         return user
     
     @login_manager.unauthorized_handler
     def unauthorized_handler():
         return 'Unauthorized', 401
 
-    bp.add_url_rule('/login', view_func=AuthView.as_view('auth', Users,  template='create.html'))
+    bp.add_url_rule('/login', view_func=AuthView.as_view('login', Users,  template='auth.html'))
 

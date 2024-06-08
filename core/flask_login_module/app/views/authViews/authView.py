@@ -18,9 +18,10 @@ class AuthView(View):
                 user = self.model.query.filter_by(username=username).first()
                 
                 if user and user.check_password(password):
+                    
                     # Use the login_user method to log in the user
                     login_user(user)
-                    return redirect(url_for('create'))
+                    return redirect(url_for('main_view.main_view'))
                 else:
                     flash('Invalid username or password', 'error')
             

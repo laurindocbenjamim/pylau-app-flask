@@ -1,5 +1,5 @@
 
-
+import secrets
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -24,8 +24,10 @@ def connect_to_server_db(app,type_db=None):
 def create_app(config_filename, type_db=None, silent=True):
     app = Flask(__name__, instance_relative_config=True, template_folder='templates')
     app.config.from_pyfile(config_filename, silent=silent)
+    secret = secrets.token_urlsafe(16)
+    #app.secret_key = foo
     app.config.from_mapping(
-        SECRET_KEY="AB8D23A974B4C7B2ABB641668F9F9"
+        SECRET_KEY=secret
     )
     CORS(app)
 
