@@ -4,7 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-
+from flask_caching import Cache
 from flask_login import LoginManager
 
 db = SQLAlchemy()
@@ -29,6 +29,8 @@ def create_app(config_filename, type_db=None, silent=True):
     app.config.from_mapping(
         SECRET_KEY=secret
     )
+    app.config['CACHE_TYPE'] = 'simple'  # Choose cache type, e.g., 'simple', 'redis', etc.
+    
     CORS(app)
 
     connect_to_server_db(app,type_db)
@@ -53,14 +55,15 @@ def create_app(config_filename, type_db=None, silent=True):
     from .views.bp_main_view import bp as main_bp
     app.register_blueprint(main_bp)
 
-    from . views.bp_view_select import bp as select_bp
+    from .views.bp_select_view import bp as select_bp
+    #@cache.cached(timeout=50)
     app.register_blueprint(select_bp)
 
     from . views.bp_create_user_view import bp as create_bp, init_app
     init_app(login_manger, db=db)
     app.register_blueprint(create_bp)
 
-    from . views.bp_view_auth import bp as auth_bp, init_app
+    from .views.bp_auth_view import bp as auth_bp, init_app
     init_app(login_manger, db=db)
     app.register_blueprint(auth_bp)
 

@@ -13,20 +13,14 @@ def init_app(login_manager, db):
     from ..model.users import Users
 
     @login_manager.user_loader
-    def load_user(email):
-        #return Users.query.get(email)
-        users = Users.list_users()
-        if len(users) > 0:
-            user = [u for u in users if u['email'] == email]
-            if not user:
-                return 
-            return user[0]
-        return  
+    def load_user(user_id):
+        return Users.query.get(user_id)
+       
     
     @login_manager.request_loader
     def request_loader(request):
         email = request.form.get('username')
-        users = Users.list_users()
+        users = [user.to_dict() for user in Users.query.all()]
         user = [u for u in users if u['email'] == email]
         if not user:
             return

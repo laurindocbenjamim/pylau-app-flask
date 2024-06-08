@@ -70,56 +70,6 @@ class Users(UserMixin, db.Model):
             db.session.rollback()
             return str(e)
 
-
-    def list_users():
-        return [
-            {
-            'id': 1,
-            'username': 'Maurice',
-            'email': 'maurice@email.com',
-            'password': '1211',
-            'phone': '111111',
-            'role': 'user',
-            'is_active': True,
-            'two_factor': False,
-            'two_factor_secret': 'self.two_factor_secret',
-            'two_factor_recovery': True,
-            'two_factor_recovery_codes': 'self.two_factor_recovery_codes',
-            'created_at': datetime.now(),
-            'updated_at': datetime.now()
-        },
-        {
-            'id': 2,
-            'username': 'Clarice',
-            'email': 'clarice@email.com',
-            'password': '1211',
-            'phone': '333333',
-            'role': 'user',
-            'is_active': False,
-            'two_factor': True,
-            'two_factor_secret': 'self.two_factor_secret',
-            'two_factor_recovery': True,
-            'two_factor_recovery_codes': 'self.two_factor_recovery_codes',
-            'created_at': datetime.now(),
-            'updated_at': datetime.now()
-        },
-        {
-            'id': 3,
-            'username': 'Afonso',
-            'email': 'afonso@email.com',
-            'password': '1211',
-            'phone': '4444',
-            'role': 'user',
-            'is_active': True,
-            'two_factor': False,
-            'two_factor_secret': 'self.two_factor_secret',
-            'two_factor_recovery': False,
-            'two_factor_recovery_codes': 'self.two_factor_recovery_codes',
-            'created_at': datetime.now(),
-            'updated_at': datetime.now()
-        }
-        ]
-
     def get_item_by_id(self,id):
         return next((item for item in self.list_users() if item['id'] == id), None)
     
