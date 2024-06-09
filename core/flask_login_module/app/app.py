@@ -1,6 +1,6 @@
 
 import secrets
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -50,10 +50,25 @@ def create_app(config_filename, type_db=None, silent=True):
     with app.app_context():
         db.create_all()
 
+
+    # Main route
+    @app.route('/')
+    def index():
+        return render_template('site_home.html')
+    
+    from .views.error_handlers_view import error_handlers_view
+    error_handlers_view(app)
     
     # Integrating the blueprints into the application
     from .views.bp_main_view import bp as main_bp
     app.register_blueprint(main_bp)
+
+    # Integrating the blueprints parent and child into the application
+    from .views.bp_auth_register_view import bp_auth_parent
+    from .views.bp_auth_login_view import bp_auth_login_child, init_app
+    init_app(login_manger, db=db)
+    bp_auth_parent.register_blueprint(bp_auth_login_child)
+    app.register_blueprint(bp_auth_parent)
 
     from .views.bp_select_view import bp as select_bp
     #@cache.cached(timeout=50)
@@ -63,9 +78,7 @@ def create_app(config_filename, type_db=None, silent=True):
     init_app(login_manger, db=db)
     app.register_blueprint(create_bp)
 
-    from .views.bp_auth_view import bp as auth_bp, init_app
-    init_app(login_manger, db=db)
-    app.register_blueprint(auth_bp)
+   
 
     
     

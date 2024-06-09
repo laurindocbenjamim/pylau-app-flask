@@ -3,7 +3,7 @@ from flask.views import View
 from flask import render_template, request, redirect, url_for, flash
 from .authViewController import validate_user_form
 
-class AuthView(View):
+class AuthLoginView(View):
     methods = ['GET', 'POST']
 
     def __init__(self, model, template):
@@ -21,7 +21,7 @@ class AuthView(View):
                     
                     # Use the login_user method to log in the user
                     login_user(user)
-                    return redirect(url_for('main_view.main_view'))
+                    return redirect(url_for('select.user_list_view'))
                 else:
                     flash('Invalid username or password', 'error')
             

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "site.html" %}
 
 {% block title %}
 {% if title %}{{ title }} {% endif %}
@@ -57,6 +57,6 @@
             </form>
         </div>
     </div>
-    <!--<p><a href="{{ url_for('main_view.main_view') }}">Login</a></p>-->
+    <p>You are not registered yet? <a href="{{ url_for('auth.register') }}">Create account</a></p>
 
 {% endblock %}

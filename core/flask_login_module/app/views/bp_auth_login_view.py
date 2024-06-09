@@ -1,12 +1,13 @@
 import flask
+from flask import render_template
 
-from .authViews.authView import AuthView
+from .authLoginView.auth_login_view import AuthLoginView
 
 from flask_login import LoginManager
 
 
 
-bp = flask.Blueprint('auth', __name__, url_prefix='/auth', template_folder='templates')
+bp_auth_login_child = flask.Blueprint('user', __name__, url_prefix='/user', template_folder='templates')
 
 def init_app(login_manager, db):
     
@@ -30,7 +31,8 @@ def init_app(login_manager, db):
     
     @login_manager.unauthorized_handler
     def unauthorized_handler():
-        return 'Unauthorized', 401
+        #return 'Unauthorized', 401
+        return render_template('auth.html')
 
-    bp.add_url_rule('/login', view_func=AuthView.as_view('login', Users,  template='auth.html'))
+    bp_auth_login_child.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users,  template='auth.html'))
 

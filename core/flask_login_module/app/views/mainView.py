@@ -11,4 +11,4 @@ class MainView(View):
         self.template = template
 
     def dispatch_request(self):
-        return render_template(self.template, title="Home", user="John Doe")
+        return render_template(self.template, title="Main", user="John Doe")
