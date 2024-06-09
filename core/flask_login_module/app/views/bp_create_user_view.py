@@ -22,7 +22,7 @@ def init_app(login_manager, db):
             return user[0]
         return  
 
-    bp.add_url_rule('/new-user', view_func=CreateView.as_view('newUser', Users,  template='create.html'))
+    bp.add_url_rule('/new-user', view_func=CreateView.as_view('newUser', Users,  template='create_user.html'))
 # Last block of code in the file
 """
 

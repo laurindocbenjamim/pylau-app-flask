@@ -1,10 +1,10 @@
 from flask.views import View
 from flask import render_template, redirect, url_for, request, flash, session, jsonify
-#from flask_login import login_required
+from flask_login import login_required
 #from flask_caching import cache
 
 class ListView(View):
-    #decorators = [cache(minutes=2), login_required]
+    decorators = [login_required]
     """
     However, if your view class needs to do a lot of complex initialization, 
     doing it for every request is unnecessary and can be inefficient. To avoid this, set View.init_every_request to False, 

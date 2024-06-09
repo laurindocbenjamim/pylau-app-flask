@@ -28,7 +28,7 @@ class CreateView(View):
                 response = self.model.create_user(load_user_obj(request.form, 'admin'))
                 if response == 1:
                     flash('User created successfully', 'success')
-                    return redirect(url_for('auth.login'))
+                    return redirect(url_for('index'))
                 else:
                     flash(response, 'error')
                 

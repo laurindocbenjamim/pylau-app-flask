@@ -3,7 +3,7 @@ from flask import render_template
 
 from .authLoginView.auth_login_view import AuthLoginView
 
-from flask_login import LoginManager
+from flask_login import logout_user
 
 
 
@@ -32,7 +32,14 @@ def init_app(login_manager, db):
     @login_manager.unauthorized_handler
     def unauthorized_handler():
         #return 'Unauthorized', 401
-        return render_template('auth.html')
+        return flask.redirect(flask.url_for('auth.user.login'))
 
     bp_auth_login_child.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users,  template='auth.html'))
+
+    # Logout route
+    @bp_auth_login_child.route('/logout')
+    def logout():
+        #flask.session.clear()
+        logout_user()
+        return flask.redirect(flask.url_for('auth.user.login'))
 
