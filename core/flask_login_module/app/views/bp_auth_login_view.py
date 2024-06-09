@@ -25,6 +25,7 @@ def init_app(login_manager, db):
         user = [u for u in users if u['email'] == email]
         if not user:
             return
+        
         user = user[0]
         #user.id = email
         return user

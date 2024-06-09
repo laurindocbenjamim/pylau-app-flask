@@ -1,6 +1,7 @@
-from flask_login import login_user
+import flask
+from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from .authViewController import validate_user_form
 
 class AuthLoginView(View):
@@ -18,11 +19,13 @@ class AuthLoginView(View):
                 user = self.model.query.filter_by(username=username).first()
                 
                 if user and user.check_password(password):
-                    
-                    # Use the login_user method to log in the user
-                    login_user(user)
-                    return redirect(url_for('select.user_list_view'))
+                    if user.is_active() == 1:
+                        # Use the login_user method to log in the user
+                        login_user(user)
+                        return redirect(url_for('select.user_list_view'))  
+                    logout_user()
+                    flask.flash('User is not active', 'error') 
                 else:
-                    flash('Invalid username or password', 'error')
+                    flask.flash('Invalid username or password ', 'error')
             
         return render_template(self.template, title='Login')

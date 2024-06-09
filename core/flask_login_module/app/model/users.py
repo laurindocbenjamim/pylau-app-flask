@@ -13,6 +13,7 @@ class Users(UserMixin, db.Model):
     email:Mapped[str] = db.Column(db.String(100), unique=True)
     password: Mapped[str] = db.Column(db.String(100))
     role:Mapped[str] = db.Column(db.String(100), default='user')
+    active:Mapped[bool] = db.Column(db.Boolean(), default=False)
     created_at = db.Column(db.DateTime(), default=db.func.current_timestamp())
 
     def __repr__(self):
@@ -32,7 +33,7 @@ class Users(UserMixin, db.Model):
     Inactive accounts may not log in (without being forced of course).
     """
     def is_active(self):
-        return True
+        return self.active
     
 
     """
@@ -55,6 +56,7 @@ class Users(UserMixin, db.Model):
             'username': self.username,
             'email': self.email,
             'role': self.role,
+            'active': self.active,
             'created_at': self.created_at,
         }
     
