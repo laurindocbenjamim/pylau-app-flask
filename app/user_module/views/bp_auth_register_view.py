@@ -8,5 +8,5 @@ bp_auth_register_parent = flask.Blueprint('auth', __name__, url_prefix='/auth', 
 
 # Initialize the application extension by passing the login_manager in the init_app function
 def init_app():    
-    bp_auth_register_parent.add_url_rule('/user/register', view_func=AuthRegisterView.as_view('register', Users, template='create_user.html'))
+    bp_auth_register_parent.add_url_rule('/user/register', view_func=AuthRegisterView.as_view('register', Users, template='auth/create_user.html'))
 

@@ -4,18 +4,28 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 from werkzeug.security import check_password_hash
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from app import db
+#datetime.now(tz=timezone.utc)
 
 class Users(UserMixin, db.Model):
+
     __tablename__ = 'users'
-    id: Mapped[int] = db.Column(db.Integer, primary_key=True, nullable=False)
-    username: Mapped[str] = db.Column(db.String(100), unique=True)    
-    email:Mapped[str] = db.Column(db.String(100), unique=True)
-    password: Mapped[str] = db.Column(db.String(100))
+
+    userID:Mapped[int] = db.Column(db.Integer, primary_key=True, autoincrement=True)   
+    firstname:Mapped[str] = db.Column(db.String(100), nullable=False)
+    lastname:Mapped[str] = db.Column(db.String(100), nullable=False)
+    email:Mapped[str] = db.Column(db.String(100), nullable=False)
+    country:Mapped[str] = db.Column(db.String(20), nullable=False)
+    country_code:Mapped[str] = db.Column(db.String(6), nullable=False)
+    phone:Mapped[str] = db.Column(db.String(100), nullable=False)
+    password:Mapped[str] = db.Column(db.String(255), nullable=False)
     role:Mapped[str] = db.Column(db.String(100), default='user')
     active:Mapped[bool] = db.Column(db.Boolean(), default=False)
-    created_at = db.Column(db.DateTime(), default=db.func.current_timestamp())
+    date_added = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_updated = db.Column(db.DateTime, nullable=True)
+    
+
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -55,12 +65,18 @@ class Users(UserMixin, db.Model):
     
     def to_dict(self):
         return {
-            'id': self.id,
-            'username': self.username,
+            'userID': self.userID,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'password': self.password,
             'email': self.email,
-            'role': self.role,
-            'active': self.active,
-            'created_at': self.created_at,
+            'country': self.country,
+            'country_code': self.country_code,
+            'phone': self.phone,
+            'status': self.status,
+            'two_factor_auth_secret': self.two_factor_auth_secret,
+            'date_added': self.date_added,
+            'date_updated': self.date_updated
         }
     
     def create_user(user_object):        
@@ -74,6 +90,18 @@ class Users(UserMixin, db.Model):
         except Exception as e:
             db.session.rollback()
             return str(e)
+
+    def check_email_exists(email):
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            return True
+        return False
+    
+    def check_phone_exists(phone):
+        user = Users.query.filter_by(phone=phone).first()
+        if user:
+            return True
+        return False
 
     def get_item_by_id(self,id):
         return next((item for item in self.list_users() if item['id'] == id), None)

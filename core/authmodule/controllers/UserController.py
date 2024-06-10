@@ -43,7 +43,7 @@ def get_user_by_id_limited_dict(db,id):
 
 def _get_user_by_id(id):
     try:
-        #pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
+        pers = db.session.execute(db.select(user).order_by(User.firstname)).scalars()
         user = User.query.filter_by(userID=id).first()
         return user.to_dict()
     except:

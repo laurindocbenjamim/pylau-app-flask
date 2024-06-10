@@ -44,7 +44,7 @@ def init_app(login_manager, db):
         #return 'Unauthorized', 401
         return flask.redirect(flask.url_for('auth.user.login'))
 
-    bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users,  template='auth.html'))
+    bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users,  template='auth/auth.html'))
 
     # Logout route
     @bp_auth.route('/logout')

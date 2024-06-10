@@ -1,0 +1,315 @@
+{% extends "site.html" %}
+
+{% block title %}
+{% if title %}{{ title }} {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% block styles %}
+<style>
+  ul,
+  li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .message {
+    font-size: .9rem;
+  }
+
+  .error {
+    color: rgb(247, 45, 45);
+  }
+
+  .info {
+    color: rgb(19, 122, 240);
+  }
+
+  .success {
+    color: rgb(11, 167, 11);
+  }
+
+  .danger {
+    color: rgb(255, 94, 0);
+  }
+
+
+
+
+
+  .list-group {
+    width: 100%;
+    max-width: 460px;
+    margin-inline: 1.5rem;
+  }
+
+  .form-check-input:checked+.form-checked-content {
+    opacity: .5;
+  }
+
+  .form-check-input-placeholder {
+    border-style: dashed;
+  }
+
+  [contenteditable]:focus {
+    outline: 0;
+  }
+
+  .list-group-checkable .list-group-item {
+    cursor: pointer;
+  }
+
+  .list-group-item-check {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .list-group-item-check:hover+.list-group-item {
+    background-color: var(--bs-secondary-bg);
+  }
+
+  .list-group-item-check:checked+.list-group-item {
+    color: #fff;
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+  }
+
+  .list-group-item-check[disabled]+.list-group-item,
+  .list-group-item-check:disabled+.list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
+  }
+
+  .list-group-radio .list-group-item {
+    cursor: pointer;
+    border-radius: .5rem;
+  }
+
+  .list-group-radio .form-check-input {
+    z-index: 2;
+    margin-top: -.5em;
+  }
+
+  .list-group-radio .list-group-item:hover,
+  .list-group-radio .list-group-item:focus {
+    background-color: var(--bs-secondary-bg);
+  }
+
+  .list-group-radio .form-check-input:checked+.list-group-item {
+    background-color: var(--bs-body);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 2px var(--bs-primary);
+  }
+
+  .list-group-radio .form-check-input[disabled]+.list-group-item,
+  .list-group-radio .form-check-input:disabled+.list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
+  }
+</style>
+{% endblock %}
+
+
+
+<div class="container" style="display: flex; justify-content: center; align-items: center;">
+  
+  <div class="col-lg-12" style="display: flex; justify-content: center; align-items: center;">
+
+    <form class="needs-validation form-register" method="post" id="form-register" novalidate>
+
+        <div class="col-lg-8">
+          <div class="g-3">             
+            
+            <div class="col-8 ">
+              <h1>Sign Up</h1>
+            
+              <div class="">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="flash-alert">
+                  <ul class=flashes>
+                    {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }} {{ redirectUrl }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="firstname" class="form-label">First name</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">@</span>
+                <input type="text" class="form-control" id="firstname" name="firstname"
+                value="{{ request.form.firstname }}"
+                placeholder="First name" required>
+                <div class="invalid-feedback">
+                  Your first name is required.
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-12">
+              <label for="lastname" class="form-label">Last name</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">@</span>
+                <input type="text" class="form-control" id="lastname" name="lastname" 
+                value="{{ request.form.lastname }}"
+                 placeholder="Last name" required>
+                <div class="invalid-feedback">
+                  Your last name is required.
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-12">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">@</span>
+                <input type="email" class="form-control" id="email" name="email" 
+                value="{{ request.form.email }}"
+                placeholder="example@gmail.com" required>
+                
+                <div class="invalid-feedback">
+                  Your email is required.
+                </div>
+                
+              </div>
+              <p style="font-size: .8rem; color:#c0c0c0">Accepted emails: 
+                <span style="font-size: .8rem; color:#f77d0a">
+                  gmail.com, outlook.com, hotmail.com, live.com, icloud.com</span>
+                </p>
+            </div>
+      
+            <div class="col-12">
+              <label for="country" class="form-label">Country</label>
+              <div class="input-group has-validation">
+                <select id="country" name="country" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option {% if request.form.country == 'Portugal' %}  selected {% endif %}>Portugal</option>                  
+                  <option {% if request.form.country == 'Angola' %}  selected {% endif %}>Angola</option>
+                  
+                </select>
+      
+                <div class="invalid-feedback">
+                  The country is required.
+                </div>
+              </div>
+            </div>
+      
+            <div class="row">
+      
+              <div class="form-group col-md-4">
+                <label for="code">Code</label>
+                <select id="country_code" name="country_code" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option {% if request.form.country == 'Portugal' %}  selected {% endif %}>+351</option>
+                  <option {% if request.form.country == 'Angola' %}  selected {% endif %}>+244</option>
+                </select>
+              </div>
+      
+              <div class="form-group col-md-8">
+                <label for="phone">Phone</label>
+                <input type="number" class="form-control"
+                value="{{ request.form.phone }}" 
+                 max="12" min="4" id="phone" name="phone">
+              </div>
+      
+            </div>
+            
+      
+            <div class="col-12">
+              <label for="password" class="form-label">Password </label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+              <div class="invalid-feedback">
+                Please enter a valid password address for shipping updates.
+              </div>
+            </div>
+      
+            <div class="col-12">
+              
+              <input type="password" class="form-control" id="confirm" name="confirm" placeholder="Confirm the password" required>
+              <div class="invalid-feedback">
+                Please confirm the password.
+              </div>
+            </div>
+      
+            <hr class="my-4">
+      
+            <div class="col-12">               
+              <strong class="d-inline-block mb-2 text-primary-emphasis">
+                <h3 class="mb-0">2-Factor Authentication</h3>
+              </strong>
+      
+              <p class="mb-auto" style="color: #bebdbd;">
+                We worring about your data security. We use 2-Factor Authentication to protect your data.
+              </p>
+              <p class="mb-auto" style="color: #bebdbd;">
+                Please select one of the options below to authenticate.
+              </p>
+              <div class="my-3">
+               
+                <div class="list-group">
+                  <label class="list-group-item d-flex gap-2">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="two_fa_auth_method" id="two_fa_auth_method"
+                      value="app" checked>
+                    <span>
+                      By using a 2-FA authenticator application
+                      <small class="d-block text-body-secondary">(Google Authenticator, Microsoft Authenticator, Salesforce Authenticator, etc.)</small>
+                    </span>
+                  </label>
+                  <label class="list-group-item d-flex gap-2">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="two_fa_auth_method" id="two_fa_auth_method"
+                      value="email">
+                    <span>
+                      Receive code by email or cell phone
+                      <small class="d-block text-body-secondary">Receive code by email or cell phone</small>
+                    </span>
+                  </label>
+                </div>
+              </div>
+      
+            </div>  
+            
+      
+            
+      
+            <div class="col-11 alert" style="font-size: .8rem;">                  
+                <p></p>
+            </div> 
+    
+          
+          </div>
+          
+          <hr class="my-2">
+          
+          <div class="buttons" style="padding:.6rem 0;">
+            
+            <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Next</button>
+            
+      
+          </div>
+          
+          
+       
+        </div>
+
+    </form>
+
+  </div>
+</div>
+<p>I have an account. <a href="{{ url_for('auth.user.login') }}">Sign In</a></p>
+
+{% endblock %}
+
+{% block scripts %}
+
+  <!--<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>-->
+  
+{% endblock %}
