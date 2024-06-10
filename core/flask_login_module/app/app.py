@@ -38,9 +38,9 @@ def create_app(config_filename, type_db=None, silent=True):
     # Login Manager is needed for the the application 
     # to be able to log in and log out users
 
-    login_manger = LoginManager()
-    #login_manger.login_view = 'auth.user.login'
-    login_manger.init_app(app)
+    login_manager = LoginManager()
+    #login_manager.login_view = 'auth.user.login'
+    login_manager.init_app(app)
     
 
     #from model.usermodel import db
@@ -64,8 +64,8 @@ def create_app(config_filename, type_db=None, silent=True):
     # Integrating the blueprints parent and child into the application
     from .views.bp_auth_register_view import bp_auth_parent, init_app as init_app_register
     from .views.bp_auth_login_view import bp_auth_login_child, init_app as init_app_login
-    init_app_register(login_manger)
-    init_app_login(login_manger, db=db)
+    init_app_register(login_manager)
+    init_app_login(login_manager, db=db)
     bp_auth_parent.register_blueprint(bp_auth_login_child)
     app.register_blueprint(bp_auth_parent)
 
@@ -75,11 +75,11 @@ def create_app(config_filename, type_db=None, silent=True):
     
     from .views.bp_select_view import bp as select_bp, init_select_view_app
     #@cache.cached(timeout=50)
-    init_select_view_app(login_manger)
+    init_select_view_app(login_manager)
     app.register_blueprint(select_bp)
 
     from . views.bp_create_user_view import bp as create_bp, init_app
-    init_app(login_manger, db=db)
+    init_app(login_manager, db=db)
     app.register_blueprint(create_bp)
 
    

@@ -1,0 +1,1 @@
+from .views.bp_projects_view import bp_project_view

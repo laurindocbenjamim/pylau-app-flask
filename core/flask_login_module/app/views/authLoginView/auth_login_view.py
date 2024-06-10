@@ -19,10 +19,7 @@ class AuthLoginView(View):
                 user = self.model.query.filter_by(username=username).first()
                 
                 if user and user.check_password(password):
-                    if user.is_active() == 1:
-                        # Use the login_user method to log in the user
-                        login_user(user)
-                        return redirect(url_for('select.user_list_view'))  
+                    
                     logout_user()
                     flask.flash('User is not active', 'error') 
                 else:

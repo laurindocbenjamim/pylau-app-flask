@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>401 Unauthorized</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 text-center">
+                <img src="https://example.com/unauthenticated-image.jpg" alt="Unauthenticated Error Image" class="img-fluid">
+                <h1 class="mt-4">401 Unauthorized</h1>
+                <p>You are not authorized to access this page. Please login to continue.</p>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Back to home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

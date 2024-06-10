@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Projects</h1>
+    <ul>
+        {% for project in projects %}
+            <li><a href="{{ urlFor('project', {'id': project.id}) }}">{{ project.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block sidebar %}
+    <h3>Projects</h3>
+    <ul>
+        {% for project in projects %}
+            <li><a href="{{ urlFor('project', {'id': project.id}) }}">{{ project.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block title %}Projects{% endblock %}
+
+{% block head %}
+    <style>
+        h1 {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        alert('Hello');
+    </script>
+{% endblock %}
+
+{% block footer %}
+    <p>&copy; 2015</p>
+{% endblock %}
+
+{% block extra %}
+    <p>Extra content</p>
+{% endblock %}
+

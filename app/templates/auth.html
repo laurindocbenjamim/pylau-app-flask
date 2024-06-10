@@ -1,0 +1,62 @@
+{% extends "site.html" %}
+
+{% block title %}
+{% if title %}{{ title }} {% endif %}
+{% endblock %}
+
+{% block content %}
+    
+<style>
+    ul,li{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    .message{
+        font-size: .9rem;
+    }
+    .error {
+        color: rgb(247, 45, 45);
+    }
+    .info {
+        color: rgb(54, 54, 236);
+    }
+    .success {
+        color: rgb(11, 167, 11);
+    }
+    .danger {
+        color: rgb(255, 94, 0);
+    }
+    
+</style>
+    <h1>Login</h1>
+    <div class="container">
+        <div class="col-lg-7">
+            <form method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" value="{{ request.form.get('username', '') }}" name="username" placeholder="Username" >
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" >
+                
+                </div>
+
+                <div class="form-group">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="flash-alert">
+                            <ul class=flashes>
+                                {% for category, message in messages %}
+                                    <li class="{{ category }}">{{ message }} {{ redirectUrl }}</li>                       
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <input type="submit" class="btn btn-primary" value="Create">
+            </form>
+        </div>
+    </div>
+    <p>You are not registered yet? <a href="{{ url_for('auth.register') }}">Create account</a></p>
+
+{% endblock %}

@@ -3,7 +3,7 @@ from flask import render_template
 
 from .authLoginView.auth_login_view import AuthLoginView
 
-from flask_login import logout_user
+from flask_login import logout_user, login_user
 
 
 
@@ -21,12 +21,18 @@ def init_app(login_manager, db):
     @login_manager.request_loader
     def request_loader(request):
         email = request.form.get('username')
-        users = [user.to_dict() for user in Users.query.all()]
+        """users = [user.to_dict() for user in Users.query.all()]
         user = [u for u in users if u['email'] == email]
         if not user:
             return
-        
-        user = user[0]
+
+        """
+        user = Users.query.get(email)
+        if user.is_active() == False:
+            # Use the login_user method to log in the user
+            login_user(user)
+            return flask.redirect(flask.url_for('select.user_list_view'))  
+        # user = user[0]
         #user.id = email
         return user
     
