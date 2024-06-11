@@ -1,6 +1,7 @@
 
-#import core.__init__2 as __init__2
-from core import create_application
+
+#from core import create_application
+from app import create_application
 
 # This atribute `app` fits with the heroku's requirements
 app = create_application()
