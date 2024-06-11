@@ -27,7 +27,7 @@ class AuthLoginView(View):
                         flask.g.user = user
                         return redirect(url_for('projects.list'))
                     logout_user()
-                    flask.flash('User is not active', 'danger')
+                    flask.flash('This user is not activated', 'danger')
                 else:
                     flask.flash('Invalid username or password ', 'error')
             

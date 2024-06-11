@@ -3,6 +3,17 @@
 
 {% block styles %}  
 <style>
+
+  @import url("https://fonts.googleapis.com/css2?family=Anton&family=Arimo:ital,wght@1,400;1,600&family=Bricolage+Grotesque&family=Jaro:opsz@6..72&family=Jersey+25+Charted&family=Pacifico&family=Roboto:ital,wght@0,500;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@1,300;1,400;1,500;1,600;1,800;1,900&display=swap");
+
+  .welcome-title {
+    font-family: "Jaro", sans-serif;
+    font-optical-sizing: auto;
+  
+    font-size: 4rem;
+    font-style: normal;
+    color: rgb(95, 79, 241)
+  }
     .scroll-animation {
         opacity: 0;
         transform: translateY(20px);
@@ -415,13 +426,13 @@
     
     <header class="pb-3 mb-4 border-bottom">
       <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
-        <span class="fs-4">Data Tuning</span>
+        <span class="fs-4" style="font-family: 'Jaro', sans-serif;">Data Tuning</span>
       </a>
     </header>
 
     <div class="p-5 mb-4 bg-body-tertiar rounded-3 scroll-animation" style="background-color: rgba(4, 34, 73, 0.5);">
       <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold" >Think to Inovate</h1>
+        <h1 class="display-5 fw-bold welcome-title" >Think to Inovate</h1>
         <p class="col-md-8 fs-4">
             A company's treasure lies in the data generated through its activities. Managing this data
         responsibly is a priority; otherwise, business failure is inevitable.

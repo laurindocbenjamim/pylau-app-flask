@@ -115,10 +115,10 @@
 
 
 <div class="container" style="margin-top:10%;">
-  <div class="col-lg-12" style="display: flex; flex-direction: column; justify-content: center;align-items: center;">
+  <div class="col-lg-12" style="display: flex; flex-direction: column; justify-content: center;align-items: center; text-align:center">
     <h1>Sign Up</h1>
 
-    <div class="col-3" style="display: block; flex-direction: column;">
+    <div class="col-3" style="display: block; flex-direction: column; text-align:center">
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
      
@@ -150,7 +150,7 @@
                 <span class="input-group-text">@</span>
                 <input type="text" class="form-control" id="firstname" name="firstname"
                 value="{{ request.form.firstname }}"
-                placeholder="First name" required>
+                placeholder="First name" required maxlength="100" oninput="this.value = this.value.replace(/[^\w\s]/gi, '')">
                 <div class="invalid-feedback">
                   Your first name is required.
                 </div>
@@ -163,7 +163,7 @@
                 <span class="input-group-text">@</span>
                 <input type="text" class="form-control" id="lastname" name="lastname" 
                 value="{{ request.form.lastname }}"
-                 placeholder="Last name" required>
+                 placeholder="Last name" required maxlength="100" oninput="this.value = this.value.replace(/[^\w\s]/gi, '')">
                 <div class="invalid-feedback">
                   Your last name is required.
                 </div>
@@ -176,7 +176,7 @@
                 <span class="input-group-text">@</span>
                 <input type="email" class="form-control" id="email" name="email" 
                 value="{{ request.form.email }}"
-                placeholder="example@gmail.com" required>
+                placeholder="example@gmail.com" required maxlength="100">
                 
                 <div class="invalid-feedback">
                   Your email is required.
@@ -192,7 +192,7 @@
             <div class="col-12">
               <label for="country" class="form-label">Country</label>
               <div class="input-group has-validation">
-                <select id="country" name="country" class="form-control">
+                <select id="country" name="country" class="form-control" maxlength="50">
                   <option value="" selected>Choose...</option>
                   <option {% if request.form.country == 'Portugal' %}  selected {% endif %}>Portugal</option>                  
                   <option {% if request.form.country == 'Angola' %}  selected {% endif %}>Angola</option>
@@ -209,7 +209,7 @@
       
               <div class="form-group col-md-4">
                 <label for="code">Code</label>
-                <select id="country_code" name="country_code" class="form-control">
+                <select id="country_code" name="country_code" class="form-control" maxlength="5">
                   <option value="" selected>Choose...</option>
                   <option {% if request.form.country == 'Portugal' %}  selected {% endif %}>+351</option>
                   <option {% if request.form.country == 'Angola' %}  selected {% endif %}>+244</option>
@@ -218,9 +218,8 @@
       
               <div class="form-group col-md-8">
                 <label for="phone">Phone</label>
-                <input type="number" class="form-control"
-                value="{{ request.form.phone }}" 
-                 max="12" min="4" id="phone" name="phone">
+                <input type="tel" class="form-control"
+                value="{{ request.form.phone }}" id="phone" name="phone" pattern="[0-9]{9}" required>
               </div>
       
             </div>
@@ -228,7 +227,17 @@
       
             <div class="col-12">
               <label for="password" class="form-label">Password </label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+              <!--
+      This input field is used for entering a password.
+      It has the following pattern applied:
+      - At least one digit: (?=.*\d)
+      - At least one lowercase letter: (?=.*[a-z])
+      - At least one uppercase letter: (?=.*[A-Z])
+      - At least one letter (uppercase or lowercase): (?=.*[a-zA-Z])
+      - Minimum length of 8 characters: .{8,}
+      - The password is required: required
+    -->
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
               <div class="invalid-feedback">
                 Please enter a valid password address for shipping updates.
               </div>
