@@ -60,7 +60,7 @@ class Users(UserMixin, db.Model):
     Note that this must be a str - if the ID is natively an int or some other type, you will need to convert it to str.
     """
     def get_id(self):
-        return self.id
+        return self.userID
     
     
     def to_dict(self):
@@ -73,8 +73,8 @@ class Users(UserMixin, db.Model):
             'country': self.country,
             'country_code': self.country_code,
             'phone': self.phone,
-            'status': self.status,
-            'two_factor_auth_secret': self.two_factor_auth_secret,
+            'status': self.active,
+            'role': self.role,
             'date_added': self.date_added,
             'date_updated': self.date_updated
         }

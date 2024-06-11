@@ -4,7 +4,7 @@
     <h1>Projects</h1>
     <ul>
         {% for project in projects %}
-            <li><a href="{{ urlFor('project', {'id': project.id}) }}">{{ project.name }}</a></li>
+            <li><a href="">{{ project.name }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
@@ -13,7 +13,7 @@
     <h3>Projects</h3>
     <ul>
         {% for project in projects %}
-            <li><a href="{{ urlFor('project', {'id': project.id}) }}">{{ project.name }}</a></li>
+            <li><a href="">{{ project.name }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block footer %}
-    <p>&copy; 2015</p>
+    <p>&copy; 2024</p>
 {% endblock %}
 
 {% block extra %}

@@ -21,23 +21,13 @@ def init_app(login_manager, db):
     @login_manager.request_loader
     def request_loader(request):
         email = request.form.get('username')
-        """users = [user.to_dict() for user in Users.query.all()]
-        user = [u for u in users if u['email'] == email]
-        if not user:
-            return
-
-        """
-        user = Users.query.get(email)
-    
-        if not user:
-            return
-        elif user.is_active() == True:        
-         # Use the login_user method to log in the user
-            login_user(user)
-            return flask.redirect(flask.url_for('projects.list'))  
-        # user = user[0]
-        #user.id = email
-        return user
+        
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            if user.is_active() == True:
+                # Use the login_user method to log in the user                
+                return flask.redirect(flask.url_for('projects.list'))   
+        return 
     
     @login_manager.unauthorized_handler
     def unauthorized_handler():

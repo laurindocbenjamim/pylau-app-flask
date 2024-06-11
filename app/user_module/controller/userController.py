@@ -1,4 +1,6 @@
+import re
 from ..model.users import Users
+
 from flask import flash, Request
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
@@ -18,7 +20,7 @@ def load_user_obj(form = Request.form, role='user', active=0):
         
 
 
-import re
+
 
 def validate_form_fields(form = Request.form):
     # Validate each field
