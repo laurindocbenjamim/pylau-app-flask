@@ -31,6 +31,9 @@ def load_routes(app, db, login_manager):
     init_auth_login_view_app(login_manager=login_manager, db=db)
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)
     app.register_blueprint(bp_auth_register_parent)
+
+    from .send_email_module.bp_send_email_view import bp as bp_send_email_view
+    app.register_blueprint(bp_send_email_view)
     
     from .projects_module import bp_project_view
     app.register_blueprint(bp_project_view)

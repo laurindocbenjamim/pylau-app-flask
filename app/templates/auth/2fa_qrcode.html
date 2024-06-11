@@ -1,4 +1,4 @@
-{% extends 'site.html' %}
+{% extends 'index2.html' %}
 
 {% block header %}
 <h1></h1> {% block title %} {{ title }} - {% endblock %}</h1>
@@ -90,7 +90,7 @@
                   <label for="otpcode" class="form-label">Enter the code provided by the app</label>
                   <div class="input-group has-validation">
                     
-                    <input type="text" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" required>
+                    <input type="tel" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
                     
                   </div>
 
@@ -116,7 +116,7 @@
           
             <p>
               Are you not registered yet? 
-              <a href="{{ url_for('Register.sign_up')}}" rel="noopener noreferrer">Create your account.</a>
+              <a href="{{ url_for('auth.register')}}" rel="noopener noreferrer">Create your account.</a>
             </p>
 
           </div>

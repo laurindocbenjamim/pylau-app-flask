@@ -1,15 +1,19 @@
+import flask
 from typing import Any
 from flask.views import View
+
 from flask.views import MethodView
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from ..controller.userController import load_user_obj, validate_form_fields
 
+
 class AuthRegisterView(MethodView):
     methods = ['GET', 'POST']
 
-    def __init__(self, model, template):
+    def __init__(self, model, tokenModel, template):
         self.model = model
         self.template = template
+        self.tokenModel = tokenModel
 
     def dispatch_request(self):
         if request.method == 'POST':
@@ -27,12 +31,37 @@ class AuthRegisterView(MethodView):
 
                 # If email and phone do not exist, create user
                 else:
-                    response = self.model.create_user(load_user_obj(request.form, 'user'))
-                    if response == 1:
-                        flash('User created successfully', 'success')
-                        return redirect(url_for('index'))
-                    else:
-                        flash(response, 'error')
+
+                    # bEFORE CREATE User generate and save token
+                    token = self.tokenModel.create_token(request.form.get('email'))
+                    if token == False:
+                        self.model.db.session.rollback()
+                        flash(f'Error creating token {token}', 'error')
+                    else:      
+
+                        response = self.model.create_user(load_user_obj(request.form, 'user'))
+                        if response == 1:
+
+                            two_fa_auth_method = request.form.get('two_fa_auth_method')
+                            flask.session['activate_token'] = token
+                            flask.session['firstname'] = request.form.get('firstname')
+                            flask.session['lastname'] = request.form.get('lastname')
+                            flask.session['email'] = request.form.get('email')
+
+                            if two_fa_auth_method == 'app':
+                                #redirectURL = "register/qrcode/generate"
+                                flask('The user code has been generated successfully! Please scan the QR code to activate your account.', 'info')
+                            else:
+                                #redirectURL = "register/send/opt/email"
+                                flask('The user code has been generated successfully! Please check your email to activate your account.', 'info')
+
+                            
+                            return redirect(url_for('email.send', token=token))                           
+                        else:
+                            flash(response, 'error')                      
+                        
+                        
+                    
                 
                 
         return render_template(self.template, title='Register')
