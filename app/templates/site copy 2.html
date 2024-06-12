@@ -28,14 +28,8 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 
-        
+        {% block styles %} {% endblock %}
     <style>
-
-        body{
-            /*background: linear-gradient(to right, #3a1c71, #836265, #ffaf7b);*/
-                background: linear-gradient(to right, #0a0318, #2e3157, #000c25);              
-        }
-
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -117,26 +111,30 @@
             display: block !important;
         }
 
-
-
-        
-
-        .scroll-animatio {
+        .scroll-animation {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
-        .scroll-animatio.show {
+        .scroll-animation.show {
             opacity: 1;
             transform: translateY(0);
         }
 
-       
+        body{
+            /*background: linear-gradient(to right, #3a1c71, #836265, #ffaf7b);*/
+                background: linear-gradient(to right, #0a0318, #2e3157, #000c25);
+              
+              
+        }
+
+
+
+
         
 
     </style>
 
-    {% block styles %} {% endblock %}
 
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='assets/css/offcanvas-navbar.css') }}" rel="stylesheet">
@@ -221,7 +219,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('index')}}">
                 <img src="{{ url_for('static', filename='assets/img/bantu02-removebg-preview.png')}}" width="40" height="32"  alt="" srcset="">
-                </a>
+                <#></a>
             <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -377,7 +375,7 @@
     </main>
 
 
-    <ul class="circles">
+    <!--<ul class="circles">
         <li></li>
         <li></li>
         <li></li>
@@ -388,7 +386,7 @@
         <li></li>
         <li></li>
         <li></li>
-</ul>
+</ul>-->
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
