@@ -19,5 +19,6 @@ flask-migrate
 Flask-WTF
 bootstrap-flask
 Flask-Caching
+flask-talisman
 pycryptodome
 geocoder
