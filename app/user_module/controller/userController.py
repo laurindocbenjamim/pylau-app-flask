@@ -71,8 +71,9 @@ def validate_form_fields(form = Request.form):
         return False
     
     if not form.get('two_fa_auth_method') or not isinstance(form.get('two_fa_auth_method'), str):
-        flash('Two-factor authentication code is required', 'error')
+        flash('Two-factor authentication method is required', 'error')
         return False
+    
     if not form.get('password') or not isinstance(form.get('password'), str):
         flash('Password is required', 'error')
         return False

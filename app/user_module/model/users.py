@@ -68,7 +68,6 @@ class Users(UserMixin, db.Model):
             'userID': self.userID,
             'firstname': self.firstname,
             'lastname': self.lastname,
-            'password': self.password,
             'email': self.email,
             'country': self.country,
             'country_code': self.country_code,
@@ -79,17 +78,21 @@ class Users(UserMixin, db.Model):
             'date_updated': self.date_updated
         }
     
-    def create_user(user_object):        
+    def create_user(user_object):  
+        status = False
+        last_user_id = None   
         try:
             db.session.add(user_object)
             db.session.commit()
-            return 1
+            last_user_id = user_object.userID
+            status = True
+            return status,last_user_id
         except SQLAlchemyError as e:
             db.session.rollback()
-            return str(e)
+            return status, str(e)
         except Exception as e:
             db.session.rollback()
-            return str(e)
+            return status, str(e)
 
     def check_email_exists(email):
         user = Users.query.filter_by(email=email).first()

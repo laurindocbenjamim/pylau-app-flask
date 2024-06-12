@@ -39,29 +39,30 @@ class AuthRegisterView(MethodView):
                         flash(f'Error creating token {token}', 'error')
                     else:      
 
-                        response = self.model.create_user(load_user_obj(request.form, 'user'))
-                        if response == 1:
-
+                        status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
+                        if status:
+                            user_token = token.to_dict()['token']
+                            
                             two_fa_auth_method = request.form.get('two_fa_auth_method')
-                            flask.session['activate_token'] = token
+                            
+                            flask.session['two_fa_auth_method'] = two_fa_auth_method
+                            flask.session['user_token'] = token.token
+                            flask.session['user_id'] = last_user_id
                             flask.session['firstname'] = request.form.get('firstname')
                             flask.session['lastname'] = request.form.get('lastname')
                             flask.session['email'] = request.form.get('email')
-
+                           
                             if two_fa_auth_method == 'app':
                                 #redirectURL = "register/qrcode/generate"
-                                flask('The user code has been generated successfully! Please scan the QR code to activate your account.', 'info')
+                                flask.flash('The user code has been generated successfully! Please scan the QR code to activate your account.', 'info')                                
+                                return redirect(url_for('email.verify_qr_code_send', token=token.token)) 
                             else:
                                 #redirectURL = "register/send/opt/email"
-                                flask('The user code has been generated successfully! Please check your email to activate your account.', 'info')
-
-                            
-                            return redirect(url_for('email.send', token=token))                           
+                                flask.flash('The user code has been generated successfully! Please check your email to activate your account.', 'info')                                
+                                return redirect(url_for('email.verify_code_send', token=token.token))                           
                         else:
-                            flash(response, 'error')                      
+                            flash(status, 'error')                    
                         
                         
                     
-                
-                
         return render_template(self.template, title='Register')

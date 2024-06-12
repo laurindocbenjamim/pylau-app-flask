@@ -30,7 +30,14 @@ class UserToken(db.Model):
             db.session.rollback()
             return False
     
-
+    def to_dict(self):
+        return {
+            'token_id': self.token_id,
+            'username': self.username,
+            'token': self.token,
+            'date_added': self.date_added,
+            'date_exp': self.date_exp
+        }
     def update_token(self, user_id, username):
         token = generate_token(username)
         try:
@@ -55,7 +62,14 @@ class UserToken(db.Model):
         
     def get_token_by_token(self, token):
         try:
-            return self.query.filter_by(token=token).first()
+            token_obj = self.query.filter_by(token=token).first()
+            return {
+                'token_id': token_obj.token_id,
+                'username': token_obj.username,
+                'token': token_obj.token,
+                'date_added': token_obj.date_added,
+                'date_exp': token_obj.date_exp
+            }
         except SQLAlchemyError as e:
             return False
 
