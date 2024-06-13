@@ -37,3 +37,6 @@ def load_routes(app, db, login_manager):
     
     from .projects_module import bp_project_view
     app.register_blueprint(bp_project_view)
+
+    from .test_forms.bp_form import bp as bp_form
+    app.register_blueprint(bp_form)
