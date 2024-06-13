@@ -52,14 +52,10 @@ class AuthRegisterView(MethodView):
                             flask.session['lastname'] = request.form.get('lastname')
                             flask.session['email'] = request.form.get('email')
                            
-                            if two_fa_auth_method == 'app':
-                                #redirectURL = "register/qrcode/generate"
-                                flask.flash('The user code has been generated successfully! Please scan the QR code to activate your account.', 'info')                                
-                                return redirect(url_for('email.verify_qr_code_send', token=token.token)) 
-                            else:
-                                #redirectURL = "register/send/opt/email"
-                                flask.flash('The user code has been generated successfully! Please check your email to activate your account.', 'info')                                
-                                return redirect(url_for('email.verify_code_send', token=token.token))                           
+                            if two_fa_auth_method == 'app':                              
+                                return redirect(url_for('email.2fappqrcodesend')) 
+                            else:                               
+                                return redirect(url_for('email.2facodesend'))                           
                         else:
                             flash(status, 'error')                    
                         

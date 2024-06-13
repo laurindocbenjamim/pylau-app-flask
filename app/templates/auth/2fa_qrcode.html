@@ -1,144 +1,197 @@
-{% extends 'index2.html' %}
+{% extends "site.html" %}
 
-{% block header %}
-<h1></h1> {% block title %} {{ title }} - {% endblock %}</h1>
+{% block title %}
+{% if title %}{{ title }} {% endif %}
 {% endblock %}
 
 {% block content %}
 
+{% block styles %}
 <style>
-
-  @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
-  .title{
-    font-family: "Kode Mono", monospace;
-    font-optical-sizing: auto;
-    
-    font-weight: bold;
-    font-style: normal;
-    color: #3266f5;
+  ul,
+  li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
   }
 
-  .flash_error {
-    color: #ee4242;
-    font-size: 1rem;
-    font-weight: normal;
+  .message {
+    font-size: .9rem;
   }
-  
+
+  .error {
+    color: rgb(247, 45, 45);
+  }
+
+  .info {
+    color: rgb(19, 122, 240);
+  }
+
+  .success {
+    color: rgb(11, 167, 11);
+  }
+
+  .danger {
+    color: rgb(255, 94, 0);
+  }
+
+
+
+
+
+  .list-group {
+    width: 100%;
+    max-width: 460px;
+    margin-inline: 1.5rem;
+  }
+
+  .form-check-input:checked+.form-checked-content {
+    opacity: .5;
+  }
+
+  .form-check-input-placeholder {
+    border-style: dashed;
+  }
+
+  [contenteditable]:focus {
+    outline: 0;
+  }
+
+  .list-group-checkable .list-group-item {
+    cursor: pointer;
+  }
+
+  .list-group-item-check {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .list-group-item-check:hover+.list-group-item {
+    background-color: var(--bs-secondary-bg);
+  }
+
+  .list-group-item-check:checked+.list-group-item {
+    color: #fff;
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+  }
+
+  .list-group-item-check[disabled]+.list-group-item,
+  .list-group-item-check:disabled+.list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
+  }
+
+  .list-group-radio .list-group-item {
+    cursor: pointer;
+    border-radius: .5rem;
+  }
+
+  .list-group-radio .form-check-input {
+    z-index: 2;
+    margin-top: -.5em;
+  }
+
+  .list-group-radio .list-group-item:hover,
+  .list-group-radio .list-group-item:focus {
+    background-color: var(--bs-secondary-bg);
+  }
+
+  .list-group-radio .form-check-input:checked+.list-group-item {
+    background-color: var(--bs-body);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 2px var(--bs-primary);
+  }
+
+  .list-group-radio .form-check-input[disabled]+.list-group-item,
+  .list-group-radio .form-check-input:disabled+.list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
+  }
 </style>
+{% endblock %}
 
 
-<!--  Welcome section -->
-<section class="welcome-section">
+<div class="container" style="margin-top:10%;">
+  <div class="col-lg-12" style="display: flex; flex-direction: column; justify-content: center; text-align:center; align-items: center;">
+    <h1>Submit the App code</h1>
 
-  <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
-    <div class="col-lg-7 px-0 information center-content">
-
-      <div class="col-lg-7">
-        <h3 class="title" >
-          Welcome to Data Management and Analysis Consulting
-        </h3>
-  
-        {% if g.user %}
-        <h4 class="title" style="color: #4afc53;margin-top:5%;">
-          <p>{{ g.user.firstname}} {{ g.user.lastname}}</p>
-        </h4>
-        {% endif %}
-        <p class="lead" style="font-size: 1rem;">
-          To access the platform, you need to authenticate using the 2FA app.
-          Probably, you have received a code in your cell phone or email.
-        </p>
-      </div>
+    <div class="col-3" style="display: block; flex-direction: column; text-align:center">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+     
+       
+          {% for category, message in messages %}
+          <span class="{{ category }}"><p class="pb-3 mb-0 small lh-sm" >{{ message }}</p> </span>
+          {% endfor %}
+       
+      
+      {% endif %}
+      {% endwith %}
     </div>
   </div>
+</div>
 
-  <!--  Services section -->
-  <div class="row mb-2 services" style="justify-content: center;">
-
+<div class="container" style="justify-content: center; align-items: center; margin-top:1%;">
     
-
-    <!-- Training -->
-    <div class="col-md-6 chield">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-
-          <div class=" col-lg-12" style="text-align: center;">
-            <h4>{{ title }} </h4>
-            {% if otpqrcode_uri %}
-            <form class="needs-validation form-check-2fa" id="form-check-2fa" method="post" novalidate>
-              <div class="row g-3">             
-                    
-
-                <div class="col-12 " id="box-qrcode"  style="justify-content: center;">
-
-                    <p>
-                      Scan the QR code with your authenticator app
-                    </p>
-                    <div class="input-group has-validation" id="otpimage" style="justify-content: center;
-                    background-color:#fff; border-radius: 2rem; margin: 2%;">
-                     
-                      <img src="{{ url_for('static', filename='/') + otpqrcode_uri }}" height="150" width="150" alt="" srcset="">
-                      
-                                            
-                    </div>
-                    
-                </div>
-
-                <div class="col-12">
-                  {% if message %}
-                    <div class="flash_error"><p>{{ message }}</p></div>
-                  {% endif %}
-                  <label for="otpcode" class="form-label">Enter the code provided by the app</label>
-                  <div class="input-group has-validation">
-                    
-                    <input type="tel" class="form-control" id="otpcode" name="otpcode" placeholder="Tipe the code" type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
-                    
-                  </div>
-
-                  {% for message in get_flashed_messages() %}
-                  <div class="flash_error"><p>{{ message }}</p></div>
-                  {% endfor %}
-
-                </div>
-
+  <div class="col-lg-12" style="display: flex; justify-content: center; align-items: center;">
     
+    
+    <form class="needs-validation form-register" method="post" id="form-register" novalidate>
+
+        <div class="col-lg-12">
+          <div class="g-3">             
+         
+      
+            <div class="col-12">
+              <label for="otpcode" class="form-label">2-FA Auth code</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">@</span>
+                <input type="text" class="form-control" id="otpcode" name="otpcode" 
+                placeholder="" required maxlength="100">
+                
+                <div class="invalid-feedback">
+                  The code is required.
+                </div>
+                
               </div>
-    
-              <hr class="my-2">
-    
-              <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
-                         
-              
-            </form>
-            {% endif %}
-            
-            
+            </div>
+            <br>
+            <!--<p>Request a <a href="{{ url_for('email.2facodesend') }}">new code</a></p>-->
 
-          
-            <p>
-              Are you not registered yet? 
-              <a href="{{ url_for('auth.register')}}" rel="noopener noreferrer">Create your account.</a>
-            </p>
-
+            <hr class="my-4">
+            
+            <div class="col-12">               
+                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Send</button>
+                <br>
+                <br>
+                <p>I have an account. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>
+            </div>  
+            
+      
+            <div class="col-11 alert" style="font-size: .8rem;">                  
+                <p></p>
+            </div> 
+    
           </div>
-          
+            
+            
+            
+              
         </div>
 
-      </div>
-    </div>
-
-    <!-- End Training -->
-
-    
+    </form>
 
   </div>
-
-  <!--  End Services section -->
-
-</section>
+</div>
 
 
+{% endblock %}
 
-<!--  End welcome section -->
+{% block scripts %}
 
-
+  <!--<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>-->
+  
 {% endblock %}

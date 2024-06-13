@@ -9,7 +9,7 @@ from flask_mail import Mail, Message
 from email.message import EmailMessage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from ..configs.smtp_config import _get_smtp_config
+from ...configs.smtp_config import _get_smtp_config
 
 
 mail = Mail()
