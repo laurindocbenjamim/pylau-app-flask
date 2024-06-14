@@ -148,13 +148,13 @@
             <div class="col-12">
               <label for="otpcode" class="form-label">2-FA Auth code</label>
               <div class="input-group has-validation">
-                <span class="input-group-text">@</span>
-                <input type="text" class="form-control" id="otpcode" name="otpcode" 
-                placeholder="" required maxlength="100">
                 
-                <div class="invalid-feedback">
-                  The code is required.
-                </div>
+                {% if otpqrcode_uri %}
+                <img src="{{ url_for('static', filename='/') + otpqrcode_uri }}" height="150" width="150" alt="" srcset="">
+                {% else %}
+                <img src="{{ url_for('static', filename='assets/img/icons8-success.gif') }}" height="150" width="150"
+                alt="success-icon" style="border-radius: 6rem;" srcset="">
+                {% endif %}
                 
               </div>
             </div>
@@ -164,10 +164,10 @@
             <hr class="my-4">
             
             <div class="col-12">               
-                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Send</button>
+                <!--<button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Send</button>
                 <br>
                 <br>
-                <p>I have an account. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>
+                <p>I have an account. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>-->
             </div>  
             
       

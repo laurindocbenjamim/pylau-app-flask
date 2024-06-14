@@ -54,8 +54,8 @@ class AuthRegisterView(View):
                            
                             if two_fa_auth_method == 'app':      
                                 flash('Unavailable service', 'info')                        
-                                #return redirect(url_for('email.2fappqrcodeget')) 
-                                pass
+                                return redirect(url_for('email.2fappqrcodeget', token=token.token)) 
+                                
                             else:                               
                                 return redirect(url_for('email.2facodesend'))                           
                         else:

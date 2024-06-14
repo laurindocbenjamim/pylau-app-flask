@@ -44,12 +44,13 @@ class GetQrCodeEmailView(View):
 
     methods = ['GET']
     
-    def __init__(self, model, template):
-        self.model = model
+    def __init__(self, TwoFaModel, UserModel, template):
+        self.twoFaModel = TwoFaModel
+        self.userModel = UserModel
         self.template = template
     
     
-    def dispatch_request(self):
+    def dispatch_request(self, token: str):
         """
         Dispatches the request to handle sending a QR code verification email.
 
@@ -60,36 +61,40 @@ class GetQrCodeEmailView(View):
                  
         if request.method == 'GET':
             
-            if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'lastname' and 'email' in flask.session:
-               
+            if 'user_id' and 'two_fa_auth_method' and 'firstname'\
+                and 'origin_request' and 'lastname' and 'email' in flask.session:
+
                 email = flask.session.get('email')
                 lastname = flask.session.get('lastname')
                 firstname = flask.session.get('firstname')
-                # generate a secret code for the user
-                user_secret_code = self.model.generate_secret()                
-                
-                # Create an object of the TwoFAModel class
-                flask.session['two_factor_auth_secret'] = user_secret_code
-                
-                # Call the method with the required data
-                two_fa_obj = load_two_fa_obj({
-                    'userID': flask.session.get('user_id'),
-                    'two_factor_auth_secret': user_secret_code,
-                    'method_auth': flask.session.get('two_fa_auth_method'),
-                    'is_active': True
-                })
 
-                # Save the secret code in the database
-                respTwoFa, obj = self.model.save_two_fa_data(two_fa_obj)
+                if flask.session.get('origin_request') == 'register':
+                    # generate a secret code for the user
+                    user_secret_code = self.twoFaModel.generate_secret() 
+                    # Create an object of the TwoFAModel class
+                    flask.session['two_factor_auth_secret'] = user_secret_code               
+                    # Call the method with the required data
+                    two_fa_obj = load_two_fa_obj({
+                        'userID': flask.session.get('user_id'),
+                        'two_factor_auth_secret': user_secret_code,
+                        'method_auth': flask.session.get('two_fa_auth_method'),
+                        'is_active': True
+                    })
 
-                if respTwoFa:
+                    # Save the secret code in the database
+                    respTwoFa, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)                
+                elif flask.session.get('origin_request') == 'signin':
+                    respTwoFa = True 
+
+                if respTwoFa and 'two_factor_auth_secret' in flask.session:
                     #totp = get_otp(obj.two_factor_auth_secret, email , otp_time_interval)
-                    otp_qr_code = self.model.generate_provisioning_uri(accountname=email, secret=obj.two_factor_auth_secret)
+                    otp_qr_code = self.twoFaModel.generate_provisioning_uri(accountname=email, secret=flask.session['two_factor_auth_secret'])
                     flask.session['otpqrcode'] = otp_qr_code
                     flask.session['otpqrcode_uri'] = 'otp_qrcode_images/' + str(flask.session['otpqrcode'])
 
                     time_remaining = f"This code expires in 24 hours."
                     
+                    """
                     html = get_otp_qr_code_message_html(str(firstname)+" "+str(lastname), flask.session['otpqrcode_uri'], time_remaining)
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
 
@@ -98,6 +103,9 @@ class GetQrCodeEmailView(View):
                         return redirect(url_for('email.2fappqrcodeverify'))
                     else:
                         flash('Email code verification failed', 'error')
+                    """
+                    flask.flash('Scan the QR Code with your Authenticator Application', 'info')
+                    return render_template(self.template, title='2-FA QrCode app', otpqrcode_uri=flask.session['otpqrcode_uri'], email=email, time_remaining=time_remaining)
                 else:
                     flash('Process failed', 'error')
 
