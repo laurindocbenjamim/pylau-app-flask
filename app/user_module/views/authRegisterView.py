@@ -1,7 +1,7 @@
 import flask
 
 from flask.views import View
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, session, request, redirect, url_for, flash, jsonify
 from ..controller.userController import load_user_obj, validate_form_fields
 
 
@@ -43,14 +43,14 @@ class AuthRegisterView(View):
                             
                             two_fa_auth_method = request.form.get('two_fa_auth_method')
                             
-                            flask.session['origin_request'] = 'register'
-                            flask.session['two_fa_auth_method'] = two_fa_auth_method
-                            flask.session['user_token'] = token.token
+                            session['origin_request'] = 'register'
+                            session['two_fa_auth_method'] = two_fa_auth_method
+                            session['user_token'] = token.token
                             
-                            flask.session['user_id'] = last_user_id
-                            flask.session['firstname'] = request.form.get('firstname')
-                            flask.session['lastname'] = request.form.get('lastname')
-                            flask.session['email'] = request.form.get('email')
+                            session['user_id'] = last_user_id
+                            session['firstname'] = request.form.get('firstname')
+                            session['lastname'] = request.form.get('lastname')
+                            session['email'] = request.form.get('email')
                            
                             if two_fa_auth_method == 'app':      
                                 flash('Unavailable service', 'info')                        

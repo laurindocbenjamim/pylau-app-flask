@@ -3,7 +3,7 @@ import flask
 
 from flask.views import View
 
-from flask import request, current_app, redirect, url_for, flash, jsonify
+from flask import request, session, current_app, redirect, url_for, flash, jsonify
 from ..factory.otp_code_account_message_html import get_otp_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -46,33 +46,34 @@ class SendCodeEmailView(View):
         if request.method == 'GET':
             
             if 'user_id' and 'two_fa_auth_method' and 'firstname'\
-                and 'origin_request' and 'lastname' and 'email' in flask.session:
-               
-                email = flask.session.get('email')
-                lastname = flask.session.get('lastname')
-                firstname = flask.session.get('firstname')
-
-                if flask.session.get('origin_request') == 'register':
+                and 'origin_request' and 'lastname' and 'email' in session:
+                secret = current_app.config['OTP_SECRET_KEY']
+                user_id = session['user_id']
+                email = session.get('email')
+                lastname = session.get('lastname')
+                firstname = session.get('firstname')
+                
+                if session.get('origin_request') == 'register':
                     # generate a secret code for the user
-                    secret = current_app.config['OTP_SECRET_KEY']
+                    
                     # Create an object of the TwoFAModel class
                                  
                     # Call the method with the required data
                     two_fa_obj = load_two_fa_obj({
-                        'userID': flask.session.get('user_id'),
+                        'userID': user_id,
                         'two_factor_auth_secret': '',
-                        'method_auth': flask.session.get('two_fa_auth_method'),
+                        'method_auth': session.get('two_fa_auth_method'),
                         'is_active': True
                     })
 
                     # Save the secret code in the database
                     respTwoFa, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)                
-                elif flask.session.get('origin_request') == 'signin':
+                elif session.get('origin_request') == 'signin':
                     respTwoFa = True                
 
                 if respTwoFa:
                     
-                    totp = self.twoFaModel.generate_otp(accountname=flask.session['email'], secret=secret, interval=otp_time_interval)
+                    totp = self.twoFaModel.generate_otp(accountname=session['email'], secret=secret, interval=otp_time_interval)
                     OTP = totp.now()
 
                     time_remaining = f"This code expires in {otp_time_interval} seconds ({ int(otp_time_interval / 60) } minutes)"
@@ -80,6 +81,10 @@ class SendCodeEmailView(View):
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
 
                     if res:
+                        #session['user_id'] = user_id
+                        #session['email'] = email
+                        #session['lastname'] = lastname
+                        #session['firstname'] = firstname
                         flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
                         return redirect(url_for('email.2facodeverify'))
                     else:

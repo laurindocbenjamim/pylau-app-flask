@@ -50,7 +50,6 @@ class AuthLoginView(View):
                                         flask.session['email'] = user.email
                                         flask.session['lastname'] = user.lastname
                                         flask.session['firstname'] = user.firstname
-                                        flask.session['two_factor_auth_secret'] = two_fa.two_factor_auth_secret
                                         flask.session['two_fa_auth_method'] = two_fa.method_auth
                                         flask.session['origin_request'] = 'signin'
 

@@ -53,6 +53,7 @@ class VerifyAppCodeAuthView(View):
 
             if code is not None and 'email' in flask.session\
                 and 'user_id' in flask.session:
+                
                 secret = current_app.config['OTP_SECRET_KEY']
                 user_id = flask.session['user_id']
                 email = flask.session['email']

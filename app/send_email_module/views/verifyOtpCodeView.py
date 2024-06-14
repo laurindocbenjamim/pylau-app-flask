@@ -3,7 +3,7 @@ import flask
 from flask.views import View
 from flask_login import login_user, logout_user
 
-from flask import render_template, request, current_app, g, redirect, url_for, flash, jsonify
+from flask import render_template, session, request, current_app, g, redirect, url_for, flash, jsonify
 
 
 
@@ -51,30 +51,31 @@ class VerifyOtpCodeView(View):
         if request.method == 'POST':
             code = request.form.get('otpcode',None)
 
-            if code is not None in flask.session and 'email' in flask.session\
-                and 'user_id' in flask.session:
+            if code is not None and 'email' and 'user_id' in session:
+                
                 secret = current_app.config['OTP_SECRET_KEY']
-                user_id = flask.session['user_id']
-                totp = self.twoFaModel.generate_otp(accountname=flask.session['email'], secret=secret, interval=otp_time_interval)
+                user_id = session['user_id']
+                totp = self.twoFaModel.generate_otp(accountname=session['email'], secret=secret, interval=otp_time_interval)
                 otpstatus =  totp.verify(code)
                 
                 if otpstatus:
                    
-                    #return jsonify({'status': 'success', 'message': 'Email verified successfully!'})
-                    if 'origin_request' in flask.session:
-                        if flask.session['origin_request'] == 'register':
+                    if 'origin_request' in session:
+                        if session['origin_request'] == 'register':
                             flash('Code verified successful', 'success')
                             return redirect(url_for('email.activate_send')) 
                          
                         # If the origin request is a sign-in request
-                        elif flask.session['origin_request'] == 'signin':
+                        elif session['origin_request'] == 'signin':
                             user = self.UserModel.get_user_by_id(user_id)
                             login_user(user)
-                            flask.g.user = user      
+                            g.user = user      
                         
                     return redirect(url_for('index'))
                 else:
                     flash('Code verification failed', 'error')
+            else:
+                flash(f'User not identified', 'error')
         
         return render_template(self.template, title='Code verification')
             
