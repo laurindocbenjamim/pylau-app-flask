@@ -94,6 +94,120 @@ class Users(UserMixin, db.Model):
             db.session.rollback()
             return status, str(e)
 
+    # This method update all user fields
+    def update_user(user_id, user_object):
+        status = False
+        try:
+            user = Users.query.filter_by(userID=user_id).first()
+            user.firstname = user_object.firstname
+            user.lastname = user_object.lastname
+            user.email = user_object.email
+            user.country = user_object.country
+            user.country_code = user_object.country_code
+            user.phone = user_object.phone
+            user.role = user_object.role
+            user.active = user_object.active
+            user.date_updated = datetime.now()
+            db.session.commit()
+            return True, user_object
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return status, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return status, str(e)
+        
+    # This method update user status
+    def update_user_status(user_id, status):
+        try:
+            user = Users.query.filter_by(userID=user_id).first_or_404()
+            user.active = status
+            db.session.commit()
+            return True, user
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+    
+    # This method update user role
+    def update_user_role(user_id, role):
+        try:
+            user = Users.query.filter_by(userID=user_id).first_or_404()
+            user.role = role
+            db.session.commit()
+            return True
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False
+        except Exception as e:
+            db.session.rollback()
+            return False
+    
+    # This method update user password
+    def update_password(user_id, password):
+        try:
+            user = Users.query.filter_by(userID=user_id).first_or_404()
+            user.password = password
+            db.session.commit()
+            return True
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False
+        except Exception as e:
+            db.session.rollback()
+            return False
+
+    # This method delete user
+    def delete_user(user_id):
+        try:
+            user = Users.query.filter_by(userID=user_id).first_or_404()
+            db.session.delete(user)
+            db.session.commit()
+            return True
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False
+        except Exception as e:
+            db.session.rollback()
+            return False
+
+
+    """
+    This method selects the user by email.
+    """
+    def get_user_by_email(email):
+        try:
+            user = Users.query.filter_by(email=email).first_or_404()
+            return True, user
+        except SQLAlchemyError as e:
+            return False, str(e)
+        except Exception as e:
+            return False, str(e)
+    
+    """
+    This method selects the user by ID.
+    """
+    def get_user_by_id(id):
+        try:
+            user = Users.query.filter_by(userID=id).first()
+            return user
+        except SQLAlchemyError as e:
+            return str(e)
+        except Exception as e:
+            return str(e)
+
+    # This method selects the user by phone.
+    def get_user_by_phone(phone):
+        try:
+            user = Users.query.filter_by(phone=phone).first_or_404()
+            return user
+        except SQLAlchemyError as e:
+            return str(e)
+        except Exception as e:
+            return str(e)
+        
     def check_email_exists(email):
         user = Users.query.filter_by(email=email).first()
         if user:
