@@ -81,10 +81,6 @@ class SendCodeEmailView(View):
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
 
                     if res:
-                        #session['user_id'] = user_id
-                        #session['email'] = email
-                        #session['lastname'] = lastname
-                        #session['firstname'] = firstname
                         flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
                         return redirect(url_for('email.2facodeverify'))
                     else:
