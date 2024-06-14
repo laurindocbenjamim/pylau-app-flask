@@ -20,5 +20,6 @@ Flask-WTF
 bootstrap-flask
 Flask-Caching
 flask-talisman
+hvac #install vault
 pycryptodome
 geocoder

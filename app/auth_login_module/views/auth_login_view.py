@@ -55,9 +55,6 @@ class AuthLoginView(View):
                                         flask.session['origin_request'] = 'signin'
 
                                         if two_fa.method_auth == 'app':
-                                            #login_user(user)
-                                            #flask.g.user = user
-                                            #return redirect(url_for('projects.list'))
                                              return redirect(url_for('email.2fappqrcodeverify'))
                                         elif two_fa.method_auth == 'email':
                                             return redirect(url_for('email.2facodesend')) 
@@ -66,5 +63,7 @@ class AuthLoginView(View):
                                 flask.flash('This user is not activated', 'danger')
                             else:
                                 flask.flash('Invalid username or password ', 'error')
-            
+                else:
+                    flask.flash('Username not found', 'error')
+
         return render_template(self.template, title='Login')

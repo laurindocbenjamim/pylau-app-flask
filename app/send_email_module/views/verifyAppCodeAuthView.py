@@ -1,9 +1,10 @@
 
+import pyotp
 import flask
 from datetime import date
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template,current_app, request, redirect, url_for, flash, jsonify
 
 
 
@@ -50,13 +51,14 @@ class VerifyAppCodeAuthView(View):
         if request.method == 'POST':
             code = request.form.get('otpcode',None)
 
-            if code is not None and 'two_factor_auth_secret' in flask.session and 'email' in flask.session\
+            if code is not None and 'email' in flask.session\
                 and 'user_id' in flask.session:
-
+                secret = current_app.config['OTP_SECRET_KEY']
                 user_id = flask.session['user_id']
-                
-                otpstatus = self.twoFaModel.verify_provisioning_uri(flask.session['two_factor_auth_secret'], code)
-                               
+                email = flask.session['email']
+
+                otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
+                      
                 if otpstatus:
 
                     # Save the image with the new name is the verification is successful
@@ -70,7 +72,6 @@ class VerifyAppCodeAuthView(View):
                                          + flask.session['otpqrcode'], new_image_name)
 
                     # If the origin request is register, redirect to the activate account endpoint
-                    #return jsonify({'status': 'success', 'message': 'Email verified successfully!'})
                     if 'origin_request' in flask.session:
                         if flask.session['origin_request'] == 'register':
                             flash('Code verified successful', 'success')
@@ -86,15 +87,6 @@ class VerifyAppCodeAuthView(View):
                 else:
                     flash('Code verification failed', 'error')
 
-                """
-                return jsonify({'status': 'error', 
-                        'message': 'Email code verification failed!', 
-                        'code': code, 'status': otpstatus, 
-                        'secret': flask.session['two_factor_auth_secret'], 
-                        'email': flask.session['email'], 
-                        'user_id': flask.session['user_id']
-                        })
-                """
 
         return render_template(self.template, title='2-FA App Authentication')
             

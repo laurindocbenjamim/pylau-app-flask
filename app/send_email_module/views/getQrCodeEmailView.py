@@ -4,7 +4,7 @@ import flask
 from typing import Any
 from flask.views import View
 
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, current_app, request, redirect, url_for, flash, jsonify
 from ..factory.otp_qr_code_account_message_html import get_otp_qr_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -86,9 +86,10 @@ class GetQrCodeEmailView(View):
                 elif flask.session.get('origin_request') == 'signin':
                     respTwoFa = True 
 
-                if respTwoFa and 'two_factor_auth_secret' in flask.session:
+                if respTwoFa:
                     #totp = get_otp(obj.two_factor_auth_secret, email , otp_time_interval)
-                    otp_qr_code = self.twoFaModel.generate_provisioning_uri(accountname=email, secret=flask.session['two_factor_auth_secret'])
+                    secret = secret = current_app.config['OTP_SECRET_KEY']
+                    otp_qr_code = self.twoFaModel.generate_provisioning_uri(accountname=email, secret=secret)
                     flask.session['otpqrcode'] = otp_qr_code
                     flask.session['otpqrcode_uri'] = 'otp_qrcode_images/' + str(flask.session['otpqrcode'])
 

@@ -1,4 +1,5 @@
 import os
+import pyotp
 import secrets
 from flask import Flask, render_template, request, session, jsonify
 from flask_cors import cross_origin
@@ -18,9 +19,10 @@ def load_routes(app, db, login_manager):
     @cross_origin(methods=['GET'])
     def get_secret():
             
-        foo = secrets.token_urlsafe(32)
+        t_key = secrets.token_urlsafe(32)
+        otp_secret = pyotp.random_base32()
             
-        return {'secret': foo}
+        return {'token_secret': t_key, 'otp_secret': otp_secret}
     
     # Integrating the blueprints parent and child into the application
 

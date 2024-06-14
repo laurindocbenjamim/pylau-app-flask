@@ -220,13 +220,13 @@ class TwoFAModel(db.Model):
         """
         accountname = kwargs.get('accountname')
         secret = kwargs.get('secret')
-        otpuri = pyotp.totp.TOTP(secret).provisioning_uri(name=accountname, issuer_name='PyLau App')
+        otpuri = pyotp.totp.TOTP(secret).provisioning_uri(name=accountname, issuer_name='DTuning App')
     
         imagename = secret +'-otpqrcode.png'
         qrcode.make(otpuri).save('app/static/otp_qrcode_images/'+imagename)
         return imagename
 
-    def verify_provisioning_uri(secret, code):
+    def verify_provisioning_uri(**kwargs):
         """
         Verifies the provisioning URI with the given secret key and code.
 
@@ -238,12 +238,13 @@ class TwoFAModel(db.Model):
         Returns:
             True if the code is valid, False otherwise.
         """
-        #secret = kwargs.get('secret')
-        #code = kwargs.get('code')
+        secret = kwargs.get('secret')
+        code = kwargs.get('code')
         
         totp = pyotp.TOTP(secret)
-        resp = totp.verify(code)
-        return resp
+        if totp.verify(code):
+            return True
+        return False
     
 
     def update_imagename(image_path, new_imagename):
