@@ -226,7 +226,7 @@ class TwoFAModel(db.Model):
         qrcode.make(otpuri).save('app/static/otp_qrcode_images/'+imagename)
         return imagename
 
-    def verify_provisioning_uri(**kwargs):
+    def verify_provisioning_uri(secret, code):
         """
         Verifies the provisioning URI with the given secret key and code.
 
@@ -238,8 +238,8 @@ class TwoFAModel(db.Model):
         Returns:
             True if the code is valid, False otherwise.
         """
-        secret = kwargs.get('secret')
-        code = kwargs.get('code')
+        #secret = kwargs.get('secret')
+        #code = kwargs.get('code')
         
         totp = pyotp.TOTP(secret)
         resp = totp.verify(code)

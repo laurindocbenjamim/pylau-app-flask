@@ -58,7 +58,7 @@ class AuthLoginView(View):
                                             #login_user(user)
                                             #flask.g.user = user
                                             #return redirect(url_for('projects.list'))
-                                             return redirect(url_for('email.2fappqrcodesend'))
+                                             return redirect(url_for('email.2fappqrcodeverify'))
                                         elif two_fa.method_auth == 'email':
                                             return redirect(url_for('email.2facodesend')) 
                             
