@@ -1,12 +1,12 @@
 
 import flask
 from datetime import date
-from flask.views import MethodView
+from flask.views import View
 from flask import render_template, request, redirect, url_for, flash, jsonify
 
 
 
-class VerifyAppCodeAuthView(MethodView):
+class VerifyAppCodeAuthView(View):
     """
     View class for handling the verification of app code authentication.
 
@@ -26,8 +26,9 @@ class VerifyAppCodeAuthView(MethodView):
 
     methods = ['GET', 'POST']
     
-    def __init__(self, twoFaModel, template):
+    def __init__(self, twoFaModel, UserModel, template):
         self.twoFaModel = twoFaModel
+        self.UserModel = UserModel
         self.template = template
     
     def dispatch_request(self):
@@ -68,12 +69,16 @@ class VerifyAppCodeAuthView(MethodView):
                         self.twoFaModel.update_imagename('app/static/otp_qrcode_images/' \
                                          + flask.session['otpqrcode'], new_image_name)
 
-                    # 
-                    flash('Email code verification successful', 'success')
+                    # If the origin request is register, redirect to the activate account endpoint
+                    if 'origin_request' in flask.session:
+                        if flask.session['origin_request'] == 'register':
+                            return redirect(url_for('email.activate_send'))
+                        
+                    flash('Code verified successful', 'success')
                     return jsonify({'status': 'success', 'message': 'Email verified successfully!'})
                     #return redirect(url_for('auth.user.login'))
                 else:
-                    flash('Email code verification failed', 'error')
+                    flash('Code verification failed', 'error')
 
                 return jsonify({'status': 'error', 
                         'message': 'Email code verification failed!', 

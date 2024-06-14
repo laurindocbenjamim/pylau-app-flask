@@ -2,7 +2,7 @@
 from flask import request, url_for
 
 def get_activate_account_message_html(name = 'Subscriber', user_token='', time_remaining=''):
-    base_url = request.url_root + 'users/activate/' + user_token
+    base_url = request.url_root + 'auth/user/activate/account/' + user_token
 
     html = """\
 
@@ -80,7 +80,7 @@ def get_activate_account_message_html(name = 'Subscriber', user_token='', time_r
                             <div class="box-content">
                                 <p>
                                     This is the last step in the process of creating your account.
-                                    Please click in the link below to verify your email address and complete your registration.
+                                    Please click in the link below to activate your account.
                                 </p>
                                 <p>
                                     <p><a class="btn" style="font-size: 1.7rem;" href='""" +base_url+ """'>Activate my account</a>.</p>

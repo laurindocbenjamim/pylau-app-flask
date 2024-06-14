@@ -116,7 +116,7 @@
 
 <div class="container" style="margin-top:10%;">
   <div class="col-lg-12" style="display: flex; flex-direction: column; justify-content: center; text-align:center; align-items: center;">
-    <h1>Sign In</h1>
+    <h1>Submit the App code</h1>
 
     <div class="col-3" style="display: block; flex-direction: column; text-align:center">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -142,35 +142,29 @@
     <form class="needs-validation form-register" method="post" id="form-register" novalidate>
 
         <div class="col-lg-12">
-          <div class="g-3">          
+          <div class="g-3">             
+         
       
             <div class="col-12">
-              <label for="email" class="form-label">Email</label>
+              <label for="otpcode" class="form-label">2-FA Auth code</label>
               <div class="input-group has-validation">
                 <span class="input-group-text">@</span>
-                <input type="email" class="form-control" id="username" name="username" 
-                value="{{ request.form.username }}"
-                placeholder="example@gmail.com" required maxlength="100">
+                <input type="text" class="form-control" id="otpcode" name="otpcode" 
+                placeholder="" required maxlength="100">
                 
                 <div class="invalid-feedback">
-                  Your email is required.
+                  The code is required.
                 </div>
                 
               </div>
             </div>
-      
-            <div class="col-12">
-              <label for="password" class="form-label">Password </label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
-              <div class="invalid-feedback">
-                Please enter a valid password address for shipping updates.
-              </div>
-            </div>
-      
+            <br>
+            <!--<p>Request a <a href="{{ url_for('email.2facodesend') }}">new code</a></p>-->
+
             <hr class="my-4">
-      
+            
             <div class="col-12">               
-                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Submit</button>
+                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Send</button>
                 <br>
                 <br>
                 <p>I have an account. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>

@@ -2,6 +2,8 @@ import flask
 from flask import render_template, jsonify
 
 from .auth_login_view import AuthLoginView
+from ...token_module.userTokenModel import UserToken
+from ...two_factor_auth_module.twoFAModel import TwoFAModel
 
 from flask_login import logout_user, login_user
 
@@ -34,7 +36,7 @@ def init_app(login_manager, db):
         #return 'Unauthorized', 401
         return flask.redirect(flask.url_for('auth.user.login'))
 
-    bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users,  template='auth/auth.html'))
+    bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users, UserToken, TwoFAModel,  template='auth/auth.html'))
 
     # Logout route
     @bp_auth.route('/logout')

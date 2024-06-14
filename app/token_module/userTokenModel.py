@@ -19,6 +19,8 @@ class UserToken(db.Model):
     date_added = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(minutes=30))
 
+
+    # This method is used to create a token
     def create_token(username):
         token = generate_token(username)
         try:
@@ -38,19 +40,27 @@ class UserToken(db.Model):
             'date_added': self.date_added,
             'date_exp': self.date_exp
         }
-    def update_token(self, user_id, username):
+    
+    # This method is used to update a token
+    def update_token(user_id, username):
         token = generate_token(username)
         try:
-            #self.user_id = user_id
-            self.username = username
-            self.token = token
+            obj = UserToken.query.filter_by(username=username).first_or_404()
+            #obj.user_id = user_id
+            obj.username = username
+            obj.token = token
+            db.session.merge(obj)
             db.session.commit()
-            return self.token
+            return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            return False
-        
-    def update_date_exp_token_by_user_id(self, user_id):
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+
+    # This method is used to update the date_exp of a token 
+    def update_date_exp_token_by_user_id(user_id):
         try:
             #token = self.query.filter_by(user_id=user_id).first()
             #token.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
@@ -59,17 +69,42 @@ class UserToken(db.Model):
         except SQLAlchemyError as e:
             db.session.rollback()
             return False
-        
-    def get_token_by_token(self, token):
+
+    # This method is used to get a token by the token 
+    def get_token_by_token(token):
         try:
-            token_obj = self.query.filter_by(token=token).first()
-            return {
-                'token_id': token_obj.token_id,
-                'username': token_obj.username,
-                'token': token_obj.token,
-                'date_added': token_obj.date_added,
-                'date_exp': token_obj.date_exp
-            }
+            token_obj = UserToken.query.filter_by(token=token).first_or_404()
+            return True, token_obj
         except SQLAlchemyError as e:
-            return False
+            return False, str(e)
+        except Exception as e:
+            return False, str(e)
+    
+
+    # This method is used to get a token by the username
+    def get_token_by_user(username):
+        try:
+            token_obj = UserToken.query.filter_by(username=username).first_or_404()
+            return True, token_obj
+        except SQLAlchemyError as e:
+            return False, str(e)
+        except Exception as e:
+            return False, str(e)
+        
+    def check_token_exists(token):
+        try:
+            token_obj = UserToken.query.filter_by(token=token).first()
+            if token_obj:
+                return True
+            return False 
+        except SQLAlchemyError as e:
+            return False, str(e)
+        except Exception as e:
+            return False, str(e)
+    
+    
+    
+    # This method is used to check if a token is expired
+    def is_token_expired(self):
+        return datetime.now(tz=timezone.utc) > self.date_exp
 

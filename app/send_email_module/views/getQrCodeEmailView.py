@@ -37,7 +37,7 @@ from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
         app.add_url_rule('/send_qr_code', view_func=send_qr_code_view.as_view('send_qr_code'))
 """
 
-class SendQrCodeEmailView(View):
+class GetQrCodeEmailView(View):
     """
     View class for sending a QR code verification email.
     """

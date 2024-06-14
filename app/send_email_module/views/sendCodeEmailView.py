@@ -1,20 +1,16 @@
 
 import flask
-from typing import Any
+
 from flask.views import View
 
-
-from flask.views import MethodView
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import request, redirect, url_for, flash, jsonify
 from ..factory.otp_code_account_message_html import get_otp_code_message_html
-from ..factory.activate_account_message_html import get_activate_account_message_html
-from ..factory.generate_otp import get_otp, check_otp, generate_secret
-from ..factory.emailcontroller import send_simple_email, send_simple_email_mime_multipart
+from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
 
 
 
-class SendCodeEmailView(MethodView):
+class SendCodeEmailView(View):
     """
     This class is responsible for handling the sending of code verification emails to users.
 
@@ -49,29 +45,32 @@ class SendCodeEmailView(MethodView):
                  
         if request.method == 'GET':
             
-            if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'lastname' and 'email' in flask.session:
+            if 'user_id' and 'two_fa_auth_method' and 'firstname'\
+                and 'origin_request' and 'lastname' and 'email' in flask.session:
                
                 email = flask.session.get('email')
                 lastname = flask.session.get('lastname')
                 firstname = flask.session.get('firstname')
-                # generate a secret code for the user
-                user_secret_code = self.twoFaModel.generate_secret()                
-                
-                # Create an object of the TwoFAModel class
-                flask.session['two_factor_auth_secret'] = user_secret_code
-                
-                # Call the method with the required data
-                two_fa_obj = load_two_fa_obj({
-                    'userID': flask.session.get('user_id'),
-                    'two_factor_auth_secret': user_secret_code,
-                    'method_auth': flask.session.get('two_fa_auth_method'),
-                    'is_active': True
-                })
 
-                # Save the secret code in the database
-                respTwoFa, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)
+                if flask.session.get('origin_request') == 'register':
+                    # generate a secret code for the user
+                    user_secret_code = self.twoFaModel.generate_secret() 
+                    # Create an object of the TwoFAModel class
+                    flask.session['two_factor_auth_secret'] = user_secret_code               
+                    # Call the method with the required data
+                    two_fa_obj = load_two_fa_obj({
+                        'userID': flask.session.get('user_id'),
+                        'two_factor_auth_secret': user_secret_code,
+                        'method_auth': flask.session.get('two_fa_auth_method'),
+                        'is_active': True
+                    })
 
-                if respTwoFa:
+                    # Save the secret code in the database
+                    respTwoFa, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)                
+                elif flask.session.get('origin_request') == 'signin':
+                    respTwoFa = True                
+
+                if respTwoFa and 'two_factor_auth_secret' in flask.session:
                     #totp = get_otp(obj.two_factor_auth_secret, email , otp_time_interval)
                     totp = self.twoFaModel.generate_otp(accountname=flask.session['email'], secret=flask.session['two_factor_auth_secret'], interval=otp_time_interval)
                     OTP = totp.now()
@@ -81,7 +80,7 @@ class SendCodeEmailView(MethodView):
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
 
                     if res:
-                        flash(f'If the email provided is real, a code verification was sent to <<{email}>>', 'success')
+                        flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
                         return redirect(url_for('email.2facodeverify'))
                     else:
                         flash('Email code verification failed', 'error')

@@ -1,14 +1,13 @@
 
 import flask
 from flask.views import View
+from flask_login import login_user, logout_user
+
+from flask import render_template, request, g, redirect, url_for, flash, jsonify
 
 
-from flask.views import MethodView
-from flask import render_template, request, redirect, url_for, flash, jsonify
 
-
-
-class VerifyOtpCodeView(MethodView):
+class VerifyOtpCodeView(View):
     """
     A class representing a view for verifying OTP codes in a Flask application.
 
@@ -27,8 +26,9 @@ class VerifyOtpCodeView(MethodView):
 
     methods = ['GET', 'POST']
     
-    def __init__(self, twoFaModel, template):
+    def __init__(self, twoFaModel, UserModel, template):
         self.twoFaModel = twoFaModel
+        self.UserModel = UserModel
         self.template = template
     
     def dispatch_request(self):
@@ -59,12 +59,23 @@ class VerifyOtpCodeView(MethodView):
                 otpstatus =  totp.verify(code)
                 
                 if otpstatus:
-                    flash('Email code verification successful', 'success')
+                   
                     #return jsonify({'status': 'success', 'message': 'Email verified successfully!'})
+                    if 'origin_request' in flask.session:
+                        if flask.session['origin_request'] == 'register':
+                            flash('Code verified successful', 'success')
+                            return redirect(url_for('email.activate_send')) 
+                         
+                        # If the origin request is a sign-in request
+                        elif flask.session['origin_request'] == 'signin':
+                            user = self.UserModel.get_user_by_id(user_id)
+                            login_user(user)
+                            flask.g.user = user      
+                        
                     return redirect(url_for('index'))
                 else:
-                    flash('Email code verification failed', 'error')
+                    flash('Code verification failed', 'error')
         
-        return render_template(self.template, title='Code verification failed')
+        return render_template(self.template, title='Code verification')
             
     

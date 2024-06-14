@@ -1,13 +1,11 @@
 import flask
-from typing import Any
-from flask.views import View
 
-from flask.views import MethodView
+from flask.views import View
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from ..controller.userController import load_user_obj, validate_form_fields
 
 
-class AuthRegisterView(MethodView):
+class AuthRegisterView(View):
     methods = ['GET', 'POST']
 
     def __init__(self, model, tokenModel, template):
@@ -45,20 +43,23 @@ class AuthRegisterView(MethodView):
                             
                             two_fa_auth_method = request.form.get('two_fa_auth_method')
                             
+                            flask.session['origin_request'] = 'register'
                             flask.session['two_fa_auth_method'] = two_fa_auth_method
                             flask.session['user_token'] = token.token
+                            
                             flask.session['user_id'] = last_user_id
                             flask.session['firstname'] = request.form.get('firstname')
                             flask.session['lastname'] = request.form.get('lastname')
                             flask.session['email'] = request.form.get('email')
                            
-                            if two_fa_auth_method == 'app':                              
-                                return redirect(url_for('email.2fappqrcodesend')) 
+                            if two_fa_auth_method == 'app':      
+                                flash('Unavailable service', 'info')                        
+                                #return redirect(url_for('email.2fappqrcodeget')) 
+                                pass
                             else:                               
                                 return redirect(url_for('email.2facodesend'))                           
                         else:
-                            flash(status, 'error')                    
-                        
+                            flash(status, 'error')   
                         
                     
         return render_template(self.template, title='Register')

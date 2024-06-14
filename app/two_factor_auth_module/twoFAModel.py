@@ -21,7 +21,7 @@ class TwoFAModel(db.Model):
     method_auth:Mapped[str] = db.Column(db.String(20),default="app", nullable=False) 
     is_active:Mapped[str] = db.Column(db.Boolean(), default=True, nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.now())
-    date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(days=30))
+    date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(days=1))
     
     def __repr__(self):
         return f'<TwoFAModel {self.two_fa_id} - {self.userID}>'
@@ -56,7 +56,126 @@ class TwoFAModel(db.Model):
             db.session.rollback()
             return False, str(e)
     
+    def update_secret_two_fa_data(user_id):
+        """
+        Updates the secret key for two-factor authentication in the database.
 
+        Args:
+            user_id: The ID of the user.
+
+        Returns:
+            A tuple containing a boolean indicating the success of the operation and the updated object.
+        """
+        try:
+            obj = TwoFAModel.query.filter_by(userID=user_id).first_or_404()
+            obj.two_factor_auth_secret = pyotp.random_base32()
+            db.session.merge(obj)
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+        
+    def update_two_fa_data(obj):
+        """
+        Updates the TwoFAModel object in the database.
+
+        Args:
+            obj: The TwoFAModel object to be updated.
+
+        Returns:
+            A tuple containing a boolean indicating the success of the operation and the updated object.
+        """
+        try:
+            db.session.merge(obj)
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+    
+
+
+    def delete_two_fa_data(obj):
+        """
+        Deletes the TwoFAModel object from the database.
+
+        Args:
+            obj: The TwoFAModel object to be deleted.
+
+        Returns:
+            A tuple containing a boolean indicating the success of the operation and the deleted object.
+        """
+        try:
+            db.session.delete(obj)
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+        
+    def  get_all_two_fa_data():
+        """
+        Retrieves all two-factor authentication data from the database.
+
+        Returns:
+            A list of all two-factor authentication data.
+        """
+        return TwoFAModel.query.all()
+    
+
+    
+    def  get_user_two_fa_data(user_id):
+        """
+        Retrieves the two-factor authentication data for the given user.
+
+        Args:
+            user_id: The ID of the user.
+
+        Returns:
+            The two-factor authentication data for the user.
+        """
+        try:
+            obj = TwoFAModel.query.filter_by(userID=user_id).first_or_404()
+            return True, obj
+        except SQLAlchemyError as e:
+            return False, str(e)
+        except Exception as e:
+            return False, str(e)
+    
+    def  get_user_two_fa_by_id(two_fa_id):
+        """
+        Retrieves the two-factor authentication data for the given 2-FA.
+
+        Args:
+            two_fa_id: The ID of the 2-FA object.
+
+        Returns:
+            The two-factor authentication data for the user.
+        """
+        return TwoFAModel.query.filter_by(two_fa_id=two_fa_id).first_or_404()
+
+    def  get_user_two_fa_by_secret(secret):
+        """
+        Retrieves the two-factor authentication data for the given secret key.
+
+        Args:
+            secret: The secret key for two-factor authentication.
+
+        Returns:
+            The two-factor authentication data for the user.
+        """
+        return TwoFAModel.query.filter_by(two_factor_auth_secret=secret).first_or_404()
+    
     def generate_secret():
         """
         Generates a random secret key for two-factor authentication.
