@@ -54,7 +54,7 @@ class AuthRegisterView(View):
                             else:                               
                                 return redirect(url_for('email.2facodesend'))                           
                         else:
-                            flash(status, 'error')   
+                            flash("Failed to create user", 'error')   
                         
                     
         return render_template(self.template, title='Register')
