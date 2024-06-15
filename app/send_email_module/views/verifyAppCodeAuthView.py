@@ -4,7 +4,7 @@ import flask
 from datetime import date
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template,current_app, request, redirect, url_for, flash, jsonify
+from flask import render_template,current_app, g, session, request, redirect, url_for, flash, jsonify
 
 
 
@@ -51,42 +51,43 @@ class VerifyAppCodeAuthView(View):
         if request.method == 'POST':
             code = request.form.get('otpcode',None)
 
-            if code is not None and 'email' in flask.session\
-                and 'user_id' in flask.session:
+            if code is not None and 'email' and 'user_id' in session:
                 
                 secret = current_app.config['OTP_SECRET_KEY']
-                user_id = flask.session['user_id']
-                email = flask.session['email']
+                user_id = session['user_id']
+                email = session['email']
 
                 otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
                       
                 if otpstatus:
 
                     # Save the image with the new name is the verification is successful
-                    if 'otpqrcode' in flask.session:
+                    if 'otpqrcode' in session:
                         current_date = date.today()
                         
-                        new_image_name = flask.session['two_factor_auth_secret']\
+                        new_image_name = secret\
                               +'-otpqrcode-done-'+current_date.strftime("%Y-%m-%d")
                         
                         self.twoFaModel.update_imagename('app/static/otp_qrcode_images/' \
-                                         + flask.session['otpqrcode'], new_image_name)
+                                         + session['otpqrcode'], new_image_name)
 
                     # If the origin request is register, redirect to the activate account endpoint
-                    if 'origin_request' in flask.session:
-                        if flask.session['origin_request'] == 'register':
+                    if 'origin_request' in session:
+                        if session['origin_request'] == 'register':
                             flash('Code verified successful', 'success')
                             return redirect(url_for('email.activate_send')) 
                          
                         # If the origin request is a sign-in request
-                        elif flask.session['origin_request'] == 'signin':
+                        elif session['origin_request'] == 'signin':
                             user = self.UserModel.get_user_by_id(user_id)
                             login_user(user)
-                            flask.g.user = user  
+                            g.user = user  
 
                         return redirect(url_for('index'))
                 else:
                     flash('Code verification failed', 'error')
+            else:
+                flash('User not identified', 'error')
 
 
         return render_template(self.template, title='2-FA App Authentication')
