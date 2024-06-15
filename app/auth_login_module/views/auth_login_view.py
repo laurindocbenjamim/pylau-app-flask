@@ -39,10 +39,10 @@ class AuthLoginView(View):
                                 if user.is_active() == True:
                                     
                                     # generate a secret code for the user
-                                    status, two_fa = self.TwoFaModel.update_secret_two_fa_data(user.userID)  
+                                    #status, two_fa = self.TwoFaModel.update_secret_two_fa_data(user.userID)  
                                     st_t, u_token = self.UserTokenModel.update_token(user.userID, user.email)              
                                     
-                                    if status and st_t and two_fa and u_token:
+                                    if st_t and u_token:
                                         # Create an object of the TwoFAModel class
                                         flask.session['user_token'] = u_token.token
                                         flask.session['user_id'] = user.userID

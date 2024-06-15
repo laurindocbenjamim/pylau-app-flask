@@ -1,5 +1,5 @@
 
-import flask
+
 from flask.views import View
 from flask_login import login_user, logout_user
 

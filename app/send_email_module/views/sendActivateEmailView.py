@@ -1,9 +1,8 @@
 
-import flask
 from typing import Any
 from flask.views import View
 
-from flask import request, redirect, url_for, flash, jsonify
+from flask import request,session, redirect, url_for, flash, jsonify
 from ..factory.activate_account_message_html import get_activate_account_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 
@@ -37,12 +36,12 @@ class SendActivateEmailView(View):
         if request.method == 'GET':
             
             if 'origin_request' and 'user_id' and 'user_token' \
-                and 'firstname' and 'lastname' and 'email' in flask.session:
+                and 'firstname' and 'lastname' and 'email' in session:
                
-                email = flask.session.get('email')
-                lastname = flask.session.get('lastname')
-                firstname = flask.session.get('firstname')
-                user_token = flask.session.get('user_token')
+                email = session.get('email')
+                lastname = session.get('lastname')
+                firstname = session.get('firstname')
+                user_token = session.get('user_token')
                 
                 time_remaining = f"You have { int(otp_time_interval / 60) } hours to activate your account."
                 html = get_activate_account_message_html(str(firstname)+" "+str(lastname), user_token, time_remaining)

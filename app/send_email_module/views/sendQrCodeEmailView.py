@@ -1,10 +1,10 @@
 
 
-import flask
+
 from typing import Any
 from flask.views import View
 
-from flask import render_template, current_app, request, redirect, url_for, flash, jsonify
+from flask import render_template,session, current_app, request, redirect, url_for, flash, jsonify
 from ..factory.otp_qr_code_account_message_html import get_otp_qr_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -60,23 +60,22 @@ class SendQrCodeEmailView(View):
                  
         if request.method == 'GET':
             
-            if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'lastname' and 'email' in flask.session:
+            if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'lastname' and 'email' in session:
                 
                 secret = current_app.config['OTP_SECRET_KEY']
-                email = flask.session.get('email')
-                lastname = flask.session.get('lastname')
-                firstname = flask.session.get('firstname')
+                email = session.get('email')
+                lastname = session.get('lastname')
+                firstname = session.get('firstname')
                 # generate a secret code for the user
                 user_secret_code = self.model.generate_secret()                
                 
                 # Create an object of the TwoFAModel class
-                flask.session['two_factor_auth_secret'] = user_secret_code
                 
                 # Call the method with the required data
                 two_fa_obj = load_two_fa_obj({
-                    'userID': flask.session.get('user_id'),
+                    'userID': session.get('user_id'),
                     'two_factor_auth_secret': user_secret_code,
-                    'method_auth': flask.session.get('two_fa_auth_method'),
+                    'method_auth': session.get('two_fa_auth_method'),
                     'is_active': True
                 })
 
@@ -86,12 +85,12 @@ class SendQrCodeEmailView(View):
                 if respTwoFa:
                     #totp = get_otp(obj.two_factor_auth_secret, email , otp_time_interval)
                     otp_qr_code = self.model.generate_provisioning_uri(accountname=email, secret=obj.two_factor_auth_secret)
-                    flask.session['otpqrcode'] = otp_qr_code
-                    flask.session['otpqrcode_uri'] = 'otp_qrcode_images/' + str(flask.session['otpqrcode'])
+                    session['otpqrcode'] = otp_qr_code
+                    session['otpqrcode_uri'] = 'otp_qrcode_images/' + str(session['otpqrcode'])
 
                     time_remaining = f"This code expires in 24 hours."
                     
-                    html = get_otp_qr_code_message_html(str(firstname)+" "+str(lastname), flask.session['otpqrcode_uri'], time_remaining)
+                    html = get_otp_qr_code_message_html(str(firstname)+" "+str(lastname), session['otpqrcode_uri'], time_remaining)
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
 
                     if res:

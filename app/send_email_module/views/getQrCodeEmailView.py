@@ -1,6 +1,6 @@
 
 
-import flask
+
 from typing import Any
 from flask.views import View
 
@@ -61,8 +61,7 @@ class GetQrCodeEmailView(View):
                  
         if request.method == 'GET':
             
-            if 'user_id' and 'two_fa_auth_method' and 'firstname'\
-                and 'origin_request' and 'lastname' and 'email' in session:
+            if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'origin_request' and 'lastname' and 'email' in session:
                 
                 secret = current_app.config['OTP_SECRET_KEY']
                 email = session.get('email')
@@ -71,8 +70,7 @@ class GetQrCodeEmailView(View):
 
                 if session.get('origin_request') == 'register':
                      
-                    # Create an object of the TwoFAModel class
-                    session['two_factor_auth_secret'] = secret               
+                    # Create an object of the TwoFAModel class             
                     # Call the method with the required data
                     two_fa_obj = load_two_fa_obj({
                         'userID': session.get('user_id'),
@@ -87,7 +85,6 @@ class GetQrCodeEmailView(View):
                     respTwoFa = True 
 
                 if respTwoFa:
-                    #totp = get_otp(obj.two_factor_auth_secret, email , otp_time_interval)
                     
                     otp_qr_code = self.twoFaModel.generate_provisioning_uri(accountname=email, secret=secret)
                     session['otpqrcode'] = otp_qr_code

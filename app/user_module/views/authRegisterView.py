@@ -1,4 +1,3 @@
-import flask
 
 from flask.views import View
 from flask import render_template, session, request, redirect, url_for, flash, jsonify
@@ -50,10 +49,8 @@ class AuthRegisterView(View):
                             session['lastname'] = request.form.get('lastname')
                             session['email'] = request.form.get('email')
                            
-                            if two_fa_auth_method == 'app':      
-                                flash('Unavailable service', 'info')                        
-                                return redirect(url_for('email.2fappqrcodeget', token=token.token)) 
-                                
+                            if two_fa_auth_method == 'app':                            
+                                return redirect(url_for('email.2fappqrcodeget', token=token.token))                                 
                             else:                               
                                 return redirect(url_for('email.2facodesend'))                           
                         else:

@@ -1,6 +1,4 @@
 
-import flask
-
 from flask.views import View
 
 from flask import request, session, current_app, redirect, url_for, flash, jsonify

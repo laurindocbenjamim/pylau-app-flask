@@ -122,6 +122,7 @@ class Users(UserMixin, db.Model):
         try:
             user = Users.query.filter_by(userID=user_id).first_or_404()
             user.active = status
+            user.date_updated = datetime.now()
             db.session.commit()
             return True, user
         except SQLAlchemyError as e:

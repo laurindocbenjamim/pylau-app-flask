@@ -1,6 +1,6 @@
 
 import pyotp
-import flask
+
 from datetime import date
 from flask_login import login_user, logout_user
 from flask.views import View
@@ -87,7 +87,7 @@ class VerifyAppCodeAuthView(View):
                 else:
                     flash('Code verification failed', 'error')
             else:
-                flash('User not identified', 'error')
+                flash(f'User not identified.', 'error')
 
 
         return render_template(self.template, title='2-FA App Authentication')
