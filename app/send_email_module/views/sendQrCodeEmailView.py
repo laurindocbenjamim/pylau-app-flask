@@ -4,7 +4,7 @@ import flask
 from typing import Any
 from flask.views import View
 
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, current_app, request, redirect, url_for, flash, jsonify
 from ..factory.otp_qr_code_account_message_html import get_otp_qr_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -61,7 +61,8 @@ class SendQrCodeEmailView(View):
         if request.method == 'GET':
             
             if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'lastname' and 'email' in flask.session:
-               
+                
+                secret = current_app.config['OTP_SECRET_KEY']
                 email = flask.session.get('email')
                 lastname = flask.session.get('lastname')
                 firstname = flask.session.get('firstname')

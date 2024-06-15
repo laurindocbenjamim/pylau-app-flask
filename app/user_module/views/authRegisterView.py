@@ -39,14 +39,12 @@ class AuthRegisterView(View):
 
                         status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
                         if status:
-                            user_token = token.to_dict()['token']
-                            
+                                                      
                             two_fa_auth_method = request.form.get('two_fa_auth_method')
                             
                             session['origin_request'] = 'register'
                             session['two_fa_auth_method'] = two_fa_auth_method
-                            session['user_token'] = token.token
-                            
+                            session['user_token'] = token.token                            
                             session['user_id'] = last_user_id
                             session['firstname'] = request.form.get('firstname')
                             session['lastname'] = request.form.get('lastname')
