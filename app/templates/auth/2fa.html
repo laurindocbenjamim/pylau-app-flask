@@ -159,7 +159,7 @@
               </div>
             </div>
             <br>
-            <p>Request a <a href="{{ url_for('email.2facodesend') }}">new code</a></p>
+            <p>Request a <a href="{{ url_for('email.2facodesend', user_token=user_token) }}">new code</a></p>
 
             <hr class="my-4">
             

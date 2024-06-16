@@ -2,11 +2,12 @@
 import pyotp
 
 from datetime import date
+from markupsafe import escape
 from flask_login import login_user, logout_user
 from flask.views import View
 from flask import render_template,current_app, g, session, request, redirect, url_for, flash, jsonify
 
-
+from ...token_module.userTokenModel import UserToken
 
 class VerifyAppCodeAuthView(View):
     """
@@ -33,7 +34,7 @@ class VerifyAppCodeAuthView(View):
         self.UserModel = UserModel
         self.template = template
     
-    def dispatch_request(self):
+    def dispatch_request(self, user_token: str):
         """
         Handles the POST request and verifies the app code authentication.
 
@@ -48,7 +49,15 @@ class VerifyAppCodeAuthView(View):
 
         """
                  
-        if request.method == 'POST':
+        if request.method == 'POST' and user_token is not None:
+            token = UserToken().get_token_by_token(escape(user_token))
+            
+            # Check if the token is expired
+            if UserToken().is_token_expired(token):
+                flash('Token is expired!', 'danger')
+                return redirect(url_for('auth.register'))
+            
+            # Check if the token is already used
             code = request.form.get('otpcode',None)
 
             if code is not None and 'email' and 'user_id' in session:
@@ -75,7 +84,7 @@ class VerifyAppCodeAuthView(View):
                     if 'origin_request' in session:
                         if session['origin_request'] == 'register':
                             flash('Code verified successful', 'success')
-                            return redirect(url_for('email.activate_send')) 
+                            return redirect(url_for('email.activate_send', user_token=escape(user_token))) 
                          
                         # If the origin request is a sign-in request
                         elif session['origin_request'] == 'signin':

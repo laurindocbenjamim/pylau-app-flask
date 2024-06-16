@@ -3,11 +3,11 @@ from flask.views import View
 
 from markupsafe import escape
 from flask import request, session, current_app, redirect, url_for, flash, jsonify
-from ..factory.otp_code_account_message_html import get_otp_code_message_html
-from ..factory.emailcontroller import send_simple_email_mime_multipart
+from ...send_email_module.factory.otp_code_account_message_html import get_otp_code_message_html
+from ...send_email_module.factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
 
-class SendCodeEmailView(View):
+class SendAuthCodeEmailView(View):
     """
     This class is responsible for handling the sending of code verification emails to users.
 

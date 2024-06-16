@@ -15,7 +15,7 @@ class UserToken(db.Model):
     token_id:Mapped[int] = db.Column(db.Integer, primary_key=True)
     #user_id:Mapped[int] = db.Column(db.Integer, db.ForeignKey('users.userID'))
     username:Mapped[str] = db.Column(db.String(100), nullable=False)
-    token:Mapped[str] = db.Column(db.String(255), nullable=False)
+    token:Mapped[str] = db.Column(db.String(255), unique=True, nullable=False)
     date_added = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(minutes=30))
 
@@ -106,5 +106,9 @@ class UserToken(db.Model):
     
     # This method is used to check if a token is expired
     def is_token_expired(self):
-        return datetime.now(tz=timezone.utc) > self.date_exp
+        return datetime.now(tz=timezone.utc).replace(tzinfo=None) > self.date_exp.replace(tzinfo=None)
+    
+    # Check if the token is already used
+    def is_token_used(self):
+        return self.is_used
 

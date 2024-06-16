@@ -2,15 +2,17 @@
 from flask.views import View
 from flask import render_template, session, request, redirect, url_for, flash, jsonify
 from ..controller.userController import load_user_obj, validate_form_fields
+from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
 
 
 class AuthRegisterView(View):
     methods = ['GET', 'POST']
 
-    def __init__(self, model, tokenModel, template):
+    def __init__(self, model, tokenModel, twoFaModel, template):
         self.model = model
         self.template = template
         self.tokenModel = tokenModel
+        self.twoFaModel = twoFaModel
 
     def dispatch_request(self):
         if request.method == 'POST':
@@ -33,7 +35,7 @@ class AuthRegisterView(View):
                     token = self.tokenModel.create_token(request.form.get('email'))
                     if token == False:
                         self.model.db.session.rollback()
-                        flash(f'Error creating token {token}', 'error')
+                        flash('Error creating token.', 'error')
                     else:      
 
                         status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
@@ -48,13 +50,28 @@ class AuthRegisterView(View):
                             session['firstname'] = request.form.get('firstname')
                             session['lastname'] = request.form.get('lastname')
                             session['email'] = request.form.get('email')
-                           
-                            if two_fa_auth_method == 'app':                            
-                                return redirect(url_for('email.2fappqrcodeget', token=token.token))                                 
+
+                            # Create an object of the TwoFAModel class
+                                 
+                            # Call the method with the required data
+                            two_fa_obj = load_two_fa_obj({
+                                'userID': last_user_id,
+                                'two_factor_auth_secret': '',
+                                'method_auth': two_fa_auth_method,
+                                'is_active': True
+                            })
+
+                            # Save the secret code in the database
+                            respTwoFa, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)
+
+                            if two_fa_auth_method == 'app':  
+                                return redirect(url_for('email.2fappqrcodeget', user_token=token.token))                                 
                             else:                               
-                                return redirect(url_for('email.2facodesend'))                           
+                                return redirect(url_for('email.2facodesend', user_token=token.token))                           
                         else:
                             flash("Failed to create user", 'error')   
                         
                     
         return render_template(self.template, title='Register')
+    
+    

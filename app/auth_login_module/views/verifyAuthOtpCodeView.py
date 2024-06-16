@@ -6,7 +6,7 @@ from markupsafe import escape
 from flask import render_template, session, request, current_app, g, redirect, url_for, flash, jsonify
 
 
-class VerifyOtpCodeView(View):
+class VerifyAuthOtpCodeView(View):
     """
     A class representing a view for verifying OTP codes in a Flask application.
 

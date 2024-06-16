@@ -34,3 +34,4 @@ In summary, the code retrieves the value of the environment variable 'OTP' using
     app.config['MAIL_PASSWORD'] = 'jgtkeopkbwoxkjoo'
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
+    

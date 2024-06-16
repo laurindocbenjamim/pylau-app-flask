@@ -11,19 +11,34 @@ from ..controller.userController import load_user_obj, validate_form_fields
 class ActivateAccountView(View):
     methods = ['GET']
 
-    def __init__(self, model, tokenModel, template):
+    def __init__(self, model, userToken, template):
         self.model = model
         self.template = template
-        self.tokenModel = tokenModel
+        self.userToken = userToken
 
-    def dispatch_request(self, token):
-        if request.method == 'GET' and escape(token) is not None:
-            token_status,token_obj = self.tokenModel.get_token_by_token(escape(token))
-            # Validate token
-            if token_status and token_obj.token == escape(token):               
-                u_status, user = self.model.get_user_by_email(token_obj.username)
+    def dispatch_request(self, user_token):
+        if request.method == 'GET' and user_token is not None:
+           
+            status,token = self.userToken.get_token_by_token(escape(user_token))
+            
+            # Check if the token is expired
+            if status:
+                if self.userToken.is_token_expired(token):
+                    flash('Token is expired!', 'danger')
+                    return redirect(url_for('auth.register'))
+            else:
+                flash('Token required!', 'danger')
+                return redirect(url_for('auth.register'))
+            
+            
+            # Get the user details using the email address
+            status, user = self.model.get_user_by_email(token.username)
+           
+            # Check if the user is identified
+            if status and user is not None:
+                
                 # Check if email exists
-                if u_status and user.email == token_obj.username:
+                if user.email == token.username:
 
                     # bEFORE CREATE User generate and save token
                     status, user = self.model.update_user_status(user.userID, True)
