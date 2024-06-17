@@ -8,16 +8,16 @@ from markupsafe import escape
 from ..controller.userController import load_user_obj, validate_form_fields
 
 
-class ActivateAccountView(View):
+class RemoveUserAccountView(View):
     methods = ['GET']
 
-    def __init__(self, model, userToken, template):
+    def __init__(self, model, userToken):
         self.model = model
-        self.template = template
         self.userToken = userToken
 
-    def dispatch_request(self, user_token):
-        if request.method == 'GET' and user_token is not None:
+    def dispatch_request(self, user_id, user_token):
+        
+        if request.method == 'GET' and user_id is not None and user_token is not None:
             
             status,token = self.userToken.get_token_by_token(escape(user_token))
             
@@ -39,21 +39,16 @@ class ActivateAccountView(View):
                 
                 # Check if email exists
                 if user.email == token.username:
-
-                    # bEFORE CREATE User generate and save token
-                    status, user = self.model.update_user_status(user.userID, True)
-                    if status:
-                        login_user(user)
-                        flask.g.user = user
-                      
-                        return redirect(url_for('index', user_token=token.token))
                     
-                    logout_user()
-                    flask.flash('This user is not activated', 'danger')                        
-                        
+                    # bEFORE CREATE User generate and save token
+                    
+                    if self.model.delete_user(escape(user_id)):     
+                        flash('User account removed successfully!', 'success')                              
+                                                
+                    return redirect(url_for('projects.list', user_token=token.token))    
                 else:
                     flash('Invalid user', 'danger') 
             else:
                 flash('Invalid token', 'danger')        
                     
-        return render_template(self.template, title='Register')
+        return redirect(url_for('index'))

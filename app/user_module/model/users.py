@@ -174,6 +174,15 @@ class Users(UserMixin, db.Model):
             db.session.rollback()
             return False
 
+    # This method get all users
+    def get_all_users():
+        try:
+            users = Users.query.all()
+            return True, users
+        except SQLAlchemyError as e:
+            return False, str(e)
+        except Exception as e:
+            return False, str(e)
 
     """
     This method selects the user by email.
@@ -228,3 +237,17 @@ class Users(UserMixin, db.Model):
         # Implement password checking logic here
         # For example, you can compare the provided password with the stored password hash
         return check_password_hash(self.password,password)
+
+    
+    get_limited_user_object = lambda data: Users(
+        firstname=data.get('firstname'),
+        lastname=data['lastname'],
+        email=data['email'],
+        country=data['country'],
+        country_code=data['country_code'],
+        phone=data['phone'],
+        role=data['role'],
+        active=data['active'],
+        date_added=data['date_added'],
+        date_updated=data['date_updated']
+    )

@@ -1,6 +1,7 @@
 from flask.views import View
-from flask import render_template, redirect, url_for, request, flash,jsonify
+from flask import render_template, session, redirect, url_for, request, flash,jsonify
 from flask_login import login_required
+from markupsafe import escape
 #from flask_caching import cache
 
 class ProjectsView(View):
@@ -15,15 +16,34 @@ class ProjectsView(View):
     init_every_request = True
     methods = ['GET']
 
-    def __init__(self, template):
+    def __init__(self, userModel, userToken, template):
+        self.userModel = userModel
+        self.userToken = userToken
         self.template = template
 
-    def dispatch_request(self):
-        listItems = [
-            {
-                "code": "1",
-            "name": "Project 1",
-            "description": "Description 1",
-        }
-        ]
-        return render_template(self.template, title="List Users", items=listItems)
+    def dispatch_request(self, user_token):
+        listItems = []
+
+        if request.method == 'GET' and user_token is not None:
+
+            status,token = self.userToken.get_token_by_token(escape(user_token))
+            
+            # Check if the token is expired
+            if status and token is not None:
+                if self.userToken.is_token_expired(token):
+                    flash('Unauthorized authentication!', 'danger')
+                    return redirect(url_for('auth.register'))
+            else:
+                flash('Unauthorized authentication!', 'danger')
+                return redirect(url_for('auth.register'))
+            
+             # Get the user details using the email address
+            if self.userModel.check_email_exists(token.username):
+                session['user_token'] = escape(user_token)
+                status, users = self.userModel.get_all_users()
+                if status:
+                    listItems = users
+                
+                return render_template(self.template, user_token=token.token, title="List Users", items=listItems)
+            
+        return redirect(url_for('index'))

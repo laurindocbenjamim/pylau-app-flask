@@ -45,7 +45,8 @@ class GetQrCodeEmailView(View):
 
     methods = ['GET']
     
-    def __init__(self, TwoFaModel, UserModel, template):
+    def __init__(self, userToken, UserModel, TwoFaModel, template):
+        self.userToken = userToken
         self.twoFaModel = TwoFaModel
         self.userModel = UserModel
         self.template = template
@@ -61,9 +62,9 @@ class GetQrCodeEmailView(View):
         otp_time_interval = 360
                  
         if request.method == 'GET' and user_token is not None:
-            token = UserToken().get_token_by_token(escape(user_token))
+            status, token = self.userToken.get_token_by_token(escape(user_token))
             # Check if the token is expired
-            if UserToken().is_token_expired(token):
+            if status and self.userToken.is_token_expired(token):
                 flash('Token is expired!', 'danger')
                 return redirect(url_for('auth.register'))
             

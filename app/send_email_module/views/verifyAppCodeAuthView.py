@@ -29,9 +29,10 @@ class VerifyAppCodeAuthView(View):
 
     methods = ['GET', 'POST']
     
-    def __init__(self, twoFaModel, UserModel, template):
-        self.twoFaModel = twoFaModel
-        self.UserModel = UserModel
+    def __init__(self, userToken, userModel, TwoFaModel, template):
+        self.userToken = userToken
+        self.twoFaModel = TwoFaModel
+        self.userModel = userModel
         self.template = template
     
     def dispatch_request(self, user_token: str):
@@ -50,10 +51,9 @@ class VerifyAppCodeAuthView(View):
         """
                  
         if request.method == 'POST' and user_token is not None:
-            token = UserToken().get_token_by_token(escape(user_token))
-            
+            status, token = self.userToken.get_token_by_token(escape(user_token))
             # Check if the token is expired
-            if UserToken().is_token_expired(token):
+            if status and self.userToken.is_token_expired(token):
                 flash('Token is expired!', 'danger')
                 return redirect(url_for('auth.register'))
             
@@ -88,17 +88,17 @@ class VerifyAppCodeAuthView(View):
                          
                         # If the origin request is a sign-in request
                         elif session['origin_request'] == 'signin':
-                            user = self.UserModel.get_user_by_id(user_id)
+                            user = self.userModel.get_user_by_id(user_id)
                             login_user(user)
                             g.user = user  
 
                         return redirect(url_for('index'))
                 else:
-                    flash('Code verification failed', 'error')
+                    flash('Invalid code provided', 'error')
             else:
                 flash(f'User not identified.', 'error')
 
 
-        return render_template(self.template, title='2-FA App Authentication')
+        return render_template(self.template, title='2-FA App Authentication', form_title='Enter the code provided by the Authenticator App')
             
     

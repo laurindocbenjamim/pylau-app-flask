@@ -8,6 +8,7 @@ from flask.views import View
 from flask import render_template,current_app, g, session, request, redirect, url_for, flash, jsonify
 
 from ...token_module.userTokenModel import UserToken
+from ...user_module.model.users import Users
 
 class VerifyAppAuthCodeView(View):
     """
@@ -29,9 +30,11 @@ class VerifyAppAuthCodeView(View):
 
     methods = ['GET', 'POST']
     
-    def __init__(self, twoFaModel, UserModel, template):
+    def __init__(self, userToken, userModel, twoFaModel, authUserHistoric, template):
+        self.userToken = userToken
         self.twoFaModel = twoFaModel
-        self.UserModel = UserModel
+        self.userModel = userModel
+        self.authUserHistoric = authUserHistoric
         self.template = template
     
     def dispatch_request(self, user_token: str):
@@ -48,53 +51,72 @@ class VerifyAppAuthCodeView(View):
             If the verification fails, a JSON response with status 'error' and message 'Email code verification failed'
 
         """
-                 
-        if request.method == 'POST' and user_token is not None:
-            token = UserToken().get_token_by_token(escape(user_token))
+
+        if request.method == 'GET' and user_token is not None:
+            
+            status,token = self.userToken.get_token_by_token(escape(user_token))
             
             # Check if the token is expired
-            if UserToken().is_token_expired(token):
-                flash('Token is expired!', 'danger')
+            if status:
+                if self.userToken.is_token_expired(token):
+                    flash('Unauthorized authentication!', 'danger')
+                    return redirect(url_for('auth.register'))
+            else:
+                flash('Unauthorized authentication!', 'danger')
                 return redirect(url_for('auth.register'))
+                 
+        if request.method == 'POST' and user_token is not None:
+
+            status,token = self.userToken.get_token_by_token(escape(user_token))
+            
+            # Check if the token is expired
+            if status:
+                if self.userToken.is_token_expired(token):
+                    flash('Unauthorized authentication!', 'danger')
+                    return redirect(url_for('auth.user.login'))
+            else:
+                flash('Unauthorized authentication!', 'danger')
+                return redirect(url_for('auth.user.login'))
             
             # Check if the token is already used
             code = request.form.get('otpcode',None)
 
-            if code is not None and 'email' and 'user_id' in session:
+            # Get the user details using the email address
+            status, user = self.userModel.get_user_by_email(token.username)
+
+            # Check if the user is identified
+
+            if code is not None and status and user is not None:
                 
-                secret = current_app.config['OTP_SECRET_KEY']
-                user_id = session['user_id']
-                email = session['email']
+                # Check if email exists
+                if user.email == token.username:
+                    secret = current_app.config['OTP_SECRET_KEY']
 
-                otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
-                      
-                if otpstatus:
-
-                    # Save the image with the new name is the verification is successful
-                    if 'otpqrcode' in session:
-                        current_date = date.today()
+                    otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
                         
-                        new_image_name = secret\
-                              +'-otpqrcode-done-'+current_date.strftime("%Y-%m-%d")
+                    if otpstatus:
                         
-                        self.twoFaModel.update_imagename('app/static/otp_qrcode_images/' \
-                                         + session['otpqrcode'], new_image_name)
+                        user = self.userModel.get_user_by_id(user.userID)
+                        l_user = self.userModel.get_limited_user_object({
+                            'userID': user.userID,
+                            'firstname': user.firstname,
+                            'lastname': user.lastname,
+                            'email': user.email,
+                            'country': user.country,
+                            'country_code': user.country_code,
+                            'phone': user.phone,
+                            'active': user.active,
+                            'role': user.role,
+                            'date_added': user.date_added,
+                            'date_updated': user.date_updated
+                        })
+                        login_user(user)
+                        g.user = user  
 
-                    # If the origin request is register, redirect to the activate account endpoint
-                    if 'origin_request' in session:
-                        if session['origin_request'] == 'register':
-                            flash('Code verified successful', 'success')
-                            return redirect(url_for('email.activate_send', user_token=escape(user_token))) 
-                         
-                        # If the origin request is a sign-in request
-                        elif session['origin_request'] == 'signin':
-                            user = self.UserModel.get_user_by_id(user_id)
-                            login_user(user)
-                            g.user = user  
-
-                        return redirect(url_for('index'))
-                else:
-                    flash('Code verification failed', 'error')
+                        return redirect(url_for('index', user_token=token.token))
+                    else:
+                        flash('Invalid code detected', 'error')
+                flash(f'User not identified.', 'error')       
             else:
                 flash(f'User not identified.', 'error')
 

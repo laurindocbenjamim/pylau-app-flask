@@ -14,10 +14,12 @@ class AuthLoginView(View):
         self.template = template
 
     def dispatch_request(self):
-
+        logout_user()
+        session.clear()
         # Check if the user is already logged in
         if 'user_token' in session:
-            if session['user_token'] :
+            if session['user_token']:
+                #return jsonify({'status': 'success', 'message': 'User already logged in', 'user_token': session['user_token']})
                 return redirect(url_for('index', user_token=session['user_token']))
 
         # Check if the user is already logged in
@@ -58,8 +60,9 @@ class AuthLoginView(View):
                                         flask.session['firstname'] = user.firstname
                                         flask.session['two_fa_auth_method'] = two_fa.method_auth
                                         flask.session['origin_request'] = 'signin'
-
+                                        
                                         if two_fa.method_auth == 'app':
+                                             
                                              return redirect(url_for('auth.user.app-otp-verify', user_token=u_token.token))
                                         elif two_fa.method_auth == 'email':
                                             return redirect(url_for('auth.user.send-otp-email', user_token=u_token.token)) 

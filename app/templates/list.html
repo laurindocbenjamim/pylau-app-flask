@@ -10,20 +10,21 @@
     <table class="table">
         <thead>
             <tr>
-                <th>#</th>
-                <th>Username</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>Country</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for user in items %}
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>   
-                <td>{{ user.name }}</td>                 
-                <td>{{ user.email }}</td>
-                
+                <td>{{ user.firstname }} {{ user.lastname }}</td>   
+                <td>{{ user.email }}</td>                 
+                <td>{{ user.country_code }} {{ user.phone }}</td>
+                <td>{{ user.country }}</td>
+                <td><a class="btn btn-danger" href="{url_for('projects.user-remove', user_id=user.userID, user_token=user_token)}">{{user_token}}Remove</a></td>
             </tr>
             {% endfor %}
         </tbody>
