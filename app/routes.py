@@ -1,18 +1,39 @@
 import os
 import pyotp
 import secrets
-from flask import Flask, render_template, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, sessions, request, session, jsonify
 from flask_cors import cross_origin
+from .user_module.model.users import Users
 
 def load_routes(app, db, login_manager):
+    # Initialize the login manager
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Users.query.get(int(user_id))
+       
     
+    @login_manager.request_loader
+    def request_loader(request):
+        email = request.form.get('username')
+        
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            if user.is_active() == True:
+                # Use the login_user method to log in the user  
+                if 'user_token' in session:
+                    return redirect(url_for('index', user_token=session['user_token']))   
+        return 
+    
+
      # Main route
     @app.route('/')
     @app.route('/<string:user_token>')
     def index(user_token=None):
         if user_token is not None:
             session['user_token'] = user_token
-            #return jsonify({'message': 'User token set successfully'}), 200
+        elif 'user_token' in session:
+            user_token = session['user_token']
         return render_template('site_home.html', user_token=user_token)
     
     from .views.error_handlers_view import error_handlers_view
@@ -43,6 +64,9 @@ def load_routes(app, db, login_manager):
     
     from .projects_module import bp_project_view
     app.register_blueprint(bp_project_view)
+
+    from .adminmodule.bp_admin_view import bp as bp_admin_view
+    app.register_blueprint(bp_admin_view)
 
     from .test_forms.bp_form import bp as bp_form
     app.register_blueprint(bp_form)

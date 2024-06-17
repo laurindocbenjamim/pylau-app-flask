@@ -9,6 +9,7 @@ def load_user_obj(form = Request.form, role='user', active=0):
     return Users(
         firstname = form.get('firstname'),
         lastname = form.get('lastname'),
+        username = form.get('email'),
         email = form.get('email'),
         country = form.get('country'),
         country_code = form.get('country_code'),

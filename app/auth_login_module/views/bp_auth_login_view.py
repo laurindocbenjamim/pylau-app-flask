@@ -1,5 +1,5 @@
 import flask
-from flask import render_template, jsonify
+from flask import render_template, jsonify, abort
 
 from .authLoginView import AuthLoginView
 from .logoutView import LogoutView
@@ -20,9 +20,11 @@ def init_app(login_manager, db):
     
     from ...user_module import Users
 
+    """
+    
     @login_manager.user_loader
     def load_user(user_id):
-        return Users.query.get(user_id)
+        return Users.query.get(int(user_id))
        
     
     @login_manager.request_loader
@@ -34,13 +36,21 @@ def init_app(login_manager, db):
             if user.is_active() == True:
                 # Use the login_user method to log in the user  
                 if 'user_token' in flask.session:
-                    return flask.redirect(flask.url_for('projects.list', user_token=flask.session['user_token']))   
+                    return flask.redirect(flask.url_for('index', user_token=flask.session['user_token']))   
         return 
+        
     
-    @login_manager.unauthorized_handler
-    def unauthorized_handler():
-        #return 'Unauthorized', 401
-        return flask.redirect(flask.url_for('auth.user.login'))
+    """
+    
+    
+    """
+        @login_manager.unauthorized_handler
+        def unauthorized_handler():
+            flask.session.clear()        
+            return render_template('errors/401.html')
+    """
+        
+    
 
     bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users, UserToken, TwoFAModel,  template='auth/auth.html'))
     bp_auth.add_url_rule('/send-otp/email/<string:user_token>', view_func=SendAuthCodeEmailView.as_view('send-otp-email', UserToken, Users, TwoFAModel, template='auth/2fa.html'))

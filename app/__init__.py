@@ -28,8 +28,8 @@ def create_application(type_db=None,test_config=None):
     # to be able to log in and log out users
 
     login_manager = LoginManager()
-    #login_manager.login_view = 'auth.user.login'
     login_manager.init_app(app)
+    #login_manager.login_view = 'auth.user.login'
     
 
     #from model.usermodel import db

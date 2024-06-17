@@ -5,7 +5,7 @@ from markupsafe import escape
 #from flask_caching import cache
 
 class ProjectsView(View):
-    decorators = [login_required]
+    #decorators = [login_required]
     """
     However, if your view class needs to do a lot of complex initialization, 
     doing it for every request is unnecessary and can be inefficient. To avoid this, set View.init_every_request to False, 
