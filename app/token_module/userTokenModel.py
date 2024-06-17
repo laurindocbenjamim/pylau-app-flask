@@ -46,10 +46,9 @@ class UserToken(db.Model):
         token = generate_token(username)
         try:
             obj = UserToken.query.filter_by(username=username).first_or_404()
-            #obj.user_id = user_id
-            obj.username = username
             obj.token = token
-            db.session.merge(obj)
+            obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
+            #db.session.merge(obj)
             db.session.commit()
             return True, obj
         except SQLAlchemyError as e:
@@ -70,6 +69,20 @@ class UserToken(db.Model):
             db.session.rollback()
             return False
 
+    # Delete a token by the token_id
+    def delete_token_by_id(token_id):
+        try:
+            token = UserToken.query.filter_by(token_id=token_id).first_or_404()
+            db.session.delete(token)
+            db.session.commit()
+            return True
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False
+        except Exception as e:
+            db.session.rollback()
+            return False
+        
     # This method is used to get a token by the token 
     def get_token_by_token(token):
         try:

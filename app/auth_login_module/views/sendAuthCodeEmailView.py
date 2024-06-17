@@ -1,11 +1,10 @@
-
+from datetime import datetime, timezone
 from flask.views import View
 
 from markupsafe import escape
 from flask import request, session, current_app, redirect, url_for, flash, jsonify
 from ...send_email_module.factory.otp_code_account_message_html import get_otp_code_message_html
 from ...send_email_module.factory.emailcontroller import send_simple_email_mime_multipart
-from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
 
 class SendAuthCodeEmailView(View):
     """
@@ -48,12 +47,14 @@ class SendAuthCodeEmailView(View):
             
             # Check if the token is expired
             if status:
+                #exp = datetime.now(tz=timezone.utc).replace(tzinfo=None) > token.date_exp.replace(tzinfo=None)
+                #return jsonify({'status': True, 'token': escape(user_token), 'exp': exp})
                 if self.userToken.is_token_expired(token):
-                    flash('Token is expired!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    flash('Unauthorized authentication!', 'danger')
+                    return redirect(url_for('auth.user.login'))
             else:
-                flash('Token required!', 'danger')
-                return redirect(url_for('auth.register'))
+                flash('Unauthorized authentication!', 'danger')
+                return redirect(url_for('auth.user.login'))
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)
 
@@ -76,7 +77,7 @@ class SendAuthCodeEmailView(View):
 
                     if res:
                         flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
-                        return redirect(url_for('email.2facodeverify', user_token=escape(user_token)))
+                        return redirect(url_for('auth.user.verify-otp', user_token=escape(user_token)))
                     else:
                         flash('Failed to send code to the email.', 'error')
                 else:
@@ -86,7 +87,7 @@ class SendAuthCodeEmailView(View):
                 flash('User not identified!', 'danger')         
         
 
-        return redirect(url_for('auth.register'))
+        return redirect(url_for('auth.user.login'))
             
     
 

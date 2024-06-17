@@ -8,8 +8,9 @@ def load_routes(app, db, login_manager):
     
      # Main route
     @app.route('/')
-    def index():
-        return render_template('site_home.html')
+    @app.route('/<string:user_token>')
+    def index(user_token=None):
+        return render_template('site_home.html', user_token=user_token)
     
     from .views.error_handlers_view import error_handlers_view
     error_handlers_view(app)

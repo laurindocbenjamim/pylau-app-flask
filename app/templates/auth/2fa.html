@@ -159,8 +159,13 @@
               </div>
             </div>
             <br>
+            {% if origin and origin=='login_auth_email' %}
+            <p>Request a <a href="{{ url_for('auth.user.send-otp-email', user_token=user_token) }}">new code to login</a></p>
+            {% elif origin and origin=='login_auth_app' %}
+            <p>Request a <a href="{{ url_for('auth.user.send-otp-email', user_token=user_token) }}">new code to login</a></p>            
+            {% else %}
             <p>Request a <a href="{{ url_for('email.2facodesend', user_token=user_token) }}">new code</a></p>
-
+            {% endif %}
             <hr class="my-4">
             
             <div class="col-12">               

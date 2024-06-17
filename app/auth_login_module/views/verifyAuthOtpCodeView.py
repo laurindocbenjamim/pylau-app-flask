@@ -25,10 +25,11 @@ class VerifyAuthOtpCodeView(View):
 
     methods = ['GET', 'POST']
     
-    def __init__(self, userToken, userModel, twoFaModel, template):
+    def __init__(self, userToken, userModel, twoFaModel, AuthUserHistoric, template):
         self.userToken = userToken
         self.userModel = userModel
         self.twoFaModel = twoFaModel
+        self.AuthUserHistoric = AuthUserHistoric
         self.template = template
     
     def dispatch_request(self, user_token):
@@ -55,10 +56,10 @@ class VerifyAuthOtpCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Token is expired!', 'danger')
+                    flash('Unauthorized authentication!', 'danger')
                     return redirect(url_for('auth.register'))
             else:
-                flash('Token required!', 'danger')
+                flash('Unauthorized authentication!', 'danger')
                 return redirect(url_for('auth.register'))
             
         if request.method == 'POST' and user_token is not None:
@@ -68,11 +69,11 @@ class VerifyAuthOtpCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Token is expired!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    flash('Unauthorized authentication!', 'danger')
+                    return redirect(url_for('auth.user.login'))
             else:
-                flash('Token required!', 'danger')
-                return redirect(url_for('auth.register'))
+                flash('Unauthorized authentication!', 'danger')
+                return redirect(url_for('auth.user.login'))
             
             
             code = request.form.get('otpcode',None)
@@ -89,10 +90,20 @@ class VerifyAuthOtpCodeView(View):
                     totp = self.twoFaModel.generate_otp(accountname=user.email, secret=secret, interval=otp_time_interval)
                     otpstatus =  totp.verify(code)
                     
-                    if otpstatus:                   
+                    if otpstatus:     
+                        #resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')             
                         session['user_token'] = escape(user_token)
+                        user_object = {
+                            'user_id': user.userID,
+                            'email': user.email,
+                            'lastname': user.lastname,
+                            'firstname': user.firstname,
+                            'active': user.active
+                        }
                         flash('Code verified successful', 'success')
-                        return redirect(url_for('email.activate_send', user_token=escape(user_token))) 
+                        login_user(user)
+                        g.user = user_object
+                        return redirect(url_for('index', user_token=escape(user_token))) 
                     else:
                         flash('Code verification failed', 'error')
                 else:
@@ -100,6 +111,8 @@ class VerifyAuthOtpCodeView(View):
             else:
                 flash(f'User not identified', 'error')
         
-        return render_template(self.template, title='Code verification', user_token=escape(user_token))
+        return render_template(self.template, title='Code verification', origin='login_auth_email', user_token=escape(user_token))
             
+    
+
     

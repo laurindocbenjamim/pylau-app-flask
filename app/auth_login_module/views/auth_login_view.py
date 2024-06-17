@@ -39,10 +39,9 @@ class AuthLoginView(View):
                                 if user.is_active() == True:
                                     
                                     # generate a secret code for the user
-                                    #status, two_fa = self.TwoFaModel.update_secret_two_fa_data(user.userID)  
-                                    st_t, u_token = self.UserTokenModel.update_token(user.userID, user.email)              
-                                    
-                                    if st_t and u_token:
+                                    status, u_token = self.UserTokenModel.update_token(user.userID, user.email)              
+                                    #return jsonify({'status': u_token, 'message': u_token.exp_date, 'user_token': u_token.token})
+                                    if status and u_token:
                                         # Create an object of the TwoFAModel class
                                         flask.session['user_token'] = u_token.token
                                         flask.session['user_id'] = user.userID
@@ -56,7 +55,7 @@ class AuthLoginView(View):
                                         if two_fa.method_auth == 'app':
                                              return redirect(url_for('email.2fappqrcodeverify'))
                                         elif two_fa.method_auth == 'email':
-                                            return redirect(url_for('email.2facodesend')) 
+                                            return redirect(url_for('auth.user.send-otp-email', user_token=u_token.token)) 
                             
                                 logout_user()
                                 flask.flash('This user is not activated', 'danger')
