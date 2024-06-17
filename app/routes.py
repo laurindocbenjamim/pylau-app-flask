@@ -10,6 +10,9 @@ def load_routes(app, db, login_manager):
     @app.route('/')
     @app.route('/<string:user_token>')
     def index(user_token=None):
+        if user_token is not None:
+            session['user_token'] = user_token
+            #return jsonify({'message': 'User token set successfully'}), 200
         return render_template('site_home.html', user_token=user_token)
     
     from .views.error_handlers_view import error_handlers_view

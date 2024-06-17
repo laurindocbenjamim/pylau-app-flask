@@ -15,6 +15,12 @@ class AuthRegisterView(View):
         self.twoFaModel = twoFaModel
 
     def dispatch_request(self):
+
+        # Check if the user is already logged in
+        if 'user_token' in session:
+            if session['user_token'] :
+                return redirect(url_for('index', user_token=session['user_token']))
+            
         if request.method == 'POST':
 
             # Validate form fields

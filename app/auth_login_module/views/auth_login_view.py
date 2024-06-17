@@ -1,7 +1,7 @@
 import flask
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from flask.views import View
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, request, session, redirect, url_for, flash, jsonify
 from ..controller.authController import validate_form_fields
 
 class AuthLoginView(View):
@@ -14,6 +14,13 @@ class AuthLoginView(View):
         self.template = template
 
     def dispatch_request(self):
+
+        # Check if the user is already logged in
+        if 'user_token' in session:
+            if session['user_token'] :
+                return redirect(url_for('index', user_token=session['user_token']))
+
+        # Check if the user is already logged in
         if request.method == 'POST':
             if validate_form_fields(request.form):
                 
@@ -53,7 +60,7 @@ class AuthLoginView(View):
                                         flask.session['origin_request'] = 'signin'
 
                                         if two_fa.method_auth == 'app':
-                                             return redirect(url_for('email.2fappqrcodeverify'))
+                                             return redirect(url_for('auth.user.app-otp-verify', user_token=u_token.token))
                                         elif two_fa.method_auth == 'email':
                                             return redirect(url_for('auth.user.send-otp-email', user_token=u_token.token)) 
                             

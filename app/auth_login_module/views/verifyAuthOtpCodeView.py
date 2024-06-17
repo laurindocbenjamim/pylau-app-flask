@@ -91,8 +91,10 @@ class VerifyAuthOtpCodeView(View):
                     otpstatus =  totp.verify(code)
                     
                     if otpstatus:     
-                        #resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')             
+                        resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')             
                         session['user_token'] = escape(user_token)
+                        session['user_id'] = escape(user.userID)
+                        session['email'] = escape(user.email)
                         user_object = {
                             'user_id': user.userID,
                             'email': user.email,
@@ -111,7 +113,7 @@ class VerifyAuthOtpCodeView(View):
             else:
                 flash(f'User not identified', 'error')
         
-        return render_template(self.template, title='Code verification', origin='login_auth_email', user_token=escape(user_token))
+        return render_template(self.template, title='Code verification', form_title='Enter the code sent to your email', origin='login_auth_email', user_token=escape(user_token))
             
     
 

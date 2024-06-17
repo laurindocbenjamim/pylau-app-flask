@@ -2,10 +2,12 @@ import flask
 from flask import render_template, jsonify
 
 from .auth_login_view import AuthLoginView
+from .logoutView import LogoutView
 from ...token_module.userTokenModel import UserToken
 from ...two_factor_auth_module.twoFAModel import TwoFAModel
 from .sendAuthCodeEmailView import SendAuthCodeEmailView
 from .verifyAuthOtpCodeView import VerifyAuthOtpCodeView
+from .verifyAppAuthCodeView import VerifyAppAuthCodeView
 from .authUserHistoric import AuthUserHistoric
 
 from flask_login import logout_user, login_user
@@ -42,11 +44,14 @@ def init_app(login_manager, db):
     bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users, UserToken, TwoFAModel,  template='auth/auth.html'))
     bp_auth.add_url_rule('/send-otp/email/<string:user_token>', view_func=SendAuthCodeEmailView.as_view('send-otp-email', UserToken, Users, TwoFAModel, template='auth/2fa.html'))
     bp_auth.add_url_rule('/otp/verify/<string:user_token>', view_func=VerifyAuthOtpCodeView.as_view('verify-otp',  UserToken, Users, TwoFAModel, AuthUserHistoric, template='auth/2fa.html'))
-
+    bp_auth.add_url_rule('/app-otp/verify/<string:user_token>', view_func=VerifyAppAuthCodeView.as_view('app-otp-verify',  UserToken, Users, TwoFAModel, AuthUserHistoric, template='auth/2fa.html'))
+    bp_auth.add_url_rule('/logout/<string:user_token>', view_func=LogoutView.as_view('logout', UserToken))
     # Logout route
-    @bp_auth.route('/logout')
-    def logout():
-        flask.session.clear()
-        logout_user()
-        return flask.redirect(flask.url_for('auth.user.login'))
+    #@bp_auth.route('/logout')
+    #def logout():
+        #AuthUserHistoric().update_auth_user(flask.session.get('user_id'), flask.session.get('email'), False)
+        #flask.session.clear()
+        #logout_user()
+        
+        #return flask.redirect(flask.url_for('auth.user.login'))
 

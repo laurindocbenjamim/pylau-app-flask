@@ -266,7 +266,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">My account</a></li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ url_for('auth.user.logout')}}" style="color: #c8233e;">
+                                    <a class="dropdown-item" href="{{ url_for('auth.user.logout', user_token=user_token)}}" style="color: #c8233e;">
                                     Logout</a>
                                 </li>
                             </ul>

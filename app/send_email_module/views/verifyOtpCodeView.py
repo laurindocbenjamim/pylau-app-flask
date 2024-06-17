@@ -100,6 +100,6 @@ class VerifyOtpCodeView(View):
             else:
                 flash(f'User not identified', 'error')
         
-        return render_template(self.template, title='Code verification', user_token=escape(user_token))
+        return render_template(self.template, title='Code verification', form_title='Enter the code sent to your email', user_token=escape(user_token))
             
     

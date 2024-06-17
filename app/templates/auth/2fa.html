@@ -142,11 +142,15 @@
     <form class="needs-validation form-register" method="post" id="form-register" novalidate>
 
         <div class="col-lg-12">
-          <div class="g-3">             
+          <div class="g-3">           
          
       
             <div class="col-12">
+              {% if form_title %}
+              <label for="otpcode" class="form-label">{{form_title}}</label>
+              {% else %}
               <label for="otpcode" class="form-label">Code</label>
+              {% endif %}
               <div class="input-group has-validation">
                 <span class="input-group-text">@</span>
                 <input type="text" class="form-control" id="otpcode" name="otpcode" 
