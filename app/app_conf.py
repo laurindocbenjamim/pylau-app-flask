@@ -4,7 +4,7 @@ import pyotp
 
 def set_app_config(app):   
     
-    app.config['CORS_HEADERS'] = 'Content-Type'
+    #app.config['CORS_HEADERS'] = 'Content-Type'
 
     """
     The provided code is from a file called app_conf.py and it contains a line of code that sets the value of the OTP_SECRET_KEY variable using the os.getenv() function and secrets.token_urlsafe() function.
@@ -24,11 +24,12 @@ In summary, the code retrieves the value of the environment variable 'OTP' using
 
     #app.config.from_object(os.getenv('FLASK_CONFIG', 'configs.config.DevelopmentConfig'))
     app.config.from_mapping(
-        SECRET_KEY= os.getenv('SECRET_KEY', secrets.token_urlsafe(32)), # KEY GENERATED WITH secrets.token_urlsafe(32) 32 byts
-        OTP_SECRET_KEY=os.getenv('OTP_SECRET_KEY', pyotp.random_base32()), 
+        SECRET_KEY= 'GvkxD-8YsYKKpwZOODi9pBKtm3wr_0TP5enjETS6ZC8', #os.getenv('SECRET_KEY', secrets.token_urlsafe(32)), # KEY GENERATED WITH secrets.token_urlsafe(32) 32 byts
+        OTP_SECRET_KEY= '3UCJZNMYCJP36IDL3RI2AWLQNU6O6TMN' #os.getenv('OTP_SECRET_KEY', pyotp.random_base32()), 
     )
 
     # Set Email configurations
+    """
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_SERVER']= 'live.smtp.mailtrap.io'
     app.config['MAIL_PORT'] = 587
@@ -36,4 +37,5 @@ In summary, the code retrieves the value of the environment variable 'OTP' using
     app.config['MAIL_PASSWORD'] = 'jgtkeopkbwoxkjoo'
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
+    """
     

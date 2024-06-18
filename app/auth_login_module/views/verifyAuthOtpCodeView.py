@@ -91,20 +91,26 @@ class VerifyAuthOtpCodeView(View):
                     otpstatus =  totp.verify(code)
                     
                     if otpstatus:     
-                        resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')             
-                        session['user_token'] = escape(user_token)
-                        session['user_id'] = escape(user.userID)
-                        session['email'] = escape(user.email)
-                        user_object = {
-                            'user_id': user.userID,
-                            'email': user.email,
-                            'lastname': user.lastname,
-                            'firstname': user.firstname,
-                            'active': user.active
-                        }
-                        flash('Code verified successful', 'success')
+
+                        resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')
+                                     
+                        status, user = self.userModel.get_user_by_id(user.userID)
+                        session['user_id'] = user.userID
+                        session['firstname'] = user.firstname
+                        session['lastname'] = user.lastname
+                        session['email'] = user.email
+                        session['country'] = user.country
+                        session['country_code'] = user.country_code
+                        session['phone'] = user.phone
+                        session['active'] = user.active
+                        session['role'] = user.role
+                        session['date_added'] = user.date_added
+                        session['date_updated'] = user.date_updated
+                        session['user_token'] = token.token
+                        
                         login_user(user)
-                        g.user = user_object
+                        g.user = user  
+                        flash('Code verified successful', 'success')
                         return redirect(url_for('index', user_token=escape(user_token))) 
                     else:
                         flash('Code verification failed', 'error')

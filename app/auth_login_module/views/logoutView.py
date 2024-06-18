@@ -19,7 +19,9 @@ class LogoutView(View):
                 
             logout_user()
             session.clear()
-
+            session.pop('username', None)
+            session.pop('user_token', None)
+            session.pop('username', None)
         else:
             return jsonify({'message': 'User token is required'}), 400
         return redirect(url_for('auth.user.login'))

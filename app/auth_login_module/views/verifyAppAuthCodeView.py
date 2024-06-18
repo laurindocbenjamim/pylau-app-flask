@@ -96,27 +96,30 @@ class VerifyAppAuthCodeView(View):
                         
                     if otpstatus:
                         
-                        user = self.userModel.get_user_by_id(user.userID)
-                        l_user = self.userModel.get_limited_user_object({
-                            'userID': user.userID,
-                            'firstname': user.firstname,
-                            'lastname': user.lastname,
-                            'email': user.email,
-                            'country': user.country,
-                            'country_code': user.country_code,
-                            'phone': user.phone,
-                            'active': user.active,
-                            'role': user.role,
-                            'date_added': user.date_added,
-                            'date_updated': user.date_updated
-                        })
+                        resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')
+                        
+                        status, user = self.userModel.get_user_by_id(user.userID)
+                        session['user_id'] = user.userID
+                        session['firstname'] = user.firstname
+                        session['lastname'] = user.lastname
+                        session['email'] = user.email
+                        session['country'] = user.country
+                        session['country_code'] = user.country_code
+                        session['phone'] = user.phone
+                        session['active'] = user.active
+                        session['role'] = user.role
+                        session['date_added'] = user.date_added
+                        session['date_updated'] = user.date_updated
+                        session['user_token'] = token.token
+                        
                         login_user(user)
                         g.user = user  
 
                         return redirect(url_for('index', user_token=token.token))
                     else:
                         flash('Invalid code detected', 'error')
-                flash(f'User not identified.', 'error')       
+                else:
+                    flash(f'User not identified.', 'error')       
             else:
                 flash(f'User not identified.', 'error')
 

@@ -18,7 +18,7 @@ class AuthRegisterView(View):
 
         # Check if the user is already logged in
         if 'user_token' in session:
-            if session['user_token'] :
+            if session['user_token'] != 'favicon.ico':
                 return redirect(url_for('index', user_token=session['user_token']))
             
         if request.method == 'POST':

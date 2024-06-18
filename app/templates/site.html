@@ -11,7 +11,6 @@
     <meta name="generator" content="Laurindo C.Benjamim">
     <title>{% block title %} {% endblock %} - Tuning</title>
 
-    <!--<link href="{{ url_for('static', filename='assets/img/favicon/favicon.ico') }}" rel="icon">-->
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/offcanvas-navbar/">
 
@@ -262,12 +261,18 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                                aria-expanded="false">{{ current_user.email}}</a>
+                                aria-expanded="false">
+                                <i class="fa-regular fa-circle-user"></i>
+                                {{ current_user.email}}
+                            </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">My account</a></li>
+                                <li><a class="dropdown-item" href="#">{{current_user.userID}}#{{current_user.firstname}} {{current_user.lastname}}</a></li>
+                                <li><a class="dropdown-item" href="#">{{current_user.country}}</a></li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ url_for('auth.user.logout', user_token=user_token)}}" style="color: #c8233e;">
-                                    Logout</a>
+                                    {% if 'user_token' in session %}
+                                    <a class="dropdown-item" href="{{ url_for('auth.user.logout', user_token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9ja2V0bWMyMDA5QGdtYWlsLmNvbSIsImV4cCI6MTcxODY4NjY1NCwibmJmIjoxNzE4Njg0ODU0fQ.YLCXNuv5DqPZbF2Hd3nwkhS3d8s7JwNgPOg1-ion2rs')}}" style="color: #c8233e;">
+                                        Logout</a>
+                                    {% endif %}
                                 </li>
                             </ul>
                         </li>

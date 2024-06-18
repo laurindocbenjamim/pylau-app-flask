@@ -23,3 +23,6 @@ flask-talisman
 hvac #install vault
 pycryptodome
 geocoder
+
+#
+bs4

@@ -13,6 +13,7 @@ def load_routes(app, db, login_manager):
         return Users.query.get(int(user_id))
        
     
+    """
     @login_manager.request_loader
     def request_loader(request):
         email = request.form.get('username')
@@ -24,16 +25,23 @@ def load_routes(app, db, login_manager):
                 if 'user_token' in session:
                     return redirect(url_for('index', user_token=session['user_token']))   
         return 
+    """
     
 
      # Main route
     @app.route('/')
     @app.route('/<string:user_token>')
+    @cross_origin(methods=['GET'])
     def index(user_token=None):
         if user_token is not None:
             session['user_token'] = user_token
+            if user_token == 'favicon.ico': 
+                session.pop('user_token', None)
+                user_token = ''
         elif 'user_token' in session:
+            if session['user_token'] == 'favicon.ico': session.pop('user_token', None)
             user_token = session['user_token']
+        #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
         return render_template('site_home.html', user_token=user_token)
     
     from .views.error_handlers_view import error_handlers_view

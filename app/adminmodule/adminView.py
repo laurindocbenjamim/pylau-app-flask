@@ -25,6 +25,12 @@ class AdminView(View):
                 flash('Unauthorized authentication!', 'danger')
                 return redirect(url_for('auth.user.login'))
             
+            if 'user_id' not in session:
+                session.clear()
+                logout_user()
+                flash('Unauthorized authentication!', 'danger')
+                return redirect(url_for('auth.user.login'))
+            
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)
 
@@ -33,8 +39,8 @@ class AdminView(View):
             if status and user is not None:
                 
                 if user.email == token.username:
-                    session['user_token'] = escape(user_token)
-                    session['user_id'] = escape(user.userID)
-                    session['email'] = escape(user.email)
+                    session['user_token'] = token.token
+                    session['user_id'] = user.userID
+                    session['email'] = user.email
                    
-                    return render_template(self.template, user=user)
+                    return render_template(self.template, user=user, user_token=token.token)

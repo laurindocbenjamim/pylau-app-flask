@@ -203,21 +203,21 @@ class Users(UserMixin, db.Model):
     def get_user_by_id(id):
         try:
             user = Users.query.filter_by(userID=id).first()
-            return user
+            return True, user
         except SQLAlchemyError as e:
-            return str(e)
+            return False, str(e)
         except Exception as e:
-            return str(e)
+            return False, str(e)
 
     # This method selects the user by phone.
     def get_user_by_phone(phone):
         try:
             user = Users.query.filter_by(phone=phone).first_or_404()
-            return user
+            return True, user
         except SQLAlchemyError as e:
-            return str(e)
+            return False, str(e)
         except Exception as e:
-            return str(e)
+            return False, str(e)
         
     def check_email_exists(email):
         user = Users.query.filter_by(email=email).first()

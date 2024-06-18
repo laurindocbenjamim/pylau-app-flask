@@ -227,10 +227,44 @@
       </button>
     </li>
   </ul>
+  
+  
 
   <div id="navbarSearch" class="navbar-search w-100 collapse">
     <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   </div>
+  
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-regular fa-circle-user"></i>
+      {% if current_user %}
+        {{ current_user.username }}
+      {% else %}
+        Sign in
+      {% endif %}
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">
+          {% if 'firstname' and 'lastname' in session %}
+          <i class="fa-solid fa-check"></i>
+            {{ session['firstname'] }} {{ session['lastname'] }}
+          {% endif %}
+
+        </a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('auth.user.logout', user_token=user_token)}}" style="color: #fa4242;">Logout</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  
+  
 </header>
 
 <div class="container-fluid">
