@@ -1,10 +1,11 @@
 import mysql.connector
 
 # Replace the placeholders with your actual database credentials
-host = 'herokupylau' #185.12.116.142
+host = '185.12.116.142'  #185.12.116.142/herokupylau
 user = 'iledmdpt_admin'
-password = '#h*zvXb+S6?;'
-database = '#h*zvXb+S6?;'
+password = 'takagEw5FVpy'
+database = 'iledmdpt_octech'
+port = 3306
 #connection = None
 # Establish a connection to the database
 try:
@@ -12,12 +13,17 @@ try:
         host=host,
         user=user,
         password=password,
-        database=database
+        database=database,
+        port=int(port)
     )
     print("Connection established successfully!")
     
     # Perform database operations here
-    
+    #print("Database version:", connection.get_server_info())
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("select * from users;")
+    resp = cursor.fetchall()
+    print(resp)
 except mysql.connector.Error as error:
     print("Error while connecting to the database:", error)
 except Exception as e:

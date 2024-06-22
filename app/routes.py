@@ -55,7 +55,7 @@ def load_routes(app, db, login_manager):
         t_key = secrets.token_urlsafe(32)
         otp_secret = pyotp.random_base32()
             
-        return {'token_secret': t_key, 'otp_secret': otp_secret}
+        return jsonify({'token_secret': t_key, 'otp_secret': otp_secret})
     
     # Integrating the blueprints parent and child into the application
 
