@@ -13,30 +13,25 @@ with_length = "https://www.iban.com/dialing-codes"
 url = "https://countrycode.org/"
 
 
-def extract_countries_2(url):
+def extract_countries(url):
     count = 0
     data_dict = {}
+    tables_list = []
     if url is None:
         return None
 
     df = pd.DataFrame()
     columns = []
-    html_page = requests.get(url).text
-    data_soup = BeautifulSoup(html_page, "html.parser")
+    rows = []
 
-    extract_tables(url)
+    tables = extract_tables(url)
 
-    table = data_soup.find_all("table")
-    thead = data_soup.find_all("thead")
-    tr = data_soup.find_all("tr")
-    tbody = data_soup.find_all("tbody")
-    rows = tbody[0].find_all("tr")
-
-    print(f"Tables: {len(table)}")
-
-   
-
-    columns = get_each_head_item(thead)
+    if len(tables) > 0:
+        for table in tables:
+            thead, tbody, rows, columns = extract_table_data(table, df)
+            tables_list.append([thead, tbody, rows, columns])
+            break
+        
 
     if rows is not None and len(rows) > 0:
         for row in rows:
@@ -51,7 +46,6 @@ def extract_countries_2(url):
                             
                             if len(col) == len(columns):
                                 item = get_each_tbody_item(col, a)
-                                #print(f"{a} - {'N/A' if item is None else item}")
                                 myList.append('null' if item is None else item)
                                 data_dict[columns[a]] = 'N/A' if item is None else item
                                 
@@ -80,10 +74,16 @@ def extract_countries_2(url):
                 break
 
         return df
+        
     
     print(data_dict)
     return None
 
+
+"""
+Fisrt function to extract the tables
+from the url
+"""
 def extract_tables(url):
   
     if url is None:
@@ -98,6 +98,29 @@ def extract_tables(url):
     
     return []
 
+
+"""
+Second function to extract the data from the tables like
+thead, tbody, rows and columns
+"""
+def extract_table_data(table, df):
+    count = 0
+    columns = []
+    if table is None:
+        return None
+    
+    thead = table.find_all("thead")    
+    tbody = table.find_all("tbody")
+    rows = tbody[0].find_all("tr")
+    # Extract the columns
+    columns = get_each_head_item(thead)
+
+    return thead, tbody, rows, columns
+
+
+"""
+This function will extract the columns items from the thead
+"""
 def get_each_head_item(thead):
     columns = []
     try:
@@ -117,6 +140,11 @@ def get_each_head_item(thead):
         return None
     return None
 
+
+"""
+This function will extract the column items from the tbody rows
+
+"""
 def get_each_tbody_item(list, index):
     try:
         return list[index].contents[0].text
@@ -124,9 +152,10 @@ def get_each_tbody_item(list, index):
         return None
     except Exception as e:
         return None
-    
+
+
 print("\n")
-print("Second function")
+print("==================== EXTRACTED DATA FROM THE URL: {}\n".format(url))
 print("\n")
-df = extract_countries_2(url)
-print(df.head(20))
+#df = extract_countries(url)
+#print(df)

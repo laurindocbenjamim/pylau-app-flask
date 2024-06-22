@@ -78,3 +78,6 @@ def load_routes(app, db, login_manager):
 
     from .test_forms.bp_form import bp as bp_form
     app.register_blueprint(bp_form)
+
+    from .web_scrappin_module.bp_web_scrapping_view import bp as bp_web_scrapping_view
+    app.register_blueprint(bp_web_scrapping_view)
