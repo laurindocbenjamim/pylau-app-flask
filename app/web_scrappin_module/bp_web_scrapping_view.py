@@ -13,5 +13,9 @@ def get_countries():
     url = "https://countrycode.org/"
 
     df = extract_countries(url)
-    serialized_data = df.to_json()
-    return jsonify({"obj":  serialized_data})
+    #serialized_data = df.to_json(orient='records', date_format='iso')
+    data = []
+    for i, row in df.iterrows():
+        data.append(dict(row))
+    
+    return jsonify({"obj":  data })

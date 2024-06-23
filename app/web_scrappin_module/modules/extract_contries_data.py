@@ -154,8 +154,14 @@ def get_each_tbody_item(list, index):
         return None
 
 
+"""
 print("\n")
 print("==================== EXTRACTED DATA FROM THE URL: {}\n".format(url))
 print("\n")
-#df = extract_countries(url)
-#print(df)
+df = extract_countries(url)
+keys = df.keys()
+data = []
+for i, row in df.iterrows():
+    data.append(dict(row))
+print(data)
+"""
