@@ -46,7 +46,7 @@ def extract_countries(url):
                             
                             if len(col) == len(columns):
                                 item = get_each_tbody_item(col, a)
-                                myList.append('null' if item is None else item)
+                                myList.append('null' if item is None or item == '' else item)
                                 data_dict[columns[a]] = 'N/A' if item is None else item
                                 
                             else:
