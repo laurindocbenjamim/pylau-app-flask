@@ -14,8 +14,8 @@ class AuthLoginView(View):
         self.template = template
 
     def dispatch_request(self):
-        logout_user()
-        session.clear()
+        #logout_user()
+        #session.clear()
         # Check if the user is already logged in
         
         if 'user_token' in session:
