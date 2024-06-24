@@ -26,6 +26,11 @@ def load_routes(app, db, login_manager):
                     return redirect(url_for('index', user_token=session['user_token']))   
         return 
     """
+
+    @app.route('/clear-sessions')
+    def clear_sessions():
+        session.clear
+        return redirect(url_for('index'))
     
 
      # Main route
