@@ -3,7 +3,7 @@ from typing import Any
 from flask.views import View
 
 from markupsafe import escape
-from flask import request, render_template, session, redirect, url_for, flash, jsonify
+from flask import request, render_template, abort, session, redirect, url_for, flash, jsonify
 from ..factory.activate_account_message_html import get_activate_account_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 
@@ -44,10 +44,10 @@ class SendActivateEmailView(View):
             if status:
                 if self.userToken.is_token_expired(token):
                     flash('Unauthorized session!', 'danger')
-                    return render_template('errors/403.html')
+                    abort(403)
             else:
                 flash('Unauthorized session!', 'danger')
-                return render_template('errors/403.html')
+                abort(403)
             
             
             # Get the user details using the email address

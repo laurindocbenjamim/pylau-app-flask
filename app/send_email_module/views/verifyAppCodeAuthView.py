@@ -5,7 +5,7 @@ from datetime import date
 from markupsafe import escape
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template,current_app, g, session, request, redirect, url_for, flash, jsonify
+from flask import render_template, abort,current_app, g, session, request, redirect, url_for, flash, jsonify
 
 from ...token_module.userTokenModel import UserToken
 
@@ -53,9 +53,13 @@ class VerifyAppCodeAuthView(View):
         if request.method == 'POST' and user_token is not None:
             status, token = self.userToken.get_token_by_token(escape(user_token))
             # Check if the token is expired
-            if status and self.userToken.is_token_expired(token):
-                flash('Token is expired!', 'danger')
-                return redirect(url_for('auth.register'))
+            if status:
+                if self.userToken.is_token_expired(token):
+                    flash('Token is expired!', 'danger')
+                    abort(403)
+            else:
+                flash('Token required!', 'danger')
+                abort(403)
             
             # Check if the token is already used
             code = request.form.get('otpcode',None)

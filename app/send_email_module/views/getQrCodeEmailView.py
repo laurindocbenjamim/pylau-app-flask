@@ -5,7 +5,7 @@ from typing import Any
 from flask.views import View
 
 from markupsafe import escape
-from flask import render_template, current_app, session, request, redirect, url_for, flash, jsonify
+from flask import render_template, abort, current_app, session, request, redirect, url_for, flash, jsonify
 from ..factory.otp_qr_code_account_message_html import get_otp_qr_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -66,7 +66,7 @@ class GetQrCodeEmailView(View):
             # Check if the token is expired
             if status and self.userToken.is_token_expired(token):
                 flash('Token is expired!', 'danger')
-                return redirect(url_for('auth.register'))
+                abort(403)
             
             if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'origin_request' and 'lastname' and 'email' in session:
                 

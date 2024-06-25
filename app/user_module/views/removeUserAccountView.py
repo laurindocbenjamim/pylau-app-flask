@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user
 from typing import Any
 from flask.views import View
 
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, abort, request, redirect, url_for, flash, jsonify
 from markupsafe import escape
 from ..controller.userController import load_user_obj, validate_form_fields
 
@@ -25,10 +25,10 @@ class RemoveUserAccountView(View):
             if status and token is not None:
                 if self.userToken.is_token_expired(token):
                     flash('Unauthorized authentication!', 'danger')
-                    return render_template('errors/403.html')
+                    abort(403)
             else:
                 flash('Unauthorized authentication!', 'danger')
-                return render_template('errors/403.html')
+                abort(403)
             
             #return jsonify({'status': 'success', 'message': self.userToken.is_token_expired(token), 'user_token': escape(user_token)})
             # Get the user details using the email address

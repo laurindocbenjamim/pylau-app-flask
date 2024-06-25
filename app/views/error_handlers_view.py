@@ -30,14 +30,14 @@ def error_handlers_view(app):
 
     @app.errorhandler(401)
     def handle_unauthorized_error(e):
-        image=image='https://media.giphy.com/media/3o7aTskHEUdgCQAXde/giphy.gif'
+        image=image='https://www.asktheegghead.com/wp-content/uploads/2019/12/401-error-wordpress-featured-image.jpg'
         resp = make_response(render_template('errors/401.html', message="Unauthorized", image=image, error=401), 401)
         resp.headers['X-Something'] = 'Unauthorized'
         return resp
 
     @app.errorhandler(403)
     def handle_forbidden_error(e):
-        image='https://media.giphy.com/media/3o7aTskHEUdgCQAXde/giphy.gif'
+        image='https://www.online-tech-tips.com/wp-content/uploads/2021/06/http-403.jpeg'
         resp = make_response(render_template('errors/403.html', message="Forbidden", image=image, error=403), 403)
         resp.headers['X-Something'] = 'Forbidden'
         return resp

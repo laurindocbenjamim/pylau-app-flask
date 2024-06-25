@@ -2,7 +2,7 @@
 from flask.views import View
 
 from markupsafe import escape
-from flask import request, session, current_app, redirect, url_for, flash, jsonify
+from flask import request, abort, session, current_app, redirect, url_for, flash, jsonify
 from ..factory.otp_code_account_message_html import get_otp_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -50,10 +50,10 @@ class SendCodeEmailView(View):
             if status:
                 if self.userToken.is_token_expired(token):
                     flash('Token is expired!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    abort(403)
             else:
                 flash('Token required!', 'danger')
-                return redirect(url_for('auth.register'))
+                abort(403)
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)
 

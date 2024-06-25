@@ -3,7 +3,7 @@
 from flask.views import View
 from flask_login import login_user, logout_user
 from markupsafe import escape
-from flask import render_template, session, request, current_app, g, redirect, url_for, flash, jsonify
+from flask import render_template, abort, session, request, current_app, g, redirect, url_for, flash, jsonify
 
 
 class VerifyOtpCodeView(View):
@@ -56,10 +56,10 @@ class VerifyOtpCodeView(View):
             if status:
                 if self.userToken.is_token_expired(token):
                     flash('Token is expired!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    abort(403)
             else:
                 flash('Token required!', 'danger')
-                return redirect(url_for('auth.register'))
+                abort(403)
             
         if request.method == 'POST' and user_token is not None:
 
@@ -69,10 +69,10 @@ class VerifyOtpCodeView(View):
             if status:
                 if self.userToken.is_token_expired(token):
                     flash('Token is expired!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    abort(403)
             else:
                 flash('Token required!', 'danger')
-                return redirect(url_for('auth.register'))
+                abort(403)
             
             
             code = request.form.get('otpcode',None)

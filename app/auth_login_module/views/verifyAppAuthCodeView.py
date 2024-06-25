@@ -5,7 +5,7 @@ from datetime import date
 from markupsafe import escape
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template,current_app, g, session, request, redirect, url_for, flash, jsonify
+from flask import render_template, abort,current_app, g, session, request, redirect, url_for, flash, jsonify
 
 from ...token_module.userTokenModel import UserToken
 from ...user_module.model.users import Users
@@ -60,10 +60,10 @@ class VerifyAppAuthCodeView(View):
             if status:
                 if self.userToken.is_token_expired(token):
                     flash('Unauthorized authentication!', 'danger')
-                    return render_template('errors/403.html')
+                    abort(403)
             else:
                 flash('Unauthorized authentication!', 'danger')
-                return render_template('errors/403.html')
+                abort(403)
                  
         if request.method == 'POST' and user_token is not None:
 
