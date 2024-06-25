@@ -3,7 +3,7 @@ from typing import Any
 from flask.views import View
 
 from markupsafe import escape
-from flask import request, session, redirect, url_for, flash, jsonify
+from flask import request, render_template, session, redirect, url_for, flash, jsonify
 from ..factory.activate_account_message_html import get_activate_account_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 
@@ -65,7 +65,7 @@ class SendActivateEmailView(View):
                     html = get_activate_account_message_html(str(firstname)+" "+str(lastname), token.token, time_remaining)
                     res = send_simple_email_mime_multipart('Activate account', str(email), html, False)
                     flash('An email has been sent to your email address. Please check your email to activate your account.', 'success')
-                    return redirect(url_for('auth.user.login'))
+                    return render_template('activate_email_sent.html', firstname=firstname, lastname=lastname,email=email)
                 else:
                     flash('Invalid user', 'danger')
             else:

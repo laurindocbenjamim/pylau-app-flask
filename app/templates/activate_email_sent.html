@@ -33,9 +33,15 @@
           Welcome to Data Management and Analysis Consulting
         </h2>
         
-        <h4 >
-           Your account was activated successfull
-          </h4>
+        <p>
+          <h4 >
+            An email has been sent to 
+            {% if email %}
+             {{ email }}
+            {% endif %}
+            . Check the message to activate your account
+           </h4>
+        </p>
         {% if firstname %}
         <h3 class="title" style="color: #4afc53;margin-top:5%;">
           {{ firstname}} {{ lastname}}
