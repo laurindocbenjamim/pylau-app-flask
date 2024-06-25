@@ -1,0 +1,34 @@
+{% extends 'errors/baserror.html' %}
+{% block header %}
+{% block title %} 
+
+{% if error %}
+    {{ error }}
+{% else %}
+    Something went wrong - 
+{% endif %}
+
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-5">Oops! 
+            {% if message %}
+                {{ message }}
+            {% else %}
+                Something went wrong
+            {% endif %}
+        </h1>
+        <img src="https://www.lifewire.com/thmb/3Zne74PQmtY62N1E02VkiNg78bQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc()/shutterstock_717832600-Converted-5a29aaf3b39d030037b2cda9.png" alt="Error Image" class="img-fluid">
+        <p>
+            {% if detail %}
+                {{ detail }}
+            {% else %}
+                We're sorry, but the page you are looking for does not exist.
+            {% endif %}
+        </p>
+
+        <a href="{{ url_for('index')}}" class="btn btn-primary">Go to Home</a>
+    </div>
+{% endblock %}

@@ -3,13 +3,13 @@ import os
 import psycopg2
 from flask import url_for, session
 
-PWD = 'ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883'
-USER='fiysuzvofhprpp'
-DB = 'db5veivij96r5u'
-PORT = '5432'
-HOST = 'ec2-52-31-2-97.eu-west-1.compute.amazonaws.com'
+PWD = ''
+USER=''
+DB = ''
+PORT = ''
+HOST = ''
 
-DATABASE_URL = "jdbc:postgresql://ec2-52-31-2-97.eu-west-1.compute.amazonaws.com:5432/db5veivij96r5u?sslmode=require&user=fiysuzvofhprpp&password=ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883"
+DATABASE_URL = "jdbc:postgresql://{HOST}:{PORT}/{DB}?sslmode=require&user={USER}&password={PWD}".format(HOST=HOST,PORT=PORT,DB=DB,USER=USER,PWD=PWD)
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 print(conn)
