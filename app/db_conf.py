@@ -33,11 +33,10 @@ def connect_to_db_server(app,type_db=None):
                     host_name=os.getenv('DB_SERVER'), port='5432', database=os.getenv('DB_NAME'),\
                     sslmode='require')
         DATABASE_URL = os.getenv('DATABASE_URL')
-        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_HEROKU
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
         
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test3.db"
-
     
     """
     The line of code you provided is used to configure the behavior of SQLAlchemy, which is a popular Object-Relational Mapping (ORM) library for Python. 
