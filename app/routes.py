@@ -27,9 +27,10 @@ def load_routes(app, db, login_manager):
         return 
     """
 
-    @app.route('/clear-sessions')
-    def clear_sessions():
-        session.clear
+    @app.route('/create-db')
+    def create_db():
+        with app.app_context():
+            db.create_all()
         return redirect(url_for('index'))
     
 
