@@ -21,6 +21,13 @@ def connect_to_db_server(app,type_db=None):
             .format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
                     host_name=os.getenv('DB_SERVER'), port='3306', database=os.getenv('DB_NAME'))
         
+        DATABASE_URI_2 = 'mysql://{}:{}@{}:{}/{}'.format(
+            os.getenv('DB_USER'), 
+            os.getenv('DB_PASSWORD'), 
+            os.getenv('DB_SERVER'), 
+            os.getenv('PORT'), 
+            os.getenv('DB_NAME')
+            )
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2
 
     elif type_db == 'postgres':
