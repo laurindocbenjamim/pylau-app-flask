@@ -1,7 +1,7 @@
 {% extends 'site.html' %}
 
 {% block header %}
-<h1></h1> {% block title %} {{ title }} - {% endblock %}</h1>
+<h1></h1> {% block title %} {{ title }} Activate account {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -32,24 +32,33 @@
         <h2 class="title" style="text-transform: uppercase;">
           Welcome to Data Management and Analysis Consulting
         </h2>
-        
-        <p>
-          <h4 style="color: #FFF;">
-            An email has been sent to 
-            {% if email %}
-             <span style="color: #4afc53;">{{ email }}</span>
-            {% endif %}
-            . Check the message to activate your account
-           </h4>
-        </p>
+
         {% if firstname %}
         <h3 class="title" style="color: #4afc53;margin-top:5%;">
           {{ firstname}} {{ lastname}}
         </h3>
 
+        <p style="color: #FFF;">
+         
+            In order to complete the authentication process, an email has been sent to 
+            {% if email %}
+             <strong><span style="color: #4afc53;">{{ email }}</span></strong>
+            {% endif %}
+            . Check the message to activate your account
+           
+        </p>        
+
         <p>
-            <a href="{{ url_for('auth.user.login')}}" rel="noopener noreferrer">Sign In.</a>
+            <a class="btn btn-outline-primary" href="{{ url_for('auth.user.login')}}" rel="noopener noreferrer">Sign In.</a>
         </p>
+
+        <p>
+          If you did not received any activation email click on link below to receive a new message.
+          
+      </p>
+      <p>
+        <a class="btn btn-outline-primary" href="{{ url_for('email.activate_send', user_token=user_token)}}" rel="noopener noreferrer">Send me again.</a>
+      </p>
         
         {% endif %}
         

@@ -43,11 +43,11 @@ class SendActivateEmailView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Token is expired!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    flash('Unauthorized session!', 'danger')
+                    return render_template('errors/403.html')
             else:
-                flash('Token required!', 'danger')
-                return redirect(url_for('auth.register'))
+                flash('Unauthorized session!', 'danger')
+                return render_template('errors/403.html')
             
             
             # Get the user details using the email address
@@ -65,7 +65,7 @@ class SendActivateEmailView(View):
                     html = get_activate_account_message_html(str(firstname)+" "+str(lastname), token.token, time_remaining)
                     res = send_simple_email_mime_multipart('Activate account', str(email), html, False)
                     flash('An email has been sent to your email address. Please check your email to activate your account.', 'success')
-                    return render_template('activate_email_sent.html', firstname=firstname, lastname=lastname,email=email)
+                    return render_template('activate_email_sent.html', user_token=token.token, firstname=firstname, lastname=lastname,email=email)
                 else:
                     flash('Invalid user', 'danger')
             else:

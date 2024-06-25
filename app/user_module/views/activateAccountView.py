@@ -43,7 +43,7 @@ class ActivateAccountView(View):
                     # bEFORE CREATE User generate and save token
                     status, user = self.model.update_user_status(user.userID, True)
                     if status:                      
-                        return render_template('registered_success.html', firstname=user.firstname, lastname=user.lastname, email=user.email)
+                        return render_template('registered_success.html', user_token=token.token, firstname=user.firstname, lastname=user.lastname, email=user.email)
                     
                     flask.flash('This user is not activated', 'danger')                        
                         
