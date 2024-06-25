@@ -32,12 +32,16 @@ def connect_to_db_server(app,type_db=None):
         DATABASE_URI_1 = 'jdbc:postgresql://{host_name}:{port}/{database}?{sslmode}&{user}&{password}'\
             .format(host_name='ec2-52-31-2-97.eu-west-1.compute.amazonaws.com', port='5432', database='db5veivij96r5u',\
                     sslmode='require', user='fiysuzvofhprpp', password='ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883')
+        DATABASE_URI_2 = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
+            .format( user='fiysuzvofhprpp', password='ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883', \
+                    host_name='ec2-52-31-2-97.eu-west-1.compute.amazonaws.com', port='5432', database='db5veivij96r5u',\
+                    sslmode='require')
         
         local_db = "postgresql://postgres:root@localhost:5432/test"
         heroku = 'jdbc:postgresql://ec2-52-31-2-97.eu-west-1.compute.amazonaws.com:5432/db5veivij96r5u?user=fiysuzvofhprpp&password=ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883'
         cloud_db = "postgres://fiysuzvofhprpp:ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883@ec2-52-31-2-97.eu-west-1.compute.amazonaws.com:5432/db5veivij96r5u"
         
-        app.config["SQLALCHEMY_DATABASE_URI"] = heroku
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2
         
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test3.db"
