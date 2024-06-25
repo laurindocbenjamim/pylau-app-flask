@@ -24,10 +24,8 @@ class RemoveUserAccountView(View):
             # Check if the token is expired
             if status and token is not None:
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized authentication!', 'danger')
                     abort(403)
             else:
-                flash('Unauthorized authentication!', 'danger')
                 abort(403)
             
             #return jsonify({'status': 'success', 'message': self.userToken.is_token_expired(token), 'user_token': escape(user_token)})

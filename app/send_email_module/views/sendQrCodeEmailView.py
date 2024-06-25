@@ -66,10 +66,8 @@ class SendQrCodeEmailView(View):
             # Check if the token is expired 
             if status:
                 if UserToken().is_token_expired(token):
-                    flash('Token is expired!', 'danger')
                     abort(403)
             else:
-                flash('Token required!', 'danger')
                 abort(403)
             
             if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'lastname' and 'email' in session:

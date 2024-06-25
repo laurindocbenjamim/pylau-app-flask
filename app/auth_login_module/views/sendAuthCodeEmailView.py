@@ -46,14 +46,12 @@ class SendAuthCodeEmailView(View):
             status,token = self.userToken.get_token_by_token(escape(user_token))
             
             # Check if the token is expired
-            if status:
+            if status and token:
                 #exp = datetime.now(tz=timezone.utc).replace(tzinfo=None) > token.date_exp.replace(tzinfo=None)
                 #return jsonify({'status': True, 'token': escape(user_token), 'exp': exp})
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized authentication!', 'danger')
                     abort(403)
             else:
-                flash('Unauthorized authentication!', 'danger')
                 abort(403)
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)

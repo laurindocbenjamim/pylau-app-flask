@@ -55,10 +55,8 @@ class VerifyAppCodeAuthView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Token is expired!', 'danger')
                     abort(403)
             else:
-                flash('Token required!', 'danger')
                 abort(403)
             
             # Check if the token is already used

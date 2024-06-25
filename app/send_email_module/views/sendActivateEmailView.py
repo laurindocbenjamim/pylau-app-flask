@@ -43,10 +43,8 @@ class SendActivateEmailView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized session!', 'danger')
                     abort(403)
             else:
-                flash('Unauthorized session!', 'danger')
                 abort(403)
             
             

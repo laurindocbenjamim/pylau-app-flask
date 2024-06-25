@@ -64,8 +64,10 @@ class GetQrCodeEmailView(View):
         if request.method == 'GET' and user_token is not None:
             status, token = self.userToken.get_token_by_token(escape(user_token))
             # Check if the token is expired
-            if status and self.userToken.is_token_expired(token):
-                flash('Token is expired!', 'danger')
+            if status:
+                if self.userToken.is_token_expired(token):
+                    abort(403)
+            else:
                 abort(403)
             
             if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'origin_request' and 'lastname' and 'email' in session:

@@ -59,10 +59,8 @@ class VerifyAppAuthCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized authentication!', 'danger')
                     abort(403)
             else:
-                flash('Unauthorized authentication!', 'danger')
                 abort(403)
                  
         if request.method == 'POST' and user_token is not None:
@@ -72,11 +70,9 @@ class VerifyAppAuthCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized authentication!', 'danger')
-                    return render_template('errors/403.html')
+                    abort(403)
             else:
-                flash('Unauthorized authentication!', 'danger')
-                return render_template('errors/403.html')
+                abort(403)
             
             # Check if the token is already used
             code = request.form.get('otpcode',None)

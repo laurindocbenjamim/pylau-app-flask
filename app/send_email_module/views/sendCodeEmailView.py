@@ -49,10 +49,8 @@ class SendCodeEmailView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    flash('Token is expired!', 'danger')
                     abort(403)
             else:
-                flash('Token required!', 'danger')
                 abort(403)
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)
