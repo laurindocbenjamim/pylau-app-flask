@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from flask.views import View
 
 from markupsafe import escape
-from flask import request, session, current_app, redirect, url_for, flash, jsonify
+from flask import request, render_template, session, current_app, redirect, url_for, flash, jsonify
 from ...send_email_module.factory.otp_code_account_message_html import get_otp_code_message_html
 from ...send_email_module.factory.emailcontroller import send_simple_email_mime_multipart
 
@@ -51,10 +51,10 @@ class SendAuthCodeEmailView(View):
                 #return jsonify({'status': True, 'token': escape(user_token), 'exp': exp})
                 if self.userToken.is_token_expired(token):
                     flash('Unauthorized authentication!', 'danger')
-                    return redirect(url_for('auth.user.login'))
+                    return render_template('errors/403.html')
             else:
                 flash('Unauthorized authentication!', 'danger')
-                return redirect(url_for('auth.user.login'))
+                return render_template('errors/403.html')
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)
 

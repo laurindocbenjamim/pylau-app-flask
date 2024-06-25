@@ -25,10 +25,10 @@ class ActivateAccountView(View):
             if status and token is not None:
                 if self.userToken.is_token_expired(token):
                     flash('Unauthorized authentication!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    return render_template('errors/403.html')
             else:
                 flash('Unauthorized authentication!', 'danger')
-                return redirect(url_for('auth.register'))
+                return render_template('errors/403.html')
             
             #return jsonify({'status': 'success', 'message': self.userToken.is_token_expired(token), 'user_token': escape(user_token)})
             # Get the user details using the email address
