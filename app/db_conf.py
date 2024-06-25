@@ -28,14 +28,14 @@ def connect_to_db_server(app,type_db=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2
 
     elif type_db == 'postgres':
-        #DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
-            #.format( user='fiysuzvofhprpp', password='ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883', \
-                    #host_name='ec2-52-31-2-97.eu-west-1.compute.amazonaws.com', port='5432', database='db5veivij96r5u',\
-                    #sslmode='require')
         DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
-            .format( user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
-                    host_name=os.getenv('DB_SERVER'), port=os.getenv('PORT'), database=os.getenv('DB_NAME'),\
+            .format( user='fiysuzvofhprpp', password='ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883', \
+                    host_name='ec2-52-31-2-97.eu-west-1.compute.amazonaws.com', port='5432', database='db5veivij96r5u',\
                     sslmode='require')
+        #DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
+            #.format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
+                    #host_name=os.getenv('DB_SERVER'), port=os.getenv('PORT'), database=os.getenv('DB_NAME'),\
+                    #sslmode='require')
        
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_HEROKU
         
