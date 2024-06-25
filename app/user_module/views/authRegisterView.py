@@ -39,6 +39,7 @@ class AuthRegisterView(View):
 
                     # bEFORE CREATE User generate and save token
                     token = self.tokenModel.create_token(request.form.get('email'))
+                    
                     if token == False:
                         self.model.db.session.rollback()
                         flash('Error creating token.', 'error')
@@ -58,7 +59,7 @@ class AuthRegisterView(View):
                             session['email'] = request.form.get('email')
 
                             # Create an object of the TwoFAModel class
-                                 
+                            
                             # Call the method with the required data
                             two_fa_obj = load_two_fa_obj({
                                 'userID': last_user_id,

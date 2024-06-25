@@ -31,6 +31,9 @@ class UserToken(db.Model):
         except SQLAlchemyError as e:
             db.session.rollback()
             return False
+        except Exception as e:
+            db.session.rollback()
+            return False
     
     def to_dict(self):
         return {
