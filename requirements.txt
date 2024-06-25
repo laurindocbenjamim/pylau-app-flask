@@ -3,7 +3,7 @@ Flask-Cors
 gunicorn
 matplotlib
 pymysql
-mysql-connector-python
+#mysql-connector-python
 psycopg2
 #psycopg2-binary
 requests
