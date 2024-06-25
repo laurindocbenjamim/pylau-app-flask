@@ -28,7 +28,7 @@ def connect_to_db_server(app,type_db=None):
             #.format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
                     #host_name=os.getenv('DB_SERVER'), port=os.getenv('PORT'), database=os.getenv('DB_NAME'),\
                     #sslmode='require')
-        DATABASE_URI_HEROKU = 'postgresql://{}:{}@{}:{}/{}'.format(
+        DATABASE_URI_HEROKU = 'postgres://{}:{}@{}:{}/{}'.format(
             os.getenv('DB_USER'), 
             os.getenv('DB_PASSWORD'), 
             os.getenv('DB_SERVER'), 
