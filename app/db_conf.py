@@ -33,7 +33,7 @@ def connect_to_db_server(app,type_db=None):
                     host_name=os.getenv('DB_SERVER'), port='5432', database=os.getenv('DB_NAME'),\
                     sslmode='require')
       
-        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_HEROKU
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL')
         
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test3.db"
