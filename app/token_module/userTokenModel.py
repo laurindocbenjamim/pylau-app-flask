@@ -62,7 +62,7 @@ class UserToken(db.Model):
     def expire_the_user_token_by_user(username):
         try:
             obj = UserToken.query.filter_by(username=username).first_or_404()
-            obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(seconds=1)
+            obj.date_exp = datetime.now(tz=timezone.utc) - timedelta(minutes=5)
             #db.session.merge(obj)
             db.session.commit()
             return True, obj

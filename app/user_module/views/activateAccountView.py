@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user
 from typing import Any
 from flask.views import View
 
-from flask import render_template, abort, request, redirect, url_for, flash, jsonify
+from flask import render_template, session, abort, request, redirect, url_for, flash, jsonify
 from markupsafe import escape
 from ..controller.userController import load_user_obj, validate_form_fields
 
@@ -40,7 +40,9 @@ class ActivateAccountView(View):
 
                     # bEFORE CREATE User generate and save token
                     status, user = self.model.update_user_status(user.userID, True)
-                    if status:                      
+                    if status:    
+                        logout_user()
+                        session.clear()                 
                         return render_template('registered_success.html', user_token=token.token, firstname=user.firstname, lastname=user.lastname, email=user.email)
                     
                     flask.flash('This user is not activated', 'danger')                        

@@ -14,15 +14,23 @@ class AuthLoginView(View):
         self.template = template
 
     def dispatch_request(self):
-        #logout_user()
-        #session.clear()
+        
         # Check if the user is already logged in
         
         if 'user_token' in session:
             
             if session['user_token'] == 'favicon.ico': session.pop('user_token', None)
-            elif session['user_token'] and session['user_token'] is not None:                
-                return redirect(url_for('index', user_token=session['user_token']))
+            elif session['user_token'] and session['user_token'] is not None:       
+                
+                status,token = self.UserTokenModel.get_token_by_token(session['user_token'])
+            
+                # Check if the token is expired
+                if status and token:                    
+                    if self.UserTokenModel.is_token_expired(token) == False:
+                        return redirect(url_for('index', user_token=token.token))
+                else:
+                    logout_user()
+                    session.clear()                
         
         # Check if the user is already logged in
         if request.method == 'POST':

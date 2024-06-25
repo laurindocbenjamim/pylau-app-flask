@@ -35,9 +35,9 @@ class AuthUserHistoric(db.Model):
     
     def update_auth_user(user_id, username, status):
         try:
-            obj = AuthUserHistoric.query.filter_by(username=username).first_or_404()
+            obj = AuthUserHistoric.query.filter_by(is_logged_in=True,username=username).first_or_404()
             obj.is_logged_in = status
-            obj.updated_at = db.func.current_timestamp() #datetime.now(tz=timezone.utc)
+            obj.date_logged_out = db.func.current_timestamp() #datetime.now(tz=timezone.utc)
             db.session.commit()
             return True, obj
         except SQLAlchemyError as e:

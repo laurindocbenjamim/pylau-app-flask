@@ -61,7 +61,7 @@ def load_routes(app, db, login_manager):
     @app.route('/get-secret', methods=['GET'])
     @cross_origin(methods=['GET'])
     def get_secret():
-            
+        #session['user_token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9ja2V0bWMyMDA5QGdtYWlsLmNvbSIsImV4cCI6MTcxOTMxNDU0NiwibmJmIjoxNzE5MzEyNzQ2fQ.sBMAHsZ7IpH7TFbGwHmLbYCUYAGZ0bKQ0t7-nXOQnFc'
         t_key = secrets.token_urlsafe(32)
         otp_secret = pyotp.random_base32()
             

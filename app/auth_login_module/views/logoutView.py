@@ -14,11 +14,15 @@ class LogoutView(View):
         if user_token:
             # Update the user's historic data
             status, token = self.userToken.get_token_by_token(user_token)
+            
             if status and token:
-                self.authUserHistoric.update_auth_user(0, token.username, False)
                 
                 if self.userToken.is_token_expired(token):
                     self.userToken.expire_the_user_token_by_user(token.username)
+
+                self.authUserHistoric.update_auth_user(0, token.username, False)
+                
+                
                 
             logout_user()
             session.clear()
