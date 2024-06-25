@@ -1,9 +1,10 @@
 import os
 import pyotp
 import secrets
-from flask import Flask, render_template, redirect, url_for, sessions, request, session, jsonify
+from flask import Flask, abort, render_template, redirect, url_for, sessions, request, session, jsonify
 from flask_cors import cross_origin
 from .user_module.model.users import Users
+from markupsafe import escape
 
 def load_routes(app, db, login_manager):
     # Initialize the login manager
@@ -40,7 +41,10 @@ def load_routes(app, db, login_manager):
     @cross_origin(methods=['GET'])
     def index(user_token=None):
         if user_token is not None:
-            session['user_token'] = user_token
+            if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
+                abort(404)
+
+            session['user_token'] = escape(user_token)
             if user_token == 'favicon.ico': 
                 session.pop('user_token', None)
                 user_token = ''
@@ -61,7 +65,7 @@ def load_routes(app, db, login_manager):
         t_key = secrets.token_urlsafe(32)
         otp_secret = pyotp.random_base32()
             
-        return jsonify({'token_secret': t_key, 'otp_secret': otp_secret})
+        return jsonify({'token_secret': t_key, 'otp_secret': otp_secret, 'len': len('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2Y2NvZGVzQGdtYWlsLmNvbSIsImV4cCI6MTcxOTMwNTkyNywibmJmIjoxNzE5MzA0MTI3fQ.qXNXnz586T4_FMYooiWZNQC3C63IKANrzq8SQ9NxGWk')})
     
     # Integrating the blueprints parent and child into the application
 
