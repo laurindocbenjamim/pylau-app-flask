@@ -21,13 +21,8 @@ class AuthLoginView(View):
         if 'user_token' in session:
             
             if session['user_token'] == 'favicon.ico': session.pop('user_token', None)
-
-            if session['user_token']:
-                
+            elif session['user_token'] and session['user_token'] is not None:                
                 return redirect(url_for('index', user_token=session['user_token']))
-
-        if 'user_id' in session:
-            return redirect(url_for('index', user_token=session['user_token']))
         
         # Check if the user is already logged in
         if request.method == 'POST':
