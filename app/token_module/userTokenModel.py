@@ -59,15 +59,19 @@ class UserToken(db.Model):
             return False, str(e)
 
     # This method is used to update the date_exp of a token 
-    def update_date_exp_token_by_user_id(user_id):
+    def expire_the_user_token_by_user(username):
         try:
-            #token = self.query.filter_by(user_id=user_id).first()
-            #token.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
-            #db.session.commit()
-            return True
+            obj = UserToken.query.filter_by(username=username).first_or_404()
+            obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(seconds=1)
+            #db.session.merge(obj)
+            db.session.commit()
+            return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            return False
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
 
     # Delete a token by the token_id
     def delete_token_by_id(token_id):
