@@ -24,8 +24,8 @@ In summary, the code retrieves the value of the environment variable 'OTP' using
 
     #app.config.from_object(os.getenv('FLASK_CONFIG', 'configs.config.DevelopmentConfig'))
     app.config.from_mapping(
-        SECRET_KEY= 'GvkxD-8YsYKKpwZOODi9pBKtm3wr_0TP5enjETS6ZC8', #os.getenv('SECRET_KEY', secrets.token_urlsafe(32)), # KEY GENERATED WITH secrets.token_urlsafe(32) 32 byts
-        OTP_SECRET_KEY= '3UCJZNMYCJP36IDL3RI2AWLQNU6O6TMN' #os.getenv('OTP_SECRET_KEY', pyotp.random_base32()), 
+        SECRET_KEY= os.getenv('SECRET_KEY', secrets.token_urlsafe(32)), # KEY GENERATED WITH secrets.token_urlsafe(32) 32 byts
+        OTP_SECRET_KEY= os.getenv('OTP_SECRET_KEY', pyotp.random_base32()), 
     )
 
     # Set Email configurations
