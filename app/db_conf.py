@@ -22,21 +22,22 @@ def connect_to_db_server(app,type_db=None):
                     host_name=os.getenv('DB_SERVER'), port='3306', database=os.getenv('DB_NAME'))
         
         #DATABASE_URI_3 = 'jdbc:mysql://{host_name}:{port}/{database}?{sslmode}&{user}&{password}'\
-            #.format(host_name='', port='5432', database='',\
-                    #sslmode='require', user='', \
-                        #password='')
+            #.format(host_name='ec2-52-31-2-97.eu-west-1.compute.amazonaws.com', port='5432', database='db5veivij96r5u',\
+                    #sslmode='require', user='fiysuzvofhprpp', \
+                        #password='ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883')
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2
 
     elif type_db == 'postgres':
         DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
-            .format( user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
-                    host_name=os.getenv('DB_SERVER'), port='5432', database=os.getenv('DB_NAME'),\
+            .format( user='fiysuzvofhprpp', password='ab6e8ad51efac658eca5c1b66056b9438d8866a522daeb3fee983b66970c0883', \
+                    host_name='ec2-52-31-2-97.eu-west-1.compute.amazonaws.com', port='5432', database='db5veivij96r5u',\
                     sslmode='require')
-        DATABASE_URL = os.getenv('DATABASE_URL')
-        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+       
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_HEROKU
         
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test3.db"
+
     
     """
     The line of code you provided is used to configure the behavior of SQLAlchemy, which is a popular Object-Relational Mapping (ORM) library for Python. 
