@@ -17,7 +17,7 @@ def connect_to_db_server(app,type_db=None):
             #.format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
                     #host_name=os.getenv('DB_SERVER'), database=os.getenv('DB_NAME'))   
                 
-        DATABASE_URI_2 = 'mysql://{user}:{password}@{host_name}:{port}/{database}'\
+        DATABASE_URI_2 = 'mysql+mysqlconnector://{user}:{password}@{host_name}:{port}/{database}'\
             .format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
                     host_name=os.getenv('DB_SERVER'), port='3306', database=os.getenv('DB_NAME'))
         
