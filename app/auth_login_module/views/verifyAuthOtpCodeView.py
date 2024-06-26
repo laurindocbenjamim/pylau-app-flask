@@ -89,6 +89,7 @@ class VerifyAuthOtpCodeView(View):
                     if otpstatus:     
 
                         resp = self.AuthUserHistoric.create_auth_user(user.userID, user.email, '')
+                        status, u_token = self.userToken.update_token(user.userID, token.token, user.email, True)
                                      
                         status, user = self.userModel.get_user_by_id(user.userID)
                         session['user_id'] = user.userID

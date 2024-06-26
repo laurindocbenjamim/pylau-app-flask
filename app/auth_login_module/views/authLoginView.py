@@ -7,9 +7,9 @@ from ..controller.authController import validate_form_fields
 class AuthLoginView(View):
     methods = ['GET', 'POST']
 
-    def __init__(self, model, UserTokenModel, TwoFaModel, template):
+    def __init__(self, model, userToken, TwoFaModel, template):
         self.model = model
-        self.UserTokenModel = UserTokenModel
+        self.userToken = userToken
         self.TwoFaModel = TwoFaModel
         self.template = template
 
@@ -22,12 +22,13 @@ class AuthLoginView(View):
             if session['user_token'] == 'favicon.ico': session.pop('user_token', None)
             elif session['user_token'] and session['user_token'] is not None:       
                 
-                status,token = self.UserTokenModel.get_token_by_token(session['user_token'])
+                status,token = self.userToken.get_token_by_token(session['user_token'])
             
                 # Check if the token is expired
                 if status and token:                    
-                    if self.UserTokenModel.is_token_expired(token) == False:
-                        return redirect(url_for('index', user_token=token.token))
+                    if self.userToken.is_token_expired(token) == False:
+                        if token.is_active==True:
+                            return redirect(url_for('index', user_token=token.token))
                 else:
                     logout_user()
                     session.clear()                
@@ -44,7 +45,7 @@ class AuthLoginView(View):
                 if status and user:
 
                     # Check if the user has a Token 
-                    status, u_token = self.UserTokenModel.get_token_by_user(user.email)
+                    status, u_token = self.userToken.get_token_by_user(user.email)
                     
                     if status and u_token:
 
@@ -58,7 +59,8 @@ class AuthLoginView(View):
                                 if user.is_active() == True:
                                     
                                     # generate a secret code for the user
-                                    status, u_token = self.UserTokenModel.update_token(user.userID, user.email)              
+                                    #status, u_token = self.userToken.update_token(user.userID, user.email, False)
+                                    status, u_token = self.userToken.create_token(user.email)              
                                     #return jsonify({'status': u_token, 'message': u_token.exp_date, 'user_token': u_token.token})
                                     if status and u_token:
                                         # Create an object of the TwoFAModel class

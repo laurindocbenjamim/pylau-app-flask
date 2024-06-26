@@ -16,7 +16,9 @@ class UserToken(db.Model):
     #user_id:Mapped[int] = db.Column(db.Integer, db.ForeignKey('users.userID'))
     username:Mapped[str] = db.Column(db.String(100), nullable=False)
     token:Mapped[str] = db.Column(db.String(255), unique=True, nullable=False)
-    date_added = db.Column(db.DateTime, default=db.func.current_timestamp())
+    is_active:Mapped[str] = db.Column(db.Boolean(), default=False)
+    datetime_added = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_added = db.Column(db.DateTime, default=db.func.current_date())
     date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(minutes=30))
 
 
@@ -27,29 +29,49 @@ class UserToken(db.Model):
             obj = UserToken(username=username, token=token)
             db.session.add(obj)
             db.session.commit()
-            return obj
+            return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            return False
+            return False, str(e)
         except Exception as e:
             db.session.rollback()
-            return False
+            return False, str(e)
     
     def to_dict(self):
         return {
             'token_id': self.token_id,
             'username': self.username,
             'token': self.token,
+            'is_active': self.is_active,
             'date_added': self.date_added,
+            'datetime_added': self.datetime_added,
             'date_exp': self.date_exp
         }
     
     # This method is used to update a token
-    def update_token(user_id, username):
+    def update_token(user_id, u_token, username, is_active):
+        token = generate_token(username)
+        try:
+            obj = UserToken.query.filter_by(username=username,token=u_token).first_or_404()
+            obj.token = token
+            obj.is_active = is_active
+            obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
+            #db.session.merge(obj)
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+    
+    def refresh_user_token(user_id, username, is_active):
         token = generate_token(username)
         try:
             obj = UserToken.query.filter_by(username=username).first_or_404()
             obj.token = token
+            obj.is_active = is_active
             obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
             #db.session.merge(obj)
             db.session.commit()
@@ -62,11 +84,12 @@ class UserToken(db.Model):
             return False, str(e)
 
     # This method is used to update the date_exp of a token 
-    def expire_the_user_token_by_user(username):
+    def expire_the_user_token_by_user(username, token):
         try:
-            obj = UserToken.query.filter_by(username=username).first_or_404()
+            obj = UserToken.query.filter_by(username=username, token=token).first_or_404()
+            obj.is_active = False
             obj.date_exp = datetime.now(tz=timezone.utc) - timedelta(minutes=5)
-            #db.session.merge(obj)
+            
             db.session.commit()
             return True, obj
         except SQLAlchemyError as e:
@@ -93,7 +116,7 @@ class UserToken(db.Model):
     # This method is used to get a token by the token 
     def get_token_by_token(token):
         try:
-            token_obj = UserToken.query.filter_by(token=token).first_or_404()
+            token_obj = UserToken.query.filter_by(token=token, date_added=db.func.current_date()).first_or_404()
             return True, token_obj
         except SQLAlchemyError as e:
             return False, str(e)

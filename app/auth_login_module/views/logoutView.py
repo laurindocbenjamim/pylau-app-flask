@@ -1,6 +1,7 @@
 from flask.views import View   
 from flask import session,redirect, url_for, request, flash,jsonify
 from flask_login import login_required, logout_user
+from markupsafe import escape
 
 class LogoutView(View):
     methods = ['GET']
@@ -13,12 +14,12 @@ class LogoutView(View):
     def dispatch_request(self, user_token=None):
         if user_token:
             # Update the user's historic data
-            status, token = self.userToken.get_token_by_token(user_token)
+            status, token = self.userToken.get_token_by_token(escape(user_token))
             
             if status and token:
                 
                 if self.userToken.is_token_expired(token):
-                    self.userToken.expire_the_user_token_by_user(token.username)
+                    self.userToken.expire_the_user_token_by_user(token.username, token.token)
 
                 self.authUserHistoric.update_auth_user(0, token.username, False)
                 

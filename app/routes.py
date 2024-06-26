@@ -61,11 +61,23 @@ def load_routes(app, db, login_manager):
     @app.route('/get-secret', methods=['GET'])
     @cross_origin(methods=['GET'])
     def get_secret():
+
+        DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
+            .format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
+                    host_name=os.getenv('DB_SERVER'), port=os.getenv('DB_PORT'), database=os.getenv('DB_NAME'),\
+                    sslmode='require')
+                
+
         #session['user_token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9ja2V0bWMyMDA5QGdtYWlsLmNvbSIsImV4cCI6MTcxOTMxNDU0NiwibmJmIjoxNzE5MzEyNzQ2fQ.sBMAHsZ7IpH7TFbGwHmLbYCUYAGZ0bKQ0t7-nXOQnFc'
         t_key = secrets.token_urlsafe(32)
         otp_secret = pyotp.random_base32()
             
-        return jsonify({'token_secret': t_key, 'otp_secret': otp_secret, 'len': len('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2Y2NvZGVzQGdtYWlsLmNvbSIsImV4cCI6MTcxOTMwNTkyNywibmJmIjoxNzE5MzA0MTI3fQ.qXNXnz586T4_FMYooiWZNQC3C63IKANrzq8SQ9NxGWk')})
+        return jsonify({
+            'HEROKU_URL': os.getenv('DATABASE_HEROKU_URI').replace(' ', '').replace('\n',''),
+            'DB_URL': DATABASE_URI_HEROKU.replace(' ', '').replace('\n',''),
+            'token_secret': t_key, 
+            'otp_secret': otp_secret, 
+            'len': len('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2Y2NvZGVzQGdtYWlsLmNvbSIsImV4cCI6MTcxOTMwNTkyNywibmJmIjoxNzE5MzA0MTI3fQ.qXNXnz586T4_FMYooiWZNQC3C63IKANrzq8SQ9NxGWk')})
     
     # Integrating the blueprints parent and child into the application
 

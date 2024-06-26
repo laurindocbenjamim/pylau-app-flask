@@ -7,9 +7,6 @@ from flask_login import login_user, logout_user
 from flask.views import View
 from flask import render_template, abort,current_app, g, session, request, redirect, url_for, flash, jsonify
 
-from ...token_module.userTokenModel import UserToken
-from ...user_module.model.users import Users
-
 class VerifyAppAuthCodeView(View):
     """
     View class for handling the verification of app code authentication.
@@ -93,6 +90,7 @@ class VerifyAppAuthCodeView(View):
                     if otpstatus:
                         
                         resp = self.authUserHistoric.create_auth_user(user.userID, user.email, '')
+                        status, u_token = self.userToken.update_token(user.userID, token.token, user.email, True)
                         
                         status, user = self.userModel.get_user_by_id(user.userID)
                         session['user_id'] = user.userID

@@ -38,9 +38,9 @@ class AuthRegisterView(View):
                 else:
 
                     # bEFORE CREATE User generate and save token
-                    token = self.tokenModel.create_token(request.form.get('email'))
+                    status, token = self.tokenModel.create_token(request.form.get('email'))
                     
-                    if token == False:
+                    if status == False:
                         self.model.db.session.rollback()
                         flash('Error creating token.', 'error')
                     else:      

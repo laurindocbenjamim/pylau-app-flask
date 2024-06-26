@@ -25,25 +25,25 @@ def connect_to_db_server(app,type_db=None):
             os.getenv('DB_USER'), 
             os.getenv('DB_PASSWORD'), 
             os.getenv('DB_SERVER'), 
-            os.getenv('PORT'), 
+            os.getenv('DB_PORT'), 
             os.getenv('DB_NAME')
             )
-        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2.replace(' ', '').replace('\n','')
 
     elif type_db == 'postgres':
-        #DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
+             #DATABASE_URI_HEROKU = 'postgresql://{user}:{password}@{host_name}:{port}/{database}'\
             #.format(user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'), \
-                    #host_name=os.getenv('DB_SERVER'), port=os.getenv('PORT'), database=os.getenv('DB_NAME'),\
+                    #host_name=os.getenv('DB_SERVER'), port=os.getenv('DB_PORT'), database=os.getenv('DB_NAME'),\
                     #sslmode='require')
         DATABASE_URI_HEROKU = 'postgres://{}:{}@{}:{}/{}'.format(
             os.getenv('DB_USER'), 
             os.getenv('DB_PASSWORD'), 
             os.getenv('DB_SERVER'), 
-            os.getenv('PORT'), 
+            os.getenv('DB_PORT'), 
             os.getenv('DB_NAME')
             )
        
-        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_HEROKU
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_HEROKU.replace(' ', '').replace('\n','')
         
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test3.db"
