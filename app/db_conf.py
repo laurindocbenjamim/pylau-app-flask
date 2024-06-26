@@ -22,11 +22,11 @@ def connect_to_db_server(app,type_db=None):
                     host_name=os.getenv('DB_SERVER'), port='3306', database=os.getenv('DB_NAME'))
         
         DATABASE_URI_2 = 'mysql://{}:{}@{}:{}/{}'.format(
-            os.getenv('DB_USER'), 
-            os.getenv('DB_PASSWORD'), 
-            os.getenv('DB_SERVER'), 
-            os.getenv('DB_PORT'), 
-            os.getenv('DB_NAME')
+            os.getenv('MYSQL_DB_USER'), 
+            os.getenv('MYSQL_DB_PASSWORD'), 
+            os.getenv('MYSQL_DB_SERVER'), 
+            os.getenv('MYSQL_DB_PORT'), 
+            os.getenv('MYSQL_DB_NAME')
             )
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI_2.replace(' ', '').replace('\n','')
 
