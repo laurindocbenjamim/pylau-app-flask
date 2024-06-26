@@ -24,9 +24,9 @@ class ActivateAccountView(View):
             # Check if the token is expired
             if status and token is not None:
                 if self.userToken.is_token_expired(token):
-                    abort(403)
+                    abort(401)
             else:
-                abort(403)
+                abort(401)
             
             #return jsonify({'status': 'success', 'message': self.userToken.is_token_expired(token), 'user_token': escape(user_token)})
             # Get the user details using the email address

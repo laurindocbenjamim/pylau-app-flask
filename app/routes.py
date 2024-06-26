@@ -42,9 +42,10 @@ def load_routes(app, db, login_manager):
     def index(user_token=None):
         if user_token is not None:
             if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
-                abort(404)
+                abort(401)
 
-            session['user_token'] = escape(user_token)
+            session['user_token'] = [escape(user_token) if 'user_id' in session else None ]
+            
             if user_token == 'favicon.ico': 
                 session.pop('user_token', None)
                 user_token = ''

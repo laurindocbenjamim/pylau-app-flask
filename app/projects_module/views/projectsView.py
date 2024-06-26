@@ -1,11 +1,11 @@
 from flask.views import View
-from flask import render_template, session, redirect, url_for, request, flash,jsonify
+from flask import render_template, abort, session, redirect, url_for, request, flash,jsonify
 from flask_login import login_required
 from markupsafe import escape
 #from flask_caching import cache
 
 class ProjectsView(View):
-    #decorators = [login_required]
+    decorators = [login_required]
     """
     However, if your view class needs to do a lot of complex initialization, 
     doing it for every request is unnecessary and can be inefficient. To avoid this, set View.init_every_request to False, 
@@ -31,11 +31,9 @@ class ProjectsView(View):
             # Check if the token is expired
             if status and token is not None:
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized authentication!', 'danger')
-                    return redirect(url_for('auth.register'))
+                    abort(401)
             else:
-                flash('Unauthorized authentication!', 'danger')
-                return redirect(url_for('auth.register'))
+                abort(401)
             
              # Get the user details using the email address
             if self.userModel.check_email_exists(token.username):

@@ -1,10 +1,10 @@
-from flask import render_template, flash, redirect, url_for, session, jsonify
+from flask import render_template, abort, flash, redirect, url_for, session, jsonify
 from flask.views import View
 from flask_login import login_user, current_user, logout_user, login_required
 from markupsafe import escape
 
 class AdminView(View):
-    #decorators = [login_required]
+    decorators = [login_required]
     methods = ['GET']
 
     def __init__(self, userModel, userToken, template):
@@ -17,18 +17,15 @@ class AdminView(View):
             status,token = self.userToken.get_token_by_token(escape(user_token))
             
             # Check if the token is expired
-            if status:
+            if status and token is not None:
                 if self.userToken.is_token_expired(token):
-                    flash('Unauthorized authentication!', 'danger')
-                    return redirect(url_for('auth.user.login'))
+                    abort(401)
             else:
-                flash('Unauthorized authentication!', 'danger')
-                return redirect(url_for('auth.user.login'))
+                abort(401)
             
             if 'user_id' not in session:
                 session.clear()
                 logout_user()
-                flash('Unauthorized authentication!', 'danger')
                 return redirect(url_for('auth.user.login'))
             
             # Get the user details using the email address

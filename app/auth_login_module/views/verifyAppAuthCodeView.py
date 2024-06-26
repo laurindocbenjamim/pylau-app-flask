@@ -56,9 +56,9 @@ class VerifyAppAuthCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    abort(403)
+                    abort(401)
             else:
-                abort(403)
+                abort(401)
                  
         if request.method == 'POST' and user_token is not None:
 
@@ -67,9 +67,9 @@ class VerifyAppAuthCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    abort(403)
+                    abort(401)
             else:
-                abort(403)
+                abort(401)
             
             # Check if the token is already used
             code = request.form.get('otpcode',None)

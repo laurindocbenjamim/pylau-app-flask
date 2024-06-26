@@ -42,17 +42,14 @@ class SendAuthCodeEmailView(View):
         otp_time_interval = 300
                  
         if request.method == 'GET' and user_token is not None:
-            #return jsonify({'status': True, 'token': escape(user_token)})
             status,token = self.userToken.get_token_by_token(escape(user_token))
             
             # Check if the token is expired
             if status and token:
-                #exp = datetime.now(tz=timezone.utc).replace(tzinfo=None) > token.date_exp.replace(tzinfo=None)
-                #return jsonify({'status': True, 'token': escape(user_token), 'exp': exp})
                 if self.userToken.is_token_expired(token):
-                    abort(403)
+                    abort(401)
             else:
-                abort(403)
+                abort(401)
             # Get the user details using the email address
             status, user = self.userModel.get_user_by_email(token.username)
 

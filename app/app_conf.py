@@ -28,14 +28,4 @@ In summary, the code retrieves the value of the environment variable 'OTP' using
         OTP_SECRET_KEY= os.getenv('OTP_SECRET_KEY'), 
     )
 
-    # Set Email configurations
-    """
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_SERVER']= 'live.smtp.mailtrap.io'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USERNAME'] = 'rocketmc2009@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'jgtkeopkbwoxkjoo'
-    app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USE_SSL'] = False
-    """
     
