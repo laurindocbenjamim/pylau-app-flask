@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
+from sqlalchemy import and_
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone
@@ -17,8 +18,9 @@ class AuthUserHistoric(db.Model):
     user_id:Mapped[int] = db.Column(db.Integer, nullable=False)
     username:Mapped[str] = db.Column(db.String(100), nullable=False)
     device_id:Mapped[str] = db.Column(db.String(255), nullable=True)    
-    is_logged_in:Mapped[bool] = db.Column(db.Boolean, default=False)
-    date_logged_in = db.Column(db.DateTime, default=db.func.current_timestamp())
+    is_logged_in:Mapped[bool] = db.Column(db.Boolean(), default=False)
+    date_logged_in = db.Column(db.DateTime, default=db.func.current_date())
+    datetime_logged_in = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_logged_out = db.Column(db.DateTime, nullable=True)
 
 
@@ -35,7 +37,7 @@ class AuthUserHistoric(db.Model):
     
     def update_auth_user(user_id, username, status):
         try:
-            obj = AuthUserHistoric.query.filter_by(is_logged_in=True,username=username).first_or_404()
+            obj = AuthUserHistoric.query.filter(and_(AuthUserHistoric.username==username, AuthUserHistoric.is_logged_in.is_(True))).first_or_404()
             obj.is_logged_in = status
             obj.date_logged_out = db.func.current_timestamp() #datetime.now(tz=timezone.utc)
             db.session.commit()

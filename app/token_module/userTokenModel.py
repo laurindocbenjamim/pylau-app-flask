@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
+from sqlalchemy import and_
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone
@@ -52,8 +53,8 @@ class UserToken(db.Model):
     def update_token(user_id, u_token, username, is_active):
         token = generate_token(username)
         try:
-            obj = UserToken.query.filter_by(username=username,token=u_token).first_or_404()
-            obj.token = token
+            obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==u_token)).first_or_404()
+            #obj.token = token
             obj.is_active = is_active
             obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
             #db.session.merge(obj)
@@ -86,7 +87,7 @@ class UserToken(db.Model):
     # This method is used to update the date_exp of a token 
     def expire_the_user_token_by_user(username, token):
         try:
-            obj = UserToken.query.filter_by(username=username, token=token).first_or_404()
+            obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==token)).first_or_404()
             obj.is_active = False
             obj.date_exp = datetime.now(tz=timezone.utc) - timedelta(minutes=5)
             

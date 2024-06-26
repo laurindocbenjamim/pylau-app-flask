@@ -61,8 +61,8 @@ def init_app(login_manager, db):
     @bp_auth.route('/logout')
     def logout():
         status, obj = AuthUserHistoric.update_auth_user(session.get('user_id'), session.get('email'), False)
-        re, obj = UserToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
-
+        re, obj2 = UserToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
+       
         session.clear()
         logout_user()
         

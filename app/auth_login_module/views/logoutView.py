@@ -23,13 +23,21 @@ class LogoutView(View):
 
                 self.authUserHistoric.update_auth_user(0, token.username, False)
                 
-                
-                
+                                
             logout_user()
             session.clear()
+            session.pop('user_id', None)
             session.pop('username', None)
             session.pop('user_token', None)
-            session.pop('username', None)
+            session.pop('email', None)
         else:
-            return jsonify({'message': 'User token is required'}), 400
+            status, obj = self.authUserHistoric.update_auth_user(session.get('user_id'), session.get('email'), False)
+            re, obj2 = self.userToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
+            logout_user()
+            session.clear()
+            session.pop('user_id', None)
+            session.pop('username', None)
+            session.pop('user_token', None)
+            session.pop('email', None)
+            #return jsonify({'message': 'User token is required'}), 400
         return redirect(url_for('auth.user.login'))
