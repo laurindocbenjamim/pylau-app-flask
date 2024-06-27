@@ -51,4 +51,6 @@ dependencies = [
 
 
 [buildsystem]
-requires = ["
+requires = [
+    "unittest"
+]

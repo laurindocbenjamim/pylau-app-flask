@@ -1,0 +1,2 @@
+from .sign_up_sub_module.model.users import Users
+from .sign_up_sub_module.views.bp_auth_register_view import bp_auth_register_parent, init_app as init_user_register_app
