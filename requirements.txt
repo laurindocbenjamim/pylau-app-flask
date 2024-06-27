@@ -21,6 +21,8 @@ Flask-WTF
 bootstrap-flask
 Flask-Caching
 flask-talisman
+pytest
+coverage
 hvac #install vault
 pycryptodome
 geocoder

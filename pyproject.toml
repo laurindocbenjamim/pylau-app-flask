@@ -1,0 +1,54 @@
+[project]
+name = "pylau"
+version = "1.0.0"
+
+authors = [
+    {Laurindo C. Benjamim", email="laurindocbenjamim@gmail.com" },
+]
+
+description = "A personal project with focus on Providing Data Engineering and AI services"
+
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/laurindocbenjamim/pylau-app-flask"
+Issues = "https://github.com/laurindocbenjamim"
+
+dependencies = [
+"flask",
+"Flask-Cors",
+"gunicorn",
+"matplotlib",
+"pymysql",
+"psycopg2",
+"requests",
+"seaborn",
+"pyjwt",
+"pyotp",
+"qrcode",
+"Flask-Mail",
+"flask-login",
+"flask-bcrypt",
+"Flask-SQLAlchemy",
+"flask-migrate",
+"Flask-WTF",
+"bootstrap-flask",
+"Flask-Caching",
+"flask-talisman",
+"pytest",
+"coverage",
+"hvac",
+"pycryptodome",
+"geocoder",
+"bs4"
+]
+
+
+[buildsystem]
+requires = ["
