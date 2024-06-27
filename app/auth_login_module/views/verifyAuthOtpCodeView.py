@@ -56,9 +56,13 @@ class VerifyAuthOtpCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    abort(401)
+                    session.clear()
+                    logout_user()
+                    return redirect(url_for('auth.user.login'))
             else:
-                abort(401)
+                session.clear()
+                logout_user()
+                return redirect(url_for('auth.user.login'))
             
         if request.method == 'POST' and user_token is not None:
 
@@ -67,9 +71,13 @@ class VerifyAuthOtpCodeView(View):
             # Check if the token is expired
             if status:
                 if self.userToken.is_token_expired(token):
-                    abort(401)
+                    session.clear()
+                    logout_user()
+                    return redirect(url_for('auth.user.login'))
             else:
-                abort(401)
+                session.clear()
+                logout_user()
+                return redirect(url_for('auth.user.login'))
             
             
             code = request.form.get('otpcode',None)

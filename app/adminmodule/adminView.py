@@ -19,9 +19,13 @@ class AdminView(View):
             # Check if the token is expired
             if status and token is not None:
                 if self.userToken.is_token_expired(token):
-                    abort(401)
+                    session.clear()
+                    logout_user()
+                    return redirect(url_for('auth.user.login'))
             else:
-                abort(401)
+                session.clear()
+                logout_user()
+                return redirect(url_for('auth.user.login'))
             
             if 'user_id' not in session:
                 session.clear()
