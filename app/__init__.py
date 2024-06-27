@@ -14,6 +14,7 @@ from flask_login import LoginManager
 from .db_conf import db, connect_to_db_server, init_db_server, migrate_db
 from .app_conf import set_app_config
 
+
 def create_application(type_db=None,test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 

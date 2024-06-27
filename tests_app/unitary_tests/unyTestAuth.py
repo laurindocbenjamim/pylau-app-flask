@@ -1,9 +1,12 @@
 import unittest
 
-from ...app.auth_module.sign_up_sub_module.model.users import Users
+#from ...app.auth_module.sign_up_sub_module.model.users import Users
 from ...app.auth_module.sign_up_sub_module.controller.userController import load_user_obj, validate_form_fields
+from app.auth_module import Users
+
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
+
 
 class TestAuth(unittest.TestCase):
 
