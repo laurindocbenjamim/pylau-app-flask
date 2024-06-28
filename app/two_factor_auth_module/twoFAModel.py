@@ -4,7 +4,7 @@ import datetime
 import qrcode
 from sqlalchemy.orm import Mapped,mapped_column, relationship
 
-from app import db
+from app.configs_package.modules.db_conf import db
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 

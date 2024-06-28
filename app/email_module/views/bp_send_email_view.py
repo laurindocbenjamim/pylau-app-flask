@@ -1,15 +1,15 @@
 
 
 from flask import Blueprint, session
-from .views.sendCodeEmailView import SendCodeEmailView
-from .views.sendQrCodeEmailView import SendQrCodeEmailView
-from .views.verifyOtpCodeView import VerifyOtpCodeView
-from .views.getQrCodeEmailView import GetQrCodeEmailView
-from .views.verifyAppCodeAuthView import VerifyAppCodeAuthView
-from .views.sendActivateEmailView import SendActivateEmailView
-from ..two_factor_auth_module.twoFAModel import TwoFAModel
-from ..user_module.model.users import Users
-from ..token_module.userTokenModel import UserToken
+from .sendCodeEmailView import SendCodeEmailView
+from .sendQrCodeEmailView import SendQrCodeEmailView
+from .verifyOtpCodeView import VerifyOtpCodeView
+from .getQrCodeEmailView import GetQrCodeEmailView
+from .verifyAppCodeAuthView import VerifyAppCodeAuthView
+from .sendActivateEmailView import SendActivateEmailView
+from ...two_factor_auth_module.twoFAModel import TwoFAModel
+from ...auth_package.module_sign_up_sub.model.users import Users
+from ...token_module.userTokenModel import UserToken
 
 bp = Blueprint('email', __name__, url_prefix='/email')
 

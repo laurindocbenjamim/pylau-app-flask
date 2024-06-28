@@ -3,8 +3,8 @@ from flask.views import View
 
 from markupsafe import escape
 from flask import request, render_template, abort, session, current_app, redirect, url_for, flash, jsonify
-from ...email_module.factory.otp_code_account_message_html import get_otp_code_message_html
-from ...email_module.factory.emailcontroller import send_simple_email_mime_multipart
+from app.email_module.factory.otp_code_account_message_html import get_otp_code_message_html
+from app.email_module.factory.emailcontroller import send_simple_email_mime_multipart
 from flask_login import logout_user
 
 class SendAuthCodeEmailView(View):

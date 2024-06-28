@@ -75,7 +75,7 @@ def generate_provisioning_uri(secret, accountname='username'):
     otpuri = pyotp.totp.TOTP(secret).provisioning_uri(name=accountname, issuer_name='PyLau App')
     #code = pyotp.random_base32()
     imagename = secret +'-otpqrcode.png'
-    qrcode.make(otpuri).save('core/static/otp_qrcode_images/'+imagename)
+    qrcode.make(otpuri).save('app/static/otp_qrcode_images/'+imagename)
     return imagename
 
 def verify_provisioning_uri(secret, code):

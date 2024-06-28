@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone
-from app import db
+from app.configs_package.modules.db_conf import db
 #datetime.now(tz=timezone.utc)
 
 class Users(UserMixin, db.Model):

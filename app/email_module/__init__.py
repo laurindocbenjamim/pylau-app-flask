@@ -1,0 +1,1 @@
+from .views.bp_send_email_view import bp as bp_email_view

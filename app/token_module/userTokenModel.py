@@ -6,8 +6,9 @@ from sqlalchemy import and_
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone
-from app import db
-from ..configs.jwt_config import generate_token
+from app.configs_package.modules.jwt_config import generate_token as generate_jwt_token
+from app.configs_package.modules.db_conf import db
+
 #datetime.now(tz=timezone.utc)
 
 
@@ -25,7 +26,7 @@ class UserToken(db.Model):
 
     # This method is used to create a token
     def create_token(username):
-        token = generate_token(username)
+        token = generate_jwt_token(username)
         try:
             obj = UserToken(username=username, token=token)
             db.session.add(obj)
@@ -51,7 +52,7 @@ class UserToken(db.Model):
     
     # This method is used to update a token
     def update_token(user_id, u_token, username, is_active):
-        token = generate_token(username)
+        token = generate_jwt_token(username)
         try:
             obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==u_token)).first_or_404()
             #obj.token = token
@@ -68,7 +69,7 @@ class UserToken(db.Model):
             return False, str(e)
     
     def refresh_user_token(user_id, username, is_active):
-        token = generate_token(username)
+        token = generate_jwt_token(username)
         try:
             obj = UserToken.query.filter_by(username=username).first_or_404()
             obj.token = token

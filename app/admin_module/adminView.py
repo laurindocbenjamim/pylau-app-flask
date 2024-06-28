@@ -1,6 +1,6 @@
 from flask import render_template, abort, flash, redirect, url_for, session, jsonify
 from flask.views import View
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import logout_user, login_required
 from markupsafe import escape
 
 class AdminView(View):

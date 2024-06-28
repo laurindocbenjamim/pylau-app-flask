@@ -1,7 +1,7 @@
 
 from flask import Blueprint
 from .adminView import AdminView
-from ..user_module.model.users import Users
+from ..auth_package.module_sign_up_sub.model.users import Users
 from ..token_module.userTokenModel import UserToken
 
 bp = Blueprint('admin', __name__, url_prefix='/admin', template_folder='templates')
