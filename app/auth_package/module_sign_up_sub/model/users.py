@@ -152,9 +152,11 @@ class Users(UserMixin, db.Model):
             return True
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_user_role]: \n SQLAlchemyError: {str(e)}")
             return False
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_user_role]: \n Exception: {str(e)}")
             return False
     
     # This method update user password
@@ -166,9 +168,11 @@ class Users(UserMixin, db.Model):
             return True
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_password]: \n SQLAlchemyError: {str(e)}")
             return False
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_password]: \n Exception: {str(e)}")
             return False
 
     # This method delete user

@@ -45,7 +45,7 @@ class AuthRegisterView(View):
                         self.model.db.session.rollback()
                         flash('Error creating token.', 'error')
                     else:      
-
+                        return jsonify({"status": status, "": token.token})
                         status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
                         if status:
                                                       
@@ -73,6 +73,7 @@ class AuthRegisterView(View):
                             status, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)
                             
                             if status:
+                                
                                 if two_fa_auth_method == 'app':  
                                     return redirect(url_for('email.2fappqrcodeget', user_token=token.token))                                 
                                 else:                               
