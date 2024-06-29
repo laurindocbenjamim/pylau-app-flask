@@ -5,9 +5,11 @@ from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 from sqlalchemy import and_
 from werkzeug.security import check_password_hash
 
-from datetime import datetime, timedelta, timezone
-from app.configs_package.modules.jwt_config import generate_token as generate_jwt_token
+from datetime import datetime, timedelta, timezone, date
+from app.configs_package.modules.jwt_config import generate_token as generate_jwt_token, refresh_jwt_token, is_user_token_expired
 from app.configs_package.modules.db_conf import db
+from ..configs_package.modules.logger_config import get_message as set_logger_message
+from flask import current_app
 
 #datetime.now(tz=timezone.utc)
 
@@ -25,19 +27,32 @@ class UserToken(db.Model):
 
 
     # This method is used to create a token
-    def create_token(username):
-        token = generate_jwt_token(username)
+    def create_token(username): 
+        date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        date_now = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S')
+        username = username + ''+ str(int(date_now.timestamp()))
+        u_token = generate_jwt_token(username)
         try:
-            obj = UserToken(username=username, token=token)
+            obj = UserToken(username=username, token=u_token)
             db.session.add(obj)
             db.session.commit()
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"User: {username} \n token: {u_token} \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"User: {username} \n token: {u_token} \n Exception Error: {str(e)}")
             return False, str(e)
+    
+    # This function refresh the user token throught the previous token
+    def refresh_user_token(token): 
+        return refresh_jwt_token(token)
+    
+    def is_user_token_expired(token):
+        return is_user_token_expired(token)
+       
     
     def to_dict(self):
         return {
@@ -51,11 +66,10 @@ class UserToken(db.Model):
         }
     
     # This method is used to update a token
-    def update_token(user_id, u_token, username, is_active):
-        token = generate_jwt_token(username)
+    def update_token(user_id,last_token, new_token, username, is_active):
         try:
-            obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==u_token)).first_or_404()
-            #obj.token = token
+            obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==last_token)).first_or_404()
+            obj.token = new_token
             obj.is_active = is_active
             obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
             #db.session.merge(obj)
@@ -68,7 +82,7 @@ class UserToken(db.Model):
             db.session.rollback()
             return False, str(e)
     
-    def refresh_user_token(user_id, username, is_active):
+    def refresh_user_token_____(user_id, username, is_active):
         token = generate_jwt_token(username)
         try:
             obj = UserToken.query.filter_by(username=username).first_or_404()

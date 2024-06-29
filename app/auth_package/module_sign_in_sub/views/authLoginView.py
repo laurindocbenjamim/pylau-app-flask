@@ -1,8 +1,9 @@
 import flask
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user
 from flask.views import View
 from flask import render_template, request, session, redirect, url_for, flash, jsonify
 from ..controller.authController import validate_form_fields
+from ....configs_package.modules.jwt_config import refresh_jwt_token
 
 class AuthLoginView(View):
     methods = ['GET', 'POST']
@@ -35,6 +36,7 @@ class AuthLoginView(View):
         
         # Check if the user is already logged in
         if request.method == 'POST':
+            
             if validate_form_fields(request.form):
                 
                 username = request.form.get('username')
@@ -48,7 +50,7 @@ class AuthLoginView(View):
                     status, u_token = self.userToken.get_token_by_user(user.email)
                     
                     if status and u_token:
-
+                        
                         # Check if the user has two-factor authentication enabled
                         status, two_fa = self.TwoFaModel.get_user_two_fa_data(user.userID)
                         if status and two_fa:                           
@@ -59,19 +61,22 @@ class AuthLoginView(View):
                                 if user.is_active() == True:
                                     
                                     # generate a secret code for the user
-                                    #status, u_token = self.userToken.update_token(user.userID, user.email, False)
-                                    status, u_token = self.userToken.create_token(user.email)              
-                                    #return jsonify({'status': u_token, 'message': u_token.exp_date, 'user_token': u_token.token})
-                                    if status and u_token:
-                                        # Create an object of the TwoFAModel class
-                                        session['user_token'] = u_token.token                                        
-                                        session['two_fa_auth_method'] = two_fa.method_auth
-                                        session['origin_request'] = 'signin'
+                                    status, new_token = self.userToken.refresh_user_token(u_token.token)
+                                    
+                                    if status and new_token is not None:
                                         
-                                        if two_fa.method_auth == 'app':                                             
-                                             return redirect(url_for('auth.user.app-otp-verify', user_token=u_token.token))
-                                        elif two_fa.method_auth == 'email':
-                                            return redirect(url_for('auth.user.send-otp-email', user_token=u_token.token)) 
+                                        status, up_token = self.userToken.update_token(0,u_token.token, new_token, user.email, False)
+
+                                        if status and up_token is not None:
+                                            # Create an object of the TwoFAModel class
+                                            session['user_token'] = new_token                                        
+                                            session['two_fa_auth_method'] = two_fa.method_auth
+                                            session['origin_request'] = 'signin'
+                                            
+                                            if two_fa.method_auth == 'app':                                             
+                                                return redirect(url_for('auth.user.app-otp-verify', user_token=new_token))
+                                            elif two_fa.method_auth == 'email':
+                                                return redirect(url_for('auth.user.send-otp-email', user_token=new_token))  
                             
                                 logout_user()
                                 flask.flash('This user is not activated', 'danger')
@@ -79,5 +84,5 @@ class AuthLoginView(View):
                                 flask.flash('Invalid username or password ', 'error')
                 else:
                     flask.flash('Username not found', 'error')
-
+        
         return render_template(self.template, title='Login')

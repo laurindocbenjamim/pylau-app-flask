@@ -10,13 +10,13 @@ from .verifyAuthOtpCodeView import VerifyAuthOtpCodeView
 from .verifyAppAuthCodeView import VerifyAppAuthCodeView
 from .authUserHistoric import AuthUserHistoric
 
-from flask_login import logout_user, login_user
+from flask_login import logout_user
 
 
 
 bp_auth = flask.Blueprint('user', __name__, url_prefix='/user', template_folder='templates')
 
-def init_app(login_manager, db):
+def init_login_app(login_manager, db):
     
     from ...module_sign_up_sub.model.users import Users
 

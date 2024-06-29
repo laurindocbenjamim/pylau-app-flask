@@ -73,11 +73,13 @@ def load_routes(app, db, login_manager):
     
     # Integrating the blueprints parent and child into the application
 
-    from ... auth_package.module_sign_in_sub.views.bp_auth_login_view import init_app as init_auth_login_view_app, bp_auth as bp_auth_login_view_child
-    from ... auth_package.module_sign_up_sub.views.bp_auth_register_view import bp_auth_register_parent, init_app as init_user_register_app
+    #from ... auth_package.module_sign_in_sub.views.bp_auth_login_view import init_app as init_auth_login_view_app, bp_auth as bp_auth_login_view_child
+    #from ... auth_package.module_sign_up_sub.views.bp_auth_register_view import bp_auth_register_parent, init_app as init_user_register_app
+    from ...auth_package import bp_auth_register_parent, init_register_app
+    from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     
-    init_user_register_app()
-    init_auth_login_view_app(login_manager=login_manager, db=db)
+    init_register_app()
+    init_login_app(login_manager=login_manager, db=db)
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)
     app.register_blueprint(bp_auth_register_parent)
 

@@ -28,37 +28,52 @@ logger.addHandler(console_handler)
 
 def get_message(e, type='debug'):
     if type == 'debug':
-        code = e.code
-        name = e.name
-        description = e.description
-        logger.debug('\n===============================================================\
-            \nCODE:%s NAME:%s \
-            \n _________________________DESCRIPTION___________________________\n %s ', code, name, description)
+        code = e
+        name = e
+        description = e
+        logger.debug('\n\n\n\n========================  DEBUGING  =======================================\
+            \n\nCODE:%s \nNAME:%s \
+            \nERROR: \n%s\
+            \n _________________________\
+            DESCRIPTION\
+            ___________________________\n %s ', code, name, e, description)
     elif type == 'info':
         code = e.code
         name = e.name
         description = e.description
         logger.info('\n===============================================================\
             \nCODE:%s \nNAME:%s \
-            \n _________________________DESCRIPTION___________________________\n %s ', code, name, description)
+            \nERROR: \n%s\
+            \n _________________________\
+            DESCRIPTION\
+            ___________________________\n %s ', code, name, e, description)
     elif type == 'warn':
         code = e.code
         name = e.name
         description = e.description
         logger.warning('\n===========================================================================================\
             \nCODE:%s \nNAME:%s \
-            \n _________________________DESCRIPTION___________________________\n %s ', code, name, description)
+            \nERROR: \n%s\
+            \n _________________________\
+            DESCRIPTION\
+            ___________________________\n %s ', code, name, e, description)
     elif type == 'error':
         code = e.code
         name = e.name
         description = e.description
         logger.error('\n===============================================================\
             \nCODE:%s \nNAME:%s \
-            \n _________________________DESCRIPTION___________________________\n %s ', code, name, description)
+            \nERROR: \n%s\
+            \n _________________________\
+            DESCRIPTION\
+            ___________________________\n %s ', code, name, e, description)
     elif type == 'critical':
         code = e.code
         name = e.name
         description = e.description
         logger.critical('\n===============================================================\
             \nCODE:%s \nNAME:%s \
-            \n _________________________DESCRIPTION___________________________\n %s ', code, name, description)
+            \nERROR: \n%s\
+            \n _________________________\
+                        DESCRIPTION\
+                        ___________________________\n %s ', code, name, e, description)

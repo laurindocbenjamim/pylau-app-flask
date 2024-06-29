@@ -41,7 +41,7 @@ def error_handlers_view(app):
     def handle_generic_error(e):
         app.logger.error('Internal Server Error: %s', e)
         image=image='https://miro.medium.com/v2/resize:fit:1400/1*2Z41mMgjOxkUUuvIwd7Djw.png'
-        resp = make_response(render_template('errors/generic.html', message=f"{e.code} -{e.name}. An error occurred. {e.description}", image=image, error=500), 500)
+        resp = make_response(render_template('errors/generic.html', message=f" An error occurred.\n {e}", image=image, error=500), 500)
         resp.headers['X-Something'] = 'Generic Error'
 
         get_message(e, type='debug')

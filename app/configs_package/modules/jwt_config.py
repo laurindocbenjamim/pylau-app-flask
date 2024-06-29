@@ -7,6 +7,7 @@ import jwt
 import json
 import requests
 from flask import Flask, Request
+from .logger_config import get_message as set_logger_message
 
 from datetime import datetime, timedelta, timezone
 from flask import request, jsonify, current_app
@@ -37,6 +38,7 @@ def token_required(func):
             return payload
         except jwt.ExpiredSignatureError as e:
             error = f"{e}"
+            set_logger_message(f"JWT <<decorated method>> ExpiredSignatureError: {str(e)}")
             return jsonify({"error": error},401)
     return decorated
 
@@ -53,26 +55,83 @@ def decode_token(token):
         return payload
     except jwt.ExpiredSignatureError as e:
         error = f"{e}"
+        set_logger_message(f"JWT <<decode_token method>> ExpiredSignatureError: {str(e)}")
         return {"error": error, "status_code": 401}
 
 """  This method generate a token using the JWT library """
 def generate_token(user):
+
     token = None
-    try:
-        date = datetime.now() + timedelta(seconds=1800) # 1800 seconds is equal 30 minutes
-        #date_serialized = json.dumps(date, default=str)   
-        date_serialized = datetime.now(tz=timezone.utc) + timedelta(seconds=1800)
+    date_serialized = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
+    secret_key = current_app.config['SECRET_KEY']
 
-        token = jwt.encode({"user": user, 'exp': date_serialized, "nbf": datetime.now(tz=timezone.utc) },
-                           current_app.config['SECRET_KEY'], algorithm="HS256")
-       
-    except Exception as e:
-        token = f"{e}"
+    payload = {
+        "user": str(user), 
+        'exp': date_serialized, 
+        "nbf": datetime.now(tz=timezone.utc) 
+        }
     
-    return token
+    try:
+        #date = datetime.now() + timedelta(seconds=1800) # 1800 seconds is equal 30 minutes
+        #date_serialized = json.dumps(date, default=str)          
 
+        token = jwt.encode(payload, secret_key, algorithm="HS256")
+        return token
+    except Exception as e:
+        set_logger_message(f"JWT <<generate_token method>> ExpiredSignatureError: {str(e)}")
+    return None
 
+def refresh_jwt_token(token):
+    secret_key = current_app.config['SECRET_KEY']
+    new_token = None
+    try:
+        set_logger_message(f"<<refresh_jwt_token method>> START TO TRY TO DECODE TOKEN")
+        # First try to decode the token. If it's expired it will raise an exception
+        jwt.decode(token, secret_key, algorithms="HS256")  
 
+    except jwt.ExpiredSignatureError as e:     
+
+        set_logger_message(f"JWT <<refresh_jwt_token method>> ExpiredSignatureError: {str(e)}")
+        # If the token is expired generate a new one
+        set_logger_message(f"<<refresh_jwt_token method>> START TRYING TO REFRESH THE TOKEN")
+
+        try:
+            set_logger_message(f"<<refresh_jwt_token method>> START TRYING TO DECODE THE TOKEN")
+
+            user = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': False})['user']
+
+            set_logger_message(f"<<refresh_jwt_token method>> START TRYING TO REFRESH THE TOKEN")
+
+            new_token = generate_token(user)
+
+            set_logger_message(f"<<refresh_jwt_token method>> THE TOKEN HAS BEEN REFRESHED [!]")
+
+            return True, new_token
+        except Exception as ex:
+
+            set_logger_message(f"JWT <<refresh_jwt_token method>> ExpiredSignatureError -> [Exception]: {str(ex)}")
+
+            return False, None
+    except Exception as e:
+
+        set_logger_message(f"JWT <<refresh_jwt_token method>> Exception: {str(e)}")
+
+        return False, None
+    else:
+        return True, token
+
+def is_user_token_expired(token):
+    secret_key = current_app.config['SECRET_KEY'] 
+
+    if not token or '':
+        return None        
+    try:
+        response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
+        return False
+    except jwt.ExpiredSignatureError as e:
+        set_logger_message(f"JWT <<decode_token method>> ExpiredSignatureError: {str(e)}")
+        return True
+    
 def filter_token_from_headers(headers):
     token = headers["Authorization"]
     token = str.replace(str(token), 'Bearer ', '')
