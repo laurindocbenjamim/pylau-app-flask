@@ -33,6 +33,14 @@ def load_routes(app, db, login_manager):
         with app.app_context():
             db.create_all()
         return redirect(url_for('index'))
+
+    @app.route('/app-logs')
+    def display_logs():
+        logs = "app/static/logs/logs.log"
+        log_data =''
+        with open(logs, 'r') as data:
+            log_data = data.read()
+        return render_template('home.html', title='Display Logs', log_data=log_data)
     
 
      # Main route
