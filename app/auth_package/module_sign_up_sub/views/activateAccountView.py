@@ -17,39 +17,36 @@ class ActivateAccountView(View):
         self.userToken = userToken
 
     def dispatch_request(self, user_token):
-        if request.method == 'GET' and user_token is not None:
+        if request.method == 'GET' and user_token is not None:           
             
-            status,token = self.userToken.get_token_by_token(escape(user_token))
-            
-            # Check if the token is expired
-            if status and token is not None:
-                if self.userToken.is_token_expired(token):
-                    abort(401)
-            else:
+            if self.userToken.is_user_token_expired(escape(user_token)):
                 abort(401)
             
             #return jsonify({'status': 'success', 'message': self.userToken.is_token_expired(token), 'user_token': escape(user_token)})
             # Get the user details using the email address
-            status, user = self.model.get_user_by_email(token.username)
-           
-            # Check if the user is identified
-            if status and user is not None:
-                
-                # Check if email exists
-                if user.email == token.username:
+            status,token = self.userToken.get_token_by_token(escape(user_token))
 
-                    # bEFORE CREATE User generate and save token
-                    status, user = self.model.update_user_status(user.userID, True)
-                    if status:    
-                        logout_user()
-                        session.clear()                 
-                        return render_template('registered_success.html', user_token=token.token, firstname=user.firstname, lastname=user.lastname, email=user.email)
+            if status and token is not None:
+                status, user = self.model.get_user_by_email(token.username)
+           
+                # Check if the user is identified
+                if status and user is not None:
                     
-                    flask.flash('This user is not activated', 'danger')                        
+                    # Check if email exists
+                    if user.email == token.username:
+
+                        # bEFORE CREATE User generate and save token
+                        status, user = self.model.update_user_status(user.userID, True)
+                        if status:    
+                            logout_user()
+                            session.clear()                 
+                            return render_template('registered_success.html', user_token=token.token, firstname=user.firstname, lastname=user.lastname, email=user.email)
                         
+                        flask.flash('This user is not activated', 'danger')                        
+                            
+                    else:
+                        flash('Invalid user', 'danger') 
                 else:
-                    flash('Invalid user', 'danger') 
-            else:
-                flash('Invalid token', 'danger')        
-                    
+                    flash('Invalid token', 'danger')        
+                        
         return render_template(self.template, title='Register')

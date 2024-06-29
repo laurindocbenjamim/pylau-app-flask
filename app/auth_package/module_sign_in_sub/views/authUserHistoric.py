@@ -19,7 +19,7 @@ class AuthUserHistoric(db.Model):
     username:Mapped[str] = db.Column(db.String(100), nullable=False)
     device_id:Mapped[str] = db.Column(db.String(255), nullable=True)    
     is_logged_in:Mapped[bool] = db.Column(db.Boolean(), default=False)
-    date_logged_in = db.Column(db.DateTime, default=db.func.current_date())
+    date_logged_in = db.Column(db.Date(), default=db.func.current_date())
     datetime_logged_in = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_logged_out = db.Column(db.DateTime, nullable=True)
 

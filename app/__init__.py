@@ -36,7 +36,7 @@ def create_application(type_db=None,test_config=None):
     #set_app_config(app)
 
     # Set the database URI
-    connect_to_db_server(app,type_db)
+    #connect_to_db_server(app,type_db)
 
      # Login Manager is needed for the the application 
     # to be able to log in and log out users

@@ -81,6 +81,28 @@ def generate_token(user):
         set_logger_message(f"JWT <<generate_token method>> ExpiredSignatureError: {str(e)}")
     return None
 
+def expire_user_token(user):
+
+    token = None
+    date_serialized = datetime.now(tz=timezone.utc) - timedelta(minutes=30)
+    secret_key = current_app.config['SECRET_KEY']
+
+    payload = {
+        "user": str(user), 
+        'exp': date_serialized, 
+        "nbf": datetime.now(tz=timezone.utc) 
+        }
+    
+    try:
+        #date = datetime.now() + timedelta(seconds=1800) # 1800 seconds is equal 30 minutes
+        #date_serialized = json.dumps(date, default=str)          
+
+        token = jwt.encode(payload, secret_key, algorithm="HS256")
+        return token
+    except Exception as e:
+        set_logger_message(f"JWT <<generate_token method>> ExpiredSignatureError: {str(e)}")
+    return None
+
 def refresh_jwt_token(token):
     secret_key = current_app.config['SECRET_KEY']
     new_token = None
@@ -119,6 +141,42 @@ def refresh_jwt_token(token):
         return False, None
     else:
         return True, token
+
+# This method forces the jwt user expiration token 
+def force_jwt_token_expiration(token):
+    secret_key = current_app.config['SECRET_KEY']
+    new_token = None
+    try:
+        set_logger_message(f"<<force_jwt_token_expiration method>> START TO TRY TO DECODE TOKEN")
+        # First try to decode the token. If it's expired it will raise an exception
+        jwt.decode(token, secret_key, algorithms="HS256")  
+
+        # If the token is expired generate a new one
+        set_logger_message(f"<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN")
+
+        set_logger_message(f"<<force_jwt_token_expiration method>> START TRYING TO DECODE THE TOKEN")
+
+        user = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': False})['user']
+
+        set_logger_message(f"<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN")
+
+        new_token = expire_user_token(user)
+
+        set_logger_message(f"<<force_jwt_token_expiration method>> THE TOKEN HAS BEEN REFRESHED [!]")
+
+        return True, new_token
+
+    except jwt.ExpiredSignatureError as e:     
+
+        set_logger_message(f"JWT <<force_jwt_token_expiration method>> ExpiredSignatureError: {str(e)}")
+        
+    except Exception as e:
+
+        set_logger_message(f"JWT <<force_jwt_token_expiration method>> Exception: {str(e)}")
+
+        return False, None
+    else:
+        return True, None
 
 def is_user_token_expired(token):
     secret_key = current_app.config['SECRET_KEY'] 

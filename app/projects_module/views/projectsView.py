@@ -1,6 +1,6 @@
 from flask.views import View
 from flask import render_template, abort, session, redirect, url_for, request, flash,jsonify
-from flask_login import login_required
+from flask_login import login_required, logout_user
 from markupsafe import escape
 #from flask_caching import cache
 
@@ -24,19 +24,18 @@ class ProjectsView(View):
     def dispatch_request(self, user_token):
         listItems = []
 
+        # Check if the token is expired
+        if self.userToken.is_user_token_expired(escape(user_token)):
+            session.clear()
+            logout_user()
+            return redirect(url_for('auth.user.login'))
+        
         if request.method == 'GET' and user_token is not None:
 
             status,token = self.userToken.get_token_by_token(escape(user_token))
             
-            # Check if the token is expired
-            if status and token is not None:
-                if self.userToken.is_token_expired(token):
-                    abort(401)
-            else:
-                abort(401)
-            
              # Get the user details using the email address
-            if self.userModel.check_email_exists(token.username):
+            if status and self.userModel.check_email_exists(token.username):
                 session['user_token'] = escape(user_token)
                 status, users = self.userModel.get_all_users()
                 if status:

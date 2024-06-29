@@ -62,49 +62,24 @@ class GetQrCodeEmailView(View):
         otp_time_interval = 360
                  
         if request.method == 'GET' and user_token is not None:
-            status, token = self.userToken.get_token_by_token(escape(user_token))
-            # Check if the token is expired
-            if status:
-                if self.userToken.is_token_expired(token):
-                    abort(403)
-            else:
-                abort(403)
+
+            if self.userToken.is_user_token_expired(escape(user_token)):
+                abort(401)
+
+            status, token = self.userToken.get_token_by_token(escape(user_token))            
             
-            if 'user_id' and 'two_fa_auth_method' and 'firstname' and 'origin_request' and 'lastname' and 'email' in session:
-                
-                secret = current_app.config['OTP_SECRET_KEY']
-                email = session.get('email')
-                lastname = session.get('lastname')
-                firstname = session.get('firstname')
-
-                if session.get('origin_request') == 'register':
-                     
-                    # Create an object of the TwoFAModel class             
-                    # Call the method with the required data
-                    two_fa_obj = load_two_fa_obj({
-                        'userID': session.get('user_id'),
-                        'two_factor_auth_secret': '',
-                        'method_auth': session.get('two_fa_auth_method'),
-                        'is_active': True
-                    })
-
-                    # Save the secret code in the database
-                    respTwoFa, obj = self.twoFaModel.save_two_fa_data(two_fa_obj)                
-                elif session.get('origin_request') == 'signin':
-                    respTwoFa = True 
-
-                if respTwoFa:
+            if status and token is not None:
+                email = token.username
                     
-                    otp_qr_code = self.twoFaModel.generate_provisioning_uri(accountname=email, secret=secret)
-                    session['otpqrcode'] = otp_qr_code
-                    session['otpqrcode_uri'] = 'otp_qrcode_images/' + str(session['otpqrcode'])
+                otp_qr_code = self.twoFaModel.generate_provisioning_uri(accountname=email, secret='')
+                session['otpqrcode'] = otp_qr_code
+                session['otpqrcode_uri'] = 'otp_qrcode_images/' + str(session['otpqrcode'])
 
-                    time_remaining = f"This code expires in 24 hours."
+                time_remaining = f"This code expires in 24 hours."
 
-                    flash('Scan the QR Code with your Authenticator Application', 'info')
-                    return render_template(self.template, title='2-FA QrCode app', user_token=escape(user_token), otpqrcode_uri=session['otpqrcode_uri'], email=email, time_remaining=time_remaining)
-                else:
-                    flash('Process failed', 'error')
+                flash('Scan the QR Code with your Authenticator Application', 'info')
+                return render_template(self.template, title='2-FA QrCode app', user_token=token.token, otpqrcode_uri=session['otpqrcode_uri'], email=email, time_remaining=time_remaining)
+            
 
             else:
                 flash('User not identified!', 'danger')         

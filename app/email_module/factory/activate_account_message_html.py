@@ -3,27 +3,27 @@ from flask import request, url_for
 from datetime import datetime, timedelta
 
 def get_activate_account_message_html(name = 'Subscriber', user_token='', time_remaining=''):
-    base_url = request.url_root + 'auth/user/activate/account/' + user_token
+    base_url = request.url_root + 'auth/user/activate/account/' + str(user_token)
 
-    created_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')#user['created_date']
+    created_date = datetime.now()#user['created_date']
     created_date = datetime.strftime(created_date,'%Y-%m-%d %H:%M:%S')            
     date_obj = datetime.strptime(created_date, '%Y-%m-%d %H:%M:%S')
     date_created_int = int(date_obj.timestamp())
             
     date_now_int = int(datetime.now().timestamp())
-    expire_time = ''
+    
             
     #date_obj = datetime.strptime(str(created_date), '%a, %d %b %Y %H:%M:%S %Z')
             
 
-    expiration_date = date_obj + timedelta(days=expire_time)
+    expiration_date = date_obj + timedelta(days=5)
 
-    time_remaining = expiration_date - datetime.now()
+    #time_remaining = expiration_date - datetime.now()
             #time_remaining_int = int(datetime.strptime(str(time_remaining), '%Y-%m-%d %H:%M:%S').timestamp())
-    total_seconds = int(time_remaining.total_seconds())
-    total_minutes = total_seconds // 60
-    total_hours = total_minutes // 60
-    time_left_days = total_hours // 24
+    #total_seconds = int(time_remaining.total_seconds())
+    #total_minutes = total_seconds // 60
+    #total_hours = total_minutes // 60
+    #time_left_days = total_hours // 24
     
     html = """\
 

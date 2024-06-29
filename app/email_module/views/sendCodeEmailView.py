@@ -2,7 +2,7 @@
 from flask.views import View
 
 from markupsafe import escape
-from flask import request, abort, session, current_app, redirect, url_for, flash, jsonify
+from flask import request, abort, session, current_app, redirect, url_for, flash, jsonify, json
 from ..factory.otp_code_account_message_html import get_otp_code_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 from ...two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
@@ -44,44 +44,50 @@ class SendCodeEmailView(View):
                  
         if request.method == 'GET' and user_token is not None:
             #return jsonify({'status': True, 'token': escape(user_token)})
-            status,token = self.userToken.get_token_by_token(escape(user_token))
+            #status,token = self.userToken.get_token_by_token(escape(user_token))
             
             # Check if the token is expired
+            #if status:
+                #if self.userToken.is_token_expired(token):
+                    #abort(403)
+            #else:
+                #abort(403)
+            if self.userToken.is_user_token_expired(escape(user_token)):
+                abort(401)
+            
+            status,token = self.userToken.get_token_by_token(escape(user_token))
             if status:
-                if self.userToken.is_token_expired(token):
-                    abort(403)
-            else:
-                abort(403)
-            # Get the user details using the email address
-            status, user = self.userModel.get_user_by_email(token.username)
+                # Get the user details using the email address
+                statusu, user = self.userModel.get_user_by_email(token.username)
 
-            # Check if the user is identified
-            if status and user is not None:
                 
-                if user.email == token.username:
+                # Check if the user is identified
+                if status and user is not None:
+                    
+                    
                     secret = current_app.config['OTP_SECRET_KEY']
                     user_id = user.userID
                     email = user.email
                     lastname = user.lastname
                     firstname =user.firstname 
-                        
+                            
                     totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
                     OTP = totp.now()
 
-                    time_remaining = f"This code expires in {otp_time_interval} seconds ({ int(otp_time_interval / 60) } minutes)"
+                    
+                    time_remaining = f"This code expires in 5 minutes)"
                     html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
+                    
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
-
+                    
                     if res:
                         flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
-                        return redirect(url_for('email.2facodeverify', user_token=escape(user_token)))
+                        return redirect(url_for('email.2facodeverify', user_token=token.token))
                     else:
                         flash('Failed to send code to the email.', 'error')
-                else:
-                    flash('Invalid user', 'danger')
 
-            else:
-                flash('User not identified!', 'danger')         
+                else:
+                    flash('User not identified!', 'danger')         
         
 
         return redirect(url_for('auth.register'))

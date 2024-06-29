@@ -43,48 +43,46 @@ class SendAuthCodeEmailView(View):
         otp_time_interval = 300
                  
         if request.method == 'GET' and user_token is not None:
-            status,token = self.userToken.get_token_by_token(escape(user_token))
-            
-            # Check if the token is expired
-            if status and token:
-                if self.userToken.is_token_expired(token):
-                    session.clear()
-                    logout_user()
-                    return redirect(url_for('auth.user.login'))
-            else:
+
+            if self.userToken.is_user_token_expired(escape(user_token)):
                 session.clear()
                 logout_user()
+                flash('Your session was expired', 'error')
                 return redirect(url_for('auth.user.login'))
-            # Get the user details using the email address
-            status, user = self.userModel.get_user_by_email(token.username)
-
-            # Check if the user is identified
-            if status and user is not None:
                 
-                if user.email == token.username:
-                    secret = current_app.config['OTP_SECRET_KEY']
-                    user_id = user.userID
-                    email = user.email
-                    lastname = user.lastname
-                    firstname =user.firstname 
-                        
-                    totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
-                    OTP = totp.now()
+            status,token = self.userToken.get_token_by_token(escape(user_token))
+           
+            if status and token is not None:   
+                # Get the user details using the email address
+                status, user = self.userModel.get_user_by_email(token.username)
 
-                    time_remaining = f"This code expires in {otp_time_interval} seconds ({ int(otp_time_interval / 60) } minutes)"
-                    html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
-                    res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
+                # Check if the user is identified
+                if status and user is not None:
+                    
+                    if user.email == token.username:
+                        secret = current_app.config['OTP_SECRET_KEY']
+                        user_id = user.userID
+                        email = user.email
+                        lastname = user.lastname
+                        firstname =user.firstname 
+                            
+                        totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
+                        OTP = totp.now()
 
-                    if res:
-                        flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
-                        return redirect(url_for('auth.user.verify-otp', user_token=escape(user_token)))
+                        time_remaining = f"This code expires in {otp_time_interval} seconds ({ int(otp_time_interval / 60) } minutes)"
+                        html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
+                        res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
+
+                        if res:
+                            flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
+                            return redirect(url_for('auth.user.verify-otp', user_token=escape(user_token)))
+                        else:
+                            flash('Failed to send code to the email.', 'error')
                     else:
-                        flash('Failed to send code to the email.', 'error')
-                else:
-                    flash('Invalid user', 'danger')
+                        flash('Invalid user', 'danger')
 
-            else:
-                flash('User not identified!', 'danger')         
+                else:
+                    flash('User not identified!', 'danger')         
         
 
         return redirect(url_for('auth.user.login'))

@@ -2,11 +2,13 @@ import os
 import pyotp
 import datetime
 import qrcode
+from flask import current_app
 from sqlalchemy.orm import Mapped,mapped_column, relationship
-
+from sqlalchemy import and_
 from app.configs_package.modules.db_conf import db
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
+from ..configs_package.modules.logger_config import get_message as set_logger_message
 
 class TwoFAModel(db.Model):
     """
@@ -20,7 +22,8 @@ class TwoFAModel(db.Model):
     two_factor_auth_secret:Mapped[str] = db.Column(db.String(100), unique=False, nullable=False)  
     method_auth:Mapped[str] = db.Column(db.String(20),default="app", nullable=False) 
     is_active:Mapped[str] = db.Column(db.Boolean(), default=True, nullable=True)
-    date_added = db.Column(db.DateTime, default=datetime.now())
+    date_added = db.Column(db.Date(), default=db.func.current_date())
+    datetime_added = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(days=1))
     
     def __repr__(self):
@@ -51,9 +54,11 @@ class TwoFAModel(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[save_two_fa_data]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[create_token]: \n Exception: {str(e)}")
             return False, str(e)
     
     def update_secret_two_fa_data(user_id):
@@ -74,9 +79,11 @@ class TwoFAModel(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_secret_two_fa_data]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_secret_two_fa_data]: \n Exception: {str(e)}")
             return False, str(e)
         
     def update_two_fa_data(obj):
@@ -95,9 +102,11 @@ class TwoFAModel(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_two_fa_data]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_two_fa_data]: \n Exception: {str(e)}")
             return False, str(e)
     
 
@@ -148,8 +157,10 @@ class TwoFAModel(db.Model):
             obj = TwoFAModel.query.filter_by(userID=user_id).first_or_404()
             return True, obj
         except SQLAlchemyError as e:
+            set_logger_message(f"Error occured on METHOD[get_user_two_fa_data]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
+            set_logger_message(f"Error occured on METHOD[get_user_two_fa_data]: \n Exception: {str(e)}")
             return False, str(e)
     
     def  get_user_two_fa_by_id(two_fa_id):
@@ -200,13 +211,14 @@ class TwoFAModel(db.Model):
             The generated OTP.
         """
         accountname = kwargs.get('accountname')
-        secret = kwargs.get('secret')
+        secret = current_app.config['OTP_SECRET_KEY']
         interval = kwargs.get('interval')
 
         totp = pyotp.TOTP(secret,name=accountname, interval=interval)
         return totp
 
     def generate_provisioning_uri(**kwargs):
+        imagename = None
         """
         Generates a provisioning URI for the given account.
 
@@ -219,11 +231,12 @@ class TwoFAModel(db.Model):
             The name of the generated QR code image.
         """
         accountname = kwargs.get('accountname')
-        secret = kwargs.get('secret')
+        secret = current_app.config['OTP_SECRET_KEY']
         otpuri = pyotp.totp.TOTP(secret).provisioning_uri(name=accountname, issuer_name='DTuning App')
     
         imagename = secret +'-otpqrcode.png'
         qrcode.make(otpuri).save('app/static/otp_qrcode_images/'+imagename)
+        #set_logger_message(f"Error occured on METHOD[save_two_fa_data]: \n SQLAlchemyError: {str(e)}")
         return imagename
 
     def verify_provisioning_uri(**kwargs):
@@ -238,7 +251,7 @@ class TwoFAModel(db.Model):
         Returns:
             True if the code is valid, False otherwise.
         """
-        secret = kwargs.get('secret')
+        secret = current_app.config['OTP_SECRET_KEY']
         code = kwargs.get('code')
         
         totp = pyotp.TOTP(secret)

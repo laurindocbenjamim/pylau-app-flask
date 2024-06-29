@@ -44,16 +44,18 @@ class AuthLoginView(View):
                 status, user = self.model.get_user_by_email(username)
                 
                 # First check if the user exists
-                if status and user:
+                if status and user is not None:
 
                     # Check if the user has a Token 
                     status, u_token = self.userToken.get_token_by_user(user.email)
                     
-                    if status and u_token:
+                    if status and u_token is not None:
                         
                         # Check if the user has two-factor authentication enabled
                         status, two_fa = self.TwoFaModel.get_user_two_fa_data(user.userID)
-                        if status and two_fa:                           
+                        
+                        if status and two_fa is not None:        
+                                               
                             # Check if the user password is correct
                             if user and user.check_password(password):
                                 # Check if the user is activated
@@ -66,7 +68,7 @@ class AuthLoginView(View):
                                     if status and new_token is not None:
                                         
                                         status, up_token = self.userToken.update_token(0,u_token.token, new_token, user.email, False)
-
+                                        
                                         if status and up_token is not None:
                                             # Create an object of the TwoFAModel class
                                             session['user_token'] = new_token                                        

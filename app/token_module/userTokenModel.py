@@ -6,7 +6,7 @@ from sqlalchemy import and_
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone, date
-from app.configs_package.modules.jwt_config import generate_token as generate_jwt_token, refresh_jwt_token, is_user_token_expired
+from app.configs_package.modules.jwt_config import generate_token as generate_jwt_token, refresh_jwt_token, is_user_token_expired, force_jwt_token_expiration
 from app.configs_package.modules.db_conf import db
 from ..configs_package.modules.logger_config import get_message as set_logger_message
 from flask import current_app
@@ -22,7 +22,7 @@ class UserToken(db.Model):
     token:Mapped[str] = db.Column(db.String(255), unique=True, nullable=False)
     is_active:Mapped[str] = db.Column(db.Boolean(), default=False)
     datetime_added = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_added = db.Column(db.DateTime, default=db.func.current_date())
+    date_added = db.Column(db.Date(), default=db.func.current_date())
     date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(minutes=30))
 
 
@@ -30,8 +30,10 @@ class UserToken(db.Model):
     def create_token(username): 
         date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         date_now = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S')
-        username = username + ''+ str(int(date_now.timestamp()))
+        date_now_int = str(int(date_now.timestamp()))
+
         u_token = generate_jwt_token(username)
+        
         try:
             obj = UserToken(username=username, token=u_token)
             db.session.add(obj)
@@ -39,11 +41,11 @@ class UserToken(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            set_logger_message(f"User: {username} \n token: {u_token} \n SQLAlchemyError: {str(e)}")
+            set_logger_message(f"Error occured on METHOD[create_token]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
-            set_logger_message(f"User: {username} \n token: {u_token} \n Exception Error: {str(e)}")
+            set_logger_message(f"Error occured on METHOD[create_token]: \n Exception: {str(e)}")
             return False, str(e)
     
     # This function refresh the user token throught the previous token
@@ -68,8 +70,8 @@ class UserToken(db.Model):
     # This method is used to update a token
     def update_token(user_id,last_token, new_token, username, is_active):
         try:
-            obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==last_token)).first_or_404()
-            obj.token = new_token
+            obj = UserToken.query.filter(and_(UserToken.username==str(username), UserToken.token==str(last_token))).first_or_404()
+            obj.token = str(new_token)
             obj.is_active = is_active
             obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
             #db.session.merge(obj)
@@ -77,15 +79,17 @@ class UserToken(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_token]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_token]: \n Exception: {str(e)}")
             return False, str(e)
     
     def refresh_user_token_____(user_id, username, is_active):
         token = generate_jwt_token(username)
         try:
-            obj = UserToken.query.filter_by(username=username).first_or_404()
+            obj = UserToken.query.filter_by(username=str(username)).first_or_404()
             obj.token = token
             obj.is_active = is_active
             obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
@@ -102,7 +106,7 @@ class UserToken(db.Model):
     # This method is used to update the date_exp of a token 
     def expire_the_user_token_by_user(username, token):
         try:
-            obj = UserToken.query.filter(and_(UserToken.username==username, UserToken.token==token)).first_or_404()
+            obj = UserToken.query.filter(and_(UserToken.username==str(username), UserToken.token==str(token))).first_or_404()
             obj.is_active = False
             obj.date_exp = datetime.now(tz=timezone.utc) - timedelta(minutes=5)
             
@@ -114,7 +118,10 @@ class UserToken(db.Model):
         except Exception as e:
             db.session.rollback()
             return False, str(e)
-
+    # This method forces the jwt user expiration token 
+    def force_user_jwt_token_expiration(token):
+        return force_jwt_token_expiration(token)
+    
     # Delete a token by the token_id
     def delete_token_by_id(token_id):
         try:
@@ -132,18 +139,20 @@ class UserToken(db.Model):
     # This method is used to get a token by the token 
     def get_token_by_token(token):
         try:
-            token_obj = UserToken.query.filter_by(token=token, date_added=db.func.current_date()).first_or_404()
+            token_obj = UserToken.query.filter_by(token=str(token)).first_or_404()
             return True, token_obj
         except SQLAlchemyError as e:
+            set_logger_message(f"Error occured on METHOD[get_token_by_token]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
+            set_logger_message(f"Error occured on METHOD[get_token_by_token]: \n Exception: {str(e)}")
             return False, str(e)
     
 
     # This method is used to get a token by the username
     def get_token_by_user(username):
         try:
-            token_obj = UserToken.query.filter_by(username=username).first_or_404()
+            token_obj = UserToken.query.filter_by(username=str(username)).first_or_404()
             return True, token_obj
         except SQLAlchemyError as e:
             return False, str(e)
@@ -152,7 +161,7 @@ class UserToken(db.Model):
         
     def check_token_exists(token):
         try:
-            token_obj = UserToken.query.filter_by(token=token).first()
+            token_obj = UserToken.query.filter_by(token=str(token)).first()
             if token_obj:
                 return True
             return False 

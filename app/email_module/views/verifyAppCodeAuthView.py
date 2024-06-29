@@ -51,24 +51,23 @@ class VerifyAppCodeAuthView(View):
         """
                  
         if request.method == 'POST' and user_token is not None:
-            status, token = self.userToken.get_token_by_token(escape(user_token))
-            # Check if the token is expired
-            if status:
-                if self.userToken.is_token_expired(token):
-                    abort(403)
-            else:
-                abort(403)
             
+            # Check if the token is expired
+            if self.userToken.is_user_token_expired(escape(user_token)):
+                abort(401)
+            
+            status, token = self.userToken.get_token_by_token(escape(user_token))
             # Check if the token is already used
             code = request.form.get('otpcode',None)
 
-            if code is not None and 'email' and 'user_id' in session:
+            if code is None:
+                flash("Enter a valid code")
+
+            elif status and token is not None:
                 
                 secret = current_app.config['OTP_SECRET_KEY']
-                user_id = session['user_id']
-                email = session['email']
 
-                otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
+                otpstatus = self.twoFaModel.verify_provisioning_uri(secret='', code=code)
                       
                 if otpstatus:
 
@@ -82,19 +81,9 @@ class VerifyAppCodeAuthView(View):
                         self.twoFaModel.update_imagename('app/static/otp_qrcode_images/' \
                                          + session['otpqrcode'], new_image_name)
 
-                    # If the origin request is register, redirect to the activate account endpoint
-                    if 'origin_request' in session:
-                        if session['origin_request'] == 'register':
-                            flash('Code verified successful', 'success')
-                            return redirect(url_for('email.activate_send', user_token=escape(user_token))) 
-                         
-                        # If the origin request is a sign-in request
-                        elif session['origin_request'] == 'signin':
-                            user = self.userModel.get_user_by_id(user_id)
-                            login_user(user)
-                            g.user = user  
-
-                        return redirect(url_for('index'))
+                    flash('Code verified successful', 'success')
+                    return redirect(url_for('email.activate_send', user_token=token.token)) 
+                        
                 else:
                     flash('Invalid code provided', 'error')
             else:

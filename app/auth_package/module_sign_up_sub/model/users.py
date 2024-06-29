@@ -2,10 +2,13 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
+from sqlalchemy import and_
 from werkzeug.security import check_password_hash
+
 
 from datetime import datetime, timedelta, timezone
 from app.configs_package.modules.db_conf import db
+from ....configs_package.modules.logger_config import get_message as set_logger_message
 #datetime.now(tz=timezone.utc)
 
 class Users(UserMixin, db.Model):
@@ -23,7 +26,8 @@ class Users(UserMixin, db.Model):
     password:Mapped[str] = db.Column(db.String(255), nullable=False)
     role:Mapped[str] = db.Column(db.String(100), default='user')
     active:Mapped[bool] = db.Column(db.Boolean(), default=False)
-    date_added = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_added = db.Column(db.Date(), default=db.func.current_date())
+    datetime_added = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_updated = db.Column(db.DateTime, nullable=True)
     
 
@@ -90,9 +94,11 @@ class Users(UserMixin, db.Model):
             return status,last_user_id
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[create_user]: \n SQLAlchemyError: {str(e)}")
             return status, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[create_user]: \n Exception: {str(e)}")
             return status, str(e)
 
     # This method update all user fields
@@ -113,9 +119,11 @@ class Users(UserMixin, db.Model):
             return True, user_object
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_user]: \n Exception: {str(e)}")
             return status, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_user]: \n Exception: {str(e)}")
             return status, str(e)
         
     # This method update user status
@@ -128,9 +136,11 @@ class Users(UserMixin, db.Model):
             return True, user
         except SQLAlchemyError as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_user_status]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
             db.session.rollback()
+            set_logger_message(f"Error occured on METHOD[update_user]: \n Exception: {str(e)}")
             return False, str(e)
     
     # This method update user role
@@ -190,11 +200,14 @@ class Users(UserMixin, db.Model):
     """
     def get_user_by_email(email):
         try:
-            user = Users.query.filter_by(email=email).first_or_404()
-            return True, user
+            #user = Users.query.filter(and_(Users.email==str(email))).first()
+            response = Users.query.filter_by(email=str(email)).first()
+            return True, response
         except SQLAlchemyError as e:
+            set_logger_message(f"Error occured on METHOD[get_user_by_email]: \n SQLAlchemyError: {str(e)}")
             return False, str(e)
         except Exception as e:
+            set_logger_message(f"Error occured on METHOD[get_user_by_email]: \n Exception: {str(e)}")
             return False, str(e)
     
     """

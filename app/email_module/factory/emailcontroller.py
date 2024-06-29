@@ -10,6 +10,7 @@ from email.message import EmailMessage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from app.configs_package.modules.smtp_config import _get_smtp_config
+from ...configs_package.modules.logger_config import get_message as set_logger_message
 
 
 mail = Mail()
@@ -43,7 +44,8 @@ def send_simple_email(subject, recipients, body, is_file=False) -> None:
         s.quit()
         return True
     except Exception as e:
-        return f"Error: {e}"
+        set_logger_message(f"Error occured on METHOD[send_simple_email]: \n Exception: {str(e)}")
+        return type(e).__name__
     
 
 def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -> None:
@@ -72,6 +74,6 @@ def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -
             server.sendmail(smtp_user, recipients, msg.as_string())
             return True
     except Exception as e:
-        #print(f"Error: {e}")
+        set_logger_message(f"Error occured on METHOD[send_simple_email_mime_multipart]: \n Exception: {str(e)}\nerror_type:{str(type(e).__name__)}")
         return type(e).__name__
     

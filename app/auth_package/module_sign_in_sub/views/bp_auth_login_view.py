@@ -62,7 +62,8 @@ def init_login_app(login_manager, db):
     def logout():
         status, obj = AuthUserHistoric.update_auth_user(session.get('user_id'), session.get('email'), False)
         re, obj2 = UserToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
-       
+        #resp, exp_token = UserToken.force_user_jwt_token_expiration(str(session.get('user_token')))
+        #return jsonify({"sms": exp_token})
         session.clear()
         logout_user()
         
