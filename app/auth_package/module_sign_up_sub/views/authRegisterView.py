@@ -45,7 +45,7 @@ class AuthRegisterView(View):
                         self.model.db.session.rollback()
                         flash('Error creating token.', 'error')
                     else:      
-                        return jsonify({"status": status, "": token.token})
+                        return jsonify({"status": status, "token": token.token})
                         status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
                         if status:
                                                       
