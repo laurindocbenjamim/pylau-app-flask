@@ -254,10 +254,17 @@ class Users(UserMixin, db.Model):
             return False
     
     def check_phone_exists(phone_number):
-        user = Users.query.filter(and_(Users.phone==str(phone_number))).first()
-        if user:
-            return True
-        return False
+        try:
+            user = Users.query.filter_by(phone=str(phone_number)).first()
+            if user:
+                return True
+            return False
+        except SQLAlchemyError as e:
+            set_logger_message(f"Error occured on METHOD[check_phone_exists]: \n SQLAlchemyError: {str(e)}")
+            return False
+        except Exception as e:
+            set_logger_message(f"Error occured on METHOD[check_phone_exists]: \n Exception: {str(e)}")
+            return False
 
     def get_item_by_id(self,id):
         return next((item for item in self.list_users() if item['id'] == id), None)
