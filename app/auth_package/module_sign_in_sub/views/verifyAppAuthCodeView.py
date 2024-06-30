@@ -1,11 +1,14 @@
 
 import pyotp
-
+import traceback
+import sys
+import os
 from datetime import date
 from markupsafe import escape
 from flask_login import login_user, logout_user
 from flask.views import View
 from flask import render_template, abort,current_app, g, session, request, redirect, url_for, flash, jsonify
+from ....configs_package.modules.logger_config import get_message as set_logger_message
 
 class VerifyAppAuthCodeView(View):
     """
@@ -56,47 +59,60 @@ class VerifyAppAuthCodeView(View):
             return redirect(url_for('auth.user.login'))
                  
         if request.method == 'POST' and user_token is not None:
-
-            status,token = self.userToken.get_token_by_token(escape(user_token))                       
             
-            code = request.form.get('otpcode',None)
-            # Get the user details using the email address
-            status, user = self.userModel.get_user_by_email(token.username)
+            try:
+                status,token = self.userToken.get_token_by_token(escape(user_token))                       
+                
+                code = request.form.get('otpcode',None)
+                # Get the user details using the email address
+                status, user = self.userModel.get_user_by_email(token.username)
 
-            # Check if the user is identified
+                # Check if the user is identified
 
-            if code is not None and status and user is not None:
-                                
-                secret = current_app.config['OTP_SECRET_KEY']
+                if code is not None and status and user is not None:
+                                    
+                    secret = current_app.config['OTP_SECRET_KEY']
 
-                otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
-                        
-                if otpstatus:
-                        
-                    resp = self.authUserHistoric.create_auth_user(user.userID, user.email, '')
-                                     
-                    status, user = self.userModel.get_user_by_id(user.userID)
-                    session['user_id'] = user.userID
-                    session['firstname'] = user.firstname
-                    session['lastname'] = user.lastname
-                    session['email'] = user.email
-                    session['country'] = user.country
-                    session['country_code'] = user.country_code
-                    session['phone'] = user.phone
-                    session['active'] = user.active
-                    session['role'] = user.role
-                    session['date_added'] = user.date_added
-                    session['date_updated'] = user.date_updated
-                    session['user_token'] = token.token
-                        
-                    login_user(user)
-                    g.user = user  
-                    flash('Code verified successful', 'success')
-                    return redirect(url_for('index', user_token=str(token.token))) 
+                    otpstatus = self.twoFaModel.verify_provisioning_uri(secret=secret, code=code)
+                            
+                    if otpstatus:
+                            
+                        resp = self.authUserHistoric.create_auth_user(user.userID, user.email, '')
+                                        
+                        status, user = self.userModel.get_user_by_id(user.userID)
+                        session['user_id'] = user.userID
+                        session['firstname'] = user.firstname
+                        session['lastname'] = user.lastname
+                        session['email'] = user.email
+                        session['country'] = user.country
+                        session['country_code'] = user.country_code
+                        session['phone'] = user.phone
+                        session['active'] = user.active
+                        session['role'] = user.role
+                        session['date_added'] = user.date_added
+                        session['date_updated'] = user.date_updated
+                        session['user_token'] = token.token
+                            
+                        login_user(user)
+                        g.user = user  
+                        flash('Code verified successful', 'success')
+                        return redirect(url_for('index', user_token=str(token.token))) 
+                    else:
+                        flash('Invalid code detected', 'error')      
                 else:
-                    flash('Invalid code detected', 'error')      
-            else:
-                flash(f'User not identified.', 'error')
+                    flash(f'User not identified.', 'error')
+            except Exception as e:
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                    set_logger_message(f"Error occured on [VerifyAppAuthCodeView]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
 
 
         return render_template(self.template, title='Code verification', origin='login_auth_app_', user_token=escape(user_token))

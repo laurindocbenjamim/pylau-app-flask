@@ -94,10 +94,8 @@ class AuthRegisterView(View):
                                        \nExc-instance: {fname}\
                                        \nExc-classe: {exc_type}\
                                        \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTraceback object: {exc_tb}\
-                                        ") 
-                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
-                                       Exception(traceback): {str(traceback.format_exc())}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
                                         ") 
                         
                     

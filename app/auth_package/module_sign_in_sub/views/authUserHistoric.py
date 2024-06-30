@@ -1,4 +1,6 @@
-
+import traceback
+import sys
+import os
 from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
@@ -8,6 +10,8 @@ from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone
 from app.configs_package.modules.db_conf import db
+
+from ....configs_package.modules.logger_config import get_message as set_logger_message
 #datetime.now(tz=timezone.utc)
 
 

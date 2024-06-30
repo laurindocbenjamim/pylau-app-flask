@@ -1,3 +1,6 @@
+import traceback
+import sys
+import os
 from datetime import datetime, timezone
 from flask.views import View
 
@@ -6,6 +9,7 @@ from flask import request, render_template, abort, session, current_app, redirec
 from app.email_module.factory.otp_code_account_message_html import get_otp_code_message_html
 from app.email_module.factory.emailcontroller import send_simple_email_mime_multipart
 from flask_login import logout_user
+from ....configs_package.modules.logger_config import get_message as set_logger_message
 
 class SendAuthCodeEmailView(View):
     """
@@ -49,41 +53,53 @@ class SendAuthCodeEmailView(View):
                 logout_user()
                 flash('Your session was expired', 'error')
                 return redirect(url_for('auth.user.login'))
-                
-            status,token = self.userToken.get_token_by_token(escape(user_token))
-           
-            if status and token is not None:   
-                # Get the user details using the email address
-                status, user = self.userModel.get_user_by_email(token.username)
 
-                # Check if the user is identified
-                if status and user is not None:
-                    
-                    if user.email == token.username:
-                        secret = current_app.config['OTP_SECRET_KEY']
-                        user_id = user.userID
-                        email = user.email
-                        lastname = user.lastname
-                        firstname =user.firstname 
-                            
-                        totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
-                        OTP = totp.now()
+            try: 
+                status,token = self.userToken.get_token_by_token(escape(user_token))
+            
+                if status and token is not None:   
+                    # Get the user details using the email address
+                    status, user = self.userModel.get_user_by_email(token.username)
 
-                        time_remaining = f"This code expires in {otp_time_interval} seconds ({ int(otp_time_interval / 60) } minutes)"
-                        html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
-                        res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
+                    # Check if the user is identified
+                    if status and user is not None:
+                        
+                        if user.email == token.username:
+                            secret = current_app.config['OTP_SECRET_KEY']
+                            user_id = user.userID
+                            email = user.email
+                            lastname = user.lastname
+                            firstname =user.firstname 
+                                
+                            totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
+                            OTP = totp.now()
 
-                        if res:
-                            flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
-                            return redirect(url_for('auth.user.verify-otp', user_token=escape(user_token)))
+                            time_remaining = f"This code expires in {otp_time_interval} seconds ({ int(otp_time_interval / 60) } minutes)"
+                            html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
+                            res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
+
+                            if res:
+                                flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
+                                return redirect(url_for('auth.user.verify-otp', user_token=escape(user_token)))
+                            else:
+                                flash('Failed to send code to the email.', 'error')
                         else:
-                            flash('Failed to send code to the email.', 'error')
-                    else:
-                        flash('Invalid user', 'danger')
+                            flash('Invalid user', 'danger')
 
-                else:
-                    flash('User not identified!', 'danger')         
-        
+                    else:
+                        flash('User not identified!', 'danger')         
+            except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                set_logger_message(f"Error occured on [SendAuthCodeEmailView]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")     
 
         return redirect(url_for('auth.user.login'))
             
