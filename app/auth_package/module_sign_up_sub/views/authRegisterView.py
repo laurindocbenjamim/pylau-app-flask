@@ -1,5 +1,6 @@
-
+import traceback
 import sys
+import os
 from flask.views import View
 from flask import render_template, session, request, redirect, url_for, flash, jsonify
 from ..controller.userController import load_user_obj, validate_form_fields
@@ -84,8 +85,18 @@ class AuthRegisterView(View):
                                         return redirect(url_for('email.2facodesend', user_token=token.token))                           
                             else:
                                 flash("Failed to create user", 'error')   
-                except Exception:
-                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n Exception: {str(sys.exc_info())}") 
+                except Exception as e:
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                        ") 
+                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
+                                       Exception(traceback): {str(traceback.format_exc())}\
+                                        ") 
                         
                     
         return render_template(self.template, title='Register')
