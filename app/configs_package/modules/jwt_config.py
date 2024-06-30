@@ -3,6 +3,9 @@
 To use this module you need to install the following libraries:
 pip install pyjwt
 """
+import traceback
+import sys
+import os
 import jwt
 import json
 import requests
@@ -38,8 +41,18 @@ def token_required(func):
             return payload
         except jwt.ExpiredSignatureError as e:
             error = f"{e}"
-            set_logger_message(f"JWT <<decorated method>> ExpiredSignatureError: {str(e)}")
-            return jsonify({"error": error},401)
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"\nJWT Error occured on method[decorated]: \n \
+                                       ExpiredSignatureError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
+            return False
     return decorated
 
 def decode_token(token):    
@@ -55,8 +68,18 @@ def decode_token(token):
         return payload
     except jwt.ExpiredSignatureError as e:
         error = f"{e}"
-        set_logger_message(f"JWT <<decode_token method>> ExpiredSignatureError: {str(e)}")
-        return {"error": error, "status_code": 401}
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        set_logger_message(f"\nJWT Error occured on method[decode_token]: \n \
+                                       ExpiredSignatureError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
+        return False
 
 """  This method generate a token using the JWT library """
 def generate_token(user):
@@ -78,7 +101,17 @@ def generate_token(user):
         token = jwt.encode(payload, secret_key, algorithm="HS256")
         return token
     except Exception as e:
-        set_logger_message(f"JWT <<generate_token method>> ExpiredSignatureError: {str(e)}")
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        set_logger_message(f"\nJWT Error occured on method[decode_token]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
     return None
 
 def expire_user_token(user):
@@ -100,7 +133,17 @@ def expire_user_token(user):
         token = jwt.encode(payload, secret_key, algorithm="HS256")
         return token
     except Exception as e:
-        set_logger_message(f"JWT <<generate_token method>> ExpiredSignatureError: {str(e)}")
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        set_logger_message(f"\nJWT Error occured on method[expire_user_token]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
     return None
 
 def refresh_jwt_token(token):
@@ -131,12 +174,32 @@ def refresh_jwt_token(token):
             return True, new_token
         except Exception as ex:
 
-            set_logger_message(f"JWT <<refresh_jwt_token method>> ExpiredSignatureError -> [Exception]: {str(ex)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"\nJWT Error occured on method[refresh_jwt_token]: \n \
+                                       ExpiredSignatureError -> [Exception]: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
 
             return False, None
     except Exception as e:
 
-        set_logger_message(f"JWT <<refresh_jwt_token method>> Exception: {str(e)}")
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        set_logger_message(f"\nJWT Error occured on method[refresh_jwt_token]: \n \
+                                       [Exception]: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
 
         return False, None
     else:
@@ -168,11 +231,11 @@ def force_jwt_token_expiration(token):
 
     except jwt.ExpiredSignatureError as e:     
 
-        set_logger_message(f"JWT <<force_jwt_token_expiration method>> ExpiredSignatureError: {str(e)}")
+        set_logger_message(f"JWT <<force_jwt_token_expiration method>> ExpiredSignatureError: {str(traceback.format_exc())}")
         
     except Exception as e:
 
-        set_logger_message(f"JWT <<force_jwt_token_expiration method>> Exception: {str(e)}")
+        set_logger_message(f"JWT <<force_jwt_token_expiration method>> Exception: {str(traceback.format_exc())}")
 
         return False, None
     else:
@@ -187,7 +250,7 @@ def is_user_token_expired(token):
         response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
         return False
     except jwt.ExpiredSignatureError as e:
-        set_logger_message(f"JWT <<decode_token method>> ExpiredSignatureError: {str(e)}")
+        set_logger_message(f"JWT <<decode_token method>> ExpiredSignatureError: {str(traceback.format_exc())}")
         return True
     
 def filter_token_from_headers(headers):

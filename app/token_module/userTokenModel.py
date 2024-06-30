@@ -1,3 +1,6 @@
+import traceback
+import sys
+import os
 from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
@@ -41,11 +44,31 @@ class UserToken(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[create_token]: \n SQLAlchemyError: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[CREATE_TOKEN]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         except Exception as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[create_token]: \n Exception: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[CREATE_TOKEN]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
     
     # This function refresh the user token throught the previous token
@@ -79,11 +102,31 @@ class UserToken(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[update_token]: \n SQLAlchemyError: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_token]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         except Exception as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[update_token]: \n Exception: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_token]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
     
     def refresh_user_token_____(user_id, username, is_active):
@@ -142,10 +185,30 @@ class UserToken(db.Model):
             token_obj = UserToken.query.filter_by(token=str(token)).first_or_404()
             return True, token_obj
         except SQLAlchemyError as e:
-            set_logger_message(f"Error occured on METHOD[get_token_by_token]: \n SQLAlchemyError: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[get_token_by_token]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         except Exception as e:
-            set_logger_message(f"Error occured on METHOD[get_token_by_token]: \n Exception: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[get_token_by_token]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
     
 
@@ -166,8 +229,30 @@ class UserToken(db.Model):
                 return True
             return False 
         except SQLAlchemyError as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[check_token_exists]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[check_token_exists]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
     
     
