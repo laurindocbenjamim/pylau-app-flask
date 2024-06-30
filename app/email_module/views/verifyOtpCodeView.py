@@ -47,7 +47,7 @@ class VerifyOtpCodeView(View):
 
         """
         otp_time_interval = 300
-
+        
         if request.method == 'GET' and user_token is not None:
             
             if self.userToken.is_user_token_expired(escape(user_token)):

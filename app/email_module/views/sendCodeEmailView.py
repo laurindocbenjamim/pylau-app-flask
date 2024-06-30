@@ -41,7 +41,7 @@ class SendCodeEmailView(View):
         """
          
         otp_time_interval = 300
-                 
+              
         if request.method == 'GET' and user_token is not None:
             #return jsonify({'status': True, 'token': escape(user_token)})
             #status,token = self.userToken.get_token_by_token(escape(user_token))
@@ -57,8 +57,9 @@ class SendCodeEmailView(View):
             
             status,token = self.userToken.get_token_by_token(escape(user_token))
             if status:
+                
                 # Get the user details using the email address
-                statusu, user = self.userModel.get_user_by_email(token.username)
+                status, user = self.userModel.get_user_by_email(token.username)
 
                 
                 # Check if the user is identified
@@ -70,14 +71,14 @@ class SendCodeEmailView(View):
                     email = user.email
                     lastname = user.lastname
                     firstname =user.firstname 
-                            
+                           
                     totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
                     OTP = totp.now()
-
+                    
                     
                     time_remaining = f"This code expires in 5 minutes)"
                     html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
-                    
+                     
                     res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
                     
                     if res:

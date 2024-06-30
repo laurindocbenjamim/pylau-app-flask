@@ -1,4 +1,6 @@
 import os
+import traceback
+import sys
 import pyotp
 import datetime
 import qrcode
@@ -22,8 +24,8 @@ class TwoFAModel(db.Model):
     two_factor_auth_secret:Mapped[str] = db.Column(db.String(100), unique=False, nullable=False)  
     method_auth:Mapped[str] = db.Column(db.String(20),default="app", nullable=False) 
     is_active:Mapped[str] = db.Column(db.Boolean(), default=True, nullable=True)
-    date_added = db.Column(db.Date(), default=db.func.current_date())
-    datetime_added = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_added = db.Column(db.Date(), default=datetime.now().date())
+    datetime_added = db.Column(db.DateTime, default=datetime.now())
     date_exp = db.Column(db.DateTime, default=datetime.now(tz=timezone.utc) + timedelta(days=1))
     
     def __repr__(self):
@@ -54,11 +56,31 @@ class TwoFAModel(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[save_two_fa_data]: \n SQLAlchemyError: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[save_two_fa_data]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         except Exception as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[create_token]: \n Exception: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[save_two_fa_data]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
     
     def update_secret_two_fa_data(user_id):
@@ -79,11 +101,31 @@ class TwoFAModel(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[update_secret_two_fa_data]: \n SQLAlchemyError: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_secret_two_fa_data]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         except Exception as e:
             db.session.rollback()
-            set_logger_message(f"Error occured on METHOD[update_secret_two_fa_data]: \n Exception: {str(e)}")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_secret_two_fa_data]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
             return False, str(e)
         
     def update_two_fa_data(obj):
