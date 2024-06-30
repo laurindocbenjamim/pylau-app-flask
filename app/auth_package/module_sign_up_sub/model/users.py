@@ -246,7 +246,7 @@ class Users(UserMixin, db.Model):
         return False
     
     def check_phone_exists(phone):
-        user = Users.query.filter_by(phone=phone).first()
+        user = Users.query.filter(and_(Users.phone==str(phone))).first()
         if user:
             return True
         return False
