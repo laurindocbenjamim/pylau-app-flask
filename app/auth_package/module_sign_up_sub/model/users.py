@@ -240,13 +240,21 @@ class Users(UserMixin, db.Model):
             return False, str(e)
         
     def check_email_exists(username):
-        user = Users.query.filter(and_(Users.email==str(username))).first()
-        if user:
-            return True
-        return False
+        try:
+            #user = Users.query.filter(and_(Users.email==str(username))).first()
+            user = Users.query.filter_by(email=str(username)).first()
+            if user:
+                return True
+            return False
+        except SQLAlchemyError as e:
+            set_logger_message(f"Error occured on METHOD[check_email_exists]: \n SQLAlchemyError: {str(e)}")
+            return False
+        except Exception as e:
+            set_logger_message(f"Error occured on METHOD[check_email_exists]: \n Exception: {str(e)}")
+            return False
     
-    def check_phone_exists(phone):
-        user = Users.query.filter(and_(Users.phone==str(phone))).first()
+    def check_phone_exists(phone_number):
+        user = Users.query.filter(and_(Users.phone==str(phone_number))).first()
         if user:
             return True
         return False
