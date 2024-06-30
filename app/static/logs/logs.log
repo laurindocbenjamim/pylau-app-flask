@@ -11562,3 +11562,375 @@ ERROR:
 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
  _________________________            DESCRIPTION            ___________________________
  401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:16:35 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:17:00 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:17:11 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:17:13 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:17:20 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:<<refresh_jwt_token method>> START TO TRY TO DECODE TOKEN 
+NAME:<<refresh_jwt_token method>> START TO TRY TO DECODE TOKEN             
+ERROR: 
+<<refresh_jwt_token method>> START TO TRY TO DECODE TOKEN            
+ _________________________            DESCRIPTION            ___________________________
+ <<refresh_jwt_token method>> START TO TRY TO DECODE TOKEN 
+06/30/2024 06:17:22 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:17:35 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:17:38 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:18:19 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:19:25 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:19:48 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:19:51 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:19:53 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:19:59 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Invalid token type. Token must be a <class 'bytes'> 
+NAME:Invalid token type. Token must be a <class 'bytes'>             
+ERROR: 
+Invalid token type. Token must be a <class 'bytes'>            
+ _________________________            DESCRIPTION            ___________________________
+ Invalid token type. Token must be a <class 'bytes'> 
+06/30/2024 06:19:59 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:20:05 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Invalid token type. Token must be a <class 'bytes'> 
+NAME:Invalid token type. Token must be a <class 'bytes'>             
+ERROR: 
+Invalid token type. Token must be a <class 'bytes'>            
+ _________________________            DESCRIPTION            ___________________________
+ Invalid token type. Token must be a <class 'bytes'> 
+06/30/2024 06:20:05 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:20:06 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Invalid token type. Token must be a <class 'bytes'> 
+NAME:Invalid token type. Token must be a <class 'bytes'>             
+ERROR: 
+Invalid token type. Token must be a <class 'bytes'>            
+ _________________________            DESCRIPTION            ___________________________
+ Invalid token type. Token must be a <class 'bytes'> 
+06/30/2024 06:20:06 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:20:08 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:21:28 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:21:56 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:22:48 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Invalid token type. Token must be a <class 'bytes'> 
+NAME:Invalid token type. Token must be a <class 'bytes'>             
+ERROR: 
+Invalid token type. Token must be a <class 'bytes'>            
+ _________________________            DESCRIPTION            ___________________________
+ Invalid token type. Token must be a <class 'bytes'> 
+06/30/2024 06:22:48 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:24:19 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Object of type bytes is not JSON serializable 
+NAME:Object of type bytes is not JSON serializable             
+ERROR: 
+Object of type bytes is not JSON serializable            
+ _________________________            DESCRIPTION            ___________________________
+ Object of type bytes is not JSON serializable 
+06/30/2024 06:24:19 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:24:47 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:26:17 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Object of type type is not JSON serializable 
+NAME:Object of type type is not JSON serializable             
+ERROR: 
+Object of type type is not JSON serializable            
+ _________________________            DESCRIPTION            ___________________________
+ Object of type type is not JSON serializable 
+06/30/2024 06:26:17 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:26:53 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+06/30/2024 06:30:36 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 

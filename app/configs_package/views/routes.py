@@ -51,14 +51,14 @@ def load_routes(app, db, login_manager):
         if user_token is not None:
             if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
                 abort(401)
-
-            session['user_token'] = [escape(user_token) if 'user_id' in session else None ]
+            token = escape(user_token)
+            session['user_token'] = escape(user_token) if 'user_id' in session else None 
             
             if user_token == 'favicon.ico': 
                 session.pop('user_token', None)
                 user_token = ''
         elif 'user_token' in session:
-            user_token = [session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']]
+            user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
         #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
         return render_template('site_home.html', user_token=user_token)
     
