@@ -31,6 +31,7 @@ class AuthRegisterView(View):
             if validate_form_fields(request.form):    
                 
                 try:
+                    return jsonify({"status": request.form.get('email')})
                     # Check if email exists
                     if self.model.check_email_exists(request.form.get('email')):
                         flash('Email already exists', 'info')
@@ -90,8 +91,10 @@ class AuthRegisterView(View):
                     set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
                                        Exception: {str(sys.exc_info())}\
                                        \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
                                        \nExc-classe: {exc_type}\
                                        \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTraceback object: {exc_tb}\
                                         ") 
                     set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
                                        Exception(traceback): {str(traceback.format_exc())}\
