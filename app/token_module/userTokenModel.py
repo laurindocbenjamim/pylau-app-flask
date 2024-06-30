@@ -25,7 +25,7 @@ class UserToken(db.Model):
     token:Mapped[str] = db.Column(db.String(255), unique=True, nullable=False)
     is_active:Mapped[str] = db.Column(db.Boolean(), default=False)
     datetime_added = db.Column(db.DateTime, default=datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
-    date_added = db.Column(db.Date(), default=datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+    date_added = db.Column(db.Date(), default=datetime.now().strftime("%Y/%m/%d"))
     date_exp = db.Column(db.DateTime, default=datetime.now() + timedelta(minutes=30))
 
 
