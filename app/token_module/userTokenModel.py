@@ -96,7 +96,7 @@ class UserToken(db.Model):
             obj = UserToken.query.filter(and_(UserToken.username==str(username), UserToken.token==str(last_token))).first_or_404()
             obj.token = str(new_token)
             obj.is_active = is_active
-            obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
+            obj.date_exp = datetime.now() + timedelta(minutes=30)
             #db.session.merge(obj)
             db.session.commit()
             return True, obj
@@ -135,7 +135,7 @@ class UserToken(db.Model):
             obj = UserToken.query.filter_by(username=str(username)).first_or_404()
             obj.token = token
             obj.is_active = is_active
-            obj.date_exp = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
+            obj.date_exp = datetime.now() + timedelta(minutes=30)
             #db.session.merge(obj)
             db.session.commit()
             return True, obj
@@ -151,7 +151,7 @@ class UserToken(db.Model):
         try:
             obj = UserToken.query.filter(and_(UserToken.username==str(username), UserToken.token==str(token))).first_or_404()
             obj.is_active = False
-            obj.date_exp = datetime.now(tz=timezone.utc) - timedelta(minutes=5)
+            obj.date_exp = datetime.now() - timedelta(minutes=5)
             
             db.session.commit()
             return True, obj
