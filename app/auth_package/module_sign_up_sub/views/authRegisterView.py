@@ -28,7 +28,7 @@ class AuthRegisterView(View):
             
             # Validate form fields
             if validate_form_fields(request.form):     
-                return jsonify({"status": False, "token": 11})
+                
 
                 try:
                     # Check if email exists
@@ -41,7 +41,7 @@ class AuthRegisterView(View):
 
                     # If email and phone do not exist, create user
                     else:
-                        
+                        return jsonify({"status": False, "token": 11})
                         # bEFORE CREATE User generate and save token
                         status, token = self.tokenModel.create_token(request.form.get('email'))
                         
@@ -85,7 +85,7 @@ class AuthRegisterView(View):
                             else:
                                 flash("Failed to create user", 'error')   
                 except Exception:
-                    set_logger_message(f"Error occured on METHOD[get_user_by_email]: \n Exception: {str(sys.exc_info())}") 
+                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n Exception: {str(sys.exc_info())}") 
                         
                     
         return render_template(self.template, title='Register')
