@@ -31,7 +31,7 @@ class AuthRegisterView(View):
             if validate_form_fields(request.form):    
                 
                 try:
-                    return jsonify({"status": request.form.get('email')})
+                    
                     # Check if email exists
                     if self.model.check_email_exists(request.form.get('email')):
                         flash('Email already exists', 'info')

@@ -239,8 +239,8 @@ class Users(UserMixin, db.Model):
         except Exception as e:
             return False, str(e)
         
-    def check_email_exists(email):
-        user = Users.query.filter(and_(Users.email==str(email))).first()
+    def check_email_exists(username):
+        user = Users.query.filter(and_(Users.email==str(username))).first()
         if user:
             return True
         return False
