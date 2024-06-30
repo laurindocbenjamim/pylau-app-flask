@@ -28,9 +28,8 @@ class AuthRegisterView(View):
         if request.method == 'POST':
             
             # Validate form fields
-            if validate_form_fields(request.form):     
+            if validate_form_fields(request.form):    
                 
-
                 try:
                     # Check if email exists
                     if self.model.check_email_exists(request.form.get('email')):
@@ -42,7 +41,7 @@ class AuthRegisterView(View):
 
                     # If email and phone do not exist, create user
                     else:
-                        return jsonify({"status": False, "token": 11})
+                        
                         # bEFORE CREATE User generate and save token
                         status, token = self.tokenModel.create_token(request.form.get('email'))
                         

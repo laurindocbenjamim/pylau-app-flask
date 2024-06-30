@@ -240,7 +240,7 @@ class Users(UserMixin, db.Model):
             return False, str(e)
         
     def check_email_exists(email):
-        user = Users.query.filter_by(email=email).first()
+        user = Users.query.filter(and_(Users.email==str(email))).first()
         if user:
             return True
         return False
