@@ -46,6 +46,7 @@ dependencies = [
 "hvac",
 "pycryptodome",
 "geocoder",
+"sentry-sdk[flask]",
 "bs4"
 ]
 

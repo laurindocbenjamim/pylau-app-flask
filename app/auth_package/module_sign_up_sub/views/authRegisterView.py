@@ -26,7 +26,7 @@ class AuthRegisterView(View):
             
             # Validate form fields
             if validate_form_fields(request.form):     
-                
+                return jsonify({"status": status, "token": token.token})
                 # Check if email exists
                 if self.model.check_email_exists(request.form.get('email')):
                     flash('Email already exists', 'info')
@@ -45,7 +45,7 @@ class AuthRegisterView(View):
                         self.model.db.session.rollback()
                         flash('Error creating token.', 'error')
                     else:      
-                        return jsonify({"status": status, "token": token.token})
+                        
                         status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
                         if status:
                                                       

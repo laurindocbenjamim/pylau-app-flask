@@ -26,6 +26,7 @@ coverage
 hvac #install vault
 pycryptodome
 geocoder
-
+sentry-sdk[flask]
+# pip install --upgrade sentry-sdk[flask]
 #
 bs4
