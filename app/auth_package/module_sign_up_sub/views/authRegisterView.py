@@ -47,7 +47,6 @@ class AuthRegisterView(View):
                         status, token = self.tokenModel.create_token(request.form.get('email'))
                         
                         if status == False:
-                            self.model.db.session.rollback()
                             flash('Error creating token.', 'error')
                         else:      
                             
