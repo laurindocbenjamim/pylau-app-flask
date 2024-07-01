@@ -19,7 +19,7 @@ class AuthLoginView(View):
         self.template = template
 
     def dispatch_request(self):
-        
+        session.pop('_flashes', None)
         # Check if the user is already logged in
         
         if 'user_token' in session:

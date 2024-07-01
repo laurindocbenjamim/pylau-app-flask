@@ -1,7 +1,11 @@
 from flask import Blueprint, request, jsonify
 from .modules.extract_contries_data import extract_countries
+from ..token_module import UserToken
+from ..auth_package import Users
+from .extractWebPageView import ExtractWebPageView
 
 bp = Blueprint('ws', __name__, url_prefix='/ws')
+bp.add_url_rule('/etl/<string:user_token>', view_func=ExtractWebPageView.as_view('etl', Users, UserToken, 'etl_web.html'))
 
 @bp.route('/api/countries', methods=['GET'])
 def get_countries():
@@ -20,3 +24,4 @@ def get_countries():
         data.append(dict(row))
     
     return jsonify({"EXTRACTED_FROM": web_font, "ELEMENTS_or_SIZE": len(data),  "OBJECTS":  data })
+

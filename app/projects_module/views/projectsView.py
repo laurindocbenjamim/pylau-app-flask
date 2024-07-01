@@ -36,11 +36,11 @@ class ProjectsView(View):
             
              # Get the user details using the email address
             if status and self.userModel.check_email_exists(token.username):
-                session['user_token'] = escape(user_token)
+                session['user_token'] = token.token
                 status, users = self.userModel.get_all_users()
                 if status:
                     listItems = users
                 
-                return render_template(self.template, user_token=token.token, title="List Users", items=listItems)
+                return render_template(self.template, user_token=token.token, total_projects=12, title="List Users", items=listItems)
             
         return redirect(url_for('index'))

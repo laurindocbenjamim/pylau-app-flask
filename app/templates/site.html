@@ -27,12 +27,11 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 
-        
-    <style>
 
-        body{
+    <style>
+        body {
             /*background: linear-gradient(to right, #3a1c71, #836265, #ffaf7b);*/
-                background: linear-gradient(to right, #0a0318, #2e3157, #000c25);              
+            background: linear-gradient(to right, #0a0318, #2e3157, #000c25);
         }
 
         .bd-placeholder-img {
@@ -49,7 +48,7 @@
             }
         }
 
-        footer .nav-link{
+        footer .nav-link {
             color: #c8233e;
         }
 
@@ -118,36 +117,35 @@
 
 
 
-        
+
 
         .scroll-animatio {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
+
         .scroll-animatio.show {
             opacity: 1;
             transform: translateY(0);
         }
 
 
-        .info{
+        .info {
             color: #0986fa;
         }
-        
-        .success{
+
+        .success {
             color: #25d45a;
         }
 
-        .error{
+        .error {
             color: #c8233e;
         }
 
-        .danger{
+        .danger {
             color: #ee5d24;
         }
-        
-
     </style>
 
     {% block styles %} {% endblock %}
@@ -159,7 +157,7 @@
 <body class="bg-body-tertiary">
 
 
-            
+
 
 
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -234,8 +232,9 @@
     <nav class="navbar scroll-animation navbar-expand-lg fixed-top navbar-dark " aria-label="Main navigation">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('index')}}">
-                <img src="{{ url_for('static', filename='assets/img/bantu02-removebg-preview.png')}}" width="40" height="32"  alt="" srcset="">
-                </a>
+                <img src="{{ url_for('static', filename='assets/img/bantu02-removebg-preview.png')}}" width="40"
+                    height="32" alt="" srcset="">
+            </a>
             <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -250,15 +249,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Articles</a>
                     </li>
-                    
+
 
                     {% if current_user.is_authenticated %}
-                        {% if g.user %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Dashboard {{ g.user.firstname }} </a>
-                        </li>
-                        {% endif %}
-                    
+                    {% if g.user %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Dashboard {{ g.user.firstname }} </a>
+                    </li>
+                    {% endif %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="#">Softwares</a>
                     </li>
@@ -270,7 +269,7 @@
 
 
                 </ul>
-                <div class="d-flex" >
+                <div class="d-flex">
                     {% if current_user.is_authenticated %}
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -281,29 +280,34 @@
                                 {{ current_user.email}}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">{{current_user.userID}}#{{current_user.firstname}} {{current_user.lastname}}</a></li>
+                                <li><a class="dropdown-item" href="#">{{current_user.userID}}#{{current_user.firstname}}
+                                        {{current_user.lastname}}</a></li>
                                 <li><a class="dropdown-item" href="#">{{current_user.country}}</a></li>
                                 <li>
                                     {% if 'user_token' in session %}
-                                    <a class="dropdown-item" href="{{ url_for('auth.user.logout', user_token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9ja2V0bWMyMDA5QGdtYWlsLmNvbSIsImV4cCI6MTcxODY4NjY1NCwibmJmIjoxNzE4Njg0ODU0fQ.YLCXNuv5DqPZbF2Hd3nwkhS3d8s7JwNgPOg1-ion2rs')}}" style="color: #c8233e;">
-                                        Logout</a>
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('auth.user.logout', user_token=session['user_token'])}}"
+                                        style="color: #c8233e;">
+                                        <i class="fa-solid fa-right-from-bracket"></i> logout
+                                        </a>
                                     {% endif %}
                                 </li>
                             </ul>
                         </li>
-                    </ul>                 
+                    </ul>
                     {% endif %}
-                    
-                    
+
+
                 </div>
 
                 <div class="d-flex" role="search">
                     <!--<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>-->
                     {% if current_user.is_authenticated == False %}
-                    <a class="btn btn-primary" href="{{ url_for('auth.user.login')}}" style="margin-right: 2%;">Login</a>                    
+                    <a class="btn btn-primary" href="{{ url_for('auth.user.login')}}"
+                        style="margin-right: 2%;">Login</a>
                     {% endif %}
-                    
+
                 </div>
 
             </div>
@@ -313,10 +317,18 @@
     <div class="nav-scroller  shadow-sm">
         <nav class="nav" aria-label="Secondary navigation">
             <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-            <a class="nav-link" href="#">
-                Projects
-                <span class="badge text-bg-light rounded-pill align-text-bottom">5</span>
-            </a>
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == 'admin' %}
+
+                    {% if 'user_token' in session %}
+                    <a class="nav-link" href="{{ url_for('projects.list', user_token=session['user_token']) }}">Projects
+                        <span class="badge text-bg-light rounded-pill align-text-bottom">{{total_projects}}</span></a>
+                    {% else %}
+                    <a class="nav-link" href="{{ url_for('projects.list', user_token=user_token) }}">Projects
+                        <span class="badge text-bg-light rounded-pill align-text-bottom">{{total_projects}}</span></a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
             <a class="nav-link" href="#">Explore</a>
             <a class="nav-link" href="#">Suggestions</a>
         </nav>
@@ -324,90 +336,104 @@
 
     <main class="container ">
 
-        
 
-        {% block content %} {% endblock %}  
-        
-        
+
+        {% block content %} {% endblock %}
+
+
         <footer class="py-5">
             <div class="row">
-              <div class="col-6 col-md-2 mb-3">
-                <h5>Links</h5>
-                <ul class="nav flex-column">
-                  <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
-                  <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Projects</a></li>
-                  <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Articles</a></li>
-                  <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Contact</a></li>
-                  <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
-                  <li class="nav-item mb-2">
-                    <a href="{{ url_for('auth.user.login')}}" class=" nav-link p-0 text-body-secondary">Login</a>
-                </li>
-                </ul>
-              </div>
-        
-              <div class="col-6 col-md-2 mb-3">
-                <h5>Social media</h5>
-                <ul class="nav flex-column">
-                  <a class="nav-link fw-bold py-1 px-0" href="https://www.linkedin.com/in/laurindocbenjamim" target="_blank" style="color: #333;"><i class="fa-brands fa-linkedin fa-2x"></i> </a>
-                    <li class="nav-item mb-2"></li>
-                        <a class="nav-link fw-bold py-1 px-0" href="https://github.com/laurindocbenjamim" target="_blank" style="color: #333;"><i class="fa-brands fa-github-alt fa-2x"></i></a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link fw-bold py-1 px-0" href="#" target="_blank" style="color: #333;"><i class="fa-brands fa-square-x-twitter fa-2x"></i></a>
-                    </li>
-                    
-                </ul>
-              </div>
-        
-              <div class="col-6 col-md-2 mb-3">
-                <h5>Users</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <a class="nav-link fw-bold py-1 px-0" href="#" style="color: #333;"><i class="fa-brands fa-facebook fa-2x"></i></a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link fw-bold py-1 px-0" href="https://youtu.be/2els0GTfHmI" target="_blank" style="color: #333;"><i class="fa-brands fa-square-youtube fa-2x" style="color: red;"></i></a>
-                    </li>
-                </ul>
-              </div>
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Links</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Projects</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Articles</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Contact</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ url_for('auth.user.login')}}"
+                                class=" nav-link p-0 text-body-secondary">Login</a>
+                        </li>
+                    </ul>
+                </div>
 
-              <div class="col-md-5 offset-md-1 mb-3">
-                <form id="subscriberForm">
-                  <h5>Subscribe to our newsletter</h5>
-                  <p>Monthly digest of what's new and exciting from us.</p>
-                  <br><br>
-                    <div class="col-12 form-message" id="form-message">
-                        <p></p>
-                    </div>
-                  <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                    <label for="newsletter1" class="visually-hidden">Email address</label>
-                    <input id="subscriber" name="subscriber" type="email" class="form-control" placeholder="Email address">
-                    <!--<button class="btn btn-primary" type="submit">Subscribe</button>-->
-                    <input type="submit" class="btn btn-primary" value="Subscribe">
-                    <br>
-                    <div class="form-message" id="form-message">
-                        <p></p>
-                    </div>
-                  </div>
-                </form>                
-              </div>              
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Social media</h5>
+                    <ul class="nav flex-column">
+                        <a class="nav-link fw-bold py-1 px-0" href="https://www.linkedin.com/in/laurindocbenjamim"
+                            target="_blank" style="color: #333;"><i class="fa-brands fa-linkedin fa-2x"></i> </a>
+                        <li class="nav-item mb-2"></li>
+                        <a class="nav-link fw-bold py-1 px-0" href="https://github.com/laurindocbenjamim"
+                            target="_blank" style="color: #333;"><i class="fa-brands fa-github-alt fa-2x"></i></a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link fw-bold py-1 px-0" href="#" target="_blank" style="color: #333;"><i
+                                    class="fa-brands fa-square-x-twitter fa-2x"></i></a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Users</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a class="nav-link fw-bold py-1 px-0" href="#" style="color: #333;"><i
+                                    class="fa-brands fa-facebook fa-2x"></i></a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link fw-bold py-1 px-0" href="https://youtu.be/2els0GTfHmI" target="_blank"
+                                style="color: #333;"><i class="fa-brands fa-square-youtube fa-2x"
+                                    style="color: red;"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-5 offset-md-1 mb-3">
+                    <form id="subscriberForm">
+                        <h5>Subscribe to our newsletter</h5>
+                        <p>Monthly digest of what's new and exciting from us.</p>
+                        <br><br>
+                        <div class="col-12 form-message" id="form-message">
+                            <p></p>
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                            <label for="newsletter1" class="visually-hidden">Email address</label>
+                            <input id="subscriber" name="subscriber" type="email" class="form-control"
+                                placeholder="Email address">
+                            <!--<button class="btn btn-primary" type="submit">Subscribe</button>-->
+                            <input type="submit" class="btn btn-primary" value="Subscribe">
+                            <br>
+                            <div class="form-message" id="form-message">
+                                <p></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        
+
             <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-              <p>&copy; 2024 Laurindo C. Benjamim, DT. All rights reserved.</p>
-              <ul class="list-unstyled d-flex">
-                <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-              </ul>
+                <p>&copy; 2024 Laurindo C. Benjamim, DT. All rights reserved.</p>
+                <ul class="list-unstyled d-flex">
+                    <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                                <use xlink:href="#twitter" />
+                            </svg></a></li>
+                    <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                                <use xlink:href="#instagram" />
+                            </svg></a></li>
+                    <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                                <use xlink:href="#facebook" />
+                            </svg></a></li>
+                </ul>
             </div>
-          </footer>
-        
+        </footer>
+
     </main>
 
 
-    
-        
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
@@ -417,17 +443,18 @@
     <script src="{{ url_for('static', filename='assets/js/offcanvas-navbar.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    
+
 
     {% block scripts %} {% endblock %}
-    
+
 
     <script type="module" src="{{ url_for('static', filename='app/subscriber/subscriber_component.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='app/webscrapping/webscrapping_component.js') }}"></script>
 
     <script>
-    
+
         // Add your JavaScript code here for scroll page animation
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".scroll-animation").addClass("show");
         });
     </script>

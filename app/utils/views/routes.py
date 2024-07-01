@@ -4,7 +4,9 @@ import secrets
 from flask import Flask, abort, render_template, redirect, url_for, sessions, request, session, jsonify
 from flask_cors import cross_origin
 from app.auth_package.module_sign_up_sub.model.users import Users
+from ...token_module import UserToken
 from ...configs_package.modules.db_conf import init_db_server, migrate_db
+from flask_login import logout_user
 from markupsafe import escape
 
 def load_routes(app, db, login_manager):
@@ -41,6 +43,28 @@ def load_routes(app, db, login_manager):
 
     @app.route('/app-logs')
     def display_logs():
+
+        if 'user_token' in session:
+            user_token = session['user_token']
+            if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
+                session.clear()
+                logout_user()
+                return redirect(url_for('auth.user.login'))            
+            
+            if UserToken.is_user_token_expired(user_token):
+                session.clear()
+                logout_user()
+                return redirect(url_for('auth.user.login'))
+        
+            if request.method == 'GET' and user_token is not None:
+
+                status,token = UserToken.get_token_by_token(user_token)
+                
+                # Get the user details using the email address
+                if status and Users.check_email_exists(token.username):
+                    session['user_token'] = token.token          
+
+        #return jsonify({"user": session['user_token']})
         logs = "app/static/logs/logs.log"
         log_data =''
         with open(logs, 'r') as data:
@@ -53,6 +77,9 @@ def load_routes(app, db, login_manager):
     @app.route('/<string:user_token>')
     @cross_origin(methods=['GET'])
     def index(user_token=None):
+        
+        session.pop('_flashes', None)
+
         if user_token is not None:
             if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
                 abort(401)

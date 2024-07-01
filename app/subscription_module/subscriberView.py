@@ -59,12 +59,12 @@ class SubscriberView(View):
                         subscriber = ''
                     
                 else:
-                    flash('Invalid email. Email accepted: @gmail.com, @hotmail.com, @outlook.com, @icloud.com, @live.com')
+                    #flash('Invalid email. Email accepted: @gmail.com, @hotmail.com, @outlook.com, @icloud.com, @live.com')
                     message = 'Invalid email. Email accepted: @gmail.com, @hotmail.com, @outlook.com, @icloud.com, @live.com'
                     category = 'error'
                     status = 400
             else:
-                flash('Enter an email to subscribe')
+                #flash('Enter an email to subscribe')
                 message = 'Enter an email to subscribe'
                 category = 'error'
                 status = 400

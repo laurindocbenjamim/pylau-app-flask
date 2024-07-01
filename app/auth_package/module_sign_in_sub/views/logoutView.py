@@ -12,7 +12,7 @@ class LogoutView(View):
         self.authUserHistoric = authUserHistoric
 
     def dispatch_request(self, user_token=None):
-
+        session.pop('_flashes', None)
         if user_token:
 
             # Check if the token is expired
