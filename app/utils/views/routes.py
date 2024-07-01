@@ -92,11 +92,9 @@ def load_routes(app, db, login_manager):
         elif 'user_token' in session:
             user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
         #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
-        return render_template('site_home.html', user_token=user_token)
+        return render_template('site_home.html', total_projects=12, user_token=user_token)
     
-    from .error_handlers_view import error_handlers_view
-    error_handlers_view(app)
-    
+       
     
     @app.route('/get-secret', methods=['GET'])
     @cross_origin(methods=['GET'])
@@ -118,6 +116,10 @@ def load_routes(app, db, login_manager):
     from ...auth_package import bp_auth_register_parent, init_register_app
     from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     
+
+    from .error_handlers_view import error_handlers_view
+    error_handlers_view(app)
+
     init_register_app()
     init_login_app(login_manager=login_manager, db=db)
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)

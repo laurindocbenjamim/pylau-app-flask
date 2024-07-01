@@ -111,7 +111,8 @@ document.getElementById('subscriberForm').addEventListener('submit', async e => 
                     }           
                     element.appendChild(p)
                 });*/
-                alertmessage.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'//"#f5324c";
+                //alertmessage.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'//"#f5324c";
+                alertmessage.classList.add(resData[0].category)
                 alertmessage.textContent = ''
                 alertmessage.textContent = resData[0].message;
             }

@@ -3,9 +3,11 @@ from .modules.extract_contries_data import extract_countries
 from ..token_module import UserToken
 from ..auth_package import Users
 from .extractWebPageView import ExtractWebPageView
+from .extractWebPageApiView import ExtractWebPageApiView
 
 bp = Blueprint('ws', __name__, url_prefix='/ws')
 bp.add_url_rule('/etl/<string:user_token>', view_func=ExtractWebPageView.as_view('etl', Users, UserToken, 'etl_web.html'))
+bp.add_url_rule('/api/etl', view_func=ExtractWebPageApiView.as_view('api-etl', Users, UserToken, 'etl_web.html'))
 
 @bp.route('/api/countries', methods=['GET'])
 def get_countries():

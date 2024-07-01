@@ -51,18 +51,18 @@ document.getElementById('etlWebForm').addEventListener('submit', async e => {
     //var alert_message = document.querySelectorAll('.form-message')
     var alertmessage = document.querySelector('.form-message p')
 
-    var email = sanitizeInput(document.getElementById("subscriber").value);
+    var email = sanitizeInput(document.getElementById("url").value);
     
     if (email.length > 100){
         return
     }
-    var obj = new Subscriber(1, email);
-    dataForm.append('email', obj.email)
+    var obj = new WebscrappingForm(1, url);
+    dataForm.append('url', obj.url)
     //
 
     try {
         const res = await fetch(
-            baseUrl + '/subscriber/subscribe',
+            baseUrl + '/ws/api/etl',
             {
               method: 'POST',
               body: dataForm
@@ -76,42 +76,14 @@ document.getElementById('etlWebForm').addEventListener('submit', async e => {
         if(resData){
             if(resData[1] == 400){
                 
-                /*alertmessage.forEach(element => {
-                    var p = document.createElement('p');
-                    element.classList.add(resData[0].category)
-                    p.style.color = resData[0].category=='error'? '#c8233e' : '#0986fa'                    
-                    p.textContent = resData[0].message     
-                    var child = alertmessage.querySelector('p')
-                    if(child){
-                        element.removeChild(p)
-                    }           
-                    element.appendChild(p)
-                     
-                });*/
-                //alertmessage.style.color = resData[0].category=='error'? '#c8233e' : '#0986fa'//"#f5324c";
                 alertmessage.classList.add(resData[0].category)
                 alertmessage.textContent = ''
                 alertmessage.textContent = resData[0].message;
             }else{
                 //
                 cleanForm()
-                /*alertmessage.forEach(element => {
-                    var p = document.createElement('p');
-                    element.classList.add(resData[0].category)
-                    //p.style.color = '#25d45a'
-                    p.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'
-                    p.textContent = resData[0].message
-                    
-                    if(resData[0].category=='success'){
-                        resData[0].category
-                    }
-                    var child = alertmessage.querySelector('p')
-                    if(child){
-                        element.removeChild(p)
-                    }           
-                    element.appendChild(p)
-                });*/
-                alertmessage.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'//"#f5324c";
+                alertmessage.classList.add(resData[0].category)
+                //alertmessage.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'//"#f5324c";
                 alertmessage.textContent = ''
                 alertmessage.textContent = resData[0].message;
             }

@@ -17,7 +17,7 @@
           <div class="input-group has-validation">
             <span class="input-group-text">@</span>
             <input type="text" class="form-control" id="url" name="url" 
-            placeholder="" maxlength="100" required oninput="this.value = this.value.replace(/[^\w\s]/gi, '')"> 
+            placeholder="" maxlength="100" > 
             
             <div class="invalid-feedback">
               The url is required.
@@ -48,7 +48,9 @@
     <!--<input type="password" id="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" required>-->
     
     <hr class="my-4">
-      
+    <div class="form-message" id="form-message">
+        <p></p>
+    </div> 
     <div class="col-5">               
       <input type="submit" class="w-100 btn btn-primary btn-lg" value="Extract">
     </div>  
