@@ -19396,3 +19396,677 @@ MESSAGE:
 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
  _________________________            DESCRIPTION            ___________________________
  None 
+07/01/2024 11:43:15 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:JWT <<decode_token method>> ExpiredSignatureError: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask\app\configs_package\modules\jwt_config.py", line 250, in is_user_token_expired
+    response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 306, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+ 
+NAME:JWT <<decode_token method>> ExpiredSignatureError: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask\app\configs_package\modules\jwt_config.py", line 250, in is_user_token_expired
+    response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 306, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+             
+ERROR: 
+JWT <<decode_token method>> ExpiredSignatureError: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask\app\configs_package\modules\jwt_config.py", line 250, in is_user_token_expired
+    response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 306, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+            
+MESSAGE: 
+JWT <<decode_token method>> ExpiredSignatureError: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask\app\configs_package\modules\jwt_config.py", line 250, in is_user_token_expired
+    response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "C:\Users\Utilizador\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\jwt\api_jwt.py", line 306, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/01/2024 11:43:15 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/01/2024 11:43:15 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:24:08 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:24:26 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:24:39 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...') 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:24:39 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:25:21 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...') 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:25:21 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:25:53 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...') 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:25:54 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:27:01 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...') 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: Textual SQL expression 'CREATE TABLE TEST (      ...' should be explicitly declared as text('CREATE TABLE TEST (      ...')            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:27:01 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:28:00 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Object of type CursorResult is not JSON serializable 
+NAME:Object of type CursorResult is not JSON serializable             
+ERROR: 
+Object of type CursorResult is not JSON serializable            
+MESSAGE: 
+Object of type CursorResult is not JSON serializable            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:28:00 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:32:02 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST already exists
+[SQL: CREATE TABLE TEST (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST already exists
+[SQL: CREATE TABLE TEST (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST already exists
+[SQL: CREATE TABLE TEST (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST already exists
+[SQL: CREATE TABLE TEST (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:32:02 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:32:28 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Object of type CursorResult is not JSON serializable 
+NAME:Object of type CursorResult is not JSON serializable             
+ERROR: 
+Object of type CursorResult is not JSON serializable            
+MESSAGE: 
+Object of type CursorResult is not JSON serializable            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:32:28 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:33:58 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST2 already exists
+[SQL: CREATE TABLE TEST2 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST2 already exists
+[SQL: CREATE TABLE TEST2 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST2 already exists
+[SQL: CREATE TABLE TEST2 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST2 already exists
+[SQL: CREATE TABLE TEST2 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:33:58 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:34:27 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically. 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:34:27 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:39:22 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically. 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:39:23 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:39:41 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST4 already exists
+[SQL: CREATE TABLE TEST4 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST4 already exists
+[SQL: CREATE TABLE TEST4 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST4 already exists
+[SQL: CREATE TABLE TEST4 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST4 already exists
+[SQL: CREATE TABLE TEST4 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:39:41 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:40:04 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically. 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: This result object does not return rows. It has been closed automatically.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:40:04 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:42:54 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST5 already exists
+[SQL: CREATE TABLE TEST5 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST5 already exists
+[SQL: CREATE TABLE TEST5 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST5 already exists
+[SQL: CREATE TABLE TEST5 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST5 already exists
+[SQL: CREATE TABLE TEST5 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:42:54 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:43:16 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Object of type CursorResult is not JSON serializable 
+NAME:Object of type CursorResult is not JSON serializable             
+ERROR: 
+Object of type CursorResult is not JSON serializable            
+MESSAGE: 
+Object of type CursorResult is not JSON serializable            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:43:16 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:44:06 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:44:07 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:46:10 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) 
+NAME:Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)             
+ERROR: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+MESSAGE: 
+Error occured on METHOD[execute_sql]: 
+ SQLAlchemyError: (sqlite3.OperationalError) table TEST6 already exists
+[SQL: CREATE TABLE TEST6 (            ID INT NOT NULL,             NAME CHARACTER NOT NULL            )]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/02/2024 12:46:10 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 

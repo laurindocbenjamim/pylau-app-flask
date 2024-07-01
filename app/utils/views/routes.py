@@ -1,7 +1,7 @@
 import os
 import pyotp
 import secrets
-from flask import Flask, abort, render_template, redirect, url_for, sessions, request, session, jsonify
+from flask import Flask, abort, render_template, redirect,json, url_for, sessions, request, session, jsonify
 from flask_cors import cross_origin
 from app.auth_package.module_sign_up_sub.model.users import Users
 from ...token_module import UserToken
@@ -31,7 +31,22 @@ def load_routes(app, db, login_manager):
         return 
     """
 
+    from ...utils import execute_sql
+    @app.route('/exec-sql')
+    @cross_origin(methods=['GET'])
+    def execute_raw_sql():       
+        
+        sql = "CREATE TABLE TEST7 (\
+            ID INT NOT NULL, \
+            NAME CHARACTER NOT NULL\
+            )"
+        status, response = execute_sql(sql)
+        response = "SQL Executed successfully" if status else response
+        #return redirect(url_for('index'))
+        return jsonify({"status": status, "response": response})
+    
     @app.route('/create-db')
+    @cross_origin(methods=['GET'])
     def create_db():       
         
         with app.app_context():
@@ -42,6 +57,7 @@ def load_routes(app, db, login_manager):
         return redirect(url_for('index'))
 
     @app.route('/app-logs')
+    @cross_origin(methods=['GET'])
     def display_logs():
 
         if 'user_token' in session:
