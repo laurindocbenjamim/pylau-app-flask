@@ -15672,3 +15672,45 @@ MESSAGE:
 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
  _________________________            DESCRIPTION            ___________________________
  None 
+07/01/2024 08:58:53 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/01/2024 09:18:13 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+07/01/2024 09:18:20 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 

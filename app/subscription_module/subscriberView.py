@@ -3,6 +3,8 @@ from cmath import e
 from flask.views import View
 from flask import request, flash,url_for, redirect, session, jsonify
 from ..utils import is_valid_email
+from ..email_module import send_simple_email_mime_multipart
+from ..email_module import get_subscriber_message_html
 
 class SubscriberView(View):
     methods = ['GET', 'POST']
@@ -34,6 +36,8 @@ class SubscriberView(View):
                         if email_not_exists:
                             resp, obj = self.subscriberModel.save_subscriber(email)
                             if resp:
+                                html = get_subscriber_message_html(str(email))
+                                status = send_simple_email_mime_multipart("Welcome subscriber", str(email), html )
                                 status = 200
                                 message = 'Submited successfully'
                                 category = 'success'

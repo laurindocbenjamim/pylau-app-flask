@@ -76,7 +76,7 @@ def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -
     SMTP_PASSWORD = current_app.config['SMTP_PASSWORD']
     message = """\
     This email was sent in order to check 
-    your email client if it is working properly."""
+    your email is working properly."""
     
     try:
         msg = MIMEMultipart()

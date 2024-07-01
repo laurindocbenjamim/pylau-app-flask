@@ -1,1 +1,5 @@
+from .factory.activate_account_message_html import get_activate_account_message_html
+from .factory.otp_qr_code_account_message_html import get_otp_qr_code_message_html
+from .factory.emailcontroller import send_simple_email_mime_multipart
+from .factory.welcome_subscriber_html import get_subscriber_message_html
 from .views.bp_send_email_view import bp as bp_email_view

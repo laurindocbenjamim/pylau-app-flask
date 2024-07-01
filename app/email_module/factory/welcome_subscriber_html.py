@@ -1,4 +1,11 @@
 
+
+def get_subscriber_message_html(name = 'Subscriber'):
+   
+    html = """\
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,3 +116,5 @@
     </div>
 </body>
 </html>
+    """
+    return html
