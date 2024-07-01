@@ -4,6 +4,7 @@ import secrets
 from flask import Flask, abort, render_template, redirect, url_for, sessions, request, session, jsonify
 from flask_cors import cross_origin
 from app.auth_package.module_sign_up_sub.model.users import Users
+from ..modules.db_conf import init_db_server, migrate_db
 from markupsafe import escape
 
 def load_routes(app, db, login_manager):
@@ -30,8 +31,11 @@ def load_routes(app, db, login_manager):
 
     @app.route('/create-db')
     def create_db():
-        with app.app_context():
-            db.create_all()
+        init_db_server(app)
+        migrate_db(app)
+        #with app.app_context():
+            #db.create_all()
+
         return redirect(url_for('index'))
 
     @app.route('/app-logs')
