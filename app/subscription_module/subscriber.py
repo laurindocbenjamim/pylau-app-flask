@@ -23,6 +23,16 @@ class Subscriber(db.Model):
     date_added = db.Column(db.Date(), default=datetime.now().date())
     datetime_added = db.Column(db.DateTime, default=datetime.now())
 
+    def to_dict(self):
+        return {
+            'id': self.subscriber_id,
+            'email': self.is_active,
+            'year': self.year_added,
+            'month': self.month_added,
+            'date': self.date_added,
+            'datetime': self.datetime_added
+        }
+
     def save_subscriber(email)-> any:
         try:
             obj = db.session.add(Subscriber(email=email, is_active=True))

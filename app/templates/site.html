@@ -130,7 +130,22 @@
             transform: translateY(0);
         }
 
-       
+
+        .info{
+            color: #0986fa;
+        }
+        
+        .success{
+            color: #25d45a;
+        }
+
+        .error{
+            color: #c8233e;
+        }
+
+        .danger{
+            color: #ee5d24;
+        }
         
 
     </style>
@@ -360,18 +375,22 @@
                 <form id="subscriberForm">
                   <h5>Subscribe to our newsletter</h5>
                   <p>Monthly digest of what's new and exciting from us.</p>
+                  <br><br>
+                    <div class="col-12 form-message" id="form-message">
+                        <p></p>
+                    </div>
                   <div class="d-flex flex-column flex-sm-row w-100 gap-2">
                     <label for="newsletter1" class="visually-hidden">Email address</label>
                     <input id="subscriber" name="subscriber" type="email" class="form-control" placeholder="Email address">
                     <!--<button class="btn btn-primary" type="submit">Subscribe</button>-->
                     <input type="submit" class="btn btn-primary" value="Subscribe">
                     <br>
-                    <div class="form-message">
+                    <div class="form-message" id="form-message">
                         <p></p>
                     </div>
                   </div>
-                </form>
-              </div>
+                </form>                
+              </div>              
             </div>
         
             <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">

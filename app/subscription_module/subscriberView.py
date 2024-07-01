@@ -1,4 +1,5 @@
 
+from cmath import e
 from flask.views import View
 from flask import request, flash,url_for, redirect, session, jsonify
 from ..utils import is_valid_email
@@ -12,8 +13,8 @@ class SubscriberView(View):
     def dispatch_request(self):
         subscriber = ''
         status = 200
-        message = ''
-        category = ''
+        message = '?'
+        category = '?'
         user_token = session['user_token'] if 'user_token' in session and session['user_token'] is not None else ''
         if request.method == 'POST':
             email = request.form.get('email', None)
@@ -22,22 +23,34 @@ class SubscriberView(View):
                 
                 if is_valid_email(email):
 
-                    status, ob = self.subscriberModel.check_subscriber(email)
-                    if status and ob.email != str(email):
-                        resp, obj = self.subscriberModel.save_subscriber(email)
-                        if resp:
-                            status = 200
-                            message = 'Submited successfull'
-                            category = 'success'
-                            subscriber = email
+                    status, obj = self.subscriberModel.check_subscriber(email)
+                    if status:
+                        email_not_exists = True
+                        try:
+                            email_not_exists = False if obj.email == str(email) else False
+                        except Exception:
+                            email_not_exists = True
+                        
+                        if email_not_exists:
+                            resp, obj = self.subscriberModel.save_subscriber(email)
+                            if resp:
+                                status = 200
+                                message = 'Submited successfully'
+                                category = 'success'
+                                subscriber = email
+                            else:
+                                status = 406
+                                message = 'Error on submition'
+                                category = 'error'
+                                subscriber = 'obj'
                         else:
-                            status = 400
-                            message = 'Error on submition'
-                            category = 'error'
-                            subscriber = obj
+                            status = 200
+                            message = 'Subscription already exists'
+                            category = 'info'
+                            subscriber = len(obj.to_dict())
                     else:
-                        status = 200
-                        message = 'Subscription alread exists'
+                        status = 400
+                        message = 'Failed to Subscribe the page'
                         category = 'error'
                         subscriber = ''
                     

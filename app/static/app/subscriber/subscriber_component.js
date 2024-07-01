@@ -48,7 +48,8 @@ document.getElementById('subscriberForm').addEventListener('submit', async e => 
     const baseUrl = window.location.origin;
     const dataForm = new FormData();
 
-    var alert_message = document.querySelectorAll('.form-message')
+    //var alert_message = document.querySelectorAll('.form-message')
+    var alertmessage = document.querySelector('.form-message p')
 
     var email = sanitizeInput(document.getElementById("subscriber").value);
     
@@ -75,26 +76,44 @@ document.getElementById('subscriberForm').addEventListener('submit', async e => 
         if(resData){
             if(resData[1] == 400){
                 
-                alert_message.forEach(element => {
+                /*alertmessage.forEach(element => {
                     var p = document.createElement('p');
                     element.classList.add(resData[0].category)
-                    p.style.color = resData[0].category=='error'? '#c8233e' : '#0986fa'
-                    p.textContent = ''
-                    p.textContent = resData[0].message                    
-                    
-                });
+                    p.style.color = resData[0].category=='error'? '#c8233e' : '#0986fa'                    
+                    p.textContent = resData[0].message     
+                    var child = alertmessage.querySelector('p')
+                    if(child){
+                        element.removeChild(p)
+                    }           
+                    element.appendChild(p)
+                     
+                });*/
+                //alertmessage.style.color = resData[0].category=='error'? '#c8233e' : '#0986fa'//"#f5324c";
+                alertmessage.classList.add(resData[0].category)
+                alertmessage.textContent = ''
+                alertmessage.textContent = resData[0].message;
             }else{
                 //
                 cleanForm()
-                alert_message.forEach(element => {
+                /*alertmessage.forEach(element => {
                     var p = document.createElement('p');
                     element.classList.add(resData[0].category)
                     //p.style.color = '#25d45a'
-                    p.style.color = '#25d45a'
-                    //p.textContent = resData[0].message
-                    p.textContent = ''
+                    p.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'
+                    p.textContent = resData[0].message
+                    
+                    if(resData[0].category=='success'){
+                        resData[0].category
+                    }
+                    var child = alertmessage.querySelector('p')
+                    if(child){
+                        element.removeChild(p)
+                    }           
                     element.appendChild(p)
-                });
+                });*/
+                alertmessage.style.color = resData[0].category=='success'? '#25d45a' : '#0986fa'//"#f5324c";
+                alertmessage.textContent = ''
+                alertmessage.textContent = resData[0].message;
             }
         }
     } catch (err) {
