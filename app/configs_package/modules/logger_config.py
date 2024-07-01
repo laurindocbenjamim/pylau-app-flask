@@ -26,7 +26,7 @@ logger.addHandler(console_handler)
 #logger.critical('This is a critical message')
 
 
-def get_message(e, type='debug'):
+def get_message(e, type='debug', message=None):
     if type == 'debug':
         code = e
         name = e
@@ -34,9 +34,10 @@ def get_message(e, type='debug'):
         logger.debug('\n\n\n\n========================  DEBUGING  =======================================\
             \n\nCODE:%s \nNAME:%s \
             \nERROR: \n%s\
+            \nMESSAGE: \n%s\
             \n _________________________\
             DESCRIPTION\
-            ___________________________\n %s ', code, name, e, description)
+            ___________________________\n %s ', code, name, e, description, message)
     elif type == 'info':
         code = e.code
         name = e.name
