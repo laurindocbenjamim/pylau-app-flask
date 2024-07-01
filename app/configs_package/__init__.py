@@ -1,6 +1,3 @@
-from .views.routes import load_routes
-
-from .views.error_handlers_view import error_handlers_view
 
 from .modules.app_conf import set_app_config
 

@@ -38,5 +38,5 @@ date_now = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
 date_now_tz = datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
 CALC_DATE = datetime.now(tz=timezone.utc) + timedelta(minutes=30)
 CALC_DATE_2 = datetime.now() + timedelta(minutes=30)
-print(f'DATE NOW: {CALC_DATE}')
+print(f'DATE NOW: {datetime.now().strftime('%Y')}')
 

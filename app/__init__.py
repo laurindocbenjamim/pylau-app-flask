@@ -57,7 +57,8 @@ def create_application(type_db=None,test_config=None):
 
 
     #from .routes import load_routes
-    from .configs_package.views.routes import load_routes
+    #from .configs_package.views.routes import load_routes
+    from .utils.views.routes import load_routes
     load_routes(app=app, db=db, login_manager=login_manager)
     
     # Migrate the db

@@ -17,19 +17,21 @@ class Subscriber(db.Model):
     __tablename__ = 'subscribers'
     subscriber_id:Mapped[int] = db.Column(db.Integer, primary_key=True)
     email:Mapped[str] = db.Column(db.String(100), nullable=False)
-    token:Mapped[str] = db.Column(db.String(255), unique=True, nullable=True)
     is_active:Mapped[str] = db.Column(db.Boolean(), default=False)    
+    year_added = db.Column(db.String(5), default=datetime.now().strftime('%Y'))
+    month_added = db.Column(db.String(10), default=datetime.now().strftime('%m'))
     date_added = db.Column(db.Date(), default=datetime.now().date())
     datetime_added = db.Column(db.DateTime, default=datetime.now())
 
-    def save_subscription(email, token)-> any:
+    def save_subscriber(email)-> any:
         try:
-            pass
+            obj = db.session.add(Subscriber(email=email))
+            return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(f"Error occured on method[save_subscription]: \n \
+            set_logger_message(f"Error occured on method[save_subscriber]: \n \
                                        SQLAlchemyError: {str(sys.exc_info())}\
                                        \nFile name: {fname}\
                                        \nExc-instance: {fname}\
