@@ -36,11 +36,25 @@ def load_routes(app, db, login_manager):
     @cross_origin(methods=['GET'])
     def execute_raw_sql():       
         
-        sql = "CREATE TABLE TEST7 (\
-            ID INT NOT NULL, \
-            NAME CHARACTER NOT NULL\
+        sql = "CREATE TABLE your_table_name (\
+                subscriber_id INT PRIMARY KEY,\
+                email VARCHAR(100) NOT NULL,\
+                is_active BOOLEAN DEFAULT TRUE,\
+                year_added CHAR(5) DEFAULT EXTRACT(YEAR FROM CURRENT_TIMESTAMP),\
+                month_added CHAR(10) DEFAULT EXTRACT(MONTH FROM CURRENT_TIMESTAMP),\
+                date_added DATE DEFAULT CURRENT_DATE,\
+                datetime_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
             )"
-        status, response = execute_sql(sql)
+        sql_pgs = "CREATE TABLE subscribers (\
+            subscriber_id SERIAL PRIMARY KEY,\
+            email VARCHAR(100) NOT NULL,\
+            is_active BOOLEAN DEFAULT TRUE,\
+            year_added CHAR(5) DEFAULT TO_CHAR(CURRENT_TIMESTAMP, 'YYYY'),\
+            month_added CHAR(10) DEFAULT TO_CHAR(CURRENT_TIMESTAMP, 'MM'),\
+            date_added DATE DEFAULT CURRENT_DATE,\
+            datetime_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
+        )"
+        status, response = execute_sql(sql_pgs)
         response = "SQL Executed successfully" if status else response
         #return redirect(url_for('index'))
         return jsonify({"status": status, "response": response})
