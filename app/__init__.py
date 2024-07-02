@@ -24,14 +24,21 @@ def create_application(type_db=None,test_config=None):
 
     # Load the application configurations from an object file
 
-    #if test_config is None:
+    if test_config is None:
         # load the instance config, if it exists, when not testing
         #app.config.from_pyfile('config.py', silent=True)
-    #lse:
+        app.config.from_object(DevelopmentConfig(type_db))
+    else:
         # load the test config if passed in
         #app.config.from_mapping(test_config)
+        app.config.from_object(TestingConfig)
 
-    app.config.from_object(DevelopmentConfig(type_db))
+    
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
     # This configuration uses from_mapping
     #set_app_config(app)
 

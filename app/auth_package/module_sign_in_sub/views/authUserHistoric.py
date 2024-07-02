@@ -41,7 +41,10 @@ class AuthUserHistoric(db.Model):
     
     def update_auth_user(user_id, username, status):
         try:
-            obj = AuthUserHistoric.query.filter(and_(AuthUserHistoric.username==username, AuthUserHistoric.is_logged_in.is_(True))).first_or_404()
+            obj = AuthUserHistoric.query.filter(and_(AuthUserHistoric.username==username, 
+                                                     AuthUserHistoric.is_logged_in.is_(True),
+                                                     AuthUserHistoric.date_logged_in==datetime.now().date()
+                                                     )).first_or_404()
             obj.is_logged_in = status
             obj.date_logged_out = db.func.current_timestamp() #datetime.now(tz=timezone.utc)
             db.session.commit()
