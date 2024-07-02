@@ -3,7 +3,7 @@ name = "pylau"
 version = "1.0.0"
 
 authors = [
-    {Laurindo C. Benjamim", email="laurindocbenjamim@gmail.com" },
+    {name="Laurindo C. Benjamim", email="laurindocbenjamim@gmail.com" },
 ]
 
 description = "A personal project with focus on Providing Data Engineering and AI services"
@@ -55,3 +55,10 @@ dependencies = [
 requires = [
     "unittest"
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]

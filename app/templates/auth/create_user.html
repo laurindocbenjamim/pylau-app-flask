@@ -194,8 +194,8 @@
               <div class="input-group has-validation">
                 <select id="country" name="country" class="form-control" maxlength="50">
                   <option value="" selected>Choose...</option>
-                  <option {% if request.form.country == 'Portugal' %}  selected {% endif %}>Portugal</option>                  
-                  <option {% if request.form.country == 'Angola' %}  selected {% endif %}>Angola</option>
+                  <!--<option {% if request.form.country == 'Portugal' %}  selected {% endif %}>Portugal</option>                  
+                  <option {% if request.form.country == 'Angola' %}  selected {% endif %}>Angola</option>-->
                   
                 </select>
       
@@ -209,11 +209,13 @@
       
               <div class="form-group col-md-4">
                 <label for="code">Code</label>
-                <select id="country_code" name="country_code" class="form-control" maxlength="5">
+                <input type="text" class="form-control"
+                value="{{ request.form.phone }}" id="country_code" name="country_code"  required>
+                <!--<select id="country_code" name="country_code" class="form-control" maxlength="5">
                   <option value="" selected>Choose...</option>
                   <option {% if request.form.country == 'Portugal' %}  selected {% endif %}>+351</option>
                   <option {% if request.form.country == 'Angola' %}  selected {% endif %}>+244</option>
-                </select>
+                </select>-->
               </div>
       
               <div class="form-group col-md-8">
@@ -313,6 +315,7 @@
 
 {% block scripts %}
 
+<script type="module" src="{{ url_for('static', filename='app/auth/get_countries.js') }}"></script>
   <!--<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>-->
   
 {% endblock %}

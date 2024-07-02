@@ -1,3 +1,8 @@
+
+# The copmmand to run this tests file is
+# $: python -m pytest -s module.py
+# or just
+# $: python -m pytest
 from ..app import create_application
 
 def test_config():

@@ -5,17 +5,13 @@ import os
 import secrets
 from flask import Flask, current_app, request, session, jsonify, render_template
 from flask_cors import CORS
-from flask_cors import cross_origin
 
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from .configs_package import DevelopmentConfig, TestingConfig, ProductionConfig
 
 from .configs_package.modules.db_conf import db
-from .configs_package.modules.db_conf import connect_to_db_server, migrate_db
-from .configs_package.modules.app_conf import set_app_config
-
+from .configs_package.modules.db_conf import migrate_db
 
 def create_application(type_db=None,test_config=None):
     app = Flask(__name__, instance_relative_config=True)

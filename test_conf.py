@@ -1,12 +1,21 @@
+
+"""
+This file is the entry point of the application, it is the file that will be executed by the server
+"""
+
+# The copmmand to run this tests file is
+# $: python -m pytest -s module.py
+# or just
+# $: python -m pytest
 import os
 import tempfile
 
 import pytest
-from ..app import create_application
-from ..app import db
+from app import create_application
+from app import db
 
 
-with open(os.path.join(os.path.dirname(__file__), 'data/data.sql'), 'rb') as f:
+with open(os.path.join(os.path.dirname(__file__), 'tests_app/data/data.sql'), 'rb') as f:
     _data_sql = f.read().decode('utf8')
 
 @pytest.fixture
@@ -55,6 +64,10 @@ test to log in as the test user, which was inserted as part of the test data in 
 @pytest.fixture
 def auth(client):
     return AuthActions(client)
+
+
+
+
 
 
     

@@ -1,3 +1,9 @@
+
+# The copmmand to run this tests file is
+# $: python -m pytest -s module.py
+# or just
+# $: python -m pytest
+
 import sqlite3
 import pytest
 from sqlalchemy import and_, text
