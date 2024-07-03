@@ -17,13 +17,15 @@ class SentimentAnalyseView(View):
     def dispatch_request(self, user_token) -> any:
         
         user_token = escape(user_token)
+
+        if user_token == '401': return redirect(url_for('auth.user.login'))
         # Check if the token is expired
-        """if self._userToken.is_user_token_expired(user_token):
+        if self._userToken.is_user_token_expired(user_token):
             session.clear()
             logout_user()
             return redirect(url_for('auth.user.login'))
         
-        status,token = self._userToken.get_token_by_token(user_token)
+        """status,token = self._userToken.get_token_by_token(user_token)
         if status and token:     
             user_token = token.token       
             # Get the user details using the email address

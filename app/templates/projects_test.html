@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Projects</h1>
+    
+
+    <div class="container">
+        <h1>User List</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Phone</th>
+                    <th>Country</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in items %}
+                <tr>
+                    <td>{{ user.firstname }} {{ user.lastname }}</td>   
+                    <td>{{ user.email }}</td>                 
+                    <td>{{ user.country_code }} {{ user.phone }}</td>
+                    <td>{{ user.country }}</td>
+                    <td><a class="btn btn-danger" href="{{url_for('projects.user-remove', user_id=user.userID, user_token=user_token)}}">Remove</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+
+
+
+{% endblock %}
+
+{% block sidebar %}
+    <h3>Projects</h3>
+    <ul>
+        {% for project in projects %}
+            <li><a href="">{{ project.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block title %}Projects{% endblock %}
+
+{% block head %}
+    <style>
+        h1 {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        alert('Hello');
+    </script>
+{% endblock %}
+
+{% block footer %}
+    <p>&copy; 2024</p>
+{% endblock %}
+
+{% block extra %}
+    <p>Extra content</p>
+{% endblock %}
+

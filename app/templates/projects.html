@@ -1,70 +1,200 @@
-{% extends "layout.html" %}
+{% extends 'site.html' %}
+{% block title %}
+{% if title %}{{ title }} {%else %} AI {% endif %}
+{% endblock %}
+
+
+{% block style %}
+
+
+{% endblock %}
 
 {% block content %}
-    <h1>Projects</h1>
-    
+<style>
+    .projects {
+        display: flex;
+        justify-content: center;
+    }
 
-    <div class="container">
-        <h1>User List</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Phone</th>
-                    <th>Country</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in items %}
-                <tr>
-                    <td>{{ user.firstname }} {{ user.lastname }}</td>   
-                    <td>{{ user.email }}</td>                 
-                    <td>{{ user.country_code }} {{ user.phone }}</td>
-                    <td>{{ user.country }}</td>
-                    <td><a class="btn btn-danger" href="{{url_for('projects.user-remove', user_id=user.userID, user_token=user_token)}}">Remove</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    .container .card {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .card-image {
+        border-radius: 20px;
+        box-sizing: border-box;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .container .card .face {
+        width: 300px;
+        height: 200px;
+        transition: 0.5s;
+    }
+
+    .container .card .face.face1 {
+        position: relative;
+        background: linear-gradient(to right, #0a0318, #2e3157, #000c25);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        transform: translateY(100px);
+    }
+
+    .container .card:hover .face.face1 {
+        background: linear-gradient(to right, #e07b08, #e29236, #e07b08);
+        transform: translateY(0);
+    }
+
+    .container .card .face.face1 .content {
+        opacity: 0.2;
+        transition: 0.5s;
+    }
+
+    .container .card:hover .face.face1 .content {
+        opacity: 1;
+    }
+
+    .container .card .face.face1 .content img {
+        max-width: 100px;
+    }
+
+    .container .card .face.face1 .content h3 {
+        margin: 10px 0 0;
+        padding: 0;
+        color: #fff;
+        text-align: center;
+        font-size: 1.5em;
+    }
+
+    .container .card .face.face2 {
+        position: relative;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        transform: translateY(-100px);
+    }
+
+    .container .card:hover .face.face2 {
+        transform: translateY(0);
+    }
+
+    .container .card .face.face2 .content p {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container .card .face.face2 .content a {
+        margin: 15px 0 0;
+        display: inline-block;
+        text-decoration: none;
+        font-weight: 900;
+        color: #333;
+        padding: 7px;
+        width: 70%;
+        border: 1px solid #333;
+        text-align: center;
+    }
+
+    .container .card .face.face2 .content a:hover {
+        background: linear-gradient(to right, #0a0318, #2e3157, #000c25);
+        color: #fff;
+    }
+</style>
+<div class="projects container py-4">
+
+
+    <div class="col-lg-9">
+        <div class="p-3 mb-4 bg-body-tertiar rounded-3 scroll-animation">
+            <div class="container-fluid py-5">
+                <h1 class="display-3 fw-bold welcome-title">Principal Projects</h1>
+                <h3 class="display-7 fw-bold text-dark-emphasis ">Explore our best projects in Data Science and Data
+                    Engineering</h3>
+                <p class="col-md-8 fs-4">
+                    A company's treasure lies in the data generated through its activities. Managing this data
+                    responsibly is a priority; otherwise, business failure is inevitable.
+                </p>
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            <div class="card">
+                <div class="face face1">
+                    <div class="content">
+                        <img class="card-image"
+                            src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai-icon-vector-23097736-removebg-preview.png')}}">
+                        <h3>Sentiment Analyse</h3>
+                    </div>
+                </div>
+                <div class="face face2">
+                    <div class="content">
+                        <p>With this resource is possible to predict or extract different type of sentiments
+                            from comments/text phrases.</p>
+                        {% if 'user_token' in session %}
+                        <a
+                            href="{{ url_for('data_science.project.sentiment_analyse', user_token=session['user_token']) }}">Try
+                            for free</a>
+                        {% elif user_token %}
+                        <a href="{{ url_for('data_science.project.sentiment_analyse', user_token=user_token) }}">Try for
+                            free</a>
+                        {% else %}
+                        <a href="{{ url_for('data_science.project.sentiment_analyse', user_token=401) }}">Try for
+                            free</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="face face1">
+                    <div class="content">
+                        <img class="card-image"
+                            src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai.png')}}">
+                        <h3>Emotion Detection</h3>
+                    </div>
+                </div>
+                <div class="face face2">
+                    <div class="content">
+                        <p>This resouce allows you to detect or extract emotions type from comments/text phrase.</p>
+                        <a href="#">Try for free</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row g-5">
+
+            <div class="col-md-8" style="">
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+
     </div>
-    
+
+
+
+
+</div>
 
 
 
 {% endblock %}
-
-{% block sidebar %}
-    <h3>Projects</h3>
-    <ul>
-        {% for project in projects %}
-            <li><a href="">{{ project.name }}</a></li>
-        {% endfor %}
-    </ul>
-{% endblock %}
-
-{% block title %}Projects{% endblock %}
-
-{% block head %}
-    <style>
-        h1 {
-            color: red;
-        }
-    </style>
-{% endblock %}
-
-{% block javascript %}
-    <script>
-        alert('Hello');
-    </script>
-{% endblock %}
-
-{% block footer %}
-    <p>&copy; 2024</p>
-{% endblock %}
-
-{% block extra %}
-    <p>Extra content</p>
-{% endblock %}
-
