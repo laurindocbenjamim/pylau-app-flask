@@ -5,10 +5,10 @@ from datetime import datetime, timedelta, timezone
 
 
 def test_mysql_connection():
-    host = '185.12.116.142'  #185.12.116.142/herokupylau
-    user = 'iledmdpt_admin'
-    password = 'takagEw5FVpy'
-    database = 'iledmdpt_octech'
+    host = ''  #
+    user = ''
+    password = ''
+    database = ''
     port = 3306
     #connection = None
     # Establish a connection to the database

@@ -40,10 +40,7 @@ document.getElementById('country').addEventListener('change', async (e) =>{
     const baseUrl = window.location.origin;
 
     if(e.target.value){
-        const country = e.target.value        
-
-        var country_code = document.getElementById('country_code')
-        const countriesL = JSON.parse(localStorage.getItem('countries'))       
+        const country = e.target.value            
         filter_country_2(country)
     }
         

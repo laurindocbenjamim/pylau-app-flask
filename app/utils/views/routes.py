@@ -130,7 +130,7 @@ def load_routes(app, db, login_manager):
     @cross_origin(methods=['GET'])
     def get_secret():                
 
-        #session['user_token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9ja2V0bWMyMDA5QGdtYWlsLmNvbSIsImV4cCI6MTcxOTMxNDU0NiwibmJmIjoxNzE5MzEyNzQ2fQ.sBMAHsZ7IpH7TFbGwHmLbYCUYAGZ0bKQ0t7-nXOQnFc'
+        #session['user_token'] = ''
         t_key = secrets.token_urlsafe(32)
         otp_secret = pyotp.random_base32()
             
@@ -158,7 +158,7 @@ def load_routes(app, db, login_manager):
     from app.email_module import bp_email_view
     app.register_blueprint(bp_email_view)
     
-    from ...projects_module import bp_project_view
+    from ...package_projects.projects_module import bp_project_view
     app.register_blueprint(bp_project_view)
 
     from ...admin_module.bp_admin_view import bp as bp_admin_view

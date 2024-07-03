@@ -15,13 +15,13 @@ Overall, the web socket functionality allows the server to receive messages from
 
 """
 
-
+import os
 from flask import Flask, render_template
 #pip install flask-socketio
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 socketio = SocketIO(app)
 
 @app.route('/')
