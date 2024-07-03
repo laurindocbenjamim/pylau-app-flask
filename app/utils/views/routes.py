@@ -140,9 +140,6 @@ def load_routes(app, db, login_manager):
             })
     
     # Integrating the blueprints parent and child into the application
-
-    #from ... auth_package.module_sign_in_sub.views.bp_auth_login_view import init_app as init_auth_login_view_app, bp_auth as bp_auth_login_view_child
-    #from ... auth_package.module_sign_up_sub.views.bp_auth_register_view import bp_auth_register_parent, init_app as init_user_register_app
     from ...auth_package import bp_auth_register_parent, init_register_app
     from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     
@@ -158,7 +155,7 @@ def load_routes(app, db, login_manager):
     from app.email_module import bp_email_view
     app.register_blueprint(bp_email_view)
     
-    from ...package_projects.projects_module import bp_project_view
+    from ...package_data_science.projects_module import bp_project_view
     app.register_blueprint(bp_project_view)
 
     from ...admin_module.bp_admin_view import bp as bp_admin_view
@@ -172,3 +169,7 @@ def load_routes(app, db, login_manager):
 
     from ...subscription_module import bp as bp_subscriber
     app.register_blueprint(bp_subscriber)
+
+    #from ...package_data_science.bp_data_science_view import bp_data_science
+    from ...package_data_science import bp_data_science
+    app.register_blueprint(bp_data_science)
