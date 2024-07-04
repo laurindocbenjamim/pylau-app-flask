@@ -28,19 +28,19 @@ class EmotionDetectorView(View):
         if self._userToken.is_user_token_expired(user_token):
             session.clear()
             logout_user()
-            session['current_route'] = 'data_science.project.sentiment_analyse' 
+            session['current_route'] = 'data_science.project.emotion_detector' 
             return redirect(url_for('auth.user.login'))
         
         status,token = self._userToken.get_token_by_token(user_token)
         if status == False:            
                 session.clear()
                 logout_user()
-                session['current_route'] = 'data_science.project.sentiment_analyse' 
+                session['current_route'] = 'data_science.project.emotion_detector' 
                 return redirect(url_for('auth.user.login'))
         if not token:
             session.clear()
             logout_user()
-            session['current_route'] = 'data_science.project.sentiment_analyse' 
+            session['current_route'] = 'data_science.project.emotion_detector' 
             return redirect(url_for('auth.user.login'))
         else:     
             user_token = token.token       
@@ -50,7 +50,7 @@ class EmotionDetectorView(View):
             if status == False:            
                 session.clear()
                 logout_user()
-                session['current_route'] = 'data_science.project.sentiment_analyse' 
+                session['current_route'] = 'data_science.project.emotion_detector' 
                 return redirect(url_for('auth.user.login'))
             else:       
                 if request.method =='POST':
@@ -73,12 +73,12 @@ class EmotionDetectorView(View):
                         category = 'error'
                     else:
                         status = 200
-                        message = f'COMMENT RECEIVED: {comment}'
-                        category = 'info'
+                        message = ''
+                        category = 'success'
                         emotions = self._emotionDetector.emotion_detector(comment)
 
                     return jsonify({"message": message, "category": category, 'emotions': [emotions]},status)
 
         
-        return render_template(self._template, title="Sentiment Analyse", user_token=user_token)
+        return render_template(self._template, title="Emotion Detector", user_token=user_token)
 

@@ -376,6 +376,9 @@
 
     <script>
 
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
         // Add your JavaScript code here for scroll page animation
         $(document).ready(function () {
             $(".scroll-animation").addClass("show");

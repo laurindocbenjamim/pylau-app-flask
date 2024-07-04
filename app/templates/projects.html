@@ -138,17 +138,9 @@
                 <div class="face face2">
                     <div class="content">
                         <p>With this feature it is possible predict or extract types of feelings through comments or text phrases.</p>
-                        {% if 'user_token' in session %}
-                        <a
-                            href="{{ url_for('data_science.project.sentiment_analyse', user_token=session['user_token']) }}">Try
-                            for free</a>
-                        {% elif user_token %}
-                        <a href="{{ url_for('data_science.project.sentiment_analyse', user_token=user_token) }}">Try for
+                        
+                        <a href="#">Try for
                             free</a>
-                        {% else %}
-                        <a href="{{ url_for('data_science.project.sentiment_analyse', user_token=401) }}">Try for
-                            free</a>
-                        {% endif %}
 
                     </div>
                 </div>
@@ -165,7 +157,17 @@
                 <div class="face face2">
                     <div class="content">
                         <p>This resouce allows you to detect or extract emotions type through comments or text phrase.</p>
-                        <a href="#">Try for free</a>
+                        {% if 'user_token' in session %}
+                        <a
+                            href="{{ url_for('data_science.project.emotion_detector', user_token=session['user_token']) }}">Try
+                            for free</a>
+                        {% elif user_token %}
+                        <a href="{{ url_for('data_science.project.emotion_detector', user_token=user_token) }}">Try for
+                            free</a>
+                        {% else %}
+                        <a href="{{ url_for('data_science.project.emotion_detector', user_token=401) }}">Try for
+                            free</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

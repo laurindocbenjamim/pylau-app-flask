@@ -4,7 +4,7 @@
 {%endblock%}
 
 {%block scripts %}
-<script type="module" src="{{ url_for('static', filename='app/sentiment_analyse.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='app/emotion_detection.js') }}"></script>
 {% endblock %}
 
 {%block content%}
@@ -20,10 +20,10 @@
   <div class="col-lg-7">
 
     <div class="p-3 mb-4 bg-body-tertiar rounded-3 scroll-animation">
-      <div class="container-fluid py-5">
-        <h1 class="display-6 fw-bold welcome-title text-dark-emphasis">Sentiment Analyse</h1>
+      <div class="container-fluid py-5">        
+        <h1 class="display-6 fw-bold welcome-title text-dark-emphasis">Emotions Detection</h1>
         <p class="col-md-8 fs-4">
-          Welcome to our <b><i style="color: rgb(42, 81, 255);">Sentiment Analyse</i></b> feature. Enter or paste a comment in the field below to test it.
+          Welcome to our <b><i style="color: rgb(42, 81, 255);">Emotions Detector</i></b> feature. Enter or paste a comment in the field below to test it.
         </p>
       </div>
     </div>
@@ -66,7 +66,14 @@
       </div>
 
       <div class="my-3 p-3 bg-body rounded shadow-sm" >
-        <h6 class="border-bottom pb-2 mb-0">RESPONSE</h6>
+        <nav class="navbar border-bottom">
+          <div class="container-fluid">
+            <a class="navbar-brand">Emotions Detection</a>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" id="dominant" type="text" readonly placeholder="Dominant emotion" aria-label="Dominant emotion">              
+            </form>
+          </div>
+        </nav>
         <div class="d-flex text-body-secondary pt-3">
           <div class="row response" id="response">
 

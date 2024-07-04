@@ -61,7 +61,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
     try {
         const res = await fetch(
-            `${baseUrl}/data-science/project/sentiment-analyse/${ token }`,
+            `${baseUrl}/data-science/project/emotion-detector/${ token }`,
             {
               method: 'POST',
               body: dataForm
