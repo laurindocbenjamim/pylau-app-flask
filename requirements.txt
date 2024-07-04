@@ -21,6 +21,7 @@ Flask-WTF
 bootstrap-flask
 Flask-Caching
 flask-talisman
+pylint
 pytest
 coverage
 hvac #install vault
@@ -30,3 +31,7 @@ sentry-sdk[flask]
 # pip install --upgrade sentry-sdk[flask]
 #
 bs4
+
+# AI libraries
+ibm-watsonx-ai
+ibm-watson>=6.1.0
