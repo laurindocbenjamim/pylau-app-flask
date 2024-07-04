@@ -62,7 +62,7 @@ document.getElementById('etlWebForm').addEventListener('submit', async e => {
 
     try {
         const res = await fetch(
-            baseUrl + '/ws/api/etl',
+            `${baseUrl}/ws/api/etl`,
             {
               method: 'POST',
               body: dataForm

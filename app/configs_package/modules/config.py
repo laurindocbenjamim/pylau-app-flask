@@ -3,6 +3,8 @@ import os
 class Config:
     DEBUG = False
     TESTING = False
+    WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
+    WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 
     SMTP_PORT = os.environ.get('SMTP_PORT')# 587 by default
     SMTP_USER = os.environ.get('SMTP_USER')
@@ -25,6 +27,8 @@ CLASS  USED ON DEVELOPMENT MODE
 class DevelopmentConfig(Config):
     DATABASE_URI = "sqlite:///test3.db"
     DEBUG = True
+    WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
+    WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 
     SMTP_PORT = os.environ.get('SMTP_PORT')# 587 by default
     SMTP_USER = os.environ.get('SMTP_USER')
@@ -92,6 +96,8 @@ CLASS USED ON TEST MODE
 class TestingConfig(Config):
     TESTING = True    
     DATABASE_URI = "sqlite:///test4.db"
+    WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
+    WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 
     SMTP_PORT = os.environ.get('SMTP_PORT')# 587 by default
     SMTP_USER = os.environ.get('SMTP_USER')
