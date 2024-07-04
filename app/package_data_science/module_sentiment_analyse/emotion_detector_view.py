@@ -23,52 +23,61 @@ class EmotionDetectorView(View):
         category = 'info'
         emotions = []
 
-        #if user_token == '401': return redirect(url_for('auth.user.login'))
+        if user_token == '401': return redirect(url_for('auth.user.login'))
         # Check if the token is expired
-        """if self._userToken.is_user_token_expired(user_token):
+        if self._userToken.is_user_token_expired(user_token):
             session.clear()
             logout_user()
             session['current_route'] = 'data_science.project.sentiment_analyse' 
-            #return redirect(url_for('auth.user.login'))
+            return redirect(url_for('auth.user.login'))
         
         status,token = self._userToken.get_token_by_token(user_token)
-        if status and token:     
+        if status == False:            
+                session.clear()
+                logout_user()
+                session['current_route'] = 'data_science.project.sentiment_analyse' 
+                return redirect(url_for('auth.user.login'))
+        if not token:
+            session.clear()
+            logout_user()
+            session['current_route'] = 'data_science.project.sentiment_analyse' 
+            return redirect(url_for('auth.user.login'))
+        else:     
             user_token = token.token       
             # Get the user details using the email address
             status, user = self._userModel.get_user_by_email(token.username)
 
-            if request.method == 'POST':
-                pass
-        else:
-            session.clear()
-            logout_user()
-            return redirect(url_for('auth.user.login'))
-        """
-        if request.method =='POST':
-            comment = request.form.get('comment', None)
-            if comment is None or comment == '':
-                status = 400
-                message = 'Enter a comment to analyse'
-                category = 'error'
-            elif comment is None or comment == '':
-                status = 400
-                message = 'Enter a comment to analyse'
-                category = 'error'
-            elif not comment or not isinstance(comment, str):
-                status = 400
-                message = 'Enter a valid comment to analyse'
-                category = 'error'
-            elif self._emotionDetector.validate_string_with_digits(comment) == False:
-                status = 400
-                message = 'Enter a valid comment with with no special characteres to analyse'
-                category = 'error'
-            else:
-                status = 200
-                message = f'COMMENT RECEIVED: {comment}'
-                category = 'info'
-                emotions = self._emotionDetector.emotion_detector(comment)
+            if status == False:            
+                session.clear()
+                logout_user()
+                session['current_route'] = 'data_science.project.sentiment_analyse' 
+                return redirect(url_for('auth.user.login'))
+            else:       
+                if request.method =='POST':
+                    comment = request.form.get('comment', None)
+                    if comment is None or comment == '':
+                        status = 400
+                        message = 'Enter a comment to analyse'
+                        category = 'error'
+                    elif comment is None or comment == '':
+                        status = 400
+                        message = 'Enter a comment to analyse'
+                        category = 'error'
+                    elif not comment or not isinstance(comment, str):
+                        status = 400
+                        message = 'Enter a valid comment to analyse'
+                        category = 'error'
+                    elif self._emotionDetector.validate_string_with_digits(comment) == False:
+                        status = 400
+                        message = 'Enter a valid comment with with no special characteres to analyse'
+                        category = 'error'
+                    else:
+                        status = 200
+                        message = f'COMMENT RECEIVED: {comment}'
+                        category = 'info'
+                        emotions = self._emotionDetector.emotion_detector(comment)
 
-            return jsonify({"message": message, "category": category, 'emotions': [emotions]},status)
+                    return jsonify({"message": message, "category": category, 'emotions': [emotions]},status)
 
         
         return render_template(self._template, title="Sentiment Analyse", user_token=user_token)
