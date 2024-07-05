@@ -54,6 +54,16 @@ class EmotionDetectorView(View):
                 return redirect(url_for('auth.user.login'))
             else:       
                 if request.method =='POST':
+
+                    if user_token == '401': return jsonify({"message": 'Session expired', "category": 'danger', 'emotions': [],
+                                                            'redirectUrl': 'auth/user/login'},401)
+                    # Check if the token is expired
+                    if self._userToken.is_user_token_expired(user_token):
+                        session.clear()
+                        logout_user()
+                        session['current_route'] = 'data_science.project.emotion_detector' 
+
+
                     comment = request.form.get('comment', None)
                     if comment is None or comment == '':
                         status = 400

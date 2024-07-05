@@ -5,6 +5,8 @@
 
 {%block scripts %}
 <script type="module" src="{{ url_for('static', filename='app/emotion_detection.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
 {% endblock %}
 
 {%block content%}
@@ -57,7 +59,13 @@
           </div>
         </small>
 
-      </form>
+        <div class="my-3 progress-process" id="progress-process" style="display: none;">
+          <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+          </div>
+        </div>
+
+      </form>      
 
       <div class="form-group">
         <div class="form-message">
@@ -79,6 +87,8 @@
 
           </div>
         </div>
+
+        <canvas id="myChart"></canvas>
         
         <small class="d-block text-end mt-3">
           <a href="#">All updates</a>
