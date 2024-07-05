@@ -89,7 +89,10 @@ document
           alertmessage.classList.add(resData[0].category);
           alertmessage.textContent = "";
           alertmessage.textContent = resData[0].message;
-        } else if (resData[1] == 200) {
+        } else if (resData[1] == 401 | resData[1] == 403){
+          window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
+        }
+        else if (resData[1] == 200) {
           // Calculate the increment for each user
           var increment = 100 / resData[0].emotions.length;
           
