@@ -21,7 +21,22 @@ def load_user_obj(form = Request.form, role='user', active=0):
         
 
 
-
+def validate_only_string(s):
+        # This pattern allows spaces, accentuated characters, and common punctuation
+        pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ\s.,;!?\'"()]+$'
+        if re.match(pattern, s):
+            return True
+        else:
+            return False
+        
+def validate_string_with_digits(s):
+    # This pattern allows spaces, accentuated characters, numbers, and common punctuation
+    pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;!?\'"()]+$'
+    if re.match(pattern, s):
+        return True
+    else:
+        return False
+        
 
 def validate_form_fields(form = Request.form):
     # Validate each field

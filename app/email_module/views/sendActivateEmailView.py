@@ -4,6 +4,7 @@ from flask.views import View
 
 from markupsafe import escape
 from flask import request, render_template, abort, session, redirect, url_for, flash, jsonify
+from  flask_login import logout_user
 from ..factory.activate_account_message_html import get_activate_account_message_html
 from ..factory.emailcontroller import send_simple_email_mime_multipart
 
@@ -40,7 +41,9 @@ class SendActivateEmailView(View):
            
             # Check if the token is expired
             if self.userToken.is_user_token_expired(escape(user_token)):
-                abort(401)
+                session.clear()
+                logout_user()
+                return redirect(url_for('auth.user.login'))
             
             status,token = self.userToken.get_token_by_token(escape(user_token))
 

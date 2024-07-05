@@ -20,6 +20,7 @@ class AuthLoginView(View):
 
     def dispatch_request(self):
         session.pop('_flashes', None)
+        recover_account = True
         # Check if the user is already logged in
         
         if 'user_token' in session:
@@ -28,14 +29,20 @@ class AuthLoginView(View):
             if self.userToken.is_user_token_expired(session['user_token']) == False:
                 
                 status,token = self.userToken.get_token_by_token(session['user_token'])
-            
+                
                 # Check if the token is expired
                 if status and token:                    
                     if token.is_active==True:
                         return redirect(url_for('index', user_token=token.token))
+                    else:
+                        session.clear()
+                        logout_user()
                 else:
                     session.clear()
                     logout_user()
+            else:
+                session.clear()
+                logout_user()
         
         # Check if the user is already logged in
         if request.method == 'POST':

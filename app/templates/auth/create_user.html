@@ -255,40 +255,46 @@
       
             <hr class="my-4">
       
-            <div class="col-12">               
+            <div class="col-8" >
               <strong class="d-inline-block mb-2 text-primary-emphasis">
-                <h3 class="mb-0">2-Factor Authentication</h3>
+                  <h1 class="fw-bold mb-0 fs-5">2-Factor Authentication</h1>
               </strong>
-      
+
               <p class="mb-auto" style="color: #bebdbd;">
-                We worring about your data security. We use 2-Factor Authentication to protect your data.
+                  We worring about your data security. We use 2-Factor Authentication to protect your
+                  data.
               </p>
               <p class="mb-auto" style="color: #bebdbd;">
-                Please select one of the options below to authenticate.
+                  Please select one of the options below to authenticate.
               </p>
               <div class="my-3">
-               
-                <div class="list-group">
-                  <label class="list-group-item d-flex gap-2">
-                    <input class="form-check-input flex-shrink-0" type="radio" name="two_fa_auth_method" id="two_fa_auth_method"
-                      value="app" checked>
-                    <span>
-                      By using a 2-FA authenticator application
-                      <small class="d-block text-body-secondary">(Google Authenticator, Microsoft Authenticator, Salesforce Authenticator, etc.)</small>
-                    </span>
-                  </label>
-                  <label class="list-group-item d-flex gap-2">
-                    <input class="form-check-input flex-shrink-0" type="radio" name="two_fa_auth_method" id="two_fa_auth_method"
-                      value="email">
-                    <span>
-                      Receive code by email or cell phone
-                      <small class="d-block text-body-secondary">Receive code by email or cell phone</small>
-                    </span>
-                  </label>
-                </div>
+
+                  <div class="list-group">
+                      <label class="list-group-item d-flex gap-2">
+                          <input class="form-check-input flex-shrink-0" type="radio"
+                              name="two_fa_auth_method" id="two_fa_auth_method" value="app"                               
+                              {% if request.form.two_fa_auth_method == 'app' %}  checked {% endif %}                                            
+                              >
+                          <span>
+                              By using a 2-FA authenticator application
+                              <small class="d-block text-body-secondary">(Google Authenticator, Microsoft
+                                  Authenticator, Salesforce Authenticator, etc.)</small>
+                          </span>
+                      </label>
+                      <label class="list-group-item d-flex gap-2">
+                          <input class="form-check-input flex-shrink-0" type="radio"
+                              name="two_fa_auth_method" id="two_fa_auth_method" value="email"
+                              {% if request.form.two_fa_auth_method == 'email' %}  checked {% endif %}
+                              >
+                          <span>
+                              Receive the code by email or cell phone
+                              <small class="d-block text-body-secondary">Your email must be real to use this option</small>
+                          </span>
+                      </label>
+                  </div>
               </div>
-      
-            </div>  
+
+          </div>  
             
             <div class="col-12" style="justify-content: center; text-align:center">               
               <button class="w-50 btn btn-primary btn-lg" id="submit" type="submit">Submit</button>    

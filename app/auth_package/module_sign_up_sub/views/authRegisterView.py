@@ -11,10 +11,10 @@ from ....configs_package.modules.logger_config import get_message as set_logger_
 class AuthRegisterView(View):
     methods = ['GET', 'POST']
 
-    def __init__(self, model, tokenModel, twoFaModel, template):
+    def __init__(self, model, userToken, twoFaModel, template):
         self.model = model
         self.template = template
-        self.tokenModel = tokenModel
+        self.userToken = userToken
         self.twoFaModel = twoFaModel
 
     def dispatch_request(self):
@@ -44,7 +44,7 @@ class AuthRegisterView(View):
                     else:
                         
                         # bEFORE CREATE User generate and save token
-                        status, token = self.tokenModel.create_token(request.form.get('email'))
+                        status, token = self.userToken.create_token(request.form.get('email'))
                         
                         if status == False:
                             flash('Error creating token.', 'error')
