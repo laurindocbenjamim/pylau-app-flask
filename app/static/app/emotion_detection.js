@@ -51,6 +51,9 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
     var alertmessage = document.querySelector('.form-message p')
     var response = document.getElementById('response')
     var comment = sanitizeInput(document.getElementById('comment').value);
+
+    let decimalPlace = 2 // number of decimal places
+    let factor = Math.pow(10, decimalPlace)
     
     if (comment.length > 255){
         return
@@ -88,6 +91,11 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
                     ol.className = "list-group list-group-numbered"
                     var p = document.createElement('p')
                     var li_anger = document.createElement('li')
+                    var li_disgust = document.createElement('li')
+                    var li_fear = document.createElement('li')
+                    var li_joy = document.createElement('li')
+                    var li_sadness = document.createElement('li')
+
                     li_anger.className = "list-group-item d-flex justify-content-between align-items-start"
                     
                     var divChild = document.createElement('div')
@@ -96,16 +104,20 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var divParent = document.createElement('div')
                     divParent.className = "ms-2 me-auto"
-                    p.textContent = 'The anger is a bad feeling'                    
+                    p.textContent = `The anger is a bad feeling. Score: [${element.anger}]`                    
 
                     var span = document.createElement('span')
                     span.className = "badge text-bg-primary rounded-pill"
-                    span.textContent = `${element.anger}`
-                    max_score = parseFloat(element.anger) > max_score? parseFloat(element.anger) : 0
+                 
+                    span.textContent = `${Math.round(parseFloat(element.anger) * factor)}%`
+                    max_score = parseFloat(element.anger) > max_score? parseFloat(element.anger) : max_score
                     
                     if(max_score == parseFloat(element.anger)){
-                        //li_anger.classList.add('active')
-                        //li_disgust.classList.remove('active')
+                        li_anger.classList.add('active')
+                        li_disgust.classList.remove('active')
+                        li_fear.classList.remove('active')
+                        li_joy.classList.remove('active')
+                        li_sadness.classList.remove('active')
                         
                     }
                     divParent.appendChild(divChild)   
@@ -120,7 +132,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var p_disgust = document.createElement('p')
 
-                    var li_disgust = document.createElement('li')
+                    
                     li_disgust.className = "list-group-item d-flex justify-content-between align-items-start"
 
                     var divChild_disgust = document.createElement('div')
@@ -132,17 +144,19 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var span_disgust = document.createElement('span')
                     span_disgust.className = "badge text-bg-primary rounded-pill"
-                    span_disgust.textContent = `${element.disgust}`
+                    span_disgust.textContent = `${Math.round(parseFloat(element.disgust) * factor)}%`
                     
-                    p_disgust.textContent = 'The Disgust is a bad feeling'
+                    p_disgust.textContent = `The Disgust is a bad feeling. Score: [${element.disgust}]`
 
-                    max_score = parseFloat(element.disgust) > max_score? parseFloat(element.disgust) : 0
+                    max_score = parseFloat(element.disgust) > max_score? parseFloat(element.disgust) : max_score
                     
                     if(max_score == parseFloat(element.disgust)){
-                        //li_disgust.classList.add('active')
+                        li_anger.classList.remove('active')
+                        li_disgust.classList.add('active')
+                        li_fear.classList.remove('active')
+                        li_joy.classList.remove('active')
+                        li_sadness.classList.remove('active')
                         
-                    }else{
-                        li_disgust.classList.remove('active')
                     }
 
                     divParent_disgust.appendChild(divChild_disgust) 
@@ -157,7 +171,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var p_fear = document.createElement('p')
 
-                    var li_fear = document.createElement('li')
+                    
                     li_fear.className = "list-group-item d-flex justify-content-between align-items-start"
 
                     var divChild_fear = document.createElement('div')
@@ -169,16 +183,18 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var span_fear = document.createElement('span')
                     span_fear.className = "badge text-bg-primary rounded-pill"
-                    span_fear.textContent = `${element.fear}`
+                    span_fear.textContent = `${Math.round(parseFloat(element.fear) * factor)}%`
                     
-                    p_fear.textContent = 'The Fear is a bad feeling'
-                    max_score = parseFloat(element.anger) > max_score? parseFloat(element.fear) : 0
+                    p_fear.textContent = `The Fear is a bad feeling. Score: [${element.fear}]`
+                    max_score = parseFloat(element.anger) > max_score? parseFloat(element.fear) : max_score
                     
                     if(max_score == parseFloat(element.fear)){
-                        //li_fear.classList.add('active')
+                        li_anger.classList.remove('active')
+                        li_disgust.classList.remove('active')
+                        li_fear.classList.add('active')
+                        li_joy.classList.remove('active')
+                        li_sadness.classList.remove('active')
                         
-                    }else{
-                        li_fear.classList.remove('active')
                     }
 
                     divParent_fear.appendChild(divChild_fear) 
@@ -192,8 +208,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
                      */
 
                     var p_joy = document.createElement('p')
-
-                    var li_joy = document.createElement('li')
+                    
                     li_joy.className = "list-group-item d-flex justify-content-between align-items-start"
                     li_joy.id = "joy-element"
 
@@ -206,20 +221,23 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var span_joy = document.createElement('span')
                     span_joy.className = "badge text-bg-primary rounded-pill"
-                    span_joy.textContent = `${element.joy}`
+                    span_joy.textContent = `${Math.round(parseFloat(element.joy) * factor)}%`
                     
-                    p_joy.textContent = 'The Joy is a GOOD feeling'
+                    p_joy.textContent = `The Joy is a GOOD feeling. Score: [${element.joy}]`
 
-                    max_score = parseFloat(element.joy) > max_score? parseFloat(element.joy) : 0
+                    max_score = parseFloat(element.joy) > max_score? parseFloat(element.joy) : max_score
                     
                     if(max_score == parseFloat(element.joy)){
-                        //li_joy.classList.add('active')
-                        //li_joy.setAttribute('data-bs-toggle', 'tooltip')
-                        //li_joy.setAttribute('data-bs-placement', 'top')
-                        //li_joy.setAttribute('data-bs-custom-class', 'custom-tooltip')
-                        //li_joy.setAttribute('data-bs-title', `This is the dominante emotion detected with ${max_score}% of max score`)
-                    }else{
-                        li_joy.classList.remove('active');
+                        li_anger.classList.remove('active')
+                        li_disgust.classList.remove('active')
+                        li_fear.classList.remove('active')
+                        li_joy.classList.add('active')
+                        li_sadness.classList.remove('active')
+                        li_joy.classList.add('active')
+                        li_joy.setAttribute('data-bs-toggle', 'tooltip')
+                        li_joy.setAttribute('data-bs-placement', 'top')
+                        li_joy.setAttribute('data-bs-custom-class', 'custom-tooltip')
+                        li_joy.setAttribute('data-bs-title', `This is the dominante emotion detected with ${max_score}% of max score`)
                     }
 
                     divParent_joy.appendChild(divChild_joy) 
@@ -233,8 +251,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
                      */
 
                     var p_sadness = document.createElement('p')
-
-                    var li_sadness = document.createElement('li')
+                    
                     li_sadness.className = "list-group-item d-flex justify-content-between align-items-start"
 
                     var divChild_sadness = document.createElement('div')
@@ -246,18 +263,19 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
 
                     var span_sadness = document.createElement('span')
                     span_sadness.className = "badge text-bg-primary rounded-pill"
-                    span_sadness.textContent = `${element.sadness}`
+                    span_sadness.textContent = `${Math.round(parseFloat(element.sadness) * factor)}%`
                     
-                    p_sadness.textContent = 'The Sadness is a BAD feeling'
+                    p_sadness.textContent = `The Sadness is a BAD feeling. Score: [${element.sadness}]`
                     
-                    max_score = parseFloat(element.sadness) > max_score? parseFloat(element.sadness) : 0
+                    max_score = parseFloat(element.sadness) > max_score? parseFloat(element.sadness) : max_score
                     
                     if(max_score == parseFloat(element.sadness)){
-                        //li_sadness.classList.add('active')
-                        
+                        li_anger.classList.remove('active')
+                        li_disgust.classList.remove('active')
+                        li_fear.classList.remove('active')
+                        li_joy.classList.remove('active')
+                        li_sadness.classList.add('active')
 
-                    }else{
-                        li_sadness.classList.remove('active')
                     }
 
                     divParent_sadness.appendChild(divChild_sadness) 
@@ -285,6 +303,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
             }
         }
     } catch (err) {
+        console.log(err);
         console.log(err.message);
     }
 
