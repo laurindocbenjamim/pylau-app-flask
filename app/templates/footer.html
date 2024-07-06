@@ -2,22 +2,22 @@
 <footer class="py-5">
     <div class="row">
         <div class="col-6 col-md-2 mb-3">
-            <h5>Links</h5>
+            <h5 class="text-light">Links</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Projects</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Articles</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Contact</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Projects</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Articles</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Contact</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">About</a></li>
                 <li class="nav-item mb-2">
                     <a href="{{ url_for('auth.user.login')}}"
-                        class=" nav-link p-0 text-body-secondary">Login</a>
+                        class=" nav-link p-0 text-light-emphasis">Login</a>
                 </li>
             </ul>
         </div>
 
         <div class="col-6 col-md-2 mb-3">
-            <h5>Social media</h5>
+            <h5 class="text-light">Social media</h5>
             <ul class="nav flex-column">
                 <a class="nav-link fw-bold py-1 px-0" href="https://www.linkedin.com/in/laurindocbenjamim"
                     target="_blank" style="color: #333;"><i class="fa-brands fa-linkedin fa-2x"></i> </a>
@@ -34,7 +34,7 @@
         </div>
 
         <div class="col-6 col-md-2 mb-3">
-            <h5>Users</h5>
+            <h5 class="text-light">Users</h5>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-bold py-1 px-0" href="#" style="color: #333;"><i
@@ -50,8 +50,8 @@
 
         <div class="col-md-5 offset-md-1 mb-3">
             <form id="subscriberForm">
-                <h5>Subscribe to our newsletter</h5>
-                <p>Monthly digest of what's new and exciting from us.</p>
+                <h5 class="text-light">Subscribe to our newsletter</h5>
+                <p class="mb-auto text-light-emphasis">Monthly digest of what's new and exciting from us.</p>
                 <br><br>
                 <div class="col-12 form-message" id="form-message">
                     <p></p>
@@ -61,7 +61,7 @@
                     <input id="subscriber" name="subscriber" type="email" class="form-control"
                         placeholder="Email address">
                     <!--<button class="btn btn-primary" type="submit">Subscribe</button>-->
-                    <input type="submit" class="btn btn-primary" value="Subscribe">
+                    <input type="submit" class="btn btn-outline-warning" value="Subscribe">
                     <br>
                     <div class="form-message" id="form-message">
                         <p></p>

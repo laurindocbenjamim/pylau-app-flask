@@ -40,8 +40,8 @@
 
     <style>
         body {
-            /*background: linear-gradient(to right, #3a1c71, #836265, #ffaf7b);
-            background: linear-gradient(to right, #0a0318, #2e3157, #000c25);*/
+            /*background: linear-gradient(to right, #3a1c71, #836265, #ffaf7b);*/
+            background: linear-gradient(to right, #0a0318, #2e3157, #000c25);
         }
 
         .bd-placeholder-img {
@@ -170,6 +170,7 @@
 
 
 
+  <!--
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path
@@ -236,7 +237,9 @@
                 </button>
             </li>
         </ul>
-    </div>
+    </div>  
+  
+  -->
 
 
     <nav class="navbar scroll-animation navbar-expand-lg fixed-top navbar-dark " aria-label="Main navigation">
@@ -331,16 +334,15 @@
             {% if current_user.role == 'admin' %}
 
             {% if 'user_token' in session %}
-            <a class="nav-link" href="{{ url_for('projects.list', user_token=session['user_token']) }}">Projects
+            <a class="nav-link" href="{{ url_for('projects.list', user_token=session['user_token']) }}">Project Manager
                 <span class="badge text-bg-light rounded-pill align-text-bottom">{{total_projects}}</span></a>
             {% else %}
-            <a class="nav-link" href="{{ url_for('projects.list', user_token=user_token) }}">Projects
+            <a class="nav-link" href="{{ url_for('projects.list', user_token=user_token) }}">Project Manager
                 <span class="badge text-bg-light rounded-pill align-text-bottom">{{total_projects}}</span></a>
             {% endif %}
             {% endif %}
             {% endif %}
-            <a class="nav-link" href="#">Explore</a>
-            <a class="nav-link" href="#">Suggestions</a>
+            <a class="nav-link" href="{{ url_for('ws.get_countries')}}" target="_blank">Countries API</a>
         </nav>
     </div>
 
