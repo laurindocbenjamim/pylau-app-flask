@@ -4,9 +4,9 @@
 {%endblock%}
 
 {%block scripts %}
+
 <script type="module" src="{{ url_for('static', filename='app/emotion_detection.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+
 {% endblock %}
 
 {%block content%}
@@ -77,18 +77,20 @@
         <nav class="navbar border-bottom">
           <div class="container-fluid">
             <a class="navbar-brand">Emotions Detection</a>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" id="dominant" type="text" readonly placeholder="Dominant emotion" aria-label="Dominant emotion">              
-            </form>
+            
           </div>
         </nav>
-        <div class="d-flex text-body-secondary pt-3">
+        <br>
+        <!--<div class="d-flex text-body-secondary pt-3">-->
           <div class="row response" id="response">
 
           </div>
-        </div>
+        <!--</div>-->
 
-        <canvas id="myChart"></canvas>
+        
+          <div class="chart-container" id="chart-container">
+
+          </div>
         
         <small class="d-block text-end mt-3">
           <a href="#">All updates</a>

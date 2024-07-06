@@ -34,7 +34,6 @@ function cleanForm() {
   }
 }
 
-
 document
   .getElementById("sentimentAnalyserForm")
   .addEventListener("submit", async (e) => {
@@ -46,17 +45,17 @@ document
     var progress = 0;
 
     //const data = [{'name': 'laurindo', 'age': 12},{'name': 'mauro', 'age': 111}]
-    
+
     var token = document
       .querySelector('meta[name="token"]')
       .getAttribute("content");
-      var progressBar = document.querySelector('.progress-bar');
-      var progressProcess = document.getElementById('progress-process')
-      progressProcess.style.display ='none'
-      // Update the progress bar's width and aria-valuenow attribute
-      progressBar.style.width = progress + '%';
-      progressBar.setAttribute('aria-valuenow', Math.round(progress));
-    
+    var progressBar = document.querySelector(".progress-bar");
+    var progressProcess = document.getElementById("progress-process");
+    progressProcess.style.display = "none";
+    // Update the progress bar's width and aria-valuenow attribute
+    progressBar.style.width = progress + "%";
+    progressBar.setAttribute("aria-valuenow", Math.round(progress));
+
     var alertmessage = document.querySelector(".form-message p");
     var response = document.getElementById("response");
     var comment = sanitizeInput(document.getElementById("comment").value);
@@ -89,24 +88,21 @@ document
           alertmessage.classList.add(resData[0].category);
           alertmessage.textContent = "";
           alertmessage.textContent = resData[0].message;
-        } else if (resData[1] == 401 | resData[1] == 403){
-          window.open(baseUrl + '/' + resData[0].redirectUrl, '_self');
-        }
-        else if (resData[1] == 200) {
+        } else if ((resData[1] == 401) | (resData[1] == 403)) {
+          window.open(baseUrl + "/" + resData[0].redirectUrl, "_self");
+        } else if (resData[1] == 200) {
           // Calculate the increment for each user
           var increment = 100 / resData[0].emotions.length;
-          
-          
-          progressProcess.style.display = 'block'
+
+          progressProcess.style.display = "block";
           //
           cleanForm();
           let max_score = 0;
           const emotions = resData[0].emotions;
           emotions.forEach((element, index) => {
             setTimeout(() => {
-                
-                progress += increment;
-                progressBar.textContent = `${progress}%`
+              progress += increment;
+              progressBar.textContent = `${progress}%`;
               //progressEmmotions(progress);
 
               var ol = document.createElement("ol");
@@ -344,18 +340,26 @@ document
               response.appendChild(ol);
 
               // Update the progress bar's width and aria-valuenow attribute
-            progressBar.style.width = progress + '%';
-            progressBar.setAttribute('aria-valuenow', Math.round(progress));
+              progressBar.style.width = progress + "%";
+              progressBar.setAttribute("aria-valuenow", Math.round(progress));
 
-            // Log the progress
-            console.log('Progress: ' + Math.round(progress) + '%');
-            // Log the progress
-                console.log('Progress: ' + Math.round(progress) + '%');
+              // Log the progress
+              console.log("Progress: " + Math.round(progress) + "%");
+              // Log the progress
+              console.log("Progress: " + Math.round(progress) + "%");
 
-                displayChart(11)
-
+              const data = [
+                {"emotions":['Anger', 'Disgust', 'Fear', 'Joy', 'Sadness'], 
+                  "scores": [
+                    Math.round(parseFloat(element.anger) * factor), 
+                    Math.round(parseFloat(element.disgust) * factor),
+                    Math.round(parseFloat(element.fear) * factor), 
+                    Math.round(parseFloat(element.joy) * factor), 
+                    Math.round(parseFloat(element.sadness) * factor)
+                  ]
+                }]
+              displayChart('pie', data)
             }, index * 1000); // Adjust the delay as needed
-
           });
 
           alertmessage.classList.add(resData[0].category);
@@ -370,46 +374,98 @@ document
   });
 
 
-  var displayChart = (value)=> {
-    const ctx = document.getElementById('myChart');
 
-  new Chart(ctx, {
-    type: 'bar',
+/**
+ *
+ */
+
+function displayChart(chart, data) {
+  var container = document.getElementById("chart-container");
+  var canvas = document.createElement("canvas");
+  
+  if (chart) {
+    if (chart == "bar") {
+      removeCanvasChildElement(container);
+
+      canvas.setAttribute("id", "barChart");
+      canvas.className = "bar-chart";
+      canvas.style = "width:100%;max-width:700px";
+      container.appendChild(canvas);
+      //barChart();
+    } else if (chart == "line") {
+      removeCanvasChildElement(container);
+
+      canvas.setAttribute("id", "lineChart");
+      canvas.style = "width:100%;max-width:700px";
+      container.appendChild(canvas);
+      //lineChart()
+    } else if (chart == "multipleline") {
+      removeCanvasChildElement(container);
+
+      canvas.setAttribute("id", "multipleLineChart");
+      canvas.style = "width:100%;max-width:700px";
+      container.appendChild(canvas);
+      //multipleLineChart()
+    } else if (chart == "pie") {
+      removeCanvasChildElement(container);
+
+      canvas.setAttribute("id", "pieChart");
+      canvas.style = "width:100%;max-width:700px";
+      container.appendChild(canvas);
+      pieChart(data);
+    } else if (chart == "doughnut") {
+      removeCanvasChildElement(container);
+
+      canvas.setAttribute("id", "doughnutChart");
+      canvas.style = "width:100%;max-width:700px";
+      container.appendChild(canvas);
+      //doughnutChart()
+    }
+  }
+}
+
+/**
+ *  This method is used to remove existent canvas child element from
+ * the chart container
+ */
+function removeCanvasChildElement(container) {
+  try {
+    var old = document.querySelector("canvas");
+    if (old) {
+      container.removeChild(old);
+    } else {
+      console.log(old);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/**
+ *
+ */
+let pieChart = (data) => {
+  console.log(data[0].scores[0])
+  const xValues = data[0].emotions;
+  const yValues = data[0].scores;
+  const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
+
+  new Chart("pieChart", {
+    type: "pie",
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: barColors,
+          data: yValues ,
+        },
+      ],
     },
     options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
+      title: {
+        display: true,
+        text: "World Wide Wine Production 2018",
+      },
+    },
   });
-  }
-
-/*document.addEventListener('DOMContentLoaded', (ev) => {
-    document.getElementById('subscriberForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        var email = document.getElementById("subscriber").value;
-        var obj = new Subscriber(1, email);
-        //
-
-        const res = await fetch(
-            //baseUrl + '/auth/register',
-            baseUrl + '/register/user/create',
-            {
-              method: 'POST',
-              body: dataForm
-            },
-          );
-      
-        const resData = await res.json();
-
-    })
-})*/
+};

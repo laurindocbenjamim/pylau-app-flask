@@ -117,7 +117,7 @@ def generate_token(user):
 def expire_user_token(user):
 
     token = None
-    date_serialized = datetime.now(tz=timezone.utc) - timedelta(minutes=30)
+    date_serialized = datetime.now(tz=timezone.utc) - timedelta(days=1)
     secret_key = current_app.config['SECRET_KEY']
 
     payload = {
