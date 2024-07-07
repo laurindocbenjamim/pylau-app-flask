@@ -116,7 +116,7 @@
 
 <div class="container" style="margin-top:10%;">
   <div class="col-lg-12" style="display: flex; flex-direction: column; justify-content: center; text-align:center; align-items: center;">
-    <h1>Sign In</h1>
+    <h1 class="text-light">Sign In</h1>
 
     <div class="col-3" style="display: block; flex-direction: column; text-align:center">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -134,62 +134,73 @@
   </div>
 </div>
 
-<div class="container" style="justify-content: center; align-items: center; margin-top:1%;">
+<div class="container" style="justify-content: center; align-items: center; ">
     
   <div class="col-lg-12" style="display: flex; justify-content: center; align-items: center;">
     
-    
-    <form class="needs-validation form-register" method="post" id="form-register" novalidate>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded-4 shadow">
+        <!--<div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 text-light">Sign in</h1>
+        </div>-->
+  
+        <div class="modal-body p-5 pt-0">
+          <form class="needs-validation form-register" method="post" id="form-register" novalidate>
 
-        <div class="col-lg-12">
-          <div class="g-3">          
-      
-            <div class="col-12">
-              <label for="email" class="form-label">Email</label>
-              <div class="input-group has-validation">
-                <span class="input-group-text">@</span>
-                <input type="email" class="form-control" id="username" name="username" 
-                value="{{ request.form.username }}"
-                placeholder="example@gmail.com" required maxlength="100">
-                
-                <div class="invalid-feedback">
-                  Your email is required.
+            <div class="col-lg-12">
+              <div class="g-3">          
+          
+                <div class="col-12">
+                  <label for="email" class="form-label text-light">Email</label>
+                  <div class="input-group has-validation">
+                    <span class="input-group-text">@</span>
+                    <input type="email" class="form-control" id="username" name="username" 
+                    value="{{ request.form.username }}"
+                    placeholder="example@gmail.com" required maxlength="100">
+                    
+                    <div class="invalid-feedback">
+                      Your email is required.
+                    </div>
+                    
+                  </div>
                 </div>
+          
+                <div class="col-12">
+                  <label for="password" class="form-label text-light">Password </label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
+                  <div class="invalid-feedback">
+                    Please enter a valid password address for shipping updates.
+                  </div>
+                </div>
+          
+                <hr class="my-4">
+          
+                <div class="col-12">               
+                    <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Submit</button>
+                    <br>
+                    <br>
+                    <p class="text-light">I don't have an account yet. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>                
+                    <!--<p><a class="btn btn-outline-primary" href="{{ url_for('auth.recover.user_account') }}">Recover my account</a></p>-->
+                </div>  
                 
+          
+                <div class="col-11 alert" style="font-size: .8rem;">                  
+                    <p></p>
+                </div> 
+        
               </div>
+                
+                
+                
+                  
             </div>
-      
-            <div class="col-12">
-              <label for="password" class="form-label">Password </label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
-              <div class="invalid-feedback">
-                Please enter a valid password address for shipping updates.
-              </div>
-            </div>
-      
-            <hr class="my-4">
-      
-            <div class="col-12">               
-                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Submit</button>
-                <br>
-                <br>
-                <p>I don't have an account yet. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>                
-                <!--<p><a class="btn btn-outline-primary" href="{{ url_for('auth.recover.user_account') }}">Recover my account</a></p>-->
-            </div>  
-            
-      
-            <div class="col-11 alert" style="font-size: .8rem;">                  
-                <p></p>
-            </div> 
     
-          </div>
-            
-            
-            
-              
+        </form>
         </div>
+      </div>
+    </div>
 
-    </form>
+    
 
   </div>
 </div>

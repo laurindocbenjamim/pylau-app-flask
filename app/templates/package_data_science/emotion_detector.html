@@ -46,8 +46,12 @@
         
         <div class="d-flex text-body-secondary pt-3">
           <div class="input-group">
-            <span class="input-group-text">Comment</span>
-            <textarea class="form-control" id="comment" name="comment" required maxlength="255" oninput="this.value = this.value.replace(/[^\w\s]/gi, '')" aria-label="With textarea"></textarea>
+            <!--<textarea class="form-control" id="comment" name="comment" required maxlength="255" 
+            oninput="this.value = this.value.replace(/[^\w\s]/gi, '')" 
+            aria-label="With textarea"></textarea>-->
+            <textarea class="form-control" id="comment" name="comment" required maxlength="255" 
+            oninput="this.value = this.value.replace(/[<>\/#$=]|[^a-zà-úA-ZÀ-Ú0-9\s.,;?!-_]/gi, '')" 
+            aria-label="With textarea"></textarea>
           </div>
         </div>
   

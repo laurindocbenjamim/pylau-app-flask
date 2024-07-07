@@ -34,6 +34,12 @@ class EmotionDetector(object):
         else:
             return False
         
+    def filter_string(input):
+        # This regular expression matches words with or without accentuation and punctuation
+        regex = r"[A-Za-zÀ-ÖØ-öø-ÿ.,;?!'\"\s]+"
+        result = re.findall(regex, input)
+        return ''.join(result) if result else ''
+  
     def validate_string_with_digits(s):
         # This pattern allows spaces, accentuated characters, numbers, and common punctuation
         pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;!?\'"()]+$'

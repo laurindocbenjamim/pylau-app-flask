@@ -19,6 +19,13 @@ function sanitizeInput_2(str) {
   return div.innerHTML;
 }
 
+function filterString(input) {
+  // This regular expression matches words with or without accentuation and punctuation
+  var regex = /[A-Za-zÀ-ÖØ-öø-ÿ.,;?!'"\s]+/g;
+  var result = input.match(regex);
+  return result ? result.join('') : '';
+}
+
 function cleanForm() {
   var inputs = document
     .getElementById("subscriberForm")
@@ -58,7 +65,7 @@ document
 
     var alertmessage = document.querySelector(".form-message p");
     var response = document.getElementById("response");
-    var comment = sanitizeInput(document.getElementById("comment").value);
+    var comment = filterString(document.getElementById("comment").value) //sanitizeInput(document.getElementById("comment").value);
 
     let decimalPlace = 2; // number of decimal places
     let factor = Math.pow(10, decimalPlace);
@@ -464,7 +471,7 @@ let pieChart = (data) => {
     options: {
       title: {
         display: true,
-        text: "World Wide Wine Production 2018",
+        text: "Emotions Rate Analysis",
       },
     },
   });
