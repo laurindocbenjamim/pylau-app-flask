@@ -142,7 +142,7 @@
                 </div>
                 <div class="face face2">
                     <div class="content">
-                        <p>With this feature it is possible predict or extract types of feelings through comments or text phrases.</p>
+                        <p class="text-dark-emphasis">With this feature it is possible predict or extract types of feelings through comments or text phrases.</p>
                         
                         <a href="#">Try for
                             free</a>
@@ -161,7 +161,7 @@
                 </div>
                 <div class="face face2">
                     <div class="content">
-                        <p>This resouce allows you to detect or extract emotions type through comments or text phrase.</p>
+                        <p class="text-dark-emphasis">This resouce allows you to detect or extract emotions type through comments or text phrase.</p>
                         {% if 'user_token' in session %}
                         <a
                             href="{{ url_for('data_science.project.emotion_detector', user_token=session['user_token']) }}">Try
