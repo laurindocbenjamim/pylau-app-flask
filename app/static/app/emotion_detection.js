@@ -41,6 +41,8 @@ function cleanForm() {
   }
 }
 
+var navCharts = document.getElementById('nav-charts')
+
 document
   .getElementById("sentimentAnalyserForm")
   .addEventListener("submit", async (e) => {
@@ -67,6 +69,8 @@ document
     var response = document.getElementById("response");
     var comment = filterString(document.getElementById("comment").value) //sanitizeInput(document.getElementById("comment").value);
     var visualize = document.getElementById('visualize')
+
+    navCharts.style.display = 'none'
 
     let decimalPlace = 2; // number of decimal places
     let factor = Math.pow(10, decimalPlace);
@@ -386,7 +390,7 @@ document
 
 
   document.getElementById('visualize').addEventListener('click', e => {
-    var navCharts = document.getElementById('nav-charts')
+    
     navCharts.style.display = 'flex'
   })
 
