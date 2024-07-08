@@ -66,6 +66,7 @@ document
     var alertmessage = document.querySelector(".form-message p");
     var response = document.getElementById("response");
     var comment = filterString(document.getElementById("comment").value) //sanitizeInput(document.getElementById("comment").value);
+    var visualize = document.getElementById('visualize')
 
     let decimalPlace = 2; // number of decimal places
     let factor = Math.pow(10, decimalPlace);
@@ -76,7 +77,7 @@ document
     var obj = new Sentiment(1, comment);
     dataForm.append("comment", obj.comment);
     //
-
+    progressProcess.style.display = "block";
     try {
       const res = await fetch(
         `${baseUrl}/data-science/project/emotion-detector/${token}`,
@@ -101,13 +102,14 @@ document
           // Calculate the increment for each user
           var increment = 100 / resData[0].emotions.length;
 
-          progressProcess.style.display = "block";
+          
           //
           cleanForm();
           let max_score = 0;
           const emotions = resData[0].emotions;
           emotions.forEach((element, index) => {
             setTimeout(() => {
+              visualize.style.display = 'block'
               progress += increment;
               progressBar.textContent = `${progress}%`;
               //progressEmmotions(progress);
@@ -365,7 +367,9 @@ document
                     Math.round(parseFloat(element.sadness) * factor)
                   ]
                 }]
-              displayChart('pie', data)
+              localStorage.setItem("emotions", JSON.stringify(data))
+
+              //displayChart('pie', data)
             }, index * 1000); // Adjust the delay as needed
           });
 
@@ -381,6 +385,42 @@ document
   });
 
 
+  document.getElementById('visualize').addEventListener('click', e => {
+    var navCharts = document.getElementById('nav-charts')
+    navCharts.style.display = 'flex'
+  })
+
+  document.getElementById('line-chart').addEventListener('click', e =>{
+    const emotions = JSON.parse(localStorage.getItem('emotions'))
+    
+    if(emotions){
+      if(emotions.length > 0){       
+        displayChart('line', emotions)
+      }
+    }
+  })
+
+  document.getElementById('bar-line-chart').addEventListener('click', e =>{
+    const emotions = JSON.parse(localStorage.getItem('emotions'))
+    
+    if(emotions){
+      if(emotions.length > 0){       
+        displayChart('bar', emotions)
+      }
+    }
+  })
+
+  document.getElementById('pie-chart').addEventListener('click', e =>{
+    const emotions = JSON.parse(localStorage.getItem('emotions'))
+    
+    if(emotions){
+      if(emotions.length > 0){       
+        displayChart('pie', emotions)
+      }
+    }
+    
+
+  })
 
 /**
  *
@@ -398,21 +438,21 @@ function displayChart(chart, data) {
       canvas.className = "bar-chart";
       canvas.style = "width:100%;max-width:700px";
       container.appendChild(canvas);
-      //barChart();
+      barChart(chart, "barChart",data);
     } else if (chart == "line") {
       removeCanvasChildElement(container);
 
       canvas.setAttribute("id", "lineChart");
       canvas.style = "width:100%;max-width:700px";
       container.appendChild(canvas);
-      //lineChart()
+      lineChart(data);
     } else if (chart == "multipleline") {
       removeCanvasChildElement(container);
 
       canvas.setAttribute("id", "multipleLineChart");
       canvas.style = "width:100%;max-width:700px";
       container.appendChild(canvas);
-      //multipleLineChart()
+      multipleLineChart(data);
     } else if (chart == "pie") {
       removeCanvasChildElement(container);
 
@@ -426,7 +466,7 @@ function displayChart(chart, data) {
       canvas.setAttribute("id", "doughnutChart");
       canvas.style = "width:100%;max-width:700px";
       container.appendChild(canvas);
-      //doughnutChart()
+      doughnutChart(data);
     }
   }
 }
@@ -451,8 +491,93 @@ function removeCanvasChildElement(container) {
 /**
  *
  */
+let barChart = (type, tagID,data) => {
+  //console.log(data[0].scores[0])
+  const xValues = data[0].emotions;
+  const yValues = data[0].scores;
+  const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
+
+  new Chart(`${tagID}`, {
+    type: `${type}`,
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: barColors,
+          data: yValues ,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Emotions Rate Analysis",
+      },
+    },
+  });
+};
+
+var lineChart = (data) => {
+  const xValues = data[0].emotions;
+  const yValues = data[0].scores;
+  const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
+
+  new Chart("lineChart", {
+    type: "line",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          fill: false,
+          lineTension: 0,
+          backgroundColor: "rgba(0,0,255,1.0)",
+          borderColor: "rgba(0,0,255,0.1)",
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Emotions Rate Analysis",
+      },
+      legend: { display: false },
+      scales: {
+        yAxes: [{ ticks: { min: 6, max: 100 } }],
+      },
+    },
+  });
+};
+
+let multipleLineChart = (data) => {
+  const xValues = data[0].emotions;
+  const yValues = data[0].scores;
+
+  new Chart("multipleLineChart", {
+    type: "line",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          fill: false,
+          lineTension: 0,
+          backgroundColor: "rgba(0,0,255,1.0)",
+          borderColor: "rgba(0,0,255,0.1)",
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Emotions Rate Analysis",
+      },
+      legend: { display: false },
+    },
+  });
+};
+
 let pieChart = (data) => {
-  console.log(data[0].scores[0])
   const xValues = data[0].emotions;
   const yValues = data[0].scores;
   const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
@@ -464,7 +589,32 @@ let pieChart = (data) => {
       datasets: [
         {
           backgroundColor: barColors,
-          data: yValues ,
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Emotions Rate Analysis",
+      },
+    },
+  });
+};
+
+let doughnutChart = (data) => {
+  const xValues = data[0].emotions;
+  const yValues = data[0].scores;
+  const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
+
+  new Chart("doughnutChart", {
+    type: "doughnut",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: barColors,
+          data: yValues,
         },
       ],
     },

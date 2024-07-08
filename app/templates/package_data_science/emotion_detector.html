@@ -18,7 +18,7 @@
   }
 </style>
 
-<div class="sentiment-container container">
+<div class="sentiment-container container" >
   <div class="col-lg-7">
 
     <div class="p-3 mb-4 bg-body-tertiar rounded-3 scroll-animation">
@@ -29,15 +29,18 @@
         </p>
       </div>
     </div>
+    <style>
+     
+    </style>
 
-    <div class="my-3 p-3 bg-body rounded shadow-sm">
-      <div class="head" style="display: flex; justify-content:center">
+    <div class="my-3 p-3 bg-body rounded shadow-sm" style="background-color:#444">
+      <div class="head" style="display: flex; justify-content:center;">
         <div class="btn-group">
           <a href="#" class="btn btn-primary active" aria-current="page">
             <i class="fa-regular fa-comment-dots"></i>
             Comment
           </a>
-          <a href="#" class="btn btn-primary">
+          <a href="#" class="btn btn-primary" >
             <i class="fa-solid fa-upload"></i>
             TXT Archieve</a>
         </div>
@@ -81,7 +84,9 @@
         <nav class="navbar border-bottom">
           <div class="container-fluid">
             <a class="navbar-brand">Emotions Detection</a>
-            
+            <form class="d-flex" role="search">
+              <button class="btn btn-outline-primary btn-sm" id="visualize" type="button">Visualize</button>
+            </form>
           </div>
         </nav>
         <br>
@@ -91,7 +96,17 @@
           </div>
         <!--</div>-->
 
-        
+          <ul class="nav nav-underline" id="nav-charts" style="display: none;">
+            <li class="nav-item">
+              <button class="nav-link" id="line-chart" aria-current="page" >Line chart</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="bar-line-chart" aria-current="page" >Bar Line chart</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="pie-chart" >Pie chart</button>
+            </li>
+          </ul>
           <div class="chart-container" id="chart-container">
 
           </div>

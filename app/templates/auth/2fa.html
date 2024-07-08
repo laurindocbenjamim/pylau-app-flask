@@ -116,7 +116,7 @@
 
 <div class="container" style="margin-top:10%;">
   <div class="col-lg-12" style="display: flex; flex-direction: column; justify-content: center; text-align:center; align-items: center;">
-    <h1>Submit your code</h1>
+    <h1 class="text-light">Submit your code</h1>
 
     <div class="col-3" style="display: block; flex-direction: column; text-align:center">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -147,7 +147,7 @@
       
             <div class="col-12">
               {% if form_title %}
-              <label for="otpcode" class="form-label">{{form_title}}</label>
+              <label for="otpcode" class="form-label text-light">{{form_title}}</label>
               {% else %}
               <label for="otpcode" class="form-label">Code</label>
               {% endif %}
@@ -164,11 +164,11 @@
             </div>
             <br>
             {% if origin and origin=='login_auth_email' %}
-            <p>Request a <a href="{{ url_for('auth.user.send-otp-email', user_token=user_token) }}">new code to login</a></p>
+            <p class="text-light">Request a <a href="{{ url_for('auth.user.send-otp-email', user_token=user_token) }}" class="text-primary">new code to login</a></p>
             {% elif origin and origin=='login_auth_app' %}
-            <p>Request a <a href="{{ url_for('auth.user.send-otp-email', user_token=user_token) }}">new code to login</a></p>            
+            <p class="text-light">Request a <a href="{{ url_for('auth.user.send-otp-email', user_token=user_token) }}" class="text-primary">new code to login</a></p>            
             {% else %}
-            <p>Request a <a href="{{ url_for('email.2facodesend', user_token=user_token) }}">new code</a></p>
+            <p class="text-light">Request a <a href="{{ url_for('email.2facodesend', user_token=user_token) }}" class="text-primary">new code</a></p>
             {% endif %}
             <hr class="my-4">
             
@@ -176,7 +176,7 @@
                 <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Send</button>
                 <br>
                 <br>
-                <p>I have an account. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>
+                <p class="text-light">I have an account. <a href="{{ url_for('auth.register') }}">Sign Up</a></p>
             </div>  
             
       
