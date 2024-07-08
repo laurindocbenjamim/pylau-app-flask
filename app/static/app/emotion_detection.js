@@ -75,7 +75,7 @@ document
     let decimalPlace = 2; // number of decimal places
     let factor = Math.pow(10, decimalPlace);
 
-    if (comment.length > 255) {
+    if (comment.length > 500) {
       return;
     }
     var obj = new Sentiment(1, comment);
