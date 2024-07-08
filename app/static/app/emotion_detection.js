@@ -70,7 +70,7 @@ document
     var comment = filterString(document.getElementById("comment").value) //sanitizeInput(document.getElementById("comment").value);
     var visualize = document.getElementById('visualize')
 
-    navCharts.style.display = 'none'
+    //navCharts.style.display = 'none'
 
     let decimalPlace = 2; // number of decimal places
     let factor = Math.pow(10, decimalPlace);
