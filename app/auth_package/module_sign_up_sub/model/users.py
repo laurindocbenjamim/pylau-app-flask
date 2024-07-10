@@ -5,12 +5,13 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy import and_
 from werkzeug.security import check_password_hash
 
 
 from datetime import datetime, timedelta, timezone
-from app.configs_package.modules.db_conf import db
+from app.configs_package.modules.load_database import db
 from ....configs_package.modules.logger_config import get_message as set_logger_message
 #datetime.now(tz=timezone.utc)
 
@@ -95,10 +96,18 @@ class Users(UserMixin, db.Model):
             last_user_id = user_object.userID
             status = True
             return status,last_user_id
+        
+        except IntegrityError as e:
+            db.session.rollback()
+            print("This user already exists")
+            set_logger_message(f"Error occured on METHOD[create_user]: \n SQLAlchemyError: {str(e)}")
+            return status, str(e)
+        
         except SQLAlchemyError as e:
             db.session.rollback()
             set_logger_message(f"Error occured on METHOD[create_user]: \n SQLAlchemyError: {str(e)}")
             return status, str(e)
+        
         except Exception as e:
             db.session.rollback()
             set_logger_message(f"Error occured on METHOD[create_user]: \n Exception: {str(e)}")

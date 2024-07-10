@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone, date
 from app.configs_package.modules.jwt_config import generate_token as generate_jwt_token, refresh_jwt_token, is_user_token_expired, force_jwt_token_expiration
-from app.configs_package.modules.db_conf import db
+from app.configs_package.modules.load_database import db
 from ..configs_package.modules.logger_config import get_message as set_logger_message
 from flask import current_app
 

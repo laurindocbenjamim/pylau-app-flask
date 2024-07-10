@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 from sqlalchemy import and_, text
 from ..configs_package.modules.logger_config import get_message as set_logger_message
-from ..configs_package import db
+from app import db
 
 def execute_sql(SQL):
     

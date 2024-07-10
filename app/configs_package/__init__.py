@@ -3,7 +3,7 @@ from .modules.app_conf import set_app_config
 
 from .modules.config import DevelopmentConfig, ProductionConfig, TestingConfig
 
-from .modules.db_conf import db, connect_to_db_server, init_db_server
+#from .modules.load_database import db, connect_to_db_server, init_db_server
 
 from .modules.jwt_config import generate_token as generate_jwt_token, is_user_token_expired,token_required, \
     decode_token as decode_jwt_token, filter_token_from_headers

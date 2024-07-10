@@ -10,7 +10,7 @@ from sqlalchemy import and_, text
 
 
 def test_get_close_sql_alchemy_db(app):
-    from ..app import db
+    from app import db
     db.init_app(app)
     with app.app_context():
         db.create_all()
@@ -22,7 +22,7 @@ def test_get_close_sql_alchemy_db(app):
     assert 'closed' in str(e.value)
 
 def test_get_close_db(app):    
-    from ..app import db
+    from app import db
     with pytest.raises(sqlite3.ProgrammingError) as e:
         response = db.session.execute(text('SELECT date'))
         db.session.commit()

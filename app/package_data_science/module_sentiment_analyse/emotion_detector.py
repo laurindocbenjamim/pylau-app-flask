@@ -49,8 +49,6 @@ class EmotionDetector(object):
             return False
     
     def emotion_detector(text_to_analyze):
-        #web_page_to_analyze = "<html><head><title>Fruits</title></head><body><h1>Apples and Oranges</h1><p>I love apples! I don't like oranges.</p></body></html>"
-        #text_to_analyze = "Eu odeio voces todos"
         apiKEY =  current_app.config['WATSON_NP_API_KEY']
         apiURL = current_app.config['WATSON_NP_API_URI']        
         natural_language_understanding = None

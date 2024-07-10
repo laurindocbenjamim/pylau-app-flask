@@ -5,7 +5,7 @@ from flask import Flask, abort, render_template, redirect,json, url_for, session
 from flask_cors import cross_origin
 from app.auth_package.module_sign_up_sub.model.users import Users
 from ...token_module import UserToken
-from ...configs_package.modules.db_conf import init_db_server, migrate_db
+from ...configs_package.modules.load_database import init_db_server
 from flask_login import logout_user
 from markupsafe import escape
 
@@ -62,11 +62,7 @@ def load_routes(app, db, login_manager):
     @app.route('/create-db')
     @cross_origin(methods=['GET'])
     def create_db():       
-        
-        with app.app_context():
-            db.create_all()
-            
-        migrate_db(app)
+        init_db_server(app=app)
 
         return redirect(url_for('index'))
 
@@ -139,19 +135,21 @@ def load_routes(app, db, login_manager):
             'otp_secret': otp_secret
             })
     
-    # Integrating the blueprints parent and child into the application
-    from ...auth_package import bp_auth_register_parent, init_register_app
-    from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
-    
+       
 
     from .error_handlers_view import error_handlers_view
     error_handlers_view(app)
 
+    """
+    # Integrating the blueprints parent and child into the application
+    from ...auth_package import bp_auth_register_parent, init_register_app
+    from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     init_register_app()
     init_login_app(login_manager=login_manager, db=db)
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)
     app.register_blueprint(bp_auth_register_parent)
 
+    """
     from app.email_module import bp_email_view
     app.register_blueprint(bp_email_view)
     
@@ -173,3 +171,8 @@ def load_routes(app, db, login_manager):
     #from ...package_data_science.bp_data_science_view import bp_data_science
     from ...package_data_science import bp_data_science
     app.register_blueprint(bp_data_science)
+
+
+    # Importing the netcaixa package
+    from ...api import bp_api
+    app.register_blueprint(bp_api)

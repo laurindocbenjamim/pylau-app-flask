@@ -7,7 +7,7 @@ import qrcode
 from flask import current_app
 from sqlalchemy.orm import Mapped,mapped_column, relationship
 from sqlalchemy import and_
-from app.configs_package.modules.db_conf import db
+from app.configs_package.modules.load_database import db
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 from ..configs_package.modules.logger_config import get_message as set_logger_message
