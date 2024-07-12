@@ -95,7 +95,7 @@ CLASS USED ON TEST MODE
 """
 class TestingConfig(Config):
     TESTING = True    
-    DATABASE_URI = "sqlite:///test4.db"
+    DATABASE_URI = "sqlite:///test.db"
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 

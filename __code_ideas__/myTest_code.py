@@ -68,3 +68,12 @@ print(get_object_data("laurindo", "benjamim", sep=', '))
 r1,r2 =names("laurindo", age=12)
 print(r1, r2)
 
+data = {"name": "Laura", "age": 12}
+def get_name(name = dict):
+    print(name['name'])
+get_name(name = data)
+
+name = "laurindo"
+if name in "laurind":
+    print("My name is LAURINDO")
+
