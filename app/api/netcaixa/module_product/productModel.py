@@ -127,6 +127,52 @@ class Product(db.Model):
 
 
     # Update method
+    def update_(product_id: int,product: dict)-> any: # type: ignore
+        """
+        This method is used to update the product's fields
+
+        Arguments
+            product_id: this argument is required to filter the product object
+            Kwargs: the method expects every fields of the product
+            and it will  update the product object according to the given fields
+
+        Return: 
+            By default the function returns a boolean and the product object if 
+            none error occured, if false return a boolean and an exception response
+        """
+        try:
+            obj = Product.query.filter(and_(Product.product_id == product_id)).first()
+            obj.product_description = product['description']
+            obj.product_barcode = product['barcode']
+            obj.product_category = product['category']
+            obj.product_type = product['type']   
+            obj.product_detail = product['deail']
+            obj.product_brand = product['brand']
+            obj.product_measure_unit = product['measure_unit']
+            obj.product_fixed_margin = product['fixed_margin']
+            obj.product_status = product['status']
+            obj.product_retention_font = product['relation_font']
+            obj.product_date_added = product['date']
+            obj.product_year_added = product['year']
+            obj.product_month_added = product['month']
+            obj.product_datetime_added = product['datetime']
+
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_product]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            
     def update_product(product_id: int,**kwargs)-> any: # type: ignore
         """
         This method is used to update the product's fields

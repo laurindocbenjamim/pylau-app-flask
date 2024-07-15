@@ -1,0 +1,72 @@
+{%extends 'site.html'%}
+{%block title%}
+{%if title%}{{title}}{%endif%}
+{%endblock%}
+
+{%block scripts %}
+
+<script type="module" src="{{ url_for('static', filename='app/audio_books/audio_book.js') }}"></script>
+
+{% endblock %}
+
+{%block content%}
+
+<style>
+  .sentiment-container {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+
+<div class="sentiment-container container" >
+  <div class="col-lg-7">
+
+    <div class="p-3 mb-4 bg-body-tertiar rounded-3 scroll-animation">
+      <div class="container-fluid py-5">        
+        <h1 class="display-6 fw-bold welcome-title text-light">Audio Book</h1>
+        <p class="col-md-8 fs-4 text-light-emphasis">
+          Welcome to our <i style="color: rgb(42, 81, 255);">Audio book</i> feature. Navigate  into the playlist.
+        </p>
+      </div>
+    </div>
+    <style>
+     
+    </style>
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm" style="background-color:#444">
+     
+      <form id="audio-book-fom" class="audio-book-fom">
+        
+        <!--<audio controls>
+            <source src="{{ url_for('static', filename='files/audio_books/audio-1721074085_3.mp3') }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>-->
+         
+        <small class="d-block text-end mt-3">
+          <div class="btn-group">
+            <button class="btn btn-outline-primary" type="submit" aria-current="page">
+                <i class="fas fa-microphone"></i>              
+            </button>
+          </div>
+        </small>
+
+        <div class="my-3 progress-process" id="progress-process" style="display: none;">
+          <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+          </div>
+        </div>
+
+      </form>      
+
+      <div class="form-group">
+        <div class="form-message">
+          <p></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{%endblock%}

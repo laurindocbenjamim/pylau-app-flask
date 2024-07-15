@@ -136,17 +136,24 @@
                 <div class="face face1">
                     <div class="content">
                         <img class="card-image"
-                            src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai-icon-vector-23097736-removebg-preview.png')}}">
-                        <h3 class="text-info">Sentiment Analyse</h3>
+                            src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai.png')}}">
+                        <h3 class="text-info">Audio Book</h3>
                     </div>
                 </div>
                 <div class="face face2">
                     <div class="content">
-                        <p class="text-dark-emphasis">With this feature it is possible predict or extract types of feelings through comments or text phrases.</p>
-                        
-                        <a href="#">Try for
+                        <p class="text-dark-emphasis">This resouce allows you to detect or extract emotions type through comments or text phrase.</p>
+                        {% if 'user_token' in session %}
+                        <a
+                            href="{{ url_for('ai.audio_book') }}">Try
+                            for free</a>
+                        {% elif user_token %}
+                        <a href="{{ url_for('ai.audio_book') }}">Try for
                             free</a>
-
+                        {% else %}
+                        <a href="{{ url_for('ai.audio_book') }}">Try for
+                            free</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -156,7 +163,7 @@
                     <div class="content">
                         <img class="card-image"
                             src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai.png')}}">
-                        <h3 class="text-info">Emotion Detection</h3>
+                        <h3 class="text-info">Sentiment Analyse</h3>
                     </div>
                 </div>
                 <div class="face face2">

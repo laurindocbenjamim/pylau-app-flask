@@ -36,3 +36,10 @@ reportlab
 # AI libraries
 ibm-watsonx-ai
 ibm-watson>=6.1.0
+
+#pip install --upgrade openai
+openai
+#pip install --upgrade pygame
+pygame
+#!pip install --upgrade PyPDF2[full]
+PyPDF2[full]
