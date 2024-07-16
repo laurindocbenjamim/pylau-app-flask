@@ -59,8 +59,37 @@
     
           const resData = await res.json();
     
-          console.log(resData);
+          //console.log(resData);
 
+    });
+
+
+
+    /**
+     * 
+     *  Activate microphone
+     */
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+  
+      const audioChunks = [];
+      mediaRecorder.addEventListener("dataavailable", event => {
+        audioChunks.push(event.data);
+      });
+  
+      mediaRecorder.addEventListener("stop", () => {
+        const audioBlob = new Blob(audioChunks);
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+      });
+  
+      setTimeout(() => {
+        mediaRecorder.stop();
+      }, 3000);
     });
   
 
@@ -83,143 +112,3 @@
       console.log(error);
     }
   }
-  
-  /**
-   *
-   */
-  let barChart = (type, tagID,data) => {
-    //console.log(data[0].scores[0])
-    const xValues = data[0].emotions;
-    const yValues = data[0].scores;
-    const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
-  
-    new Chart(`${tagID}`, {
-      type: `${type}`,
-      data: {
-        labels: xValues,
-        datasets: [
-          {
-            backgroundColor: barColors,
-            data: yValues ,
-          },
-        ],
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Emotions Rate Analysis",
-        },
-      },
-    });
-  };
-  
-  var lineChart = (data) => {
-    const xValues = data[0].emotions;
-    const yValues = data[0].scores;
-    const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
-  
-    new Chart("lineChart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [
-          {
-            fill: false,
-            lineTension: 0,
-            backgroundColor: "rgba(0,0,255,1.0)",
-            borderColor: "rgba(0,0,255,0.1)",
-            data: yValues,
-          },
-        ],
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Emotions Rate Analysis",
-        },
-        legend: { display: false },
-        scales: {
-          yAxes: [{ ticks: { min: 6, max: 100 } }],
-        },
-      },
-    });
-  };
-  
-  let multipleLineChart = (data) => {
-    const xValues = data[0].emotions;
-    const yValues = data[0].scores;
-  
-    new Chart("multipleLineChart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [
-          {
-            fill: false,
-            lineTension: 0,
-            backgroundColor: "rgba(0,0,255,1.0)",
-            borderColor: "rgba(0,0,255,0.1)",
-            data: yValues,
-          },
-        ],
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Emotions Rate Analysis",
-        },
-        legend: { display: false },
-      },
-    });
-  };
-  
-  let pieChart = (data) => {
-    const xValues = data[0].emotions;
-    const yValues = data[0].scores;
-    const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
-  
-    new Chart("pieChart", {
-      type: "pie",
-      data: {
-        labels: xValues,
-        datasets: [
-          {
-            backgroundColor: barColors,
-            data: yValues,
-          },
-        ],
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Emotions Rate Analysis",
-        },
-      },
-    });
-  };
-  
-  let doughnutChart = (data) => {
-    const xValues = data[0].emotions;
-    const yValues = data[0].scores;
-    const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
-  
-    new Chart("doughnutChart", {
-      type: "doughnut",
-      data: {
-        labels: xValues,
-        datasets: [
-          {
-            backgroundColor: barColors,
-            data: yValues,
-          },
-        ],
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Emotions Rate Analysis",
-        },
-      },
-    });
-  };
-  

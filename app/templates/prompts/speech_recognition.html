@@ -1,0 +1,98 @@
+{%extends 'site.html'%}
+{%block title%}
+{%if title%}{{title}}{%endif%}
+{%endblock%}
+
+{%block scripts %}
+
+<script type="module" src="{{ url_for('static', filename='app/audio_books/speech.js') }}"></script>
+
+{% endblock %}
+
+{%block content%}
+
+<style>
+  .sentiment-container {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+
+
+
+
+
+
+
+<div class="sentiment-container container">
+  <div class="col-lg-7">
+
+    <div class="p-3 mb-4 bg-body-tertiar rounded-3 scroll-animation">
+      <div class="container-fluid py-5">
+        <h1 class="display-6 fw-bold welcome-title text-light">Audio Book</h1>
+        <p class="col-md-8 fs-4 text-light-emphasis">
+          Welcome to our <i style="color: rgb(42, 81, 255);">Audio book</i> feature. Navigate into the playlist.
+        </p>
+      </div>
+    </div>
+    <style>
+
+    </style>
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm" style="background-color:#444">
+
+      <div class="wrapper">
+
+        <header>
+          <h1>Web dictaphone</h1>
+        </header>
+      
+        <section class="main-controls">
+          <canvas class="visualizer form-control" height="60px"></canvas>
+          <div id="buttons">
+            <button class="btn btn-outline-primary record">
+              Record <i class="fas fa-microphone"></i> 
+            </button>
+            <button class="btn btn-outline-warning stop">
+              Stop <i class="fas fa-microphone"></i> 
+            </button>
+          </div>
+        </section>
+      
+        <section class="sound-clips">
+      
+      
+        </section>
+      
+      </div>
+      
+      <label for="toggle">❔</label>
+      <input type="checkbox" id="toggle">
+      <aside>
+        <h2>Information</h2>
+      
+        <p>Web dictaphone is built using
+          <a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator.getUserMedia">getUserMedia</a> and the <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder_API">MediaRecorder API</a>, which provides an
+          easier way to capture Media streams.
+        </p>
+      
+        <p>Icon courtesy of <a href="http://findicons.com/search/microphone">Find Icons</a>. Thanks to <a
+            href="http://soledadpenades.com/">Sole</a> for the Oscilloscope code!</p>
+      </aside>
+
+
+
+
+      <div class="form-group">
+        <div class="form-message">
+          <p></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{%endblock%}

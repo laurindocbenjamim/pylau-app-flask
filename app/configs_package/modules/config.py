@@ -14,6 +14,7 @@ class Config:
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_POOL_RECYCLE = 280
     SQLALCHEMY_POOL_PRE_PING = True
+    UPLOAD_FOLDER = 'app/static/uploads/'
     
 
     @property
@@ -26,6 +27,7 @@ CLASS  USED ON DEVELOPMENT MODE
 """
 class DevelopmentConfig(Config):
     DATABASE_URI = "sqlite:///test3.db"
+    UPLOAD_FOLDER = 'app/static/uploads/'
     DEBUG = True
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
@@ -96,6 +98,7 @@ CLASS USED ON TEST MODE
 class TestingConfig(Config):
     TESTING = True    
     DATABASE_URI = "sqlite:///test.db"
+    UPLOAD_FOLDER = 'app/static/uploads/'
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 
@@ -122,3 +125,4 @@ CLASS  USED ON PRODUCTION MODE
 """
 class ProductionConfig(Config):
     DATABASE_URI = 'mysql://user@localhost/foo'
+    UPLOAD_FOLDER = 'app/static/uploads/'
