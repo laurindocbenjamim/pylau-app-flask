@@ -70,7 +70,7 @@
      *  Activate microphone
      */
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
+    /*navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorder.start();
@@ -90,7 +90,7 @@
       setTimeout(() => {
         mediaRecorder.stop();
       }, 3000);
-    });
+    });*/
   
 
 
