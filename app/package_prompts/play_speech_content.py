@@ -1,6 +1,10 @@
 import pygame
 import time
 import os
+import traceback
+import sys
+
+from ..configs_package.modules.logger_config import get_message as set_logger_message
 
 def play_speech(FILE_DIRECTORY):
     if not FILE_DIRECTORY or FILE_DIRECTORY=='':
@@ -23,7 +27,20 @@ def play_speech(FILE_DIRECTORY):
             while pygame.mixer.music.get_busy():
                 # Wait for the audio file to finish playing
                 time.sleep(1)
+        
+        return True, "Success"
     except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        set_logger_message(f"Error occured on method[play_speech]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ") 
         return False, str(e)
 
 

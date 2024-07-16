@@ -17,11 +17,11 @@ class AudioBookView(View):
         
 
         if request.method =='POST':
-            audio_book = request.form.get('audio')
+            
             FILE_DIRECTORY="app/static/files/audio_books/"
             files = get_all_files(FILE_DIRECTORY)
-            play_speech(FILE_DIRECTORY)
+            status, resp = play_speech(FILE_DIRECTORY)
             
-            return jsonify({'status': True, 'play_list':files}, 200)
+            return jsonify({'status': status, 'message': resp, 'play_list':files}, 200)
         
     
