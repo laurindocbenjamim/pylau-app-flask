@@ -49,6 +49,14 @@ class Product(db.Model):
             product_status = True,
             product_retention_font = ""
         )
+    
+    def get():
+        """
+        This method return all the products from the database
+        """
+        obj = Product.query.all()
+        return True, obj
+    
     # Create method
     def create_product(product = dict):
         """
@@ -133,7 +141,7 @@ class Product(db.Model):
 
         Arguments
             product_id: this argument is required to filter the product object
-            Kwargs: the method expects every fields of the product
+            product: is dictionary of products
             and it will  update the product object according to the given fields
 
         Return: 
@@ -163,7 +171,7 @@ class Product(db.Model):
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(f"Error occured on method[update_product]: \n \
+            set_logger_message(f"Error occured on method[update_]: \n \
                                        SQLAlchemyError: {str(sys.exc_info())}\
                                        \nFile name: {fname}\
                                        \nExc-instance: {fname}\
@@ -172,6 +180,20 @@ class Product(db.Model):
                                        \nTB object: {exc_tb}\
                                        \nTraceback object: {str(traceback.format_exc())}\
                                         ")
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            return False, str(e)
             
     def update_product(product_id: int,**kwargs)-> any: # type: ignore
         """
@@ -223,7 +245,10 @@ class Product(db.Model):
             none error occured, if false return a boolean and an exception response
         """
         try:
-            pass
+            product = Product.query.filter_by(product_id=product_id).first_or_404()
+            db.session.delete(product)
+            db.session.commit()
+            return True
         except SQLAlchemyError as e:
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -241,7 +266,7 @@ class Product(db.Model):
 
 
     # Get all product
-    def get_all_products()-> bool and object: # type: ignore
+    def get_all()-> bool and object: # type: ignore
         """
             This method is used to filter all the products
             from the database.
@@ -251,13 +276,13 @@ class Product(db.Model):
         """
 
         try:
-            obj = Product.query.all().sort('ASC')
+            obj = Product.query.all()
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(f"Error occured on method[delete_product]: \n \
+            set_logger_message(f"Error occured on method[get_all]: \n \
                                        SQLAlchemyError: {str(sys.exc_info())}\
                                        \nFile name: {fname}\
                                        \nExc-instance: {fname}\
@@ -266,47 +291,61 @@ class Product(db.Model):
                                        \nTB object: {exc_tb}\
                                        \nTraceback object: {str(traceback.format_exc())}\
                                         ")
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[delete_product]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            return False, str(e)
 
     def get_by_id(id):
-        return []
-    # Get all method test
-    def get_all_():
-        return [
-            {
-                'product_id': 1,  
-                'product_barcode': "001",
-                'product_description': "product1",
-                'product_category': "Vegetal",
-                'product_type': "Delicados" ,   
-                'product_detail':"product do campo",
-                'product_brand': "",
-                'product_measure_unit': "unit",
-                'product_fixed_margin': "10",
-                'product_status': True,
-                'product_retention_font': "",
-                'product_date_added': "2024/09/09",
-                'product_year_added': "2024",
-                'product_month_added': "09",
-                'product_datetime_added': "2024/09/09 23:03",
-                'product_date_updated': "",
-            },
-            {
-                'product_id': 2,  
-                'product_barcode': "002",
-                'product_description': "product2",
-                'product_category': "Vegetal",
-                'product_type': "Delicados" ,   
-                'product_detail':"product do campo",
-                'product_brand': "",
-                'product_measure_unit': "unit",
-                'product_fixed_margin': "10",
-                'product_status': True,
-                'product_retention_font': "",
-                'product_date_added': "2024/09/09",
-                'product_year_added': "2024",
-                'product_month_added': "09",
-                'product_datetime_added': "2024/09/09 23:03",
-                'product_date_updated': "",
-            },
-        ]
+        """
+            This method is used to filter all the products
+            from the database by ID
 
+            Return:
+                It returns a boolean value and the product object
+        """
+
+        try:
+            obj = Product.query.filter(and_(Product.product_id == id)).first_or_404()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[get_by_id]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[get_by_id]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            return False, str(e)
+   
+    

@@ -40,23 +40,17 @@ class ProductAPI(MethodView):
         return jsonify(response)
     
     def patch(self, id):
-        """
-        item = self._get_item(id)
-            errors = self.validator.validate(item, request.json)
-
-            if errors:
-                return jsonify(errors), 400
-
-            item.update_from_json(request.json)
-            db.session.commit()
-            return jsonify(item.to_json())
-        """
+        
         message = ''
         obj = []
         category = ''
         code = 200
+
+        if not id and isinstance(id, int):
+            message = "Id required"
+            code = 400
         
-        # Filter and validate each of the form field
+        # Filter and validate each field of the form 
         for key, value in request.form.items():
             status, sms = validate_words(key=key, value=value)
             if not status:
@@ -65,6 +59,7 @@ class ProductAPI(MethodView):
                 code = 400
                 break
         
+        # If the code is equal 200 it start the next step
         if code == 200:   
             message = "Test passed"
             category = "success"  
@@ -88,10 +83,10 @@ class ProductAPI(MethodView):
                 'month_added': request.form.get('month_added', None),
                 'datetime_added': request.form.get('datetime_added', None),
             }
-            status, obj = self.model.create_product(data)
+            status, obj = self.model.update_(id, data)
             message = status
         #return jsonify({"message":message, "category": category, "object": len(obj)},code)
-        return f'Response: {message}'
+        return f'Response: 222'
 
     def delete(self, id):
         item = self._get_item(id)

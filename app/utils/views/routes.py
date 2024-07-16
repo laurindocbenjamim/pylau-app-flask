@@ -142,12 +142,14 @@ def load_routes(app, db, login_manager):
 
     
     # Integrating the blueprints parent and child into the application
+    """
     from ...auth_package import bp_auth_register_parent, init_register_app
     from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     init_register_app()
     init_login_app(login_manager=login_manager, db=db)
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)
     app.register_blueprint(bp_auth_register_parent)
+    """
 
     
     from app.email_module import bp_email_view
@@ -172,6 +174,9 @@ def load_routes(app, db, login_manager):
     from ...package_data_science import bp_data_science
     app.register_blueprint(bp_data_science)
 
+    #
+    from ...api.netcaixa import bp_netcaixa
+    app.register_blueprint(bp_netcaixa)
 
     # Importing the netcaixa package
     from ...api import bp_api
@@ -180,3 +185,8 @@ def load_routes(app, db, login_manager):
     #
     from ...package_prompts.bp_prompt_ai import bp_ai
     app.register_blueprint(bp_ai)
+
+
+    # Importing the reports views
+    from ...package_reports import bp_reports
+    app.register_blueprint(bp_reports)
