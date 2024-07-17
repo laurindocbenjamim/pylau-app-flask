@@ -154,16 +154,16 @@ class Product(db.Model):
             obj.product_barcode = product['barcode']
             obj.product_category = product['category']
             obj.product_type = product['type']   
-            obj.product_detail = product['deail']
+            obj.product_detail = product['detail']
             obj.product_brand = product['brand']
             obj.product_measure_unit = product['measure_unit']
             obj.product_fixed_margin = product['fixed_margin']
             obj.product_status = product['status']
-            obj.product_retention_font = product['relation_font']
-            obj.product_date_added = product['date']
-            obj.product_year_added = product['year']
-            obj.product_month_added = product['month']
-            obj.product_datetime_added = product['datetime']
+            obj.product_retention_font = product['retention_font']
+            obj.product_date_added = product['date_added']
+            obj.product_year_added = product['year_added']
+            obj.product_month_added = product['month_added']
+            obj.product_datetime_added = product['datetime_added']
 
             db.session.commit()
             return True, obj
@@ -180,6 +180,7 @@ class Product(db.Model):
                                        \nTB object: {exc_tb}\
                                        \nTraceback object: {str(traceback.format_exc())}\
                                         ")
+            return False, str(e)
         except Exception as e:
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -231,11 +232,26 @@ class Product(db.Model):
                                        \nTB object: {exc_tb}\
                                        \nTraceback object: {str(traceback.format_exc())}\
                                         ")
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[update_product]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            return False, str(e)
     
     # Delete method
     def delete_product(product_id: int) -> any:
         """
-        This method is used t o delate  product object 
+        This method is used t o delete  product object 
 
         Arguments:
             The method receive as arguments the product ID 
@@ -245,10 +261,10 @@ class Product(db.Model):
             none error occured, if false return a boolean and an exception response
         """
         try:
-            product = Product.query.filter_by(product_id=product_id).first_or_404()
-            db.session.delete(product)
+            obj = Product.query.filter_by(product_id=product_id).first_or_404()
+            db.session.delete(obj)
             db.session.commit()
-            return True
+            return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -262,6 +278,22 @@ class Product(db.Model):
                                        \nTB object: {exc_tb}\
                                        \nTraceback object: {str(traceback.format_exc())}\
                                         ")
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(f"Error occured on method[delete_product]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        ")
+            return False, str(e)
+        
     
 
 
@@ -296,7 +328,7 @@ class Product(db.Model):
             db.session.rollback()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(f"Error occured on method[delete_product]: \n \
+            set_logger_message(f"Error occured on method[get_all]: \n \
                                        Exception: {str(sys.exc_info())}\
                                        \nFile name: {fname}\
                                        \nExc-instance: {fname}\

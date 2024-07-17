@@ -6,13 +6,14 @@ from datetime import datetime
 
 url = '/netcaixa/stock/product'
 
-def test_post(client):
+@pytest.mark.parametrize(('id'), (('8')))
+def test_update_product(client, id):
     """
     This method is used to test the post method
     of the  product
     """
     dataForm = {  
-                'barcode': "006",
+                'barcode': "02993-8",
                 'description': "Arroz Agulha",
                 'category': "Vegetal",
                 'type': "Delicados" ,   
@@ -28,7 +29,7 @@ def test_post(client):
                 'datetime_added': datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
                 'date_updated': "",
             }
-    response = client.post(url, data=dataForm)
+    response = client.put(f'{url}/{id}/update', data=dataForm)
     # Line of code to test the staus
     assert response.status_code == 200
     # Line of code to test the string lenght
@@ -36,14 +37,9 @@ def test_post(client):
     # Line of code to test the characters
     #assert response.get_json() == [{"message":"Invalid Characters detected", "category": "error", "object": []},400]
 
-    #assert response.data == f"This field must be a string [brand]".encode()
-    
-    assert response.data == f'Response: False'.encode()
-    
-    # Line of code to test the success test
-    #assert response.get_json() == [{"message":"Test passed", "category": "success", "object": 1},200]
+    #assert response.data == f"ID is required. ID {id}".encode()
 
-    # Method to test the putch request method of the product
+    assert response.data == f"Process done. ID {id}. Status: True".encode()
 
 @pytest.mark.parametrize(('barcode', 'description', 'category', 'type','detail', 'brand'),
                          (
@@ -84,6 +80,7 @@ def test_validate_input_form(client, barcode, description, category, type, detai
     #assert response.data == f"This field must be a string [brand]".encode()
     
     assert response.data == f'Response: False'.encode()
+    #assert response.data == f'Response: False'.encode()
     
     # Line of code to test the success test
     #assert response.get_json() == [{"message":"Test passed", "category": "success", "object": 1},200]

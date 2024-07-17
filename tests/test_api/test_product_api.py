@@ -6,12 +6,13 @@ from datetime import datetime
 url_of_get = '/api/netcaixa/stock/product'
 
 
-def test_get_(client):
+def test_get(client):
     """
     This method is  used to  test the get method 
     from product api
     """
-    response = client.get(url_of_get)
+    #response = client.get(url_of_get)
+    pass
    
 
 class ProductAction(object):

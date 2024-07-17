@@ -9,7 +9,7 @@ class ProductView(View):
     """
  
     """
-    methods = ['GET', 'POST']
+    methods = ['GET', 'POST', 'PUT']
 
     def __init__(self, model, template):
         self.model = model
@@ -37,11 +37,12 @@ class ProductView(View):
         if request.method =='GET':
             if not id or id is None:
                 status, obj = self.model.get_all()
-                return jsonify({"message":"List of products", "category": "success", "object": len(obj)},code)
+                return jsonify({"message":"List of products", "category": "success", 
+                                "object": len(obj) if status else []},code)
             elif id is not None and isinstance(id, int):
                 status, obj = self.model.get_by_id(id)
-                #return jsonify({"message":f"Product selected-{id}", "category": "success", "object": len(obj)},code)
-                return f"ID: {obj.product_id}"
+                return f"ID: {obj.product_id}" if status else jsonify({"message":f"Product with ID {id} not found.", "category": "error", "object": len(obj)},400)
+                
         if request.method =='POST':
             # Filter and validate each of the form field
             for key, value in request.form.items():
@@ -81,8 +82,45 @@ class ProductView(View):
             return f'Response: {message}'
         
         if request.method =='PUT':
-            if not id or id == 0 or not isinstance(id, int):
-                return f"ID is required"
+            if id is not None and isinstance(id, int):
+                # Filter and validate each of the form field
+                for key, value in request.form.items():
+                    status, sms = validate_words(key=key, value=value)
+                    if not status:
+                        message = f'{sms}'
+                        category = "error"
+                        code = 400
+                        break
+
+                if code == 200:   
+                    message = "Test passed"
+                    category = "success"  
+                    code == 200  
+                    prod_status = True
+                    if 'False' or 'false' or 0 or '0' in request.form.get('status', True):
+                        prod_status = False
+                    data = {
+                        'barcode':  request.form.get('barcode', None),
+                        'description': request.form.get('description', None),
+                        'category': request.form.get('category', None),
+                        'type': request.form.get('type', None),   
+                        'detail': request.form.get('detail', None),
+                        'brand': request.form.get('brand', None),
+                        'measure_unit': request.form.get('measure_unit', None),
+                        'fixed_margin': request.form.get('fixed_margin', None),
+                        'status': prod_status,
+                        'retention_font': request.form.get('retention_font', None),
+                        'date_added': request.form.get('date_added', None),
+                        'year_added': request.form.get('year_added', None),
+                        'month_added': request.form.get('month_added', None),
+                        'datetime_added': request.form.get('datetime_added', None),
+                    }
+                    status, obj = self.model.update_(id, data)
+                    message = status
+                    if status:
+                        return f"Process done. ID {id}. Status: {status}"
+                return f"Failed to update the product. ID {id}. Status: False"
+            return f"ID is required. IDs {id}"
 
 
 
