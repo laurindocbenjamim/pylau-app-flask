@@ -5,6 +5,10 @@ from reportlab.lib import colors
 from io import BytesIO
 
 class PdfModel(object):
+    _title = None
+
+    def __init__(self, title: str = None) -> None:
+        self._title = title
 
     def draw_header_footer(canvas, doc):
         # Save the state of our canvas so we can draw on it
@@ -24,12 +28,12 @@ class PdfModel(object):
         canvas.restoreState()
 
     
-    def draw_header_footer_first_page(canvas, doc):
+    def draw_header_footer_first_page(self, canvas, doc):
         # Save the state of our canvas so we can draw on it
         canvas.saveState()
 
         # Header
-        header_text = "Sales Report"
+        header_text = str(self._title)
         canvas.setFont('Helvetica-Bold', 16)
         canvas.drawString(200, 770, header_text)
 
@@ -41,12 +45,12 @@ class PdfModel(object):
         # Release the canvas
         canvas.restoreState()
 
-    def draw_header_footer_later_pages(canvas, doc):
+    def draw_header_footer_later_pages(self, canvas, doc):
         # Save the state of our canvas so we can draw on it
         canvas.saveState()
 
         # Header
-        header_text = "Sales Report - Continue"
+        header_text = str(self._title)
         canvas.setFont('Helvetica-Bold', 16)
         canvas.drawString(200, 770, header_text)
 

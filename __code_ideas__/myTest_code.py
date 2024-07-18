@@ -4,6 +4,19 @@ from datetime import datetime, timedelta, timezone
 # Replace the placeholders with your actual database credentials
 
 
+class SimpleClass(object):
+    _name = None
+    _age = None
+
+    def __init__(self, name: str = None, age:int = None) -> None:
+        self._name = name
+        self._age = age
+    
+    def getPeople(self):
+        return f'Name {self._name} Age {self._age}'
+    
+
+
 def test_mysql_connection():
     host = ''  #
     user = ''
@@ -76,4 +89,9 @@ get_name(name = data)
 name = "laurindo"
 if name in "laurind":
     print("My name is LAURINDO")
+
+
+print(SimpleClass().getPeople())
+
+
 

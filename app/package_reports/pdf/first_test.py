@@ -16,58 +16,23 @@ from datetime import datetime
 
 @bp_pdf_reports.route('/gen-prod-pdf')
 def products_rep():
+
+    from ...api import Product as ProductModel
+    status,products = ProductModel.get_all()
+
     buffer = BytesIO()
 
     doc = SimpleDocTemplate(buffer, pagesize=letter)
 
-    data = [
-        ['Product', 'Sales','Product', 'Sales'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-        ['Product 1', '1000'],
-        ['Product 2', '2000'],
-        ['Product 3', '1500'],
-    ]
+    table_columns = ['ID', 'Product', 'Description','Detail', 'Category']
+
+    data = [table_columns,]
+    
+    if status:
+        for i in range(len(products)):
+            data.append([products[i].product_id,products[i].product_barcode, products[i].product_description, products[i].product_detail, products[i].product_category])
+    
+    else: data.append(["No data found......"])
 
     table = Table(data)
 
@@ -92,7 +57,18 @@ def products_rep():
     New code:
         doc.build(elements, onFirstPage=draw_header_footer_first_page, onLaterPages=draw_header_footer_later_pages)
     """
+    
+    """
+    Approach -- TypeError
+    Error code in context of setting parameters into the  constructor method
     doc.build(elements, onFirstPage=PdfModel.draw_header_footer_first_page, onLaterPages=PdfModel.draw_header_footer_later_pages)
+
+    The right code for the context of using the constructor method is
+    doc.build(elements, onFirstPage=PdfModel(title="Products Report").draw_header_footer_first_page, 
+    onLaterPages=PdfModel(title="Products Report - Continue").draw_header_footer_later_pages))
+    """
+
+    doc.build(elements, onFirstPage=PdfModel(title="Products Report").draw_header_footer_first_page, onLaterPages=PdfModel(title="Products Report - Continue").draw_header_footer_later_pages)
 
     buffer.seek(0)
 
