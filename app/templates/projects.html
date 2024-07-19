@@ -137,21 +137,23 @@
                     <div class="content">
                         <img class="card-image"
                             src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai.png')}}">
-                        <h3 class="text-info">Audio Book</h3>
+                        <h3 class="text-light">From Audio to Text</h3>
                     </div>
                 </div>
                 <div class="face face2">
                     <div class="content">
-                        <p class="text-dark-emphasis">This resouce allows you to detect or extract emotions type through comments or text phrase.</p>
+                        <p class="text-dark-emphasis">This resouce allows you to convert a Speech in audio format to Text.
+                            You can record yourself, upload the generated file and convert it.
+                        </p>
                         {% if 'user_token' in session %}
                         <a
-                            href="{{ url_for('ai.audio_book') }}">Try
+                            href="{{ url_for('ai.speech') }}">Try
                             for free</a>
                         {% elif user_token %}
-                        <a href="{{ url_for('ai.audio_book') }}">Try for
+                        <a href="{{ url_for('ai.speech') }}">Try for
                             free</a>
                         {% else %}
-                        <a href="{{ url_for('ai.audio_book') }}">Try for
+                        <a href="{{ url_for('ai.speech') }}">Try for
                             free</a>
                         {% endif %}
                     </div>
@@ -163,7 +165,7 @@
                     <div class="content">
                         <img class="card-image"
                             src="{{ url_for('static', filename='assets/img/artificial-intelligence-ai.png')}}">
-                        <h3 class="text-info">Sentiment Analyse</h3>
+                        <h3 class="text-light">Sentiment Analyse</h3>
                     </div>
                 </div>
                 <div class="face face2">

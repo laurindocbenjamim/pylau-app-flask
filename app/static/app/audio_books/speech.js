@@ -12,6 +12,20 @@ stop.disabled = true;
 let audioCtx;
 const canvasCtx = canvas.getContext("2d");
 
+
+
+document.getElementById('audio').addEventListener('change', function() { 
+  var fileName = this.files[0].name;
+  document.getElementById('selected-file').textContent = fileName;  
+});
+
+document.getElementById('convert-to-text').addEventListener('click',function(){
+
+  document.getElementById('convert-status-1').style.display = "none"
+  document.getElementById('convert-status-2').style.display = "block"
+  document.getElementById('spinner').style.display = "block"
+})
+
 // Main block for doing the audio recording
 if (navigator.mediaDevices.getUserMedia) {
   console.log("The mediaDevices.getUserMedia() method is supported.");
@@ -50,46 +64,92 @@ if (navigator.mediaDevices.getUserMedia) {
 
     mediaRecorder.onstop = function (e) {
       console.log("Last data to read (after MediaRecorder.stop() called).");
+      let clipName = null
 
-      const clipName = prompt(
+      /* This code display a modal form asking the user to enter a name for the sound clip
+      /*clipName = prompt(
         "Enter a name for your sound clip?",
         "my speech voice"
-      );
+      );*/
 
+    
       const clipContainer = document.createElement("article");
       const clipLabel = document.createElement("p");
+      const divAudio = document.createElement('div')
       const audio = document.createElement("audio");
+      const audioSource = document.createElement('source')
       const deleteButton = document.createElement("button");
+      const divButtons = document.createElement('div')
+
 
       clipContainer.classList.add("clip");
+      divButtons.setAttribute('class', "btn-group btn-group-lg")
+      divButtons.setAttribute('role', "group")
+      divButtons.setAttribute('aria-label', "stream buttons")
+
+      divAudio.setAttribute('class',"col-sm-4 col-sm-offset-4")
       audio.setAttribute("controls", "");
-      deleteButton.textContent = "Delete";
+      audio.setAttribute('id', "audioPlayer")
+      audio.style.width = "800px"
+      audio.style.maxWidth = "800px"
+      //audio.setAttribute('style', "width: 100%; max-width: 800px;")
+
+      deleteButton.textContent = "Delete record";
       deleteButton.className = "btn btn-outline-danger delete";
 
       if (clipName === null) {
-        clipLabel.textContent = "My speech voice";
+        //clipLabel.textContent = "My speech voice";
       } else {
-        clipLabel.textContent = clipName;
+        //clipLabel.textContent = clipName;
       }
 
-      clipContainer.appendChild(audio);
+      audio.appendChild(audioSource)
+      divAudio.appendChild(audio)
+      //clipContainer.appendChild(audio);
+      clipContainer.appendChild(divAudio);
       clipContainer.appendChild(clipLabel);
-      clipContainer.appendChild(deleteButton);
-      soundClips.appendChild(clipContainer);
-
+      divButtons.appendChild(deleteButton)          
+      
+      const audioFormat = "mp3"
       audio.controls = true;
-      const blob = new Blob(chunks, { type: mediaRecorder.mimeType });
+      //const blob = new Blob(chunks, { type: mediaRecorder.mimeType });
+      const mediaRecorderMimeType = `audio/${audioFormat}`; // Replace with your actual MIME type
+      const blob = new Blob(chunks, { type: mediaRecorderMimeType });
       chunks = [];
       const audioURL = window.URL.createObjectURL(blob);
-      audio.src = audioURL;
+      //audio.src = audioURL;
+      audioSource.src = audioURL
       console.log("recorder stopped");
       console.log(`Audio URL ${audioURL}`)
 
-      sendAudioFile(blob)
+      const link = document.createElement('a')
+      link.setAttribute('class', 'btn btn-outline-success')
+      link.textContent = "Download"
+      link.href = URL.createObjectURL(blob)
+
+      const date = new Date()
+      
+      link.download = `speech-${date.getDate()}_${date.getTime()}.${audioFormat}`
+      
+      divButtons.appendChild(link)
+      clipContainer.appendChild(divButtons);
+      soundClips.appendChild(clipContainer);
+  
+      //soundClips.appendChild(create_the_upload_file_form(audioURL))
 
       deleteButton.onclick = function (e) {
         e.target.closest(".clip").remove();
       };
+
+      const audioPlayer = document.getElementById("audioPlayer");
+
+      audio.addEventListener("play", () => {
+        const currentSrc = audioPlayer.currentSrc;
+        // Send 'currentSrc' to the server via an HTTP request.
+        
+        console.log(currentSrc)
+        //sendAudioFile(currentSrc)
+      });
 
       clipLabel.onclick = function () {
         const existingName = clipLabel.textContent;
@@ -100,11 +160,13 @@ if (navigator.mediaDevices.getUserMedia) {
           clipLabel.textContent = newClipName;
         }
       };
+
     };
 
     mediaRecorder.ondataavailable = function (e) {
       chunks.push(e.data);
     };
+
   };
 
   let onError = function (err) {
@@ -122,24 +184,61 @@ if (navigator.mediaDevices.getUserMedia) {
  * @param {*} stream 
  */
 
-let sendAudioFile = (file) => {
+let sendAudioFile = (blob) => {
+
+  
+  //const audioURL = URL.createObjectURL(blob)
 
   const baseUrl = window.location.origin;
 
   const formData = new FormData();
-  formData.append('audio', file); // 'audio-file' is the field name
+  formData.append('audio', blob); // 'audio-file' is the field name
+
   return fetch(`${baseUrl}/ai/speech`, {
     method: 'POST',
-    body: JSON.stringify(formData),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
+    body: formData
   }).then(response => response.json())
   .then(data => {
-    console.log(data); // Handle the server response
+    // Handle the response from the server
+    console.log('File uploaded successfully!', data);
   })
-  .catch((e)=> console.log(e));
+  .catch((e)=> console.error('Error uploading file:', e));
 };
+
+
+
+let create_the_upload_file_form = (file_url) =>{
+  // Creating the html elements
+  var form = document.createElement('form')
+  var div = document.createElement('div')
+  var button = document.createElement('button')
+  var label = document.createElement('label')
+  var input = document.createElement('input')
+
+  // Setting properties to the elements 
+  form.setAttribute('method', "POST")
+  form.setAttribute('enctype', "multipart/form-data")
+  div.setAttribute('class', "form-group")
+  input.setAttribute('class', "form-control-file")
+  input.setAttribute('type', "file")
+  input.setAttribute('id', "audio") 
+  input.setAttribute('name', "audio")
+  //input.setAttribute('accept', "audio/*")
+  input.setAttribute('maxlength', "5000000")
+  input.setAttribute('value', file_url)
+
+  label.setAttribute('for', "audio")
+  label.textContent = "Choose an audio file:"
+  button.setAttribute('class', "btn btn-primary")
+  button.setAttribute('type', "submit")
+  button.textContent = "Upload"
+
+  div.appendChild(label)
+  div.appendChild(input)
+  form.appendChild(div)
+  form.appendChild(button)
+  return form
+}
 
 
 function visualize(stream) {
@@ -166,7 +265,7 @@ function visualize(stream) {
 
     analyser.getByteTimeDomainData(dataArray);
 
-    canvasCtx.fillStyle = "rgb(200, 200, 200)";
+    canvasCtx.fillStyle = "rgb(255, 255, 255)";
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
     canvasCtx.lineWidth = 2;

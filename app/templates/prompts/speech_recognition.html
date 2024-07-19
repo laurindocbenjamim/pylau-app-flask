@@ -27,46 +27,86 @@
 <div class="sentiment-container container">
   <div class="col-lg-7">
 
-    <div class="p-3 mb-4 bg-body-tertiar rounded-3 scroll-animation">
-      <div class="container-fluid py-5">
-        <h1 class="display-6 fw-bold welcome-title text-light">Audio Book</h1>
-        <p class="col-md-8 fs-4 text-light-emphasis">
-          Welcome to our <i style="color: rgb(42, 81, 255);">Audio book</i> feature. Navigate into the playlist.
-        </p>
-      </div>
+    <div class="container-fluid py-5">
+      <h1 class="display-6 fw-bold welcome-title text-light">Speech Recognition</h1>
+      <p class="col-md-8 fs-5 text-light">
+        Welcome to our <i style="color: rgb(255, 138, 42);">AI application</i> feature. Use this application to
+        record a speech and convert it to a text.
+      </p>
     </div>
-    <style>
-
-    </style>
 
     <div class="my-3 p-3 bg-body rounded shadow-sm" style="background-color:#444">
 
-      <div class="wrapper">
+      <div class="wrapper" style="display: flex;flex-direction:column;text-align:center;">
 
         <header>
-          <h1>Web dictaphone</h1>
+          <h1 class="fs-3 text-light-emphasis">Record a speech</h1>
         </header>
       
-        <section class="main-controls">
-          <canvas class="visualizer form-control" height="60px"></canvas>
-          <div id="buttons">
-            <button class="btn btn-outline-primary record">
-              Record <i class="fas fa-microphone"></i> 
-            </button>
-            <button class="btn btn-outline-warning stop">
-              Stop <i class="fas fa-microphone"></i> 
-            </button>
+        <section class="main-controls" style="display: flex;flex-direction:column;text-align:center;">
+
+          <div class="form-group">
+            <canvas class="visualizer form-control" height="60px"></canvas>
           </div>
+
+          <br>
+          <div class="form-group" id="buttons">
+            <div class="btn-group btn-group-lg" role="group" aria-label="stream buttons">
+              <button class="btn btn-outline-primary btn-lg record">
+                Start recording <i class="fa-solid fa-microphone-lines"></i> 
+              </button>
+              <button class="btn btn-outline-warning btn-lg stop">
+                Stop recording <i class="fa-solid fa-microphone-lines-slash"></i> 
+              </button>
+            </div>
+          </div>
+
         </section>
+        <br>
       
-        <section class="sound-clips">
-      
-      
+        <section class="sound-clips" style="display: flex;flex-direction:column;text-align:center;">
+            
         </section>
+
+        <br>
+        <form method="post" enctype="multipart/form-data">
+          <p>Upload an Audio file in <i><b>MP3</b></i> format</p>
+          <div class="file-upload-wrapper" >
+            <label for="audio" class="btn btn-primary fs-3 btn-lg" style="width: 100%; max-width:500px" >
+                <i class="fa fa-upload fa-2x"></i> Upload File
+            </label>
+            <input type="file" id="audio" name="audio" class="form-control-file sr-only" maxlength="5000000" accept="audio/*" required>
+          </div>
+          <br>
+          
+            <p class="fs-4 alert-link text-primary border border-primary rounded" id="selected-file"></p>
+          
+          <br>
+
+          {%if error and transcription=='' %}
+          <p class="error">{{error}}</p>          
+          {%endif%}
+
+          <br>
+          <button class="btn btn-success btn-lg" id="convert-to-text" type="submit">            
+            <span class="spinner-border spinner-border" id="spinner" style="display: none;" aria-hidden="true"></span>
+            <span role="status" id="convert-status-1">CONVERT TO TEXT</span>
+            <span role="status" id="convert-status-2" style="display: none;">Loading...</span>
+          </button>
+        </form>
+
+        <div class="form-group" style="text-align:left;" >
+          <label for="exampleFormControlTextarea1">Extracted text</label>
+          <textarea class="form-control" readonly id="exampleFormControlTextarea1" rows="6">
+            {%if transcription %}
+            {{transcription}}
+            {%endif%}
+          </textarea>
+        </div>
       
       </div>
       
-      <label for="toggle">❔</label>
+      <!--<label for="toggle">❔</label>
       <input type="checkbox" id="toggle">
       <aside>
         <h2>Information</h2>
@@ -80,6 +120,7 @@
         <p>Icon courtesy of <a href="http://findicons.com/search/microphone">Find Icons</a>. Thanks to <a
             href="http://soledadpenades.com/">Sole</a> for the Oscilloscope code!</p>
       </aside>
+      -->
 
 
 
