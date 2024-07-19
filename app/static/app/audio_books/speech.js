@@ -17,6 +17,7 @@ const canvasCtx = canvas.getContext("2d");
 document.getElementById('audio').addEventListener('change', function() { 
   var fileName = this.files[0].name;
   document.getElementById('selected-file').textContent = fileName;  
+  document.getElementById('audio').textContent = "Ola"
 });
 
 document.getElementById('convert-to-text').addEventListener('click',function(){
