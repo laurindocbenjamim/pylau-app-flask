@@ -5,6 +5,29 @@ const soundClips = document.querySelector(".sound-clips");
 const canvas = document.querySelector(".visualizer");
 const mainSection = document.querySelector(".main-controls");
 
+var count = 0;
+
+
+function myCurrentDateTime(){
+  const currentDate = new Date()
+ /* const dateFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const newDate = currentDate.toLocaleDateString('en-US', dateFormatOptions);
+  */
+  const day = currentDate.getDate();
+  const month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
+  const year = currentDate.getFullYear();
+  const hours = currentDate.getHours();
+  const minutes = currentDate.getMinutes();
+
+// Pad single-digit values with leading zeros
+const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+return formattedDate
+}
 // Disable stop button while not recording
 stop.disabled = true;
 
@@ -17,7 +40,6 @@ const canvasCtx = canvas.getContext("2d");
 document.getElementById('audio').addEventListener('change', function() { 
   var fileName = this.files[0].name;
   document.getElementById('selected-file').textContent = fileName;  
-  document.getElementById('audio').textContent = "Ola"
 });
 
 document.getElementById('convert-to-text').addEventListener('click',function(){
@@ -48,6 +70,7 @@ if (navigator.mediaDevices.getUserMedia) {
 
       stop.disabled = false;
       record.disabled = true;
+      count=count+1
     };
 
     stop.onclick = function () {
@@ -91,17 +114,18 @@ if (navigator.mediaDevices.getUserMedia) {
       divAudio.setAttribute('class',"col-sm-4 col-sm-offset-4")
       audio.setAttribute("controls", "");
       audio.setAttribute('id', "audioPlayer")
-      audio.style.width = "800px"
-      audio.style.maxWidth = "800px"
+      audio.style.width = "100%"
+      audio.style.maxWidth = "500px"
       //audio.setAttribute('style', "width: 100%; max-width: 800px;")
 
       deleteButton.textContent = "Delete record";
       deleteButton.className = "btn btn-outline-danger delete";
 
+      
       if (clipName === null) {
-        //clipLabel.textContent = "My speech voice";
+        clipLabel.textContent = `My speech voice_(${count})`;
       } else {
-        //clipLabel.textContent = clipName;
+        clipLabel.textContent = clipName;
       }
 
       audio.appendChild(audioSource)
