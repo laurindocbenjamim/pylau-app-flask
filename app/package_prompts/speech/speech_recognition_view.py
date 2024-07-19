@@ -44,6 +44,9 @@ class SpeechRecognitionView(View):
             filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
             file.save(filename)
             
+            if not os.path.exists(filename) or not os.path.isfile(filename):
+                return render_template(self.template, error="File not found",title="Speech", transcription='')   
+    
             converter = ConvertAudioSpeechToText(filename)
             status, transcription = converter.generate_transcription()
 

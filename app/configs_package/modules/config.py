@@ -29,7 +29,7 @@ class DevelopmentConfig(Config):
     DATABASE_URI = "sqlite:///test3.db"
     UPLOAD_FOLDER = 'app/static/uploads/'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
-    DEBUG = True
+    DEBUG = False
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 
