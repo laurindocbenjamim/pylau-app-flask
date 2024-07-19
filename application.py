@@ -3,7 +3,7 @@
 from app import create_application, create_app
 
 # This atribute `app` fits with the heroku's requirements
-app = create_app() # 'postgres'
+app = create_app('postgres') # 'postgres'
 
 if __name__ == '__main__':
     app.run()
