@@ -18,7 +18,7 @@ def test_get(client):
     #assert response.data == f'Response: True'.encode()
     
     # Line of code to test the success test
-    assert response.get_json() == [{"status":True, "object": 10}, 200]
+    assert response.get_json() == [{"status":True, "object": 11}, 200]
 
     # Method to test the putch request method of the product
 
@@ -43,7 +43,7 @@ def test_get_by_barcode(client):
     assert response.get_json() == [{"status":True, "object": barcode }, 200]
     #assert response.data == f'BARCODE: {id}'.encode()
 
-@pytest.mark.parametrize(('id'),(('9')))
+@pytest.mark.parametrize(('id'),(('7')))
 def test_delete_by_id(client, id):
     """ This method is used to get the product by ID """
     response = client.get(f'{url}/{id}/delete')

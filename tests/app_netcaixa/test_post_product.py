@@ -12,7 +12,7 @@ def test_post(client):
     of the  product
     """
     dataForm = {  
-                'barcode': "006",
+                'barcode': "39938833",
                 'description': "Arroz Agulha",
                 'category': "Vegetal",
                 'type': "Delicados" ,   

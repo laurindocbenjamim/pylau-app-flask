@@ -6,14 +6,14 @@ from datetime import datetime
 
 url = '/netcaixa/stock/product'
 
-@pytest.mark.parametrize(('id'), (('8')))
+@pytest.mark.parametrize(('id'), (('6')))
 def test_update_product(client, id):
     """
     This method is used to test the post method
     of the  product
     """
     dataForm = {  
-                'barcode': "02993-8",
+                'barcode': "02993-112",
                 'description': "Arroz Agulha",
                 'category': "Vegetal",
                 'type': "Delicados" ,   
