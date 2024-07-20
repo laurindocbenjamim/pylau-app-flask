@@ -1,6 +1,6 @@
 
 
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, PageBreak
 from reportlab.lib import colors
 from io import BytesIO
@@ -22,20 +22,40 @@ def products_rep():
 
     buffer = BytesIO()
 
-    doc = SimpleDocTemplate(buffer, pagesize=letter)
-
-    table_columns = ['ID', 'Product', 'Description','Detail', 'Category']
+    """
+    This code produces the page in a vertica form
+        on  
+    This code produces the page in the horizontal form
+        doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
+    """
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
+    table_columns = ['Product', 'Description', 
+                     'Category', 'Type', 'Brand', 'Unit', 'Fix.Marg', 'Stat.', 'R.Font', 'Exp.', 'Date']
 
     data = [table_columns,]
-    
     if status:
         for i in range(len(products)):
-            data.append([products[i].product_id,products[i].product_barcode, products[i].product_description, products[i].product_detail, products[i].product_category])
+            data.append([
+                products[i].product_barcode, 
+                products[i].product_description, 
+                products[i].product_category,
+                products[i].product_type,
+                products[i].product_brand,
+                products[i].product_measure_unit,
+                products[i].product_fixed_margin,
+                1 if products[i].product_status else 0,
+                products[i].product_retention_font,
+                "---",
+                products[i].product_datetime_added                     
+                         
+                         ])
     
     else: data.append(["No data found......"])
 
-    table = Table(data)
+    col_widths = [60, 80, 80, 70, 70, 50, 70, 30, 40, 100, 100]
+    table = Table(data, colWidths=col_widths)
 
+    
     style = TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.green),
         ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),

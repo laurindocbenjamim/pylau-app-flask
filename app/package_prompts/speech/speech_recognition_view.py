@@ -47,11 +47,11 @@ class SpeechRecognitionView(View):
             if not os.path.exists(filename) or not os.path.isfile(filename):
                 return render_template(self.template, error="File not found",title="Speech", transcription='')   
     
-            converter = ConvertAudioSpeechToText(filename)
-            status, transcription = converter.generate_transcription()
+            convert = ConvertAudioSpeechToText(filename)
+            status, transcription = convert.generate_transcription()
 
 
-            #return jsonify({"filename": converter.FILE_NAME, "status": status, "transcription": transcription})
+            #return jsonify({"filename": convert.FILE_NAME, "status": status, "transcription": transcription})
             return render_template(self.template, title="Speech", transcription=transcription)   
     
 
