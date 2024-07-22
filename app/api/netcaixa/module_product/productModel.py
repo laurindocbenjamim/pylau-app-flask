@@ -531,6 +531,25 @@ class Product(db.Model):
             )
             return False, str(e)
 
+    def to_dict(obj):
+        return {
+                    "product_id": obj.product_id,
+                    "product_barcode": obj.product_barcode,
+                    "product_description": obj.product_description,
+                    "product_category": obj.product_category,
+                    "product_type": obj.product_type,
+                    "product_detail": obj.product_detail,
+                    "product_brand": obj.product_brand,
+                    "product_measure_unit": obj.product_measure_unit,
+                    "product_fixed_margin": obj.product_fixed_margin,
+                    "product_status": obj.product_status,
+                    "product_retention_font": obj.product_retention_font,
+                    "product_date_added": obj.product_date_added,
+                    "product_year_added": obj.product_year_added,
+                    "product_month_added": obj.product_month_added,
+                    "product_datetime_added": obj.product_datetime_added,
+                    "product_date_updated": obj.product_date_updated,
+                }
     def convert_to_list(obj):
         objects = []
         for i, item in enumerate(obj):

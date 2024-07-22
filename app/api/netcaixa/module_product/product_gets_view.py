@@ -83,9 +83,12 @@ class ProductGetsView(View):
                 code == 200  
                 prod_status = True
                 barcode = request.form.get('barcode', None)
+                description = request.form.get('description', None)
 
                 if barcode is not None:
                     return get_product_by_barcode(barcode)
+                elif description is not None:
+                    return get_product_by_description(description)
             
             return f"ID is required. IDs {id} -- {message}"
 

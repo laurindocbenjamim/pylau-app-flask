@@ -1,5 +1,6 @@
 // Set up basic variables for app
 const record = document.querySelector(".record");
+const fa = document.querySelector('.record i')
 const stop = document.querySelector(".stop");
 const soundClips = document.querySelector(".sound-clips");
 const canvas = document.querySelector(".visualizer");
@@ -64,9 +65,11 @@ if (navigator.mediaDevices.getUserMedia) {
     record.onclick = function () {
       mediaRecorder.start();
       console.log(mediaRecorder.state);
-      console.log("Recorder started.");
+      console.log("Recorder started ");
       //record.style.background = "red";
       record.setAttribute('class', 'btn btn-outline-danger')
+      record.textContent = "Record started "
+      record.appendChild(fa)
 
       stop.disabled = false;
       record.disabled = true;
@@ -76,11 +79,13 @@ if (navigator.mediaDevices.getUserMedia) {
     stop.onclick = function () {
       mediaRecorder.stop();
       console.log(mediaRecorder.state);
-      console.log("Recorder stopped.");
+      console.log("Recorder stopped ");
       //record.style.background = "";
       //record.style.color = "";
       record.removeAttribute('class', "btn btn-outline-danger")
       record.setAttribute('class', "btn btn-outline-primary")
+      record.textContent = "Start recording "
+      record.appendChild(fa)
 
       stop.disabled = true;
       record.disabled = false;

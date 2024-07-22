@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from flask.views import View
 from flask import json, jsonify, request
 from .controller import validate_words
@@ -155,6 +156,7 @@ class ProductView(View):
                         'year_added': request.form.get('year_added', None),
                         'month_added': request.form.get('month_added', None),
                         'datetime_added': request.form.get('datetime_added', None),
+                        'product_date_updated': datetime.now().strftime("%Y/%m/%d %H:%M:%S")
                     }
                     status, obj = self.model.update_(id, data)
                     message = status

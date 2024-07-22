@@ -14,6 +14,8 @@ from datetime import datetime, timedelta, timezone
 from app.configs_package.modules.load_database import db
 from ....configs_package.modules.logger_config import get_message as set_logger_message
 
+from ..module_product.productModel import Product
+
 
 class Stock(db.Model):
 
@@ -44,4 +46,424 @@ class Stock(db.Model):
     )
     stock_date_updated = db.Column(db.String(20), nullable=True)
 
+    # Method to create stock
+    def create(product = dict):
+        try:
+            obj = Stock(
+                product_barcode = product["product_barcode"],
+                product_description = product["product_description"],
+                product_unitary_price = product["product_unitary_price"],
+                product_iva = product["product_iva"],
+                product_iva_code = product["product_iva_code"],
+                product_profit = product["product_profit"],
+                product_sale_price = product["product_sale_price"],
+                stock_pos = product["stock_pos"],
+                stock_location = product["stock_location"],
+                stock_code = product["stock_code"],
+                stock_date_added = product["stock_date_added"],
+                stock_year_added = product["stock_year_added"],
+                stock_month_added = product["stock_month_added"],
+                stock_datetime_added = product["stock_datetime_added"],
+                stock_date_updated = product["stock_date_updated"],
+            )
+            db.session.add(obj)
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[create stock]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except IntegrityError as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[create stock]: \n \
+                                       IntegrityError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, f"This product already exist. {str(e)}"
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[create stock]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+
+    # Update method
+    def update(product_barcode: str, product: dict) -> any:  # type: ignore
+        """
+        This method is used to update the product's fields
+
+        Arguments
+            product_id: this argument is required to filter the product object
+            product: is dictionary of products
+            and it will  update the product object according to the given fields
+
+        Return:
+            By default the function returns a boolean and the product object if
+            none error occured, if false return a boolean and an exception response
+        """
+        try:
+            obj = Stock.query.filter(and_(Stock.product_barcode == product_barcode)).first()
+            
+            obj.product_barcode = product["product_barcode"]
+            obj.product_description = product["product_description"]
+            obj.product_unitary_price = product["product_unitary_price"]
+            obj.product_iva = product["product_iva"]
+            obj.product_iva_code = product["product_iva_code"]
+            obj.product_profit = product["product_profit"]
+            obj.product_sale_price = product["product_sale_price"]
+            obj.stock_pos = product["stock_pos"]
+            obj.stock_location = product["stock_location"]
+            obj.stock_code = product["stock_code"]
+            obj.stock_date_added = product["stock_date_added"]
+            obj.stock_year_added = product["stock_year_added"]
+            obj.stock_month_added = product["stock_month_added"]
+            obj.stock_datetime_added = product["stock_datetime_added"]
+            obj.stock_date_updated = product["stock_date_updated"]
+            
+
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[update_]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[update_]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+
+    # 
+    # Delete method
+    def delete_product(product_id: int) -> any:
+        """
+        This method is used t o delete  product object
+
+        Arguments:
+            The method receive as arguments the product ID
+            which is used to remove  it from the database
+        Return:
+            By default the function returns a boolean and the product object if
+            none error occured, if false return a boolean and an exception response
+        """
+        try:
+            obj = Stock.query.filter_by(product_id=product_id).first_or_404()
+            db.session.delete(obj)
+            db.session.commit()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[delete_product]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[delete_product]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+
+    # Get all product
+    def get_all() -> bool and object:  # type: ignore
+        """
+        This method is used to filter all the products
+        from the database.
+
+        Return:
+            It returns a boolean value and the product object
+        """
+
+        try:
+            obj = Stock.query.all()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_all]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_all]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+
+    def get_by_id(id):
+        """
+        This method is used to filter all the products
+        from the database by ID
+
+        Return:
+            It returns a boolean value and the product object
+        """
+
+        try:
+            obj = Stock.query.filter(and_(Stock.product_id == id)).first()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_by_id]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_by_id]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+
+    # Get Product by barcode
+    def get_by_barcode(barcode):
+        """
+        This method is used to filter all the products
+        from the database by Barcode
+
+        Return:
+            It returns a boolean value and the product object
+        """
+
+        try:
+            obj = Stock.query.filter(
+                and_(Stock.product_barcode == barcode)
+            ).first_or_404()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_by_barcode]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_by_barcode]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)    
     
+    def get_by_category(barcode):
+        """
+        This method is used to filter all the products
+        from the database by Barcode
+
+        Return:
+            It returns a boolean value and the product object
+        """
+
+        try:
+            obj = Stock.query.filter(
+                and_(Stock.product_barcode == barcode)
+            ).first_or_404()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_by_barcode]: \n \
+                                       SQLAlchemyError: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        except Exception as e:
+            db.session.rollback()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            set_logger_message(
+                f"Error occured on method[get_by_barcode]: \n \
+                                       Exception: {str(sys.exc_info())}\
+                                       \nFile name: {fname}\
+                                       \nExc-instance: {fname}\
+                                       \nExc-classe: {exc_type}\
+                                       \nLine of error: {exc_tb.tb_lineno}\
+                                       \nTB object: {exc_tb}\
+                                       \nTraceback object: {str(traceback.format_exc())}\
+                                        "
+            )
+            return False, str(e)
+        
+    def to_dict(item):
+        return {
+                    "stock_id": item.stock_id,
+                    "product_barcode": item.product_barcode,
+                    "product_description": item.product_description,
+                    "product_unitary_price": item.product_unitary_price,
+                    "product_iva": item.product_iva,
+                    "product_iva_code": item.product_iva_code,
+                    "product_profit": item.product_profit,
+                    "product_sale_price": item.product_sale_price,
+                    "stock_pos": item.stock_pos,
+                    "stock_location": item.stock_location,
+                    "stock_code": item.stock_code,
+                    "stock_date_added": item.stock_date_added,
+                    "stock_year_added": item.stock_year_added,
+                    "stock_month_added": item.stock_month_added,
+                    "stock_datetime_added": item.stock_datetime_added,
+                    "stock_date_updated": item.stock_date_updated
+                }
+    def serialize_objects(obj):
+        objects = []
+        for i, item in enumerate(obj):
+            objects.append(
+                {
+                    "stock_id": item.stock_id,
+                    "product_barcode": item.product_barcode,
+                    "product_description": item.product_description,
+                    "product_unitary_price": item.product_unitary_price,
+                    "product_iva": item.product_iva,
+                    "product_iva_code": item.product_iva_code,
+                    "product_profit": item.product_profit,
+                    "product_sale_price": item.product_sale_price,
+                    "stock_pos": item.stock_pos,
+                    "stock_location": item.stock_location,
+                    "stock_code": item.stock_code,
+                    "stock_date_added": item.stock_date_added,
+                    "stock_year_added": item.stock_year_added,
+                    "stock_month_added": item.stock_month_added,
+                    "stock_datetime_added": item.stock_datetime_added,
+                    "stock_date_updated": item.stock_date_updated
+                }
+
+            )
+        return objects
