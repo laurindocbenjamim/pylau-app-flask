@@ -61,7 +61,7 @@ def validate_words(key:str, value: str | int | float)-> bool:
         if len(value.replace(' ', '')) > 10:
             return False, f"Invalid size for the {key} - {value}"
         
-    """
+    
     elif key in 'product_profit':
         if not re.match(numbers_pattern, value):
             return False, f"Invalid type value for the {key}"
@@ -90,8 +90,6 @@ def validate_words(key:str, value: str | int | float)-> bool:
             return False, f"Invalid type value for the {key} - {value}"
         if len(value.replace(' ', '')) > 10:
             return False, f"Invalid size for the {key} - {value}"
-    
-    """
     
         
     return True, "pass"

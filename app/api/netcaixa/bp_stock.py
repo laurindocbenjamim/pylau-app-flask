@@ -20,4 +20,4 @@ from .module_stock import Stock
 from .module_stock import StockPostPutView
 bp_product.add_url_rule('/create/stock', view_func=StockPostPutView.as_view('create', Stock, ''))
 #bp_product.add_url_rule('/product/<int:id>/delete', view_func=StockPostPutView.as_view('delete', Stock, ''))
-bp_product.add_url_rule('/update/<string:barcode>/stock', view_func=StockPostPutView.as_view('update', Stock, ''))
+bp_product.add_url_rule('/update/<string:product_barcode>/stock', view_func=StockPostPutView.as_view('update', Stock, ''))

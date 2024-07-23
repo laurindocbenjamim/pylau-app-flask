@@ -27,7 +27,7 @@ class Stock(db.Model):
         db.String(100), nullable=False, unique=True
     )
     product_description: Mapped[str] = db.Column(db.String(100), nullable=False)
-    product_unitary_price: Mapped[str] = db.Column(db.String(100))
+    product_unitary_price = db.Column(db.Double())
     product_iva = db.Column(db.Double())
     product_iva_code: Mapped[str] = db.Column(db.String(10))
     product_profit = db.Column(db.Double())

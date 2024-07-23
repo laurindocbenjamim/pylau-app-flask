@@ -4,32 +4,49 @@ from flask import url_for
 from datetime import datetime
 
 
-url = '/netcaixa/stock/product'
+url = "/netcaixa/stock/update"
 
-@pytest.mark.parametrize(('id'), (('6')))
-def test_update_product(client, id):
+testdata = [("02994", 14.45)]
+
+@pytest.mark.parametrize("product_barcode, product_iva", testdata)
+def test_update_product_stock(client, product_barcode, product_iva):
     """
     This method is used to test the post method
     of the  product
     """
-    dataForm = {  
-                'barcode': "02993-112",
-                'description': "Arroz Agulha",
-                'category': "Vegetal",
-                'type': "Delicados" ,   
-                'detail':"product do campo",
-                'brand': "",
-                'measure_unit': "unit",
-                'fixed_margin': "10",
-                'status': True,
-                'retention_font': "",
-                'date_added': datetime.now().date(),
-                'year_added': datetime.now().strftime('%Y'),
-                'month_added': datetime.now().strftime('%m'),
-                'datetime_added': datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
-                'date_updated': "",
-            }
-    response = client.put(f'{url}/{id}/update', data=dataForm)
+
+    """
+    Approach - Changes
+    The following notation not allow you to use a string of numbers or int values 
+    compound by more then one digit, by default it split the value number
+    @pytest.mark.parametrize(('barcode'), (('02994')))
+    def test_update_product_stock(client, product_barcode, product_iva):
+
+    Solution - New code
+    testdata = [("02994", 14.45)]
+
+    @pytest.mark.parametrize("product_barcode, product_iva", testdata)
+    def test_update_product_stock(client, product_barcode, product_iva):
+    
+    """
+    dataForm = {
+        "product_barcode": "02994",
+        "product_description": "Arroz",
+        "product_unitary_price": 12.33,
+        "product_iva": product_iva,
+        "product_iva_code": "ASA",
+        "product_profit": 12.0,
+        "product_quantity": 12,
+        "stock_pos": "",
+        "stock_location": "",
+        "stock_code": "",
+        "stock_date_added":  datetime.now().date(),
+        "stock_year_added": datetime.now().strftime("%Y"),
+        "stock_month_added": datetime.now().strftime("%m"),
+        "stock_datetime_added": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+        "stock_date_updated": "",
+    }
+    response = client.put(f'{url}/{product_barcode}/stock', data=dataForm)
     # Line of code to test the staus
     assert response.status_code == 200
     # Line of code to test the string lenght
@@ -39,50 +56,7 @@ def test_update_product(client, id):
 
     #assert response.data == f"ID is required. ID {id}".encode()
 
-    assert response.data == f"Process done. ID {id}. Status: True".encode()
+    #assert response.data == f"Response: This product already exist.".encode()
+    #assert response.data == f"Response: False".encode()
+    assert response.data == f"Response: True".encode()
 
-@pytest.mark.parametrize(('barcode', 'description', 'category', 'type','detail', 'brand'),
-                         (
-                             ('02993', 'Arrox', 'ss', 'ss','000', 'Food'),
-                             ('02995', 'ss', 'ss', '','000', 'Food'),
-                             ('ss6', 'Arrox', 'ss', '','000', 'Food'),
-                         ))
-def test_validate_input_form(client, barcode, description, category, type, detail, brand):
-    """
-    This method is used to test the post method
-    of the  product
-    """
-    dataForm = {  
-                'barcode': barcode,
-                'description': description,
-                'category': category,
-                'type': type ,   
-                'detail': detail,
-                'brand': brand,
-                'measure_unit': "unit",
-                'fixed_margin': "10",
-                'status': True,
-                'retention_font': "",
-                'date_added': datetime.now().date(),
-                'year_added': datetime.now().strftime('%Y'),
-                'month_added': datetime.now().strftime('%m'),
-                'datetime_added': datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
-                'date_updated': "",
-            }
-    response = client.post(url, data=dataForm)
-    # Line of code to test the staus
-    assert response.status_code == 200
-    # Line of code to test the string lenght
-    #assert response.get_json() == [{"message":"This field must have less or equal 100 characters", "category": "error", "object": []},400]
-    # Line of code to test the characters
-    #assert response.get_json() == [{"message":"Invalid Characters detected", "category": "error", "object": []},400]
-
-    #assert response.data == f"This field must be a string [brand]".encode()
-    
-    assert response.data == f'Response: False'.encode()
-    #assert response.data == f'Response: False'.encode()
-    
-    # Line of code to test the success test
-    #assert response.get_json() == [{"message":"Test passed", "category": "success", "object": 1},200]
-
-    # Method to test the putch request method of the product
