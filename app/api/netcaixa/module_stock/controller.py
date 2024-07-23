@@ -7,10 +7,11 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
 
 # Filter unauthorized characters
-authorized_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/:."
+authorized_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/,.:"
 authorized_integer = "0123456789"
 authorized_country_code_chars = "0123456789+"
 authorized_password_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_!@#$%^&*()_+"
+numbers_pattern = r'^[0-9.]+$'
 
 def validate_only_string(s):
         # This pattern allows spaces, accentuated characters, and common punctuation
@@ -28,20 +29,73 @@ def validate_string_with_digits(s):
     else:
         return False
 
-def validate_words(key:str, value: str)-> bool:
+def validate_words(key:str, value: str | int | float)-> bool:
     if not value:
-        if key in 'barcode':
+        if key in 'product_barcode':
             return False, f"The {key} is required"
-        elif key in 'description':
+        elif key in 'product_description':
             return False, f"The {key} is required"
-        return True, "pass"
-    elif not isinstance(value, str):
+        elif key in 'product_unitary_price':
+            return False, f"The {key} is required"
+        elif key in 'product_iva':
+            return False, f"The {key} is required"
+        elif key in 'product_iva_code':
+            return False, f"The {key} is required"
+        elif key in 'product_profit':
+            return False, f"The {key} is required"
+        elif key in 'product_quantity':
+            return False, f"The {key} is required"
+                
+    if not isinstance(value, str or int):
         return False, f"The {key} must be a string"
-    elif len(value.replace(' ', '')) > 100:
+    
+    if len(value.replace(' ', '')) > 100:
         return False, f"The {key} must have less or equal 100 characters"
-    elif any(char not in authorized_chars for char in value.replace(' ', '')):
+    
+    if any(char not in authorized_chars for char in value.replace(' ', '')):
         return False, f"Invalid characters detected on {key} - {value}"
+    
+    if key in 'product_quantity':
+        if not re.match(numbers_pattern, value):
+            return False, f"Invalid type value for the {key}"
+        if len(value.replace(' ', '')) > 10:
+            return False, f"Invalid size for the {key} - {value}"
+        
+    """
+    elif key in 'product_profit':
+        if not re.match(numbers_pattern, value):
+            return False, f"Invalid type value for the {key}"
+        if len(value.replace(' ', '')) > 5:
+            return False, f"Invalid size for the {key} - {value}"
+        
+    elif key in 'product_iva_code':
+        if not isinstance(value, str or int):
+            return False, f"Invalid type value for the {key}"
+        if len(value.replace(' ', '')) > 10:
+            return False, f"Invalid size for the {key} - {value}"
+    
+    elif key in 'stock_code':
+        if not isinstance(value, str or int):
+            return False, f"Invalid type value for the {key}"
+        if len(value.replace(' ', '')) > 10:
+            return False, f"Invalid size for the {key} - {value}"
+        
+    elif key in 'product_unitary_price':
+        if not re.match(numbers_pattern, value):
+            return False, f"Invalid type value for the {key} - {value}"
+        if len(value.replace(' ', '')) > 10:
+            return False, f"Invalid size for the {key} - {value}"
+    elif key in 'product_iva':
+        if not re.match(numbers_pattern, value):
+            return False, f"Invalid type value for the {key} - {value}"
+        if len(value.replace(' ', '')) > 10:
+            return False, f"Invalid size for the {key} - {value}"
+    
+    """
+    
+        
     return True, "pass"
+
 
 
 def validate_form_fields(form = Request.form):

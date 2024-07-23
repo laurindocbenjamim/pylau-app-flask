@@ -93,5 +93,9 @@ if name in "laurind":
 
 print(SimpleClass().getPeople())
 
+number = 12.3
+if not isinstance(float(number), float):
+    print("Invalid type value")
+
 
 

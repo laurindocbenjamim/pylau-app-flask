@@ -13,6 +13,7 @@ from werkzeug.security import check_password_hash
 from datetime import datetime, timedelta, timezone
 from app.configs_package.modules.load_database import db
 from ....configs_package.modules.logger_config import get_message as set_logger_message
+from ....utils import _catch_sys_except_information
 
 
 class Product(db.Model):

@@ -84,7 +84,7 @@ def create_application(type_db=None,test_config=None):
 """
 
 """
-def create_app(test_config=None):
+def create_app(JDBC="sqlite",test_config=None):
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     """
@@ -99,7 +99,7 @@ def create_app(test_config=None):
     if test_config is None:
         # Load  the  instance config if it exists, when not testing
         #app.config.from_pyfile('config.py', silent=True)
-        app.config.from_object(DevelopmentConfig('sqlite'))
+        app.config.from_object(DevelopmentConfig(JDBC))
     else:
         # Load the test config if passed in
         #app.config.from_mapping(test_config)
