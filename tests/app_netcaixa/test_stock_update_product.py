@@ -29,6 +29,11 @@ def test_update_product_stock(client, product_barcode, product_iva):
     def test_update_product_stock(client, product_barcode, product_iva):
     
     """
+
+    """
+    Input test: [product_iva=14.45]
+    Output: [product_iva=14.45]
+    """
     dataForm = {
         "product_barcode": "02994",
         "product_description": "Arroz",
@@ -40,11 +45,7 @@ def test_update_product_stock(client, product_barcode, product_iva):
         "stock_pos": "",
         "stock_location": "",
         "stock_code": "",
-        "stock_date_added":  datetime.now().date(),
-        "stock_year_added": datetime.now().strftime("%Y"),
-        "stock_month_added": datetime.now().strftime("%m"),
-        "stock_datetime_added": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-        "stock_date_updated": "",
+        "stock_date_updated": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     }
     response = client.put(f'{url}/{product_barcode}/stock', data=dataForm)
     # Line of code to test the staus

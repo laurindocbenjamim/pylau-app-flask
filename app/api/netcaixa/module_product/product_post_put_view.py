@@ -96,7 +96,7 @@ class ProductView(View):
                     break
 
             if code == 200:   
-                message = "Test passed"
+                message = "The product has been created successfully."
                 category = "success"  
                 code == 200  
                 prod_status = True
@@ -119,9 +119,10 @@ class ProductView(View):
                     'datetime_added': request.form.get('datetime_added', None),
                 }
                 status, obj = self.model.create_product(data)
-                message = status
+                if not status:
+                    message = f"Failed to create product. Error: [{obj}]"
             
-            return f'Response: {message}'
+            return f'{message}'
         
         if request.method =='PUT':
             if id is not None and isinstance(id, int):
@@ -135,7 +136,7 @@ class ProductView(View):
                         break
 
                 if code == 200:   
-                    message = "Test passed"
+                    message = "The product has been updated successfully."
                     category = "success"  
                     code == 200  
                     prod_status = True
@@ -159,11 +160,10 @@ class ProductView(View):
                         'product_date_updated': datetime.now().strftime("%Y/%m/%d %H:%M:%S")
                     }
                     status, obj = self.model.update_(id, data)
-                    message = status
-                    if status:
-                        return f"Process done. ID {id}. Status: {status}"
-                return f"Failed to update the product. ID {id}. Status: False"
-            return f"ID is required. IDs {id}"
+                if not status:
+                    message = f"Failed to update the product. Error: [{obj}]"
+            
+            return f'{message}'
 
 
 

@@ -23,11 +23,7 @@ def test_update_product(client, id):
                 'fixed_margin': "10",
                 'status': True,
                 'retention_font': "",
-                'date_added': datetime.now().date(),
-                'year_added': datetime.now().strftime('%Y'),
-                'month_added': datetime.now().strftime('%m'),
-                'datetime_added': datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
-                'date_updated': "",
+                'date_updated': datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
             }
     response = client.put(f'{url}/{id}/update', data=dataForm)
     # Line of code to test the staus
@@ -39,7 +35,8 @@ def test_update_product(client, id):
 
     #assert response.data == f"ID is required. ID {id}".encode()
 
-    assert response.data == f"Process done. ID {id}. Status: True".encode()
+    assert response.data == f"The product has been updated successfully.".encode()
+    #assert response.data == f"Failed to update the product. Error: []".encode()
 
 @pytest.mark.parametrize(('barcode', 'description', 'category', 'type','detail', 'brand'),
                          (
@@ -63,11 +60,7 @@ def test_validate_input_form(client, barcode, description, category, type, detai
                 'fixed_margin': "10",
                 'status': True,
                 'retention_font': "",
-                'date_added': datetime.now().date(),
-                'year_added': datetime.now().strftime('%Y'),
-                'month_added': datetime.now().strftime('%m'),
-                'datetime_added': datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
-                'date_updated': "",
+                'date_updated': datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
             }
     response = client.post(url, data=dataForm)
     # Line of code to test the staus

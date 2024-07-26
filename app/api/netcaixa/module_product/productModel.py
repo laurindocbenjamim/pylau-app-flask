@@ -120,19 +120,19 @@ class Product(db.Model):
             db.session.add(obj)
             db.session.commit()
             return True, obj
-        except SQLAlchemyError as e:
+        except IntegrityError as e:
             db.session.rollback()
-            custom_message = "Database error"
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE PRODUCT", custom_message=custom_message)
+            custom_message = "This product already exist."
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK", custom_message=custom_message)
             set_logger_message(error_info)
            
             return False, custom_message
-        except IntegrityError as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            custom_message = "This product already exist."
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE PRODUCT", custom_message=custom_message)
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK", custom_message=custom_message)
             set_logger_message(error_info)
-           
+            
             return False, custom_message
         except Exception as e:
             db.session.rollback()
@@ -167,44 +167,29 @@ class Product(db.Model):
             obj.product_fixed_margin = product["fixed_margin"]
             obj.product_status = product["status"]
             obj.product_retention_font = product["retention_font"]
-            obj.product_date_added = product["date_added"]
-            obj.product_year_added = product["year_added"]
-            obj.product_month_added = product["month_added"]
             obj.product_datetime_added = product["datetime_added"]
 
             db.session.commit()
             return True, obj
+        except IntegrityError as e:
+            db.session.rollback()
+            custom_message = "This product already exist."
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+           
+            return False, custom_message
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[update_]: \n \
-                                       SQLAlchemyError: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[update_]: \n \
-                                       Exception: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            set_logger_message(error_info)
+           
             return False, str(e)
 
     def update_product(product_id: int, **kwargs) -> any:  # type: ignore
@@ -234,37 +219,25 @@ class Product(db.Model):
 
             db.session.commit()
             return True, obj
+        except IntegrityError as e:
+            db.session.rollback()
+            custom_message = "This product already exist."
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+           
+            return False, custom_message
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[update_product]: \n \
-                                       SQLAlchemyError: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[update_product]: \n \
-                                       Exception: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            set_logger_message(error_info)
+           
             return False, str(e)
 
     # Delete method

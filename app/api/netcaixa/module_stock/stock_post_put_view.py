@@ -49,7 +49,7 @@ class StockPostPutView(View):
                     break
             
             if code == 200:   
-                message = "Test passed"
+                message = "The product has been stocked successfully."
                 category = "success"  
                 code == 200  
                 prod_status = True
@@ -73,14 +73,17 @@ class StockPostPutView(View):
                     "stock_date_updated": request.form.get("stock_date_updated",'null')
                 }
                 status, obj = self.model.create(data)
+                if not status:
+                    message = f"Failed to create stock. \nError: [{obj}]"
             
-            return f'Response: {status}'
+            return f'{message}'
         
         if request.method =='PUT':
-            return f"Barcode to update is {product_barcode} - {request.form.get("product_iva",None)}"
+            
             if product_barcode is not None and isinstance(product_barcode, str):
+                
                 # Filter and validate each of the form field
-                """for key, value in request.form.items():
+                for key, value in request.form.items():
                     status, sms = validate_words(key=key, value=value)
                     if not status:
                         message = f'{sms}'
@@ -89,14 +92,14 @@ class StockPostPutView(View):
                         break
                 
                 if code == 200:   
-                    message = "Test passed"
+                    message = "The stock has been updated successfully."
                     category = "success"  
                     code == 200  
                     prod_status = True
                     if 'False' or 'false' or 0 or '0' in request.form.get('status', True):
                         prod_status = False
                     data = {
-                    "product_barcode": request.formget('product_barcode', None),
+                    "product_barcode": request.form.get('product_barcode', None),
                     "product_description": request.form.get("product_description",None),
                     "product_unitary_price": request.form.get("product_unitary_price",None),
                     "product_iva": request.form.get("product_iva",None),
@@ -112,13 +115,12 @@ class StockPostPutView(View):
                     "stock_datetime_added": request.form.get("stock_datetime_added",None),
                     "stock_date_updated": datetime.now().strftime("%Y/%m/%d %H:%M:%S")
                 }
+                    
                     status, obj = self.model.update(product_barcode, data)
-                    message = status
-                    if status:
-                        return f"Process done. ID {id}. Status: {status}"
-                return f"Failed to update the stock of product. ID {id}. Status: False"
-                """
-            return f"Barcode to update is {product_barcode}"
+                if not status:
+                    message = f"Failed to create stock. \nError: [{obj}]"
+            
+            return f'{message}'
 
 
 

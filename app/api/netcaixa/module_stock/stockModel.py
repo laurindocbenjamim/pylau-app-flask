@@ -34,7 +34,7 @@ class Stock(db.Model):
     product_quantity = db.Column(db.Integer())
     stock_pos: Mapped[str] = db.Column(db.String(100))
     stock_location: Mapped[str] = db.Column(db.String(100))
-    stock_code: Mapped[str] = db.Column(db.String(20), default="0001")
+    stock_code: Mapped[str] = db.Column(db.String(20), default="0000")
     stock_date_added = db.Column(db.String(11), default=datetime.now().date())
     stock_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
     stock_month_added = db.Column(db.String(20), default=datetime.now().strftime("%m"))
@@ -64,6 +64,7 @@ class Stock(db.Model):
             db.session.add(obj)
             db.session.commit()
             return True, obj
+        
         
         except IntegrityError as e:
             db.session.rollback()
@@ -115,76 +116,59 @@ class Stock(db.Model):
             obj.stock_pos = product["stock_pos"]
             obj.stock_location = product["stock_location"]
             obj.stock_code = product["stock_code"]
-            obj.stock_date_added = product["stock_date_added"]
-            obj.stock_year_added = product["stock_year_added"]
-            obj.stock_month_added = product["stock_month_added"]
-            obj.stock_datetime_added = product["stock_datetime_added"]
             obj.stock_date_updated = product["stock_date_updated"]
 
             db.session.commit()
             return True, obj
+        except IntegrityError as e:
+            db.session.rollback()
+            custom_message = "This product already exist."
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="UPDATE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+           
+            return False, custom_message
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[update_] \n \
-                                       SQLAlchemyError: \n{str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="UPDATE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="UPDATE STOCK")
             set_logger_message(error_info)
            
             return False, str(e)
 
     #
     # Delete method
-    def delete_product(product_id: int) -> any:
+    def delete_product(product: int | str) -> any:
         """
         This method is used t o delete  product object
 
         Arguments:
-            The method receive as arguments the product ID
+            The method receive as arguments a product item
             which is used to remove  it from the database
         Return:
             By default the function returns a boolean and the product object if
             none error occured, if false return a boolean and an exception response
         """
         try:
-            obj = Stock.query.filter_by(product_id=product_id).first_or_404()
+            obj = Stock.query.filter_by(product_barcode=product).first_or_404()
             db.session.delete(obj)
             db.session.commit()
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[delete_product] \n \
-                                       SQLAlchemyError: \n{str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="DELETE STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="DELETE STOCK")
             set_logger_message(error_info)
            
             return False, str(e)
@@ -204,23 +188,14 @@ class Stock(db.Model):
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[get_all] \n \
-                                       SQLAlchemyError:\n {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET ALL STOCK", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET ALL STOCK")
             set_logger_message(error_info)
            
             return False, str(e)
@@ -235,27 +210,19 @@ class Stock(db.Model):
         """
 
         try:
-            obj = Stock.query.filter(and_(Stock.product_id == id)).first()
+            obj = Stock.query.filter(and_(Stock.stock_id == id))\
+            .first_or_404(description=f"No product with the ID [{id}] has been found.")
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[get_by_id] \n \
-                                       SQLAlchemyError: \n{str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET_BY_ID", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET_BY_ID")
             set_logger_message(error_info)
            
             return False, str(e)
@@ -273,27 +240,18 @@ class Stock(db.Model):
         try:
             obj = Stock.query.filter(
                 and_(Stock.product_barcode == barcode)
-            ).first_or_404()
+            ).first_or_404(description=f"No product with the barcode [{barcode}] has been found.")
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[get_by_barcode] \n \
-                                       SQLAlchemyError: \n{str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET_BY_BARCODE", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET_BY_BARCODE")
             set_logger_message(error_info)
            
             return False, str(e)
@@ -310,27 +268,18 @@ class Stock(db.Model):
         try:
             obj = Stock.query.filter(
                 and_(Stock.product_barcode == barcode)
-            ).first_or_404()
+            ).first_or_404(description=f"No product with the barcode [{barcode}] has been found.")
             return True, obj
         except SQLAlchemyError as e:
             db.session.rollback()
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            set_logger_message(
-                f"Error occured on method[get_by_barcode] \n \
-                                       SQLAlchemyError: \n{str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        "
-            )
-            return False, str(e)
+            custom_message = "Database config error"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET_BY_CATEGORY", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except Exception as e:
             db.session.rollback()
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE STOCK")
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET_BY_CATEGORY")
             set_logger_message(error_info)
            
             return False, str(e)

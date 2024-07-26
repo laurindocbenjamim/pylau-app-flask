@@ -18,7 +18,7 @@ def test_get(client):
     #assert response.data == f'Response: True'.encode()
     
     # Line of code to test the success test
-    assert response.get_json() == [{"status":True, "object": 11}, 200]
+    assert response.get_json() == [{"status":True, "object": 12}, 200]
 
     # Method to test the putch request method of the product
 

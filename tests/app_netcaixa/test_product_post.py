@@ -12,7 +12,7 @@ def test_post(client):
     of the  product
     """
     dataForm = {  
-                'barcode': "39938833",
+                'barcode': "39938836",
                 'description': "Arroz Agulha",
                 'category': "Vegetal",
                 'type': "Delicados" ,   
@@ -38,7 +38,8 @@ def test_post(client):
 
     #assert response.data == f"This field must be a string [brand]".encode()
     
-    assert response.data == f'Response: False'.encode()
+    #assert response.data == f'The product has been created successfully.'.encode()
+    assert response.data == f'Failed to create product. Error: [This product already exist.]'.encode()
     
     # Line of code to test the success test
     #assert response.get_json() == [{"message":"Test passed", "category": "success", "object": 1},200]

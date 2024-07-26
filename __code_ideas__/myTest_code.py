@@ -97,5 +97,24 @@ number = 12.3
 if not isinstance(float(number), float):
     print("Invalid type value")
 
+long_string=f"""
+Hi Laurindo Benjamim,
+
+We're sorry that you were not able to attend Illinois Tech Master of Data Science: Deep Dive on Linear Regression Courses.
+
+If you would like to view the webinar, click here: https://youtu.be/S5ystg9tcGw.
+
+Once you have had the opportunity to learn more about the program and the linear regression math courses you can expect from one of Illinois Tech's top professors, we encourage you to enroll!
+
+As a reminder, the Master of Data Science program at Illinois Tech accepts up to 6 credits from prior learning on Coursera.
+
+To learn more, join enrollment counselor, Aida Rodriguez, on August 14th at our exclusive office hours session. Register here: https://zoom.us/webinar/register/7017217643139/WN_ouroLEq5RD-0qUUZePhvEg.
+
+We look forward to reviewing your enrollment before the August 26th deadline!
+
+Thank you!
+Illinois Tech Team
+    """
+print(f"Size : {len(long_string)}")
 
 
