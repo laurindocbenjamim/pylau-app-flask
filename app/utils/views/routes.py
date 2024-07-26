@@ -142,14 +142,14 @@ def load_routes(app, db, login_manager):
 
     
     # Integrating the blueprints parent and child into the application
-    """
+    #"""
     from ...auth_package import bp_auth_register_parent, init_register_app
     from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     init_register_app()
     init_login_app(login_manager=login_manager, db=db)
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)
     app.register_blueprint(bp_auth_register_parent)
-    """
+    #"""
 
     
     from app.email_module import bp_email_view
