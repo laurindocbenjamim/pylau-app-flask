@@ -104,7 +104,7 @@ class Stock(db.Model):
         try:
             obj = Stock.query.filter(
                 and_(Stock.product_barcode == product_barcode)
-            ).first()
+            ).first_or_404(description=f"Failed to update. No product with the barcode [{product}] has been found.")
 
             obj.product_barcode = product["product_barcode"]
             obj.product_description = product["product_description"]
@@ -155,7 +155,8 @@ class Stock(db.Model):
             none error occured, if false return a boolean and an exception response
         """
         try:
-            obj = Stock.query.filter_by(product_barcode=product).first_or_404()
+            obj = Stock.query.filter_by(product_barcode=product)\
+            .first_or_404(description=f"Failed to delete. No product with the barcode [{product}] has been found.")
             db.session.delete(obj)
             db.session.commit()
             return True, obj

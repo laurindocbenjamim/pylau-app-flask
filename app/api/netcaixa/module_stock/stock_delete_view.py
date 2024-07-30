@@ -30,14 +30,15 @@ class StockDeleteProductView(View):
                 return f"Not founded"
             elif not isinstance(item, str):
                 return f"Invalid type value"
-            elif any(char not in authorized_chars for char in item):
-                return f"Invalid charcteres detected!"
-            elif len(item) > 10:
+            elif any(char not in authorized_chars for char in item.replace(' ', '')):
+                return f"Invalid charctere detected!"
+            elif len(item.replace(' ', '')) > 10:
                 return f"Invalid size value"
             else:                
                 status, obj = self.model.delete_product(item)
+                message = obj
                 if status:
                     return f"The item {item} has been removed successfully."
                 #return jsonify({"status": status, "category": "success"}, code)
         #return jsonify({"message":"Failed to delete product", "category": "error"},400)
-        return f"Failed to remove element.{item}"
+        return f"{message}"
