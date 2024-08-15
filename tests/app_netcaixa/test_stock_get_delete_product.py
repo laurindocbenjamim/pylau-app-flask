@@ -32,7 +32,7 @@ def test_get_by_id(client, id):
     assert response.get_json() == [{"status":True, "object": int(id)}, 200]
     #assert response.data == f'ID {id}'.encode()
 
-@pytest.mark.parametrize("barcode", [("0299")])
+@pytest.mark.parametrize("barcode", [("02995")])
 def test_get_by_barcode(client, barcode):
     """ This method is used to get the product by barcode """
      

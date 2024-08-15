@@ -26,8 +26,23 @@ from .module_stock import StockGetProductsView
 
 bp_product.add_url_rule('/create/stock', view_func=StockPostPutView.as_view('create_stock', Stock, ''))
 bp_product.add_url_rule('/update/<string:product_barcode>/stock', view_func=StockPostPutView.as_view('update_stock', Stock, ''))
-bp_product.add_url_rule('/select/all', view_func=StockGetProductsView.as_view('select_stock', Stock, ''))
-bp_product.add_url_rule('/select/<int:id>', view_func=StockGetProductsView.as_view('get', Stock, ''))
-bp_product.add_url_rule('/select/by', view_func=StockGetProductsView.as_view('get_by', Stock, ''))
+bp_product.add_url_rule('/select/all', view_func=StockGetProductsView.as_view('select_stocks', Stock, ''))
+bp_product.add_url_rule('/select/<int:id>', view_func=StockGetProductsView.as_view('get_stock', Stock, ''))
+bp_product.add_url_rule('/select/by', view_func=StockGetProductsView.as_view('get_stocks_by', Stock, ''))
 bp_product.add_url_rule('/delete/<item>/stock', view_func=StockDeleteProductView.as_view('delete_stock', Stock, ''))
+
+# Importing the price of product view
+# adn creating the routes
+from .module_prices import ProductPricePostPutViev
+from .module_prices import ProductPriceModel
+
+bp_product.add_url_rule('/price/create', view_func=ProductPricePostPutViev.as_view('create_price', ProductPriceModel, ''))
+bp_product.add_url_rule('/price/update/<string:product_barcode>', view_func=ProductPricePostPutViev.as_view('update_price', ProductPriceModel, ''))
+bp_product.add_url_rule('/price/select/all', view_func=ProductPricePostPutViev.as_view('select_prices', ProductPriceModel, ''))
+bp_product.add_url_rule('/price/select/<int:id>', view_func=ProductPricePostPutViev.as_view('get_price', ProductPriceModel, ''))
+bp_product.add_url_rule('/price/select/by', view_func=ProductPricePostPutViev.as_view('get_price_by', ProductPriceModel, ''))
+bp_product.add_url_rule('/price/delete/<item>', view_func=ProductPricePostPutViev.as_view('delete_price', ProductPriceModel, ''))
+
+
+
 

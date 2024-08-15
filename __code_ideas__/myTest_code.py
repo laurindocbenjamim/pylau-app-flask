@@ -118,3 +118,13 @@ Illinois Tech Team
 print(f"Size : {len(long_string)}")
 
 
+
+required = ['prod_code', 'prod_price', 'prod_img']
+key = 'prod_img'
+
+if key in required:
+    print(f'The {key.replace('_', ' ').upper()} field is required')
+
+
+
+
