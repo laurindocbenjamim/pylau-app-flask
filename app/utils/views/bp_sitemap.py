@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+from flask import Blueprint, make_response
+from flask_cors import CORS, cross_origin
+
+bp_sitemap = Blueprint('sitemap', __name__)
+CORS(bp_sitemap)
+@bp_sitemap.route('sitemap.xml')
+@cross_origin(methods=['GET'])
+def sitemap():
+    # Generate your sitemap content (e.g., read from a file or dynamically create it)
+    sitemap_content = """
+    <?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -46,3 +56,8 @@
 
 
 </urlset>
+    """
+
+    response = make_response(sitemap_content)
+    response.headers["Content-Type"] = "application/xml"
+    return response

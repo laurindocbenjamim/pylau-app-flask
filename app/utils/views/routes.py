@@ -140,6 +140,10 @@ def load_routes(app, db, login_manager):
     from .error_handlers_view import error_handlers_view
     error_handlers_view(app)
 
+    # Integrating the sitemap 
+    from .bp_sitemap import bp_sitemap
+    app.register_blueprint(bp_sitemap)
+
     
     # Integrating the blueprints parent and child into the application
     #"""
