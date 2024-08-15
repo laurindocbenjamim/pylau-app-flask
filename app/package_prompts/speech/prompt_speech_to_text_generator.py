@@ -26,7 +26,7 @@ class ConvertAudioSpeechToText(object):
     FORMAT = None
     SPEED = None
     FILE_NAME = None
-    def __init__(self, audio_file_path):
+    def __init__(self, audio_file_path, output_lang):
         """
         COSTRUCTOR PARAMETERS
         
@@ -48,6 +48,7 @@ class ConvertAudioSpeechToText(object):
 
         """
         self.FILE_NAME = audio_file_path
+        self._output_lang = output_lang
 
     def generate_transcription(self):
         """
@@ -108,7 +109,7 @@ class ConvertAudioSpeechToText(object):
                 model="whisper-1", 
                 file=audio_file,
                 response_format="text",
-                language="pt"
+                language= self._output_lang
             )
             return True, transcription
         except KeyError as e:
