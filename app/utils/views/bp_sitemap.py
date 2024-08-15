@@ -54,4 +54,5 @@ def sitemap():
 
     response = make_response(sitemap_content)
     response.headers["Content-Type"] = "application/xml"
-    return f'{response}'
+    #return f'{response}'
+    return response
