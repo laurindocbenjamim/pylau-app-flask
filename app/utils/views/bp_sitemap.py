@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 
 bp_sitemap = Blueprint('sitemap', __name__)
 CORS(bp_sitemap)
-@bp_sitemap.route('sitemap.xml')
+@bp_sitemap.route('/sitemap.xml')
 @cross_origin(methods=['GET'])
 def sitemap():
     # Generate your sitemap content (e.g., read from a file or dynamically create it)
