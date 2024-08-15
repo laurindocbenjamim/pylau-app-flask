@@ -36,4 +36,17 @@
   <changefreq>monthly</changefreq>
 </url>
 
+<url>
+  <loc>https://www.d-tuning.com/ai/convert-audio-speech-into-text</loc>
+  <lastmod>2023-12-19T14:34:26+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+
+<!--<url>
+  <loc>https://www.d-tuning.com/data-science/project/emotion-detector/</loc>
+  <lastmod>2023-12-19T14:34:26+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>-->
+
+
 </urlset>
