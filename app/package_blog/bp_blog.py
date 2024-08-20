@@ -6,6 +6,13 @@ from flask_cors import CORS, cross_origin
 bp_blog = Blueprint('blog', __name__, url_prefix='/blog')
 CORS(bp_blog)
 
+
+@bp_blog.route('/articles')
+@cross_origin(methods=['GET'])
+def articles():
+    return render_template('blog/articles/articles.html', title='Articles')
+
+
 @bp_blog.route('/article/azure-data-lake-storage-gen2')
 @cross_origin(methods=['GET'])
 def azure_data_lake_storage_gen2():

@@ -1,0 +1,86 @@
+
+
+<nav class="navbar scroll-animation navbar-expand-lg fixed-top navbar-dark " aria-label="Main navigation">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('index')}}">
+            <img src="{{ url_for('static', filename='assets/img/bantu02-removebg-preview.png')}}" width="40"
+                height="32" alt="" srcset="">
+        </a>
+        <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('projects.projects')}}">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('blog.articles')}}">Articles</a>
+                </li>
+
+
+                {% if current_user.is_authenticated %}
+                {% if g.user %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard {{ g.user.firstname }} </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Softwares</a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+
+
+            </ul>
+            <div class="d-flex">
+                {% if current_user.is_authenticated %}
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa-regular fa-circle-user"></i>
+                            {{ current_user.email}}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">{{current_user.userID}}#{{current_user.firstname}}
+                                    {{current_user.lastname}}</a></li>
+                            <li><a class="dropdown-item" href="#">{{current_user.country}}</a></li>
+                            <li>
+                                {% if 'user_token' in session %}
+                                <a class="dropdown-item"
+                                    href="{{ url_for('auth.user.logout', user_token=session['user_token'])}}"
+                                    style="color: #c8233e;">
+                                    <i class="fa-solid fa-right-from-bracket"></i> logout
+                                </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% endif %}
+
+
+            </div>
+
+            <div class="d-flex" role="search">
+                <!--<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>-->
+                {% if current_user.is_authenticated == False %}
+                <a class="btn btn-primary" href="{{ url_for('auth.user.login')}}"
+                    style="margin-right: 2%;">Login</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</nav>
