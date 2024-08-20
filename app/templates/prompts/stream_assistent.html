@@ -1,0 +1,166 @@
+{%extends 'site.html'%}
+{%block title%}
+{%if title%}{{title}}{%endif%}
+{%endblock%}
+
+
+
+{%block content%}
+
+<style>
+  .sentiment-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  
+  #output {
+    width: 100%;
+    height: 20%;
+    margin: 0 auto;
+    margin-top: 10px;
+    border-left: 0px;
+    border-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    display: block;
+    background-color: black;
+    color: white;
+    font-size: 10px;
+    font-family: 'Lucida Console', Monaco, monospace;
+    outline: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+}
+    
+    
+    
+  </style>
+
+
+
+
+
+
+
+<div class="sentiment-container container" >
+  <div class="col-lg-7" style="margin-top:2%;border-radius:4px; display:flex; flex-direction:column; text-align:center;
+  background-color:rgb(255, 255, 255); color:rgb(0, 0, 0)">
+
+    <div class="container-fluid py-5">
+      <h1 class="display-6 fw-bold welcome-title text-black">{{ title }}</h1>
+      <p class="fs-5 text-black">
+       Use our application to convert <i style="color: rgb(255, 138, 42);">any Audio Speech to text format</i> using the most 
+       powefull <i style="color: rgb(255, 138, 42);">AI </i> feature.
+      </p>
+      <p class="fs-5 text-black">With this resource you can drag and drop or select your media file and select the output langauge 
+        you want for the final text.
+      </p>
+    </div>
+
+    <div style="display: flex;flex-direction:column;text-align:center;" class="my-3 p-3 bg-body rounded shadow-sm" >
+      <div id="main-container">
+        <b>stream : Real-time Whisper transcription in WebAssembly</b>
+
+        <br><br>
+
+        You can find more about this project on <a href="https://github.com/ggerganov/whisper.cpp/tree/master/examples/stream.wasm">GitHub</a>.
+
+        <br><br>
+
+        <b>More examples:</b>
+            <a href="https://whisper.ggerganov.com/">main</a> |
+            <a href="https://whisper.ggerganov.com/bench">bench</a> |
+            <a href="https://whisper.ggerganov.com/stream">stream</a> |
+            <a href="https://whisper.ggerganov.com/command">command</a> |
+            <a href="https://whisper.ggerganov.com/talk">talk</a> |
+
+        <br><br>
+
+        <hr>
+
+        Select the model you would like to use, click the "Start" button and start speaking
+
+        <br><br>
+
+        <div id="model-whisper">
+            Whisper model: <span id="model-whisper-status"></span>
+            <button id="fetch-whisper-tiny-en" onclick="loadWhisper('tiny.en')">tiny.en (75 MB)</button>
+            <button id="fetch-whisper-base-en" onclick="loadWhisper('base.en')">base.en (142 MB)</button>
+            <br><br>
+            Quantized models:<br><br>
+            <button id="fetch-whisper-tiny-en-q5_1"   onclick="loadWhisper('tiny-en-q5_1')">tiny.en (Q5_1, 31 MB)</button>
+            <button id="fetch-whisper-base-en-q5_1"   onclick="loadWhisper('base-en-q5_1')">base.en (Q5_1, 57 MB)</button>
+            <span id="fetch-whisper-progress"></span>
+
+            <!--
+                <input type="file" id="file" name="file" onchange="loadFile(event, 'whisper.bin')" />
+            -->
+        </div>
+
+        <br>
+
+        <div id="input">
+            <button id="start"  onclick="onStart()" disabled>Start</button>
+            <button id="stop"   onclick="onStop()" disabled>Stop</button>
+            <button id="clear"  onclick="clearCache()">Clear Cache</button>
+        </div>
+
+        <br>
+
+        <div id="state">
+            Status: <b><span id="state-status">not started</span></b>
+
+            <pre id="state-transcribed">[The transcribed text will be displayed here]</pre>
+        </div>
+
+        <hr>
+
+        Debug output:
+        <textarea id="output" rows="20"></textarea>
+
+        <br>
+
+        <b>Troubleshooting</b>
+
+        <br><br>
+
+        The page does some heavy computations, so make sure:
+
+        <ul>
+            <li>To use a modern web browser (e.g. Chrome, Firefox)</li>
+            <li>To use a fast desktop or laptop computer (i.e. not a mobile phone)</li>
+            <li>Your browser supports WASM <a href="https://webassembly.org/roadmap/">Fixed-width SIMD</a></li>
+        </ul>
+
+        <div class="cell-version">
+            <span>
+                |
+                Build time: <span class="nav-link">@GIT_DATE@</span> |
+                Commit hash: <a class="nav-link" href="https://github.com/ggerganov/whisper.cpp/commit/@GIT_SHA1@">@GIT_SHA1@</a> |
+                Commit subject: <span class="nav-link">@GIT_COMMIT_SUBJECT@</span> |
+                <a class="nav-link" href="https://github.com/ggerganov/whisper.cpp/tree/master/examples/stream.wasm">Source Code</a> |
+            </span>
+        </div>
+    </div>
+      <div class="form-group">
+        <div class="form-message">
+          <p></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{%endblock%}
+
+{%block scripts %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='app/script/whisper_helpers.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='app/script/record_speech.js') }}"></script>
+
+
+{% endblock %}

@@ -199,3 +199,7 @@ def load_routes(app, db, login_manager):
     # Importing the author route 
     from ...author_profile import bp_author
     app.register_blueprint(bp_author)
+
+    # Importing the blueprint of articles
+    from ...package_blog import bp_blog
+    app.register_blueprint(bp_blog)
