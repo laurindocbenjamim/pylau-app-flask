@@ -23,25 +23,25 @@ def sitemap():
         </url>
 
         <url>
-            <loc>https://www.d-tuning.com/projects/</loc>
+            <loc>https://www.d-tuning.com/projects.html</loc>
             <lastmod>2023-12-19T14:34:26+00:00</lastmod>
             <changefreq>monthly</changefreq>
         </url>
 
         <url>
-            <loc>https://www.d-tuning.com/profile/laurindo-c-benjamim/</loc>
+            <loc>https://www.d-tuning.com/profile/laurindo-c-benjamim.html</loc>
             <lastmod>2023-12-19T14:34:26+00:00</lastmod>
             <changefreq>monthly</changefreq>
         </url>
 
         <url>
-            <loc>https://www.d-tuning.com/ws/api/countries/</loc>
+            <loc>https://www.d-tuning.com/ws/api/countries.html</loc>
             <lastmod>2023-12-19T14:34:26+00:00</lastmod>
             <changefreq>monthly</changefreq>
         </url>
 
         <url>
-            <loc>https://www.d-tuning.com/ai/convert-audio-speech-into-text/</loc>
+            <loc>https://www.d-tuning.com/ai/convert-audio-speech-into-text.html</loc>
             <lastmod>2023-12-19T14:34:26+00:00</lastmod>
             <changefreq>monthly</changefreq>
         </url>
