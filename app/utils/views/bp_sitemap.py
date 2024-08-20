@@ -46,6 +46,18 @@ def sitemap():
             <changefreq>monthly</changefreq>
         </url>
 
+        <url>
+            <loc>https://www.d-tuning.com/blog/article/articles.html</loc>
+            <lastmod>2023-12-19T14:34:26+00:00</lastmod>
+            <changefreq>monthly</changefreq>
+        </url>
+
+        <url>
+            <loc>https://www.d-tuning.com/blog/article/azure-data-lake-storage-gen2.html</loc>
+            <lastmod>2023-12-19T14:34:26+00:00</lastmod>
+            <changefreq>monthly</changefreq>
+        </url>
+
 
 
 
