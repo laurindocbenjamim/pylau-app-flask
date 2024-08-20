@@ -13,14 +13,15 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="mt-5">Oops! 
+        <p><h2>Oops!</h2></p>
+        <img src="{{ url_for('static', filename='assets/img/404.png')}}" width="300" height="350" alt="404 Error Image" class="img-fluid">
+        <h1 class="mt-5">
             {% if message %}
                 {{ message }}
             {% else %}
                 Error 404
             {% endif %}
         </h1>
-        <img src="https://media.licdn.com/dms/image/C5112AQEw1fXuabCTyQ/article-inline_image-shrink_1500_2232/0/1581099611064?e=1722470400&v=beta&t=CugOf9arTN_xgMCabNYVch7gQPPjUeYlEcy_ECNgW2s" alt="Error Image" class="img-fluid">
         <p>
             {% if detail %}
                 {{ detail }}
