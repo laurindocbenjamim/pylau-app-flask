@@ -11,7 +11,7 @@ CORS(bp)
 bp.add_url_rule('/etl/<string:user_token>', view_func=ExtractWebPageView.as_view('etl', Users, UserToken, 'etl_web.html'))
 bp.add_url_rule('/api/etl', view_func=ExtractWebPageApiView.as_view('api-etl', Users, UserToken, 'etl_web.html'))
 
-@bp.route('/api/countries.html', methods=['GET'])
+@bp.route('/api/countries', methods=['GET'])
 def get_countries():
 
     phonenumberULR = (

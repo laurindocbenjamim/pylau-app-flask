@@ -3,7 +3,9 @@
 
 import os
 import secrets
+from datetime import datetime, timedelta
 from flask import Flask, current_app, request, session, jsonify, render_template
+from flask import make_response
 from flask_cors import CORS, cross_origin
 
 from flask_migrate import Migrate
@@ -54,6 +56,31 @@ def create_app(JDBC="sqlite",test_config=None):
     load_routes(app=app, db=db, login_manager=login_manager)
     
     
+    # Create a sitemap route
+    @app.route("/sitemap.xml")
+    @cross_origin(methods=["GET"])
+    def sitemap():
+        base_url = request.url_root
+        try:
+            """ Generating a sitemap.xml 
+            Makes a list of URL and dates modified.
+            """
+            pages = []
+            ten_days_ago = (datetime.now() - timedelta(days=7)).date().isoformat()
+
+            # Static pages 
+            for rule in app.url_map.iter_rules():
+                if "GET" in rule.methods and len(rule.arguments)==0:
+                    pages.append(
+                        [request.url_root + str(rule.rule), ten_days_ago]
+                    )
+            sitemap_xml = render_template('sitemap_template.xml', pages=pages)
+            response = make_response(sitemap_xml)
+            response.headers["Content-Type"] = "application/xml"
+            return response
+        except Exception as e:
+            return str(e)
+
 
     # Simple page that say hello
     @app.route("/hello")
