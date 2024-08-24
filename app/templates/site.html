@@ -1,11 +1,8 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
-
-<head>
-    <!--<script src="{{ url_for('static', filename='assets/js/color-modes.js') }}"></script>-->
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="{{ url_for('index')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Laurindo C.Benjamim">
     <meta name="generator" content="Laurindo C.Benjamim">
@@ -27,202 +24,197 @@
     {% endif %}
 
     <title>{% block title %} {% endblock %} - Tuning</title>
-
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/offcanvas-navbar/">
-
-    <!-- Custom styles for this template -->
-    <!--<link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">-->
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-        </script>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
         body {
-            /*background: linear-gradient(to right, #3a1c71, #836265, #ffaf7b);*/
-            background: linear-gradient(to right, #0a0318, #2e3157, #000c25);
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
-
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
+        .logo {
+            max-height: 40px;
         }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+        .navbar {
+            background-color: var(--primary-color);
         }
-
-        footer .nav-link {
-            color: #c8233e;
+        .navbar-brand, .nav-link, .navbar-text {
+            color: #fff !important;
         }
-
-        .b-example-divider {
-            width: 100%;
-            height: 3rem;
-            background-color: rgba(0, 0, 0, .1);
-            border: solid rgba(0, 0, 0, .15);
-            border-width: 1px 0;
-            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        .btn-outline-light:hover {
+            color: var(--primary-color);
         }
-
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
+        .hero {
+            background: linear-gradient(rgba(52, 152, 219, 0.8), rgba(46, 204, 113, 0.8)), url('https://websimdomain.com/images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
         }
-
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
         }
-
-        .nav-scroller {
-            position: relative;
-            z-index: 2;
-            height: 2.75rem;
-            overflow-y: hidden;
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
-
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
+        .card:hover {
+            transform: translateY(-5px);
         }
-
-        .btn-bd-primary {
-            --bd-violet-bg: #712cf9;
-            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-            --bs-btn-font-weight: 600;
-            --bs-btn-color: var(--bs-white);
-            --bs-btn-bg: var(--bd-violet-bg);
-            --bs-btn-border-color: var(--bd-violet-bg);
-            --bs-btn-hover-color: var(--bs-white);
-            --bs-btn-hover-bg: #6528e0;
-            --bs-btn-hover-border-color: #6528e0;
-            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-            --bs-btn-active-color: var(--bs-btn-hover-color);
-            --bs-btn-active-bg: #5a23c8;
-            --bs-btn-active-border-color: #5a23c8;
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
-
-        .bd-mode-toggle {
-            z-index: 1500;
-        }
-
-        .bd-mode-toggle .dropdown-menu .active .bi {
-            display: block !important;
-        }
-
-
-
-
-
-        .scroll-animatio {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
-
-        .scroll-animatio.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-
-        .info {
-            color: #0986fa;
-        }
-
-        .success {
-            color: #25d45a;
-        }
-
-        .error {
-            color: #c8233e;
-        }
-
-        .danger {
-            color: #ee5d24;
+        .btn-primary:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
         }
     </style>
 
     {% block styles %} {% endblock %}
-
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='assets/css/offcanvas-navbar.css') }}" rel="stylesheet">
 </head>
-
-<body class="bg-body-tertiary">
-
-
-
-<!---- Including Navbar -->
+<body>
+    
+    <!---- Including Navbar -->
    {% include 'navbar.html' %}
 
    <!---- Including Navbar End-->
 
-    <div class="nav-scroller  shadow-sm">
-        <nav class="nav" aria-label="Secondary navigation">
-            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-            {% if current_user.is_authenticated %}
-            {% if current_user.role == 'admin' %}
+    <header class="hero text-center">
+        <div class="container">
+            <h1 class="display-4">Welcome to Data Tuning</h1>
+            <p class="lead">Empowering learners with cutting-edge online education</p>
+            <a href="http://127.0.0.1:5500/courses.html" class="btn btn-light btn-lg mt-3">Explore Courses</a>
+        </div>
+    </header>
 
-            {% if 'user_token' in session %}
-            <a class="nav-link" href="{{ url_for('projects.list', user_token=session['user_token']) }}">Project Manager
-                <span class="badge text-bg-light rounded-pill align-text-bottom">{{total_projects}}</span></a>
-            {% else %}
-            <a class="nav-link" href="{{ url_for('projects.list', user_token=user_token) }}">Project Manager
-                <span class="badge text-bg-light rounded-pill align-text-bottom">{{total_projects}}</span></a>
-            {% endif %}
-            {% endif %}
-            {% endif %}
-            <a class="nav-link" href="{{ url_for('ws.get_countries')}}" target="_blank">Countries API</a>
-        </nav>
-    </div>
-
-    <main class="container ">
-
-
-
+    <main class="container my-5">
         {% block content %} {% endblock %}
-
-<!---- Including Footer -->
-        {% include 'footer.html' %}
-
-        <!---- Including Footer end -->
-
     </main>
 
+    <footer class="bg-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('about_us')}}">About Us</a></li>
+                        <li><a href="https://websimdomain.com/courses">Courses</a></li>
+                        <li><a href="https://websimdomain.com/contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <a href="https://facebook.com/websimdomain" class="text-dark me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/websimdomain" class="text-dark me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com/company/websimdomain" class="text-dark me-2"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://youtube.com/@laurindocbenjamim?si=QBqwGf_vuu-Fvdqp" target="_blank" class="text-dark me-2"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="col-md-4">
+                    <h5>Newsletter</h5>
+                    <form>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Enter your email">
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center">&copy; 2023 Data Tuning. All rights reserved.</p>
+        </div>
+    </footer>
 
-<!---- Including Scripts -->
-    {% include 'scripts.html' %}
+    <script>
+        // Logout functionality (placeholder)
+        function logout() {
+            alert('Logout functionality would be implemented here.');
+            // In a real application, you would handle the logout process here
+            // For example, clearing session data and redirecting to a login page
+        }
 
-    <!---- Including Scripts end -->
+        // Add smooth scrolling to all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation to cards
+        const cards = document.querySelectorAll('.card');
+        const animateCard = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        const options = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver(animateCard, options);
+
+        cards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            observer.observe(card);
+        });
+
+        // Implement lazy loading for images
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+            let active = false;
+
+            const lazyLoad = function() {
+                if (active === false) {
+                    active = true;
+
+                    setTimeout(function() {
+                        lazyImages.forEach(function(lazyImage) {
+                            if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                                lazyImage.src = lazyImage.dataset.src;
+                                lazyImage.classList.remove("lazy");
+
+                                lazyImages = lazyImages.filter(function(image) {
+                                    return image !== lazyImage;
+                                });
+
+                                if (lazyImages.length === 0) {
+                                    document.removeEventListener("scroll", lazyLoad);
+                                    window.removeEventListener("resize", lazyLoad);
+                                    window.removeEventListener("orientationchange", lazyLoad);
+                                }
+                            }
+                        });
+
+                        active = false;
+                    }, 200);
+                }
+            };
+
+            document.addEventListener("scroll", lazyLoad);
+            window.addEventListener("resize", lazyLoad);
+            window.addEventListener("orientationchange", lazyLoad);
+        });
+    </script>
 
     {% block scripts %} {%endblock%}
-    
-
-</body>
-
-</html>
+</body></html>

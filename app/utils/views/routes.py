@@ -105,7 +105,7 @@ def load_routes(app, db, login_manager):
     def index(user_token=None):
         
         session.pop('_flashes', None)
-
+        session['domain'] = request.root_url
         if user_token is not None:
             if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
                 abort(401)
@@ -118,8 +118,23 @@ def load_routes(app, db, login_manager):
         elif 'user_token' in session:
             user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
         #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
-        return render_template('site_home.html', total_projects=12, user_token=user_token)
+        return render_template('site_home.html', domain = request.root_url, total_projects=12, user_token=user_token)
     
+
+    @app.route('/about-us')
+    @cross_origin(methods=['GET'])
+    def about_us():
+        return render_template('about.html', title="About")
+    
+    @app.route('/contact')
+    @cross_origin(methods=['GET'])
+    def contact():
+        return render_template('contact.html' , title="Contact")
+    
+    @app.route('/elearning')
+    @cross_origin(methods=['GET'])
+    def elearning():
+        return render_template('elearning.html' , title="Contact")
        
     
     @app.route('/get-secret', methods=['GET'])
