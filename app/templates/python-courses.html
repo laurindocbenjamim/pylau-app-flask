@@ -1,0 +1,142 @@
+
+{% extends "site.html" %}
+{% block title %}Python Courses{% endblock %}
+
+{% block styles %}  
+<style>
+    .jumbotron {
+        background-image: linear-gradient(rgba(52, 152, 219, 0.7), rgba(46, 204, 113, 0.7)), url('https://websimdomain.com/assets/python-hero-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 100px 0;
+        margin-bottom: 2rem;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .btn-primary {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+    .btn-primary:hover {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+    .course-level {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .beginner { background-color: #3498db; color: white; }
+    .intermediate { background-color: #f39c12; color: white; }
+    .advanced { background-color: #e74c3c; color: white; }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2>Why Learn Python?</h2>
+        <ul>
+            <li>Versatile and widely used in various industries</li>
+            <li>Easy to learn and read, perfect for beginners</li>
+            <li>Extensive libraries and frameworks for different applications</li>
+            <li>High demand in job markets worldwide</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>Our Python Course Offerings</h2>
+        <p>We offer a range of Python courses to suit learners of all levels. From beginners to advanced programmers, our curriculum is designed to help you achieve your goals in Python programming.</p>
+    </div>
+</div>
+
+<h2 class="text-center mb-4">Available Python Courses</h2>
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python Basics Course">
+            <div class="card-body">
+                <span class="course-level beginner">Beginner</span>
+                <h5 class="card-title">Python Basics</h5>
+                <p class="card-text">Learn the fundamentals of Python programming, including syntax, data types, and basic operations.</p>
+                <a href="https://websimdomain.com/courses/python-basics" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Object-Oriented Python Course">
+            <div class="card-body">
+                <span class="course-level intermediate">Intermediate</span>
+                <h5 class="card-title">Object-Oriented Python</h5>
+                <p class="card-text">Master object-oriented programming concepts in Python, including classes, inheritance, and polymorphism.</p>
+                <a href="https://websimdomain.com/courses/object-oriented-python" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python for Data Science Course">
+            <div class="card-body">
+                <span class="course-level advanced">Advanced</span>
+                <h5 class="card-title">Python for Data Science</h5>
+                <p class="card-text">Apply Python to data analysis and machine learning with libraries like NumPy, Pandas, and Scikit-learn.</p>
+                <a href="https://websimdomain.com/courses/python-data-science" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python Web Development Course">
+            <div class="card-body">
+                <span class="course-level intermediate">Intermediate</span>
+                <h5 class="card-title">Python Web Development</h5>
+                <p class="card-text">Build dynamic web applications using Python frameworks like Django and Flask.</p>
+                <a href="https://websimdomain.com/courses/python-web-development" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python Automation Course">
+            <div class="card-body">
+                <span class="course-level intermediate">Intermediate</span>
+                <h5 class="card-title">Python Automation</h5>
+                <p class="card-text">Learn how to automate tasks and create scripts for increased productivity.</p>
+                <a href="https://websimdomain.com/courses/python-automation" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python for AI Course">
+            <div class="card-body">
+                <span class="course-level advanced">Advanced</span>
+                <h5 class="card-title">Python for AI</h5>
+                <p class="card-text">Dive into artificial intelligence and deep learning using Python and TensorFlow.</p>
+                <a href="https://websimdomain.com/courses/python-ai" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{%endblock%}

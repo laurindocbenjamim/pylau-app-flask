@@ -106,6 +106,9 @@ def load_routes(app, db, login_manager):
         
         session.pop('_flashes', None)
         session['domain'] = request.root_url
+        welcome_title = "Welcome to Data Tuning"
+        welcome_message = "Empowering learners with cutting-edge online education"
+
         if user_token is not None:
             if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
                 abort(401)
@@ -118,7 +121,7 @@ def load_routes(app, db, login_manager):
         elif 'user_token' in session:
             user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
         #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
-        return render_template('site_home.html', domain = request.root_url, total_projects=12, user_token=user_token)
+        return render_template('site_home.html', welcome_title=welcome_title, welcome_message=welcome_message, domain = request.root_url, total_projects=12, user_token=user_token)
     
 
     @app.route('/about-us')
@@ -131,6 +134,21 @@ def load_routes(app, db, login_manager):
     def contact():
         return render_template('contact.html' , title="Contact")
     
+    @app.route('/courses')
+    @cross_origin(methods=['GET'])
+    def courses():
+        welcome_title = "Our Courses"
+        welcome_message = "Discover a world of knowledge with our diverse range of courses"
+        return render_template('courses.html', title="Courses",  welcome_title=welcome_title, welcome_message=welcome_message)
+    
+    @app.route('/python-courses')
+    @cross_origin(methods=['GET'])
+    def python_courses():
+        welcome_title = "Python Courses"
+        welcome_message = "Master Python programming with our comprehensive courses"
+        return render_template('python-courses.html', title="Python Courses",  welcome_title=welcome_title, welcome_message=welcome_message)
+    
+
     @app.route('/elearning')
     @cross_origin(methods=['GET'])
     def elearning():

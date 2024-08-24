@@ -52,7 +52,7 @@
             color: var(--primary-color);
         }
         .hero {
-            background: linear-gradient(rgba(52, 152, 219, 0.8), rgba(46, 204, 113, 0.8)), url('https://websimdomain.com/images/hero-bg.jpg');
+            background: linear-gradient(rgba(52, 152, 219, 0.8), rgba(46, 204, 113, 0.8)), url('https://d-tuning.com/images/hero-bg.jpg');
             background-size: cover;
             background-position: center;
             color: white;
@@ -91,11 +91,7 @@
    <!---- Including Navbar End-->
 
     <header class="hero text-center">
-        <div class="container">
-            <h1 class="display-4">Welcome to Data Tuning</h1>
-            <p class="lead">Empowering learners with cutting-edge online education</p>
-            <a href="http://127.0.0.1:5500/courses.html" class="btn btn-light btn-lg mt-3">Explore Courses</a>
-        </div>
+        {% include 'header.html' %}
     </header>
 
     <main class="container my-5">
@@ -109,15 +105,15 @@
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ url_for('about_us')}}">About Us</a></li>
-                        <li><a href="https://websimdomain.com/courses">Courses</a></li>
-                        <li><a href="https://websimdomain.com/contact">Contact</a></li>
+                        <li><a href="{{ url_for('courses')}}">Courses</a></li>
+                        <li><a href="{{ url_for('about_us')}}">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Follow Us</h5>
-                    <a href="https://facebook.com/websimdomain" class="text-dark me-2"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com/websimdomain" class="text-dark me-2"><i class="fab fa-twitter"></i></a>
-                    <a href="https://linkedin.com/company/websimdomain" class="text-dark me-2"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="{{ url_for('about_us')}}" class="text-dark me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ url_for('about_us')}}" class="text-dark me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="{{ url_for('about_us')}}" class="text-dark me-2"><i class="fab fa-linkedin-in"></i></a>
                     <a href="https://youtube.com/@laurindocbenjamim?si=QBqwGf_vuu-Fvdqp" target="_blank" class="text-dark me-2"><i class="fab fa-youtube"></i></a>
                 </div>
                 <div class="col-md-4">
