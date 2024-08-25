@@ -152,7 +152,7 @@ def load_routes(app, db, login_manager):
         welcome_message = "Master Python programming with our comprehensive courses"
         return render_template('python-courses.html', title="Python Courses",  welcome_title=welcome_title, welcome_message=welcome_message)
     
-
+    
     @app.route('/elearning')
     @cross_origin(methods=['GET'])
     def elearning():
