@@ -1,14 +1,32 @@
-<html><head><base href="https://example.com/articles/data-driven-decision-making">
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<base href="{{ url_for('index')}}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data-Driven Decision Making | TechInnovate</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="">
+    <meta name="author" content="Laurindo C.Benjamim">
+    <meta name="generator" content="Laurindo C.Benjamim">
+    <!-- meta tag google-site-verification -->
+    <meta name="google-site-verification" content="tdMX1So1jwh4T8V9ZBAXBbXFJ3WN8SGimEAngPNEKKk" />
 
+    <!--  code for google adsense -->
+    <meta name="google-adsense-account" content="ca-pub-3988539054248014">
+    <!--<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3988539054248014"
+     crossorigin="anonymous"></script>-->
+
+    <!-- Set the token in a meta tag -->
+    {% if 'user_token' in session %}
+    <meta name="token" content="{{ session['user_token'] }}">
+    {% elif user_token %}
+    <meta name="token" content="{{ user_token }}">
+    {% else %}
+    <meta name="token" content="401">
+    {% endif %}
+
+    <title>{% block title %} Blog {% endblock %} - Tuning</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #3498db;
@@ -16,20 +34,10 @@
             --background-color: #f8f9fa;
             --text-color: #333;
         }
-        /*
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
-        }
-        */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            scroll-behavior: smooth;
-            background-color: #f0f2f5;
-            color: #333;
         }
         .logo {
             max-height: 40px;
@@ -54,17 +62,23 @@
             font-size: 3rem;
             color: var(--primary-color);
         }
-    
-   
-       
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
         header {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #000000, #4a90e2);
+            color: white;
+            padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
@@ -74,28 +88,149 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
-            height: 80px;
         }
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #4a90e2;
         }
         .nav-links {
             display: flex;
             gap: 2rem;
         }
         .nav-links a {
+            color: white;
             text-decoration: none;
-            color: #333;
-            font-weight: 400;
-            font-size: 1.1rem;
+            font-weight: 500;
             transition: color 0.3s ease;
         }
         .nav-links a:hover {
+            color: #e0e0e0;
+        }
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .blog-header h1 {
+            font-size: 2.5rem;
             color: #4a90e2;
         }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .blog-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .blog-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .blog-card-content {
+            padding: 1.5rem;
+        }
+        .blog-card h2 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            color: #4a90e2;
+        }
+        .blog-card p {
+            font-size: 1rem;
+            color: #666;
+        }
+        .read-more {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .read-more:hover {
+            color: #3a7bc8;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        .pagination a {
+            color: #4a90e2;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border: 1px solid #4a90e2;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .pagination a:hover,
+        .pagination a.active {
+            background-color: #4a90e2;
+            color: white;
+        }
+        footer {
+            background-color: #282c34;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: #4a90e2;
+        }
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #4a90e2;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links, .social-icons {
+                margin-top: 1rem;
+            }
+        }
+
+
+        /**-----------Data driven CSS -----------------**/
         .article-header {
             background: linear-gradient(135deg, #000000, #4a90e2);
             color: white;
@@ -211,34 +346,7 @@
         .comment-form button:hover {
             background-color: #3a7bc8;
         }
-        footer {
-            background-color: #282c34;
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            margin-top: 3rem;
-        }
-        footer .nav-links {
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        footer .nav-links a {
-            color: white;
-        }
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .social-icons a {
-            color: white;
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
-        }
-        .social-icons a:hover {
-            color: #4a90e2;
-        }
+        
         .news-ticker {
             background-color: #f0f2f5;
             padding: 1rem 0;
@@ -303,12 +411,14 @@
     </style>
     </head>
     <body>
-        <!---- Including Navbar -->
+         <!---- Including Navbar -->
    {% include 'navbar.html' %}
 
    <!---- Including Navbar End-->
+   
     
-        <main>
+        <main class="container">
+            
             <section class="article-header">
                 <div class="container">
                     <h1>Data-Driven Decision Making</h1>
@@ -423,57 +533,57 @@
             </div>
         </main>
     
-           <!---- Including Footer -->
+        <!---- Including Footer -->
     {% include 'footer.html' %}
 
     <!---- Including Footer end -->
-    
-        <script>
-            // Chart.js implementation for Benefits of Data-Driven Decision Making
-            const ctx = document.getElementById('benefitsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Improved Efficiency', 'Better Resource Allocation', 'Enhanced Customer Satisfaction', 'Increased Profitability', 'Faster Problem Solving'],
-                    datasets: [{
-                        label: 'Impact Score',
-                        data: [85, 78, 92, 88, 76],
-                        backgroundColor: [
-                            'rgba(74, 144, 226, 0.7)',
-                            'rgba(74, 144, 226, 0.7)',
-                            'rgba(74, 144, 226, 0.7)',
-                            'rgba(74, 144, 226, 0.7)',
-                            'rgba(74, 144, 226, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(74, 144, 226, 1)',
-                            'rgba(74, 144, 226, 1)',
-                            'rgba(74, 144, 226, 1)',
-                            'rgba(74, 144, 226, 1)',
-                            'rgba(74, 144, 226, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+
+    <script>
+        // Chart.js implementation for Benefits of Data-Driven Decision Making
+        const ctx = document.getElementById('benefitsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Improved Efficiency', 'Better Resource Allocation', 'Enhanced Customer Satisfaction', 'Increased Profitability', 'Faster Problem Solving'],
+                datasets: [{
+                    label: 'Impact Score',
+                    data: [85, 78, 92, 88, 76],
+                    backgroundColor: [
+                        'rgba(74, 144, 226, 0.7)',
+                        'rgba(74, 144, 226, 0.7)',
+                        'rgba(74, 144, 226, 0.7)',
+                        'rgba(74, 144, 226, 0.7)',
+                        'rgba(74, 144, 226, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(74, 144, 226, 1)',
+                        'rgba(74, 144, 226, 1)',
+                        'rgba(74, 144, 226, 1)',
+                        'rgba(74, 144, 226, 1)',
+                        'rgba(74, 144, 226, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
                 },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100
-                        }
+                plugins: {
+                    legend: {
+                        display: false
                     },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Benefits of Data-Driven Decision Making'
-                        }
+                    title: {
+                        display: true,
+                        text: 'Benefits of Data-Driven Decision Making'
                     }
                 }
-            });
-        </script>
+            }
+        });
+    </script>
     </body>
     </html>
