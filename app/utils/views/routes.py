@@ -127,12 +127,16 @@ def load_routes(app, db, login_manager):
     @app.route('/about-us')
     @cross_origin(methods=['GET'])
     def about_us():
-        return render_template('about.html', title="About")
+        welcome_title = "Our Courses"
+        welcome_message = "Discover a world of knowledge with our diverse range of courses"
+        return render_template('about.html', title="About", welcome_title=welcome_title, welcome_message=welcome_message)
     
     @app.route('/contact')
     @cross_origin(methods=['GET'])
     def contact():
-        return render_template('contact.html' , title="Contact")
+        welcome_title = "Contact Us"
+        welcome_message = "Discover a world of knowledge with our diverse range of courses"
+        return render_template('contact.html' , title="Contact", welcome_title=welcome_title, welcome_message=welcome_message)
     
     @app.route('/courses')
     @cross_origin(methods=['GET'])
