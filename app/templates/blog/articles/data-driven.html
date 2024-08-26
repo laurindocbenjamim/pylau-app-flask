@@ -304,7 +304,20 @@
             display: flex;
             margin-top: 2rem;
         }
+
         .left-menu {
+            width: 300px;
+            background-color: #ffffff;
+            padding: 1rem 4rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-right: 2rem;
+            position: sticky;
+            top: 100px;
+            align-self: flex-start;
+        }
+        
+        /*.left-menu {
             width: 250px;
             background-color: #ffffff;
             padding: 2rem;
@@ -334,6 +347,7 @@
         .left-menu a:hover {
             color: #4a90e2;
         }
+            */
         .article-content {
             flex-grow: 1;
             background-color: #ffffff;
@@ -510,14 +524,7 @@
     
             <div class="container main-content">
                 <aside class="left-menu">
-                    <h3>Other Articles</h3>
-                    <ul>
-                        <li><a href="">AI Ethics: Navigating the Future</a></li>
-                        <li><a href="">Cloud Computing Trends in 2023</a></li>
-                        <li><a href="">Cybersecurity Best Practices for Businesses</a></li>
-                        <li><a href="">The IoT Revolution: Connected Living</a></li>
-                        <li><a href="">Blockchain Explained: Beyond Cryptocurrency</a></li>
-                    </ul>
+                    {% include 'articles-left-menu.html' %}
                 </aside>
     
                 <article class="article-content">

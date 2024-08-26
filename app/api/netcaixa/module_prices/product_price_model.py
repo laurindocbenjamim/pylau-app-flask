@@ -66,7 +66,7 @@ class ProductPriceModel(db.Model):
                 sale_price_03 = price['sale_price_03'],
                 pos_sale_price = price['pos_sale_price'],
             )
-            db.session.add(price)
+            db.session.add(obj)
             db.session.commit()
 
             return True, obj
