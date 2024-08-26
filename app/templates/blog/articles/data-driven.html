@@ -239,13 +239,24 @@
             margin-top: 5px;
         }
 
-        .article-header .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
+        .article-header .container .author {
+            display: grid;
             padding: 0 5px;
-            gap: 1rem;
+            
+            gap: 2rem;
             align-items: center;
+            background-color: rgba(44, 44, 44, 0.1);
+            box-shadow: 7px 0p rgba(0, 0, 0, 0.23);
+            border-radius:  0px 10px 10px 0px;
+        }
+
+        .article-header .container .author .title{
+                        
+        }
+        .author{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .article-header h1 {
@@ -262,8 +273,10 @@
         .author-info {
             display: flex;
             flex-direction: column;
+            width: 40%;
             align-items: center;
             gap: 1rem;
+            
         }
         .author-info div{
             display: flex;
@@ -441,19 +454,22 @@
                         
             <section class="article-header">
                 <div class="container">
-                    
-                    <div class="article-meta">
-                        <div class="author-info">
-                            <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/me-03-removebg-preview.png?raw=true" alt="Author's photo" class="author-photo" width="110" height="110">
-                            <div>
-                                <span><strong>Laurindo</strong></span>
-                                <span class=" text-light-emphasis" style="font-size: .8;">Data Engineer</span>
-                                <span class="text-dark-emphasis">Last Updated: August 15, 2024</span>
+                    <div class="author">
+                        <div class="article-meta">
+                            <div class="author-info">
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/me-03-removebg-preview.png?raw=true" alt="Author's photo" class="author-photo" width="110" height="110">
+                                <div>
+                                    <span><strong>Laurindo</strong></span>
+                                    <span class=" text-light-emphasis" style="font-size: .8;">Data Engineer</span>
+                                    <span class="text-dark-emphasis">Last Updated: August 15, 2024</span>
+                                </div>
                             </div>
+                            
                         </div>
-                        
+                        <div class="title">
+                            <h1>Data-Driven Decision Making</h1>
+                        </div>
                     </div>
-                    <h1>Data-Driven Decision Making</h1>
                 </div>
             </section>
     
