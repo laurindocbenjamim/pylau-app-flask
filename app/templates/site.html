@@ -209,6 +209,46 @@
             document.addEventListener("scroll", lazyLoad);
             window.addEventListener("resize", lazyLoad);
             window.addEventListener("orientationchange", lazyLoad);
+
+
+            /*------------------------------------*/
+            // Code typing animation
+            const codeContent = document.getElementById('code-content');
+            const pythonCode = `import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load product data
+products = pd.read_csv('products.csv')
+
+# Analyze product performance
+top_products = products.sort_values('sales', ascending=False).head(10)
+
+# Visualize results
+plt.figure(figsize=(12, 6))
+plt.bar(top_products['name'], top_products['sales'])
+plt.title('Top 10 Products by Sales')
+plt.xlabel('Product Name')
+plt.ylabel('Sales')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()`;
+
+            let i = 0;
+            const typeCode = () => {
+                if (i < pythonCode.length) {
+                    codeContent.innerHTML += pythonCode.charAt(i);
+                    i++;
+                    setTimeout(typeCode, 50);
+                } else {
+                    setTimeout(() => {
+                        codeContent.innerHTML = '';
+                        i = 0;
+                        typeCode();
+                    }, 5000);
+                }
+            };
+
+            typeCode();
         });
     </script>
 
