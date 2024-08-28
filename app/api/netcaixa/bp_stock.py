@@ -37,7 +37,7 @@ from .module_prices import ProductPricePostPutViev
 from .module_prices import ProductPriceModel
 
 bp_product.add_url_rule('/price/create', view_func=ProductPricePostPutViev.as_view('create_price', ProductPriceModel, ''))
-bp_product.add_url_rule('/price/update/<string:product_barcode>', view_func=ProductPricePostPutViev.as_view('update_price', ProductPriceModel, ''))
+bp_product.add_url_rule('/price/update/<int:product_price_id>', view_func=ProductPricePostPutViev.as_view('update_price', ProductPriceModel, ''))
 bp_product.add_url_rule('/price/select/all', view_func=ProductPricePostPutViev.as_view('select_prices', ProductPriceModel, ''))
 bp_product.add_url_rule('/price/select/<int:id>', view_func=ProductPricePostPutViev.as_view('get_price', ProductPriceModel, ''))
 bp_product.add_url_rule('/price/select/by', view_func=ProductPricePostPutViev.as_view('get_price_by', ProductPriceModel, ''))
