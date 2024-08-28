@@ -11,4 +11,7 @@ bp_project_view.add_url_rule('/user/remove/<int:user_id>/<string:user_token>', v
 
 @bp_project_view.route('/')
 def projects():
-    return render_template('projects.html')
+    welcome_title = "Our Projects"
+    welcome_message = "Explore our most recent projects. "
+    return render_template('projects.html', title="Our Projects",  welcome_title=welcome_title, welcome_message=welcome_message)
+    
