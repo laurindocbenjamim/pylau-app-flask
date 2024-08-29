@@ -9,4 +9,4 @@ class AuthorProfileView(View):
         self._template = template
 
     def dispatch_request(self):
-        return render_template(self._template)
+        return render_template(self._template, title="About me")
