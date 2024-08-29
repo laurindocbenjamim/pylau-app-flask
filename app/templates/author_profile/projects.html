@@ -87,7 +87,7 @@
                     </div>
                     <div class="project-links mt-3">
                         <a href="https://github.com/laurindocbenjamim/pylau-app-flask/tree/main/app/package_prompts/speech" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://www.d-tuning.com/ai/convert-audio-speech-into-text" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        <a href="{{ url_for('ai.speech')}}" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
                     </div>
                 </div>
     
@@ -98,7 +98,6 @@
                         <a href="https://www.iban.com/dialing-codes" target="_blank" rel="noopener noreferrer">https://www.iban.com/dialing-codes</a> 
                     </p>
                     <div class="tech-stack">
-                        <span class="tech-badge">OpenAI API</span>
                         <span class="tech-badge">Python</span>
                         <span class="tech-badge">Flask</span>
                         <span class="tech-badge">JavaScript</span>
@@ -107,27 +106,35 @@
                     </div>
                     <div class="project-links mt-3">
                         <a href="https://github.com/laurindocbenjamim/pylau-app-flask/tree/main/app/web_scrappin_module" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://www.d-tuning.com/ws/api/countries" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                    </div>
-                </div>
-    
-                <!--<div class="project-card">
-                    <h3 class="project-title">CodeCollab: Real-time Collaborative IDE</h3>
-                    <p>A web-based integrated development environment that allows multiple developers to code together in real-time.</p>
-                    <div class="tech-stack">
-                        <span class="tech-badge">JavaScript</span>
-                        <span class="tech-badge">WebSockets</span>
-                        <span class="tech-badge">MongoDB</span>
-                        <span class="tech-badge">Docker</span>
-                        <span class="tech-badge">Kubernetes</span>
-                    </div>
-                    <div class="project-links mt-3">
-                        <a href="https://github.com/yourusername/codecollab" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://codecollab.io" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        <a href="{{ url_for('ws.get_countries')}}" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
                     </div>
                 </div>
     
                 <div class="project-card">
+                    <h3 class="project-title">Sentiment Analysis</h3>
+                    <p>An application to extract sentiments from a text speech using the Watson AI API</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Watson AI API</span>
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">Bootstrap</span>
+                        <span class="tech-badge">Html & CSS</span>
+                    </div>
+                    <div class="project-links mt-3">
+                        <a href="https://github.com/yourusername/codecollab" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                        {% if 'user_token' in session %}
+                        <a
+                            href="{{ url_for('data_science.project.emotion_detector', user_token=session['user_token']) }}" target="_blank" ><i class="fas fa-external-link-alt"></i>Live Demo</a>
+                        {% elif user_token %}
+                        <a href="{{ url_for('data_science.project.emotion_detector', user_token=user_token) }}" target="_blank" ><i class="fas fa-external-link-alt"></i>Live Demo</a>
+                        {% else %}
+                        <a href="{{ url_for('data_science.project.emotion_detector', user_token=401) }}" target="_blank" ><i class="fas fa-external-link-alt"></i>Live Demo</a>
+                        {% endif %}
+                    </div>
+                </div>
+    
+                <!--<div class="project-card">
                     <h3 class="project-title">HealthTrack: AI-powered Health Monitoring App</h3>
                     <p>A mobile application that uses machine learning to analyze user health data and provide personalized recommendations.</p>
                     <div class="tech-stack">
