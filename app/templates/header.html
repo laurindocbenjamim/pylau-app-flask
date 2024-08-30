@@ -47,19 +47,18 @@
         <p class="lead animate__animated animate__fadeInUp">{{welcome_message}}</p>
         </div>
         </header>
-        {% elif "MSpeeText converter" in title %}
-                
-        {% elif "Login" in title %}
+        {% elif "Blog" in title %}
+        <header class="hero text-center">
+                <div class="container">
+                <h1 class="display-4 animate__animated animate__fadeInDown">{{ welcome_title }}</h1>
+                <p class="lead animate__animated animate__fadeInUp">{{welcome_message}}</p>
+                </div>
+                </header>
+        <!--{% elif "Login" in title %}
 
         {% elif "Register" in title %}
-                
+        -->     
         {% else %}
-        <header class="hero text-center">
-        <div class="container">
-        <h1 class="display-4 animate__animated animate__fadeInDown">{{ welcome_title }}</h1>
-        <p class="lead animate__animated animate__fadeInUp">{{welcome_message}}</p>
-        <a href="{{ url_for('courses')}}" class="btn btn-light btn-lg mt-3">Explore Courses</a>
-        </div>
-        </header>
+       
         {% endif %}
         

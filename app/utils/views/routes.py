@@ -121,7 +121,7 @@ def load_routes(app, db, login_manager):
         elif 'user_token' in session:
             user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
         #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
-        return render_template('site_home.html', welcome_title=welcome_title, welcome_message=welcome_message, domain = request.root_url, total_projects=12, user_token=user_token)
+        return render_template('site_home.html', title="Home", welcome_title=welcome_title, welcome_message=welcome_message, domain = request.root_url, total_projects=12, user_token=user_token)
     
 
     @app.route('/about-us')
@@ -156,7 +156,7 @@ def load_routes(app, db, login_manager):
     @app.route('/elearning')
     @cross_origin(methods=['GET'])
     def elearning():
-        return render_template('elearning.html' , title="Contact")
+        return render_template('e_learning/e-learning.html' , title="E-Learn")
        
     
     @app.route('/get-secret', methods=['GET'])
