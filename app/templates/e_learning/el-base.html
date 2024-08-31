@@ -1,0 +1,137 @@
+{% extends "e_learning/e-learning.html" %}
+
+{% block style %} 
+
+
+{%endblock%}
+
+{% block content %}
+<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block">
+    <div class="position-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="#programming">
+                    <i class="fas fa-code me-2"></i>Programming
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#python">Python</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#javascript">JavaScript</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#java">Java</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#data-science">
+                    <i class="fas fa-chart-bar me-2"></i>Data Science
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#machine-learning">Machine Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#data-analysis">Data Analysis</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#web-development">
+                    <i class="fas fa-globe me-2"></i>Web Development
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#frontend">Frontend</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#backend">Backend</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#mobile-development">
+                    <i class="fas fa-mobile-alt me-2"></i>Mobile Development
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#devops">
+                    <i class="fas fa-cogs me-2"></i>DevOps
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">JavaScript Courses</h1>
+    </div>
+
+    <section id="javascript-courses">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-book me-2"></i>JavaScript Fundamentals</h5>
+                        <p class="card-text">Learn the basics of JavaScript programming language.</p>
+                        <a href="https://d-tuning.com/courses/javascript-fundamentals" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-rocket me-2"></i>Advanced JavaScript</h5>
+                        <p class="card-text">Dive deep into advanced JavaScript concepts and techniques.</p>
+                        <a href="https://d-tuning.com/courses/advanced-javascript" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-cubes me-2"></i>JavaScript Frameworks</h5>
+                        <p class="card-text">Explore popular JavaScript frameworks like React, Vue, and Angular.</p>
+                        <a href="https://d-tuning.com/courses/javascript-frameworks" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="javascript-demo">
+        <h3 class="mt-5">JavaScript Demo</h3>
+        <p>Try out this interactive JavaScript demo:</p>
+        <div class="code-snippet">
+            <pre><code id="js-code">
+function greet() {
+const name = document.getElementById('nameInput').value;
+const greeting = `Hello, ${name}! Welcome to JavaScript learning.`;
+document.getElementById('greetingOutput').textContent = greeting;
+}
+            </code></pre>
+        </div>
+        <div class="mb-3">
+            <label for="nameInput" class="form-label">Enter your name:</label>
+            <input type="text" class="form-control" id="nameInput" placeholder="Your name">
+        </div>
+        <button onclick="greet()" class="btn btn-primary">Greet Me!</button>
+        <p id="greetingOutput" class="mt-3"></p>
+    </section>
+
+    <section id="javascript-resources">
+        <h3 class="mt-5">Additional Resources</h3>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><i class="fas fa-external-link-alt me-2"></i>MDN Web Docs - JavaScript</a></li>
+            <li class="list-group-item"><a href="https://javascript.info/"><i class="fas fa-external-link-alt me-2"></i>JavaScript.info</a></li>
+            <li class="list-group-item"><a href="https://www.w3schools.com/js/"><i class="fas fa-external-link-alt me-2"></i>W3Schools JavaScript Tutorial</a></li>
+        </ul>
+    </section>
+</main>
+{% endblock %}

@@ -133,6 +133,30 @@
                         {% endif %}
                     </div>
                 </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">Code Generator</h3>
+                    <p>An application to help developers creating suitable scripts in different programming language using the Watson AI API</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Watson AI API</span>
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">Bootstrap</span>
+                        <span class="tech-badge">Html & CSS</span>
+                    </div>
+                    <div class="project-links mt-3">
+                        <a href="https://github.com/yourusername/codecollab" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                        {% if 'user_token' in session %}
+                        <a
+                            href="{{ url_for('ai.devai', user_token=session['user_token']) }}" target="_blank" ><i class="fas fa-external-link-alt"></i>Live Demo</a>
+                        {% elif user_token %}
+                        <a href="{{ url_for('ai.devai', user_token=user_token) }}" target="_blank" ><i class="fas fa-external-link-alt"></i>Live Demo</a>
+                        {% else %}
+                        <a href="{{ url_for('ai.devai', user_token=401) }}" target="_blank" ><i class="fas fa-external-link-alt"></i>Live Demo</a>
+                        {% endif %}
+                    </div>
+                </div>
     
                 <!--<div class="project-card">
                     <h3 class="project-title">HealthTrack: AI-powered Health Monitoring App</h3>

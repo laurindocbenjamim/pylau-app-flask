@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+    <base href="{{ url_for('index')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{title}} {% endblock %} - Data Tuning</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+
+            @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+           
+        :root {
+            --primary-color: #081824;
+            --secondary-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --sidebar-bg: #f0f0f0;
+            --sidebar-text: #ffffff;
+            --sidebar-text-color: #141414;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .logo {
+            max-height: 40px;
+        }
+        .navbar {
+            background-color: var(--primary-color);
+        }
+        .navbar-brand, .navbar-text {
+            color: #ffffff !important;
+        }
+
+        #app-name{
+            font-family: "Dancing Script", cursive;
+            font-optical-sizing: auto;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        #sidebar .nav-link{
+            color: #181818 !important;
+        }
+        .btn-outline-light:hover {
+            color: var(--primary-color);
+        }
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            min-height: calc(100vh - 56px);
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text-color);
+            transition: all 0.3s;
+        }
+        #sidebar .nav-link {
+            color: var(--sidebar-text-color);
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        #sidebar .nav-link:hover {
+            background-color: rgba(10, 149, 204, 0.1);
+        }
+        
+        #sidebar .nav-link.active {
+            background-color: rgba(10, 149, 204, 0.1);
+        }
+        #sidebar .submenu {
+            padding-left: 20px;
+            display: none;
+        }
+        .content {
+            width: 100%;
+            padding: 20px;
+        }
+        .course-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .btn-primary:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+        #sidebarCollapse {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            #sidebar {
+                margin-left: -250px;
+            }
+            #sidebar.active {
+                margin-left: 0;
+            }
+            #sidebarCollapse {
+                display: block;
+            }
+        }
+
+        .code-snippet {
+            background-color: #282c34;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #abb2bf;
+        }
+    </style>
+    {% block style %} {%endblock%}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-outline-light">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('index')}}">
+                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/289-2890745_transparent-data-science-logo-removebg-preview.png?raw=true" alt="Data Tuning Logo" class="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" id="app-name" href="{{ url_for('ai.dashboard_prompt')}}">Chitec<span style="color: #27ae60;">AI</span></a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('elearning')}}">Chitec<span style="color: #27ae60;">AI</span></a>
+                    </li>-->
+                </ul>
+                <!--
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user me-2"></i>
+                    <span id="username">JohnDoe</span>
+                </span>
+                <button class="btn btn-outline-light" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block">
+                <div class="position-sticky" style="margin-top: 15%;">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#programming">
+                                <i class="fas fa-chart-bar me-2"></i>Speech Magic
+                                <i class="fas fa-chevron-down float-end"></i>
+                            </a>
+                            <ul class="nav flex-column submenu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#python">Create Audio-book</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url_for('ai.speech')}}">Convert audio to text</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#data-science">
+                                <i class="fas fa-code me-2"></i>AI Developer
+                                <i class="fas fa-chevron-down float-end"></i>
+                            </a>
+                            <ul class="nav flex-column submenu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url_for('ai.devai')}}">Generate Code</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#data-analysis">Study With AI</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--
+                        <li class="nav-item">
+                            <a class="nav-link" href="#web-development">
+                                <i class="fas fa-globe me-2"></i>Web Development
+                                <i class="fas fa-chevron-down float-end"></i>
+                            </a>
+                            <ul class="nav flex-column submenu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#frontend">Frontend</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#backend">Backend</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#mobile-development">
+                                <i class="fas fa-mobile-alt me-2"></i>Generate code
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#devops">
+                                <i class="fas fa-cogs me-2"></i>DevOps
+                            </a>
+                        </li>-->
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h3"> <strong>{{ title }}</strong></h1>
+                </div>
+            
+            {% block content %} {%endblock%}
+
+            </main>
+        </div>
+    </div>
+
+    {% include "./footer.html" %}
+
+
+
+    <script>
+        // Logout functionality (placeholder)
+        function logout() {
+            alert('Logout functionality would be implemented here.');
+            // In a real application, you would handle the logout process here
+            // For example, clearing session data and redirecting to a login page
+        }
+
+         // JavaScript Demo functionality
+         function greet() {
+            const name = document.getElementById('nameInput').value;
+            const greeting = `Hello, ${name}! Welcome to JavaScript learning.`;
+            document.getElementById('greetingOutput').textContent = greeting;
+        }
+
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            const sidebar = document.getElementById('sidebar');
+
+            sidebarCollapse.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Hide sidebar on mobile devices when the page loads
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+
+            // Sidebar active link and submenu toggle functionality
+            const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.nextElementSibling && this.nextElementSibling.classList.contains('submenu')) {
+                        e.preventDefault();
+                        this.nextElementSibling.style.display = 
+                            this.nextElementSibling.style.display === 'block' ? 'none' : 'block';
+                        this.querySelector('.fa-chevron-down').classList.toggle('fa-chevron-up');
+                    } else {
+                        sidebarLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        //
+
+        document.addEventListener('scroll', () => {
+            //var elements = document.querySelector('.navbar');
+            //elements.setAttribute('class', 'fixed-top')
+        });
+    </script>
+
+    {% block scripts %}{%endblock%}
+</body></html>

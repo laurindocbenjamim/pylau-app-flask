@@ -156,7 +156,21 @@ def load_routes(app, db, login_manager):
     @app.route('/elearning')
     @cross_origin(methods=['GET'])
     def elearning():
-        return render_template('e_learning/e-learning.html' , title="E-Learn")
+        return render_template('e_learning/el-base.html' , title="E-Learn")
+    
+    @app.route('/courses/elearning/<string:course>/<string:module>')
+    @cross_origin(methods=['GET'])
+    def course_elearning(course, module):
+        courses=[
+            {"id": 1, "course": "Python Basic","modules": ("module 1", "module 2", "module 3"), "view": "el-base.html"},
+            {"id": 2, "course": "Python Intermediate","modules": ("module 1", "module 2", "module 3"), "view": "python-basic.html"},
+            ]
+        
+        pview = next((cour['view'] for cour in courses if cour['course'] == course), None)
+
+        if pview is not None:
+            return render_template(f'e_learning/{courses[0]['view']}' , title=course)
+        return render_template(f'e_learning/{courses[0]['view']}' , title="E-Learning Portal")
        
     
     @app.route('/get-secret', methods=['GET'])
