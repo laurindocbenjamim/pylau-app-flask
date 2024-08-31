@@ -32,6 +32,7 @@
         margin-top: 20px;
     }
 
+    #chatbox{ display: none;}
     #chatbox {
         height: 450px;
         overflow-y: auto;
@@ -40,6 +41,9 @@
         padding: 20px;
         margin-bottom: 20px;
     }
+
+     #chatbox::-webkit-scrollbar-thumb { background-color: #17A2B8; /* Change this to the desired color */ } 
+     #chatbox::-webkit-scrollbar { width: 7px; /* Width of the scrollbar */ } 
 
     .message {
         margin-bottom: 15px;
@@ -69,9 +73,10 @@
         background-color: rgba(255, 255, 255, 0.1);
         border: none;
         color: #fff;
-        padding: 20px 50px 20px 20px;
-        height: 70px;
+        padding: 40px 50px 40px 20px;
+        height: 150px;
         border-radius: 35px;
+        font-size: .9rem;
     }
 
     #prompt::placeholder {
@@ -81,9 +86,25 @@
     #send-button {
         position: absolute;
         right: 10px;
+        top: 80%;
+        transform: translateY(-50%);
+        background-color: rgba(37, 202, 243, 0.1);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+    #copy-button {
+        position: absolute;
+        right: 10px;
         top: 50%;
         transform: translateY(-50%);
-        background-color: #17a2b8;
+        background-color: rgba(37, 202, 243, 0.1);
         border: none;
         border-radius: 50%;
         width: 40px;
@@ -95,10 +116,69 @@
         z-index: 10;
     }
 
+    #exec-button {
+        position: absolute;
+        right: 10px;
+        top: 30%;
+        transform: translateY(-50%);
+        background-color: rgba(37, 202, 243, 0.1);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+
     #send-button:hover {
         background-color: #138496;
     }
+    #copy-button:hover{
+        background-color: #138496;
+    }
+    #exec-button:hover{
+        background-color: #138496;
+    }
 </style>
+{%endblock%}
+
+{% block content %}
+<div class="container py-5">
+    <div class="col-md-4" style="font-size: .9rem;">
+        <p>
+            Use our AI chatbot to help you programming
+        </p>
+    </div>
+
+    <div class="content-section">
+        <form id="code_generator_form">
+
+            <div id="chatbox" style="display: none;">
+                
+            </div>
+            <div class="input-group">
+                <input type="text" id="prompt" name="prompt" class="form-control"
+                    placeholder="Type your message here...">
+                    <!--<button class="btn btn-primary" type="button" id="exec-button">
+                        Run
+                    </button>
+                    
+                <button class="btn btn-primary" type="button" onclick="copyText()" id="copy-button">
+                    <i class="fa-regular fa-copy"></i>
+                </button>-->
+                <button class="btn btn-primary" type="submit" id="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 {%endblock%}
 
 {% block scripts %}
@@ -107,24 +187,68 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script type="text/javascript"
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='app/dev_ia.js')}}"></script>
+<!--<script type="text/javascript" src="{{ url_for('static', filename='app/dev_ia.js')}}"></script>-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const chatbox = document.getElementById('chatbox');
-        const userInput = document.getElementById('prompttext');
+        const userInput = document.getElementById('prompt');
         const sendButton = document.getElementById('send-button');
+        const form = document.getElementById('code_generator_form')
 
         function addMessage(message, isUser = false) {
             const messageElement = document.createElement('div');
+           
+            const copyButton = document.createElement("button")
+            const copyIcon = document.createElement("i")
+            copyIcon.setAttribute("class", "fa-regular fa-copy")
+            copyButton.appendChild(copyIcon)
+            copyButton.setAttribute("type", "button")
+            copyButton.setAttribute("id", "copy-button")
+            copyButton.setAttribute("class", "btn btn-primary")
+            copyButton.addEventListener('click', function(){
+                copyText()
+            })
+
+
             messageElement.classList.add('message');
             messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
             messageElement.textContent = message;
+
+            //
+            //messageElement.appendChild(copyButton)
+
+            chatbox.style.display = 'block'
             chatbox.appendChild(messageElement);
             chatbox.scrollTop = chatbox.scrollHeight;
         }
 
+        function sanitizeInput(input) {
+            // Remove any script tags
+            let sanitizedInput = input.replace(/<script[^>]*?>.*?<\/script>/gi, "");
+            // Encode special characters
+            sanitizedInput = sanitizedInput.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return sanitizedInput;
+          }
+          
+          
+          function filterString(input) {
+            // This regular expression matches words with or without accentuation and punctuation
+            var regex = /[A-Za-zÀ-ÖØ-öø-ÿ.,;?!'"\s]+/g;
+            var result = input.match(regex);
+            return result ? result.join('') : '';
+          }
+
+
+          // Function to copy text
+          function copyText() { 
+            //var copyText = document.getElementById("chatbotField"); 
+            messageElement.select(); document.execCommand("copy"); 
+          alert("Copied the text: " + copyText.value); } 
+
         function botResponse(message) {
             const lowerMessage = message.toLowerCase();
+
+
             if (lowerMessage.includes('experience')) {
                 return "John has over 5 years of experience in software engineering, specializing in full-stack development. He has worked on various projects involving JavaScript, React, Node.js, and Python.";
             } else if (lowerMessage.includes('project')) {
@@ -152,44 +276,71 @@
             }
         }
 
-        sendButton.addEventListener('click', handleUserInput);
+        /*sendButton.addEventListener('click', handleUserInput);
         userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 handleUserInput();
             }
-        });
+        });*/
+
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+
+            const baseUrl = window.location.origin;
+            const dataForm = new FormData();
+
+            //var token = document.querySelector('meta[name="token"]').getAttribute('content')
+            
+            //
+
+            try {
+
+                const message = userInput.value.trim();
+                if (!message){
+                    console.log("Input required")
+                } else if(!sanitizeInput(message)){
+                    alert("Invalid input value")
+                }
+                else if(!filterString(message)){
+                    alert("Invalid input value")
+                }  
+                else{
+
+                    dataForm.append('prompt', message)
+                    addMessage(message, true);
+
+                    const res = await fetch(
+                        `${baseUrl}/ai/dev-ai`,
+                        {
+                            method: 'POST',
+                            body: dataForm
+                        },
+                    );
+
+                    const resData = await res.json();
+                     //console.log(resData)    
+                    userInput.value = '';
+                    setTimeout(() => {
+                        if (resData && resData[1]==200) {
+                            var response = resData[0].response.replace('```', '')
+                            response = response.replace('```', '')
+                            addMessage(response);
+                        }
+                        //const response = botResponse(message);
+                        
+                    }, 500);
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+
+
+        })
 
         // Initial bot message
-        addMessage("Hello! I'm Data Tuning code generator. How can I help you today?");
+        //addMessage("Hello! I'm Data Tuning code generator. How can I help you today?");
     });
 </script>
-
-{%endblock%}
-
-{% block content %}
-<div class="container py-5">
-    <div class="col-md-4" style="font-size: .9rem;">
-        <p>
-            Use our AI chatbot to help you programming
-        </p>
-    </div>
-
-    <div class="content-section">
-        <form method="POST">
-
-            <div id="chatbox">
-                {% if message %}{{message}}{%endif%}
-            </div>
-            <div class="input-group">
-                <input type="text" id="prompt" name="prompt" class="form-control"
-                    placeholder="Type your message here...">
-                <button class="btn btn-primary" type="submit" id="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-
-        </form>
-    </div>
-</div>
 
 {%endblock%}

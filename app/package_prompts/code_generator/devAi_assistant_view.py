@@ -11,6 +11,8 @@ class DevAiAssistantView(View):
     
     def dispatch_request(self):
         message = ""
+        status_code=200
+        response=""
         prompt = request.form.get('prompt', None)
 
         if request.method == 'POST':
@@ -24,7 +26,7 @@ class DevAiAssistantView(View):
 
                 prompt = f""" Read carefull the prompt in brackets 
                 [```{prompt}```].
-                Check if it is requesting a scripting of an programming language.
+                Check if it is requesting a scripting of a programming language or style sheet languages.
                 If true then generate the required script.
                 If false return the message in 'Make a request'
                 """
@@ -32,7 +34,9 @@ class DevAiAssistantView(View):
                 status, response = get_completion(prompt=prompt, model=gpt_model[0])
                 if status:
                     #return [{"entry-point": prompt, "output": response}]
-                    message = response
+                    message = "Success"
+                    status_code=200
+            return jsonify({"message": message, "response": response}, status_code)
         
         return render_template(self._template, title="Dev AI", entrypoint=prompt, message=message.replace('`', ''))
         
