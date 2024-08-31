@@ -89,10 +89,13 @@
           </header>
   
           <nav class="nav nav-pills flex-column flex-sm-row mb-4 justify-content-center">
-            <a class="flex-sm-fill text-sm-center nav-link active" 
+            
+            <a class="flex-sm-fill text-sm-center nav-link {% if title =='About me' %} active{% endif %}" 
             aria-current="page" href="{{ url_for('profile.laurindo_c_benjamim')}}">Home</a>
-            <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('profile.author_experiences')}}">Experience</a>
-            <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('profile.author_projects')}}">Projects</a>
+            <a class="flex-sm-fill text-sm-center nav-link {% if title =='Experiences' %} active{% endif %}" 
+            href="{{ url_for('profile.author_experiences')}}">Experiences</a>
+            <a class="flex-sm-fill text-sm-center nav-link {% if title =='Projects' %} active{% endif %}" 
+            href="{{ url_for('profile.author_projects')}}">Projects</a>
         </nav>
   
           {% block content %}{%endblock%}

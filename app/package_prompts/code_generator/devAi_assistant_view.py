@@ -29,6 +29,16 @@ class DevAiAssistantView(View):
                 Check if it is requesting a scripting of a programming language or style sheet languages.
                 If true then generate the required script.
                 If false return the message in 'Make a request'
+
+                """
+
+                """ 
+                Check if it is requesting a scripting of a programming language or style sheet languages.
+                If true then generate the required script.
+                If false return the message in 'Make a request'
+
+                the structure of your message must be list of a dictionary with the columns for a simple message and a column for the 
+                script or code generated.
                 """
 
                 status, response = get_completion(prompt=prompt, model=gpt_model[0])
