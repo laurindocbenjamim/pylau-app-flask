@@ -46,10 +46,19 @@
      #chatbox::-webkit-scrollbar { width: 7px; /* Width of the scrollbar */ } 
 
     .message {
+        display: flex;
         margin-bottom: 15px;
         padding: 10px;
         border-radius: 20px;
         max-width: 80%;
+    }
+
+    .messageLabel{
+        padding: 10px;
+        width: 100%;
+        background-color: rgba(36, 33, 33, 0.1);
+        border-radius: 20px;
+        font-size: .9rem;
     }
 
     .user-message {
@@ -100,21 +109,49 @@
         z-index: 10;
     }
     #copy-button {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
+        
+        
+        transform: translateY(-30%);
         background-color: rgba(37, 202, 243, 0.1);
         border: none;
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 10;
     }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position the tooltip above the button */
+        left: 50%;
+        margin-left: -60px; /* Center the tooltip */
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+
 
     #exec-button {
         position: absolute;
@@ -183,39 +220,60 @@
 
 {% block scripts %}
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script type="text/javascript"
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <!--<script type="text/javascript" src="{{ url_for('static', filename='app/dev_ia.js')}}"></script>-->
 <script>
+
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+      });
+
     document.addEventListener('DOMContentLoaded', function () {
         const chatbox = document.getElementById('chatbox');
         const userInput = document.getElementById('prompt');
         const sendButton = document.getElementById('send-button');
-        const form = document.getElementById('code_generator_form')
+        const form = document.getElementById('code_generator_form');
+
+        var botMessageNumber = 0;
 
         function addMessage(message, isUser = false) {
+            botMessageNumber ++;
             const messageElement = document.createElement('div');
-           
+            const messageLabel = document.createElement('div');
             const copyButton = document.createElement("button")
             const copyIcon = document.createElement("i")
-            copyIcon.setAttribute("class", "fa-regular fa-copy")
+            copyIcon.setAttribute("class", "fa-regular fa-clipboard")
             copyButton.appendChild(copyIcon)
             copyButton.setAttribute("type", "button")
             copyButton.setAttribute("id", "copy-button")
             copyButton.setAttribute("class", "btn btn-primary")
-            copyButton.addEventListener('click', function(){
-                copyText()
-            })
-
+            copyButton.setAttribute("data-toggle","tooltip")
+            copyButton.setAttribute("data-placement","top")
+            copyButton.setAttribute("title","Copy")
 
             messageElement.classList.add('message');
             messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
-            messageElement.textContent = message;
+            
+            messageLabel.textContent = message;
 
+            messageLabel.classList.add('messageLabel')            
+            //messageLabel.style.backgroundColor = 'red'
+
+            messageElement.appendChild(messageLabel)
             //
-            //messageElement.appendChild(copyButton)
+            if(!isUser){
+                messageLabel.id = "bot"+botMessageNumber
+                messageElement.appendChild(copyButton)
+            }
+
+            copyButton.addEventListener('click', function(e){
+                
+                const buttonId = e.target.id;
+                copyText(buttonId)
+            })
 
             chatbox.style.display = 'block'
             chatbox.appendChild(messageElement);
@@ -240,9 +298,10 @@
 
 
           // Function to copy text
-          function copyText() { 
+          function copyText(botMessage) { 
             //var copyText = document.getElementById("chatbotField"); 
-            messageElement.select(); document.execCommand("copy"); 
+            var copyText = document.getElementById(botMessage)
+            copyText.select(); document.execCommand("copy"); 
           alert("Copied the text: " + copyText.value); } 
 
         function botResponse(message) {
@@ -274,6 +333,15 @@
                     addMessage(response);
                 }, 500);
             }
+        }
+
+        // Function to handle button click
+        function handleButtonClick(event) {
+            // Get the id of the clicked button
+            const buttonId = event.target.id;
+            // Log the id to the console
+            console.log('Button clicked:', buttonId);
+            return buttonId
         }
 
         /*sendButton.addEventListener('click', handleUserInput);
@@ -325,7 +393,7 @@
                             var response = resData[0].response.replace('```', '')
                             response = response.replace('```', '')
                             console.log(response[0])
-                            addMessage(response[0].script);
+                            addMessage(response);
                         }
                         //const response = botResponse(message);
                         
@@ -340,7 +408,7 @@
         })
 
         // Initial bot message
-        //addMessage("Hello! I'm Data Tuning code generator. How can I help you today?");
+        addMessage("Hello! I'm Data Tuning code generator. How can I help you today?");
     });
 </script>
 
