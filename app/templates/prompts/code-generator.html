@@ -386,13 +386,14 @@
                     );
 
                     const resData = await res.json();
-                     //console.log(resData)    
+                     console.log(resData)    
                     userInput.value = '';
                     setTimeout(() => {
-                        if (resData && resData[1]==200) {
+                        if (resData[1]==200) {
                             var response = resData[0].response.replace('```', '')
-                            response = response.replace('```', '')
-                            console.log(response[0])
+                            //var script = resData[0].script
+                            //response = response.replace('```', '')
+                            console.log(response)
                             addMessage(response);
                         }
                         //const response = botResponse(message);
