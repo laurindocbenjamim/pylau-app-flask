@@ -1,4 +1,5 @@
 
+import json
 from flask import render_template,request, jsonify, redirect, url_for
 from flask.views import View
 from .dev_AI_assistant import validate_string_with_digits,get_completion, gpt_model
@@ -30,9 +31,7 @@ class DevAiAssistantView(View):
                 If true then generate the required script.
                 If false return the message in 'Make a request'.
 
-                The structure of your message must be list of a dictionary with the columns named 'message' 
-                for a simple message about the code and a column named 'script' for the 
-                respective generated code.
+                I just want you to return the requested code ready tob deployed.
 
                 """
 
@@ -47,6 +46,8 @@ class DevAiAssistantView(View):
                     #return [{"entry-point": prompt, "output": response}]
                     message = "Success"
                     status_code=200
+                    
+                    
             return jsonify({"message": message, "response": response}, status_code)
         
         return render_template(self._template, title="Dev AI", entrypoint=prompt, message=message.replace('`', ''))

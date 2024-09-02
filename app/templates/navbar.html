@@ -28,21 +28,26 @@
             </form>-->
             <ul class="navbar-nav ">
                 <li>
-                    <a class="nav-link" href="{{ url_for('elearning') }}" style="font-weight:600;">
-                        <span style="color: #c214da;font-weight: 600;">E</span>-Learning</a>
+                    <a class="nav-link" href="{{ url_for('elearning') }}" style="font-weight:600;font-size: .8rem;text-transform:uppercase">
+                        <span style="color: #50f127;font-weight: 600;">E</span>-<span style="color:#181818">Learning</span> </a>
                 </li>
+                {% if not current_user.is_authenticated %}
                 <li>
-                    <a class="nav-link" href="{{ url_for('auth.user.login') }}" style="font-weight:600;">
+                    <a class="nav-link" href="{{ url_for('auth.user.login') }}"  style="font-size: .8rem;color:#bcbebe">
                         Login</a>
                 </li>
+                {% endif %}
             </ul>
-            <!--<span class="navbar-text me-3">
+            {% if current_user.is_authenticated %}
+            <span class="navbar-text me-3" style="border-left: 1px solid #07bce9;border-top: 1px solid #07bce9;border-bottom: 1px solid #07bce9; border-radius:4px;padding: 0 .8rem">
                 <i class="fas fa-user me-2"></i>
-                <span id="username">Login</span>
+                <span id="username" style="font-size: .8rem;">{{ current_user.email}}</span>
             </span>
-            <button class="btn btn-outline-light" onclick="logout()">
-                <i class="fas fa-sign-out-alt me-2"></i>Logout
-            </button>-->
+            <a class="btn btn-outline-light btn-sm" style="font-size: .8rem;color:#bcbebe"
+            href="{{ url_for('auth.user.logout', user_token=session['user_token'])}}">
+                <i class="fa fa-sign-out me-2"></i>Logout
+            </a>
+            {% endif %}
         </div>
     </div>
 </nav>

@@ -62,7 +62,7 @@ class SendActivateEmailView(View):
                         
                         time_remaining = f"You have { int(otp_time_interval / 60) } hours to activate your account."
                         html = get_activate_account_message_html(str(firstname)+" "+str(lastname), token.token, time_remaining)
-                        res = send_simple_email_mime_multipart('Activate account', str(email), html, False)
+                        st, res = send_simple_email_mime_multipart('Activate account', str(email), html, False)
                         
                         flash('An email has been sent to your email address. Please check your email to activate your account.', 'success')
                         return render_template('activate_email_sent.html', user_token=token.token, firstname=firstname, lastname=lastname,email=email)

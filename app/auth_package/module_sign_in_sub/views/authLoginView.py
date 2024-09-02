@@ -4,23 +4,53 @@ import os
 import flask
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template, request, session, redirect, url_for, flash, jsonify
+from flask import render_template, request, session, redirect, url_for, flash, jsonify,g
 from ..controller.authController import validate_form_fields
 from ....configs_package.modules.jwt_config import refresh_jwt_token
 from ....configs_package.modules.logger_config import get_message as set_logger_message
+from app.utils.catch_exception_information import _catch_sys_except_information
 
 class AuthLoginView(View):
     methods = ['GET', 'POST']
 
-    def __init__(self, model, userToken, TwoFaModel, template):
+    def __init__(self, model, userToken, TwoFaModel, authUserHistoric, template):
         self.model = model
         self.userToken = userToken
         self.TwoFaModel = TwoFaModel
+        self.authUserHistoric = authUserHistoric
         self.template = template
 
     def dispatch_request(self):
         session.pop('_flashes', None)
         recover_account = True
+
+        def finalize_the_login(token, username):            
+            return [f"2FA - {two_fa.method_auth}"]             
+            status, user = self.model.get_user_by_email(username)
+            
+            if status:
+                session['user_id'] = user.userID
+                session['firstname'] = user.firstname
+                session['lastname'] = user.lastname
+                session['email'] = user.email
+                session['country'] = user.country
+                session['country_code'] = user.country_code
+                session['phone'] = user.phone
+                session['active'] = user.active
+                session['role'] = user.role
+                session['date_added'] = user.date_added
+                session['date_updated'] = user.date_updated
+                session['user_token'] = token
+                                
+                login_user(user)
+                g.user = user  
+                flash('Login success', 'success')
+                return redirect(url_for('index', user_token=str(token))) 
+            else:
+                flask.flash('Login failed. User not found', 'error')
+                return redirect(url_for('auth.user.login')) 
+
+        
         # Check if the user is already logged in
         
         if 'user_token' in session:
@@ -72,7 +102,7 @@ class AuthLoginView(View):
                                 if user and user.check_password(password):
                                     # Check if the user is activated
                                     
-                                    if user.is_active() == True:
+                                    if user.is_active():
                                         
                                         # generate a secret code for the user
                                         status, new_token = self.userToken.refresh_user_token(u_token.token)
@@ -91,24 +121,44 @@ class AuthLoginView(View):
                                                     return redirect(url_for('auth.user.app-otp-verify', user_token=new_token))
                                                 elif two_fa.method_auth == 'email':
                                                     return redirect(url_for('auth.user.send-otp-email', user_token=new_token))  
-                                
+                                                else:
+                                                    resp = self.authUserHistoric.create_auth_user(user.userID, user.email, '')
+                                                    
+                                                    status, user = self.model.get_user_by_email(user.email)
+            
+                                                    if status:
+                                                        session['user_id'] = user.userID
+                                                        session['firstname'] = user.firstname
+                                                        session['lastname'] = user.lastname
+                                                        session['email'] = user.email
+                                                        session['country'] = user.country
+                                                        session['country_code'] = user.country_code
+                                                        session['phone'] = user.phone
+                                                        session['active'] = user.active
+                                                        session['role'] = user.role
+                                                        session['date_added'] = user.date_added
+                                                        session['date_updated'] = user.date_updated
+                                                        session['user_token'] = new_token
+                                                                        
+                                                        login_user(user)
+                                                        g.user = user  
+                                                        flash('Login success', 'success')
+                                                        return redirect(url_for('index', user_token=str(new_token))) 
+                                                    else:
+                                                        flask.flash('Login failed. User not found', 'error')
+                                                        return redirect(url_for('auth.user.login')) 
+                                                 
                                     logout_user()
-                                    flask.flash('This user is not activated', 'danger')
+                                    
+                                    flask.flash(f'This user is not active {user.is_active()}', 'danger')
                                 else:
                                     flask.flash('Invalid username or password ', 'error')
                     else:
                         flask.flash('Username not found', 'error')
                 except Exception as e:
-                    exc_type, exc_obj, exc_tb = sys.exc_info()
-                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
-                                        Exception: {str(sys.exc_info())}\
-                                        \nFile name: {fname}\
-                                        \nExc-instance: {fname}\
-                                        \nExc-classe: {exc_type}\
-                                        \nLine of error: {exc_tb.tb_lineno}\
-                                        \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        ")           
+                    flask.flash(f'Failed to make login. {type(e).__name__}', 'error')
+                    custom_message = "Failed to connect to SMTP. Reconnecting..."
+                    error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email", custom_message=custom_message)
+                    set_logger_message(error_info)   
         
         return render_template(self.template, title='Login')

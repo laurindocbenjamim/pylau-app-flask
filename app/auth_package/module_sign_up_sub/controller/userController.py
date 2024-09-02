@@ -16,7 +16,7 @@ def load_user_obj(form = Request.form, role='user', active=0):
         phone = form.get('phone'),
         password = generate_password_hash(form.get('password')),        
         role = role,
-        active = active
+        active = 1 if form.get('two_fa_auth_method') == 'normal' else active
         )
         
 

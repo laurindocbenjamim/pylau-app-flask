@@ -13,7 +13,8 @@ from email.message import EmailMessage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from app.configs_package.modules.smtp_config import _get_smtp_config
-from ...configs_package.modules.logger_config import get_message as set_logger_message
+from app.configs_package.modules.logger_config import get_message as set_logger_message
+from app.utils.catch_exception_information import _catch_sys_except_information
 
 
 mail = Mail()
@@ -30,10 +31,12 @@ def send_simple_email(subject, recipients, body, is_file=False) -> None:
         SMTP_PASSWORD = current_app.config['SMTP_PASSWORD']
         #= _get_smtp_config()
 
+        """
         with open(body, "r") as fp:
             # Create a text/plain message
             msg = EmailMessage() 
             msg.set_content(fp.read())
+        """
         
         msg = EmailMessage()
         msg.set_content(body)
@@ -42,27 +45,29 @@ def send_simple_email(subject, recipients, body, is_file=False) -> None:
         msg['To'] = recipients
             
         # Send the message via our own SMTP server.
-        s = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
+        # FOR SMTP only the port is 587
+        s = smtplib.SMTP(SMTP_HOST, SMTP_PORT,  timeout=60)
         #s = smtplib.SMTP_SSL(smtp_host, smtp_port, context=context)
         s.ehlo()
         s.starttls()
         s.login(SMTP_USER, SMTP_PASSWORD)
         s.send_message(msg)
+        s.set_debuglevel(1)
         s.quit()
-        return True
+        return True, 200
+    except smtplib.SMTPServerDisconnected:
+        s.connect(SMTP_HOST, SMTP_PORT)
+        s.starttls()
+        s.login(SMTP_USER, SMTP_PASSWORD)
+        custom_message = "Failed to connect to SMTP. Reconnecting..."
+        error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email", custom_message=custom_message)
+        set_logger_message(error_info)
+        return False, type(e).__name__
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        set_logger_message(f"Error occured on method[save_two_fa_data]: \n \
-                                       Exception: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        ")
-        return type(e).__name__
+        custom_message = "General error"
+        error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email", custom_message=custom_message)
+        set_logger_message(error_info)
+        return False, type(e).__name__
     
 
 def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -> None:
@@ -77,7 +82,8 @@ def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -
     message = """\
     This email was sent in order to check 
     your email is working properly."""
-    
+    conn = None 
+    res = None
     try:
         msg = MIMEMultipart()
         msg['From'] = SMTP_USER
@@ -90,21 +96,24 @@ def send_simple_email_mime_multipart(subject, recipients, body, is_file=False) -
         msg.attach(part2)
 
         # Connectiong to the SMTP server using SSL sending the email
-        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context) as server:
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, recipients, msg.as_string())
-            return True
+        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context, timeout=60) as server:
+            conn = server.login(SMTP_USER, SMTP_PASSWORD)
+            res = server.sendmail(SMTP_USER, recipients, msg.as_string())
+            server.set_debuglevel(1)
+            server.quit()
+            
+            return True, 200
+    except smtplib.SMTPServerDisconnected as e:
+        #server.connect(SMTP_HOST, SMTP_PORT)
+        #server.starttls()
+        #server.login(SMTP_USER, SMTP_PASSWORD)
+        custom_message = f"Failed to connect to SMTP. Reconnecting..."
+        error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email_mime_multipart", custom_message=custom_message)
+        set_logger_message(error_info)
+        return False, custom_message
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        set_logger_message(f"Error occured on method[save_two_fa_data]: \n \
-                                       Exception: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        ")
-        return type(e).__name__
+        custom_message = "General error"
+        error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email_mime_multipart", custom_message=custom_message)
+        set_logger_message(error_info)
+        return False, type(e).__name__
     

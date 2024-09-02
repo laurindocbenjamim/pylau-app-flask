@@ -278,6 +278,16 @@
               <div class="my-3">
 
                   <div class="list-group">
+                    <label class="list-group-item d-flex gap-2">
+                      <input class="form-check-input flex-shrink-0" type="radio"
+                          name="two_fa_auth_method" id="two_fa_auth_method" value="normal"                               
+                          {% if request.form.two_fa_auth_method != 'app' and request.form.two_fa_auth_method != 'email' %} checked {% endif %}                                            
+                          >
+                      <span>
+                          Login with no 2-FA authentication
+                      </span>
+                  </label>
+
                       <label class="list-group-item d-flex gap-2">
                           <input class="form-check-input flex-shrink-0" type="radio"
                               name="two_fa_auth_method" id="two_fa_auth_method" value="app"                               

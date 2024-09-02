@@ -19,12 +19,15 @@ class LogoutView(View):
             if self.userToken.is_user_token_expired(escape(user_token)):
                 session.clear()
                 logout_user()
+                return [user_token]
             else:
                 # Update the user's historic data
                 status, token = self.userToken.get_token_by_token(escape(user_token))
-                
+                return [status, token]
                 if status and token:                    
-                    self.userToken.expire_the_user_token_by_user(token.username, token.token)
+                    #self.userToken.expire_the_user_token_by_user(token.username, token.token)
+                    status, exp_token = self.userToken.force_user_jwt_token_expiration(user_token)
+                    session['user_token'] = ''
 
                     self.authUserHistoric.update_auth_user(0, token.username, False)                    
                     #resp, exp_token = self.userToken.force_user_jwt_token_expiration(token.token)    
@@ -37,7 +40,9 @@ class LogoutView(View):
                 session.pop('email', None)
         else:
             status, obj = self.authUserHistoric.update_auth_user(session.get('user_id'), session.get('email'), False)
-            re, obj2 = self.userToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
+            #re, obj2 = self.userToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
+            status, exp_token = self.userToken.force_user_jwt_token_expiration(user_token)
+            session['user_token'] = ''
             logout_user()
             session.clear()
             session.pop('user_id', None)

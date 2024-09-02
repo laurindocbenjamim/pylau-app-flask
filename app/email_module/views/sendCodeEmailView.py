@@ -70,19 +70,21 @@ class SendCodeEmailView(View):
                     user_id = user.userID
                     email = user.email
                     lastname = user.lastname
-                    firstname =user.firstname 
+                    firstname = user.firstname 
                            
-                    totp = self.twoFaModel.generate_otp(accountname=email, secret=secret, interval=otp_time_interval)
+                    totp = self.twoFaModel.generate_otp(accountname=user.email, secret=secret, interval=otp_time_interval)
                     OTP = totp.now()
                     
                     
                     time_remaining = f"This code expires in 5 minutes)"
-                    html = get_otp_code_message_html(str(firstname)+" "+str(lastname), OTP, time_remaining)
-                     
-                    res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
+                    html = get_otp_code_message_html( user.firstname +" "+ user.lastname, OTP, time_remaining)
+                    
+                            
+                    st, res = send_simple_email_mime_multipart('Code verification', user.email, html, False)
                     
                     if res:
-                        flash(f'If the email provided is real, a code to verify your account was sent to <<{email}>>', 'success')
+                        flash(f'If the email provided is real, a code to verify your account was sent to <<{user.email}>>', 'success')
+                       
                         return redirect(url_for('email.2facodeverify', user_token=token.token))
                     else:
                         flash('Failed to send code to the email.', 'error')

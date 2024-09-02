@@ -101,7 +101,7 @@ class SendQrCodeEmailView(View):
                     time_remaining = f"This code expires in 24 hours."
                     
                     html = get_otp_qr_code_message_html(str(firstname)+" "+str(lastname), session['otpqrcode_uri'], time_remaining)
-                    res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
+                    st, res = send_simple_email_mime_multipart('Code verification', str(email), html, False)
 
                     if res:
                         flash(f'If the email provided is real, a Qr code verification was sent to <<{email}>>', 'success')

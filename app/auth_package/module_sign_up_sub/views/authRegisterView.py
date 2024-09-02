@@ -6,6 +6,7 @@ from flask import render_template, session, request, redirect, url_for, flash, j
 from ..controller.userController import load_user_obj, validate_form_fields
 from ....two_factor_auth_module.two_fa_auth_controller import load_two_fa_obj
 from ....configs_package.modules.logger_config import get_message as set_logger_message
+from app.utils.catch_exception_information import _catch_sys_except_information
 
 
 class AuthRegisterView(View):
@@ -50,7 +51,7 @@ class AuthRegisterView(View):
                             flash('Error creating token.', 'error')
                         else:      
                             
-                            status,last_user_id = self.model.create_user(load_user_obj(request.form, 'user'))
+                            status,last_user_id = self.model.create_user(load_user_obj(form=request.form, role='user'))
                             if status:
                                                         
                                 two_fa_auth_method = request.form.get('two_fa_auth_method')
@@ -80,22 +81,19 @@ class AuthRegisterView(View):
                                     
                                     if two_fa_auth_method == 'app':  
                                         return redirect(url_for('email.2fappqrcodeget', user_token=token.token))                                 
-                                    else:                               
-                                        return redirect(url_for('email.2facodesend', user_token=token.token))                           
+                                    elif two_fa_auth_method == 'email':                               
+                                        return redirect(url_for('email.2facodesend', user_token=token.token))  
+                                    else:
+                                        status, exp_token = self.userToken.force_user_jwt_token_expiration(token.token)
+                                        session['user_token'] = exp_token
+                                        return redirect(url_for('auth.user.login'))                   
                             else:
                                 flash("Failed to create user", 'error')   
                 except Exception as e:
-                    exc_type, exc_obj, exc_tb = sys.exc_info()
-                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                    set_logger_message(f"Error occured on [AUTH_REGISTER_VIEW]: \n \
-                                       Exception: {str(sys.exc_info())}\
-                                       \nFile name: {fname}\
-                                       \nExc-instance: {fname}\
-                                       \nExc-classe: {exc_type}\
-                                       \nLine of error: {exc_tb.tb_lineno}\
-                                       \nTB object: {exc_tb}\
-                                       \nTraceback object: {str(traceback.format_exc())}\
-                                        ") 
+                    flash(f'Failed to make login. {type(e).__name__}', 'error')
+                    custom_message = "Failed to connect to SMTP. Reconnecting..."
+                    error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email", custom_message=custom_message)
+                    set_logger_message(error_info)
                         
                     
         return render_template(self.template, title='Register')

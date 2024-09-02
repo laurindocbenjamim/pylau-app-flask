@@ -238,6 +238,7 @@
         const form = document.getElementById('code_generator_form');
 
         var botMessageNumber = 0;
+        var last
 
         function addMessage(message, isUser = false) {
             botMessageNumber ++;
@@ -269,10 +270,8 @@
                 messageElement.appendChild(copyButton)
             }
 
-            copyButton.addEventListener('click', function(e){
-                
-                const buttonId = e.target.id;
-                copyText(buttonId)
+            copyButton.addEventListener('click',(event)=>{   
+                copyText(this.id, '')
             })
 
             chatbox.style.display = 'block'
@@ -298,7 +297,8 @@
 
 
           // Function to copy text
-          function copyText(botMessage) { 
+          function copyText(buttonID, parentElement) { 
+            
             //var copyText = document.getElementById("chatbotField"); 
             var copyText = document.getElementById(botMessage)
             copyText.select(); document.execCommand("copy"); 
