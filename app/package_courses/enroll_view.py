@@ -21,12 +21,13 @@ class EnrollView(View):
         self._template = template
 
     def dispatch_request(self, course=None):
-
+        course = escape(course)
+        
         if 'user_token' in session:
             if self.userToken.is_user_token_expired(session['user_session']):
                 session.clear()                
                 return redirect(url_for('auth.user.login'))
 
         if request.method == 'POST':
-            return render_template(self._template, title=f"Enroll to {course}")
+            return render_template(self._template, title=f"Enroll to {escape(course)}")
         return render_template(self._template, title=f"Enroll to {course}")
