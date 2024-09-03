@@ -148,6 +148,8 @@
     <div class="col-md-6 col-lg-7 ">
       <h4 class="mb-3">Billing address</h4>
       <form class="needs-validation" method="post" novalidate>
+        <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" id="csrf_cookie" name="csrf_cookie" value="{{ session['csrf_cookie'] }}">
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">First name <span class="text-danger">*</span></label>
@@ -276,7 +278,18 @@
           <div class="form-check">
             <input id="bankReference" name="paymentMethod" value="bank reference" type="radio" class="form-check-input" 
             {% if request.form.paymentMethod == 'bank reference' %} checked {% endif %} required>
-            <label class="form-check-label" for="bankReference">PayPal</label>
+            <label class="form-check-label" for="bankReference">Bank reference</label>
+          </div>
+
+          <div class="col-md-7" id="bankticket" style="display: none;">
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="bank-ticket" >Upload</label>
+              <input type="file" class="form-control" id="bank-ticket" name="bankTicket" value="{{request.form.bankTicket}}" 
+              maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >
+              
+            </div>
+            <span><b>Formats:</b> <span style="font-size: .9rem; color: #f03a3a;">.png,.jpg,.jpeg,.pdf</span></span>
+
           </div>
 
         </div>
@@ -335,6 +348,23 @@
 <script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>
 <script>
 
+  document.getElementById('bankReference').addEventListener('click', (e)=>{
+    document.getElementById('bankticket').style.display = 'block'
+    document.getElementById('bank-ticket').setAttribute('required', true)
+  })
+
+  document.getElementById('debit').addEventListener('click', (e)=>{
+    document.getElementById('bankticket').style.display = 'none'
+  })
+
+  document.getElementById('credit').addEventListener('click', (e)=>{
+    document.getElementById('bankticket').style.display = 'none'
+  })
+
+  document.getElementById('paypal').addEventListener('click', (e)=>{
+    document.getElementById('bankticket').style.display = 'none'
+  })
+  
 
 </script>
 {% endblock %}

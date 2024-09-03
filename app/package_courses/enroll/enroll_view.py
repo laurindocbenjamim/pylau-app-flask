@@ -46,15 +46,19 @@ class EnrollView(View):
             return redirect(url_for('auth.user.login'))
 
         if request.method == 'POST':
+
             """
             Gets the cookie from the user request, a token previously 
             passed, check if it is expired. 
             If true redirect the user to the login page.
             """
-
+            """return [{"csrf_token":request.form.get('csrf_token'),
+                     "csrf_cookie": request.cookies.get('csrf_cookie'),
+                    "form_csrf_cookie": request.form.get('csrf_cookie')
+                     }]"""
             if not secure.verify_csrf_token(request):
                 return abort(403)
-        
+
             username = request.cookies.get('username')
             if self._userToken.is_user_token_expired(username):
                 session.clear()                
@@ -65,10 +69,12 @@ class EnrollView(View):
                 flash("Ready to study", "success")
                 #return [f"Ready to create {username}"]
                         
-            
+        
         # Render the template and then set a cookie
         response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))
         
-        secure.set_csrf_cookie(response)
+        csrf_cookie = secure.set_csrf_cookie(response)        
         response.set_cookie('username', session.get('user_token'))
+        session['csrf_cookie'] = csrf_cookie
         return response
+        #return [request.cookies.get('csrf_token'), request.form.get('csrf_token')]

@@ -5,7 +5,7 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone, date
@@ -215,7 +215,8 @@ class UserToken(db.Model):
     # This method is used to get a token by the username
     def get_token_by_user(username):
         try:
-            token_obj = UserToken.query.filter_by(username=str(username)).first_or_404()
+            token_obj = UserToken.query.filter_by(username=str(username)).order_by(desc(UserToken.token_id)).first_or_404()
+            
             return True, token_obj
         except SQLAlchemyError as e:
             return False, str(e)

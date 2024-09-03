@@ -50,6 +50,17 @@ def error_handlers_view(app):
         
         return resp
 
+    @app.errorhandler(400)
+    def handle_unauthorized_error(e):
+        image=image='https://github.com/laurindocbenjamim/dev-images/blob/main/400.jpg?raw=true'
+        resp = make_response(render_template('errors/400.html', message=f"{e.code} -{e.name}. Unauthorized {e.description}", image=image, error=401), 401)
+        resp.headers['X-Something'] = 'Unauthorized'
+
+        get_message(e, type='debug')
+        
+        return resp
+    
+        
     @app.errorhandler(401)
     def handle_unauthorized_error(e):
         image=image='https://www.asktheegghead.com/wp-content/uploads/2019/12/401-error-wordpress-featured-image.jpg'

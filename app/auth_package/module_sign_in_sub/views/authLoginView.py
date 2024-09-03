@@ -86,32 +86,47 @@ class AuthLoginView(View):
                     status, user = self.model.get_user_by_email(username)
                     
                     # First check if the user exists
-                    if status and user is not None:
-                        
+                    if not status and not user :
+                        flash('User not found', 'error')
+                    else:
                         # Check if the user has a Token 
                         status, u_token = self.userToken.get_token_by_user(user.email)
                         
-                        if status and u_token is not None:
+                        if not status and not u_token:
+                            flash('Something went wrong to check the token', 'error')
+                        else:
                             
                             # Check if the user has two-factor authentication enabled
                             status, two_fa = self.TwoFaModel.get_user_two_fa_data(user.userID)
                             
-                            if status and two_fa is not None:        
-                                                
+                            if not status and not two_fa:  
+                                flash('Something went wrong with (2FA)', 'error')
+                            else:     
+                                status = user.check_password(password)  
+                                           
                                 # Check if the user password is correct
-                                if user and user.check_password(password):
+                                if not status:
+                                    flask.flash('Invalid username or password ', 'error')
+                                else:
                                     # Check if the user is activated
                                     
-                                    if user.is_active():
+                                    if not user.is_active():
+                                        logout_user()                                    
+                                        flask.flash(f'This user is not active {user.is_active()}', 'error')
+                                    else:
                                         
                                         # generate a secret code for the user
                                         status, new_token = self.userToken.refresh_user_token(u_token.token)
                                         
-                                        if status and new_token is not None:
-                                            
+                                        
+                                        if status and new_token is None:
+                                            flash("User not  identified", 'error') 
+                                        else:                                            
                                             status, up_token = self.userToken.update_token(0,u_token.token, new_token, user.email, False)
                                             
-                                            if status and up_token is not None:
+                                            if status and up_token is None:
+                                                flash('Error to update user token', 'error')
+                                            else:
                                                 # Create an object of the TwoFAModel class
                                                 session['user_token'] = new_token                                        
                                                 session['two_fa_auth_method'] = two_fa.method_auth
@@ -126,7 +141,12 @@ class AuthLoginView(View):
                                                     
                                                     status, user = self.model.get_user_by_email(user.email)
             
-                                                    if status:
+                                                    if not status:
+                                                        flask.flash('Login failed. User not found', 'error')
+                                                        return redirect(url_for('auth.user.login')) 
+                                                    else:
+
+                                                        
                                                         session['user_id'] = user.userID
                                                         session['firstname'] = user.firstname
                                                         session['lastname'] = user.lastname
@@ -144,17 +164,10 @@ class AuthLoginView(View):
                                                         g.user = user  
                                                         flash('Login success', 'success')
                                                         return redirect(url_for('index', user_token=str(new_token))) 
-                                                    else:
-                                                        flask.flash('Login failed. User not found', 'error')
-                                                        return redirect(url_for('auth.user.login')) 
+                                                        
+                                                                                                         
                                                  
-                                    logout_user()
                                     
-                                    flask.flash(f'This user is not active {user.is_active()}', 'danger')
-                                else:
-                                    flask.flash('Invalid username or password ', 'error')
-                    else:
-                        flask.flash('Username not found', 'error')
                 except Exception as e:
                     flask.flash(f'Failed to make login. {type(e).__name__}', 'error')
                     custom_message = "Failed to connect to SMTP. Reconnecting..."

@@ -16,12 +16,15 @@ class MySecureUtils(object):
     # Store the CSRF token in a cookie
     def set_csrf_cookie(self,response):
         csrf_token = self.generate_csrf_token()
-        response.set_cookie('csrf_token', csrf_token)
-        return response
+        response.set_cookie('csrf_cookie', csrf_token)
+        return csrf_token
     
     # Verify the CSRF token
     def verify_csrf_token(self,request):
-        csrf_token = request.cookies.get('csrf_token')
-        if not csrf_token or csrf_token != request.form.get('csrf_token'):
+        app_csrf_form = request.form.get('csrf_token')
+        if app_csrf_form is None:
+            return False
+        csrf_token = request.cookies.get('csrf_cookie')
+        if not csrf_token or csrf_token != request.form.get('csrf_cookie'):
             return False
         return True
