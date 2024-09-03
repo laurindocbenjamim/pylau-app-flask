@@ -256,5 +256,5 @@ def load_routes(app, db, login_manager):
     app.register_blueprint(bp_blog)
 
     # Importing the blueprint of courses
-    from ...package_courses.bp_courses import bp_courses
+    from ...package_courses import bp_courses
     app.register_blueprint(bp_courses)

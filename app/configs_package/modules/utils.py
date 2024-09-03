@@ -1,5 +1,6 @@
 import os
 
+
 def remove_files_from_root_folder():
     root_folder = os.getcwd()
     files = os.listdir(root_folder)

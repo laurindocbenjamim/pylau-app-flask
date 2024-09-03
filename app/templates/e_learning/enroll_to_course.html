@@ -117,7 +117,7 @@
 <div class="container" style="margin-top:10%;">
   <div class="col-lg-12"
     style="display: flex; flex-direction: column; justify-content: center;align-items: center; text-align:center">
-    <h1>{{ title }}</h1>
+    <h1>Enroll to {{ course }} <span style="font-size: .8rem; color: #32d33a">[{{ course_code }}]</span></h1>
 
     <div class="col-3" style="display: block; flex-direction: column; text-align:center">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -147,29 +147,29 @@
     </div>
     <div class="col-md-6 col-lg-7 ">
       <h4 class="mb-3">Billing address</h4>
-      <form class="needs-validation" novalidate>
+      <form class="needs-validation" method="post" novalidate>
         <div class="row g-3">
           <div class="col-sm-6">
-            <label for="firstName" class="form-label">First name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+            <label for="firstName" class="form-label">First name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="{{request.form.firstName}}" required>
             <div class="invalid-feedback">
               Valid first name is required.
             </div>
           </div>
 
           <div class="col-sm-6">
-            <label for="lastName" class="form-label">Last name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+            <label for="lastName" class="form-label">Last name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value="{{request.form.lastName}}" required>
             <div class="invalid-feedback">
               Valid last name is required.
             </div>
           </div>
 
           <div class="col-12">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
             <div class="input-group has-validation">
               <span class="input-group-text">@</span>
-              <input type="text" class="form-control" id="username" placeholder="Username" required>
+              <input type="text" class="form-control" id="username" name="username" value="{{request.form.username}}" placeholder="Username" required>
             <div class="invalid-feedback">
                 Your username is required.
               </div>
@@ -177,16 +177,19 @@
           </div>
 
           <div class="col-12">
-            <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
-            <input type="email" class="form-control" id="email" placeholder="you@example.com">
-            <div class="invalid-feedback">
-              Please enter a valid email address for shipping updates.
+            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>            
+            <div class="input-group has-validation">
+              <span class="input-group-text">@</span>
+              <input type="email" class="form-control" id="email" name="email" value="{{request.form.email}}" placeholder="you@example.com" required>
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
             </div>
           </div>
 
           <div class="col-12">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="address" name="address" value="{{request.form.address}}" placeholder="1234 Main St" required>
             <div class="invalid-feedback">
               Please enter your shipping address.
             </div>
@@ -194,14 +197,17 @@
 
           <div class="col-12">
             <label for="address2" class="form-label">Address 2 <span class="text-body-secondary">(Optional)</span></label>
-            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+            <input type="text" class="form-control" id="address2" name="address2" value="{{request.form.address2}}" placeholder="Apartment or suite">
           </div>
 
           <div class="col-md-5">
-            <label for="country" class="form-label">Country</label>
-            <select class="form-select" id="country" required>
-              <option value="">Choose...</option>
-              <option>United States</option>
+            <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+            <select class="form-select" id="country" name="country" required>
+              <option >Choose...</option>
+              {% if request.form.country != '' %} 
+              <option value="{{request.form.country}}">{{request.form.country}}</option>
+              {% endif %}
+              
             </select>
             <div class="invalid-feedback">
               Please select a valid country.
@@ -209,10 +215,12 @@
           </div>
 
           <div class="col-md-4">
-            <label for="state" class="form-label">State</label>
-            <select class="form-select" id="state" required>
+            <label for="state" class="form-label">State <span class="text-danger">*</span></label>
+            <select class="form-select" id="state" name="state" required>
               <option value="">Choose...</option>
-              <option>California</option>
+              <option {% if request.form.state == 'Coimbra' %}  selected {% endif %} >Coimbra</option>
+              <option {% if request.form.state == 'Lisboa' %}  selected {% endif %}>Lisboa</option>
+              <option {% if request.form.state == 'Porto' %}  selected {% endif %}>Porto</option>
             </select>
             <div class="invalid-feedback">
               Please provide a valid state.
@@ -221,7 +229,7 @@
 
           <div class="col-md-3">
             <label for="zip" class="form-label">Zip</label>
-            <input type="text" class="form-control" id="zip" placeholder="" required>
+            <input type="text" class="form-control" id="zip" name="zip" value="{{request.form.zip}}" placeholder="" required>
             <div class="invalid-feedback">
               Zip code required.
             </div>
@@ -231,12 +239,16 @@
         <hr class="my-4">
 
         <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="same-address">
+          <input type="checkbox" class="form-check-input" id="same-address" name="sameAddress" 
+          {% if request.form.sameAddress == 'Shipping address is the same as my billing address' %}  checked {% endif %} 
+          value="Shipping address is the same as my billing address">
           <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
         </div>
 
         <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="save-info">
+          <input type="checkbox" class="form-check-input" id="save-info" name="saveInfo" 
+          {% if request.form.saveInfo == 'Save this information for next time' %}  checked {% endif %} 
+          value="Save this information for next time">
           <label class="form-check-label" for="save-info">Save this information for next time</label>
         </div>
 
@@ -246,23 +258,33 @@
 
         <div class="my-3">
           <div class="form-check">
-            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
-            <label class="form-check-label" for="credit">Credit card</label>
+            <input id="credit" name="paymentMethod" value="credit card" type="radio" class="form-check-input" 
+            {% if request.form.paymentMethod == 'credit card' %} checked {% endif %} required>
+            <label class="form-check-label" for="credit">Credit card </label>
           </div>
-          <div class="form-check">
-            <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+          <div class="form-check">{{request.form.country}}
+            <input id="debit" name="paymentMethod" value="debit card" type="radio" class="form-check-input" 
+            {% if request.form.paymentMethod == 'debit card' %} checked {% endif %} required>
             <label class="form-check-label" for="debit">Debit card</label>
           </div>
           <div class="form-check">
-            <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+            <input id="paypal" name="paymentMethod" value="paypal" type="radio" class="form-check-input" 
+            {% if request.form.paymentMethod == 'paypal' %} checked {% endif %} required>
             <label class="form-check-label" for="paypal">PayPal</label>
           </div>
+
+          <div class="form-check">
+            <input id="bankReference" name="paymentMethod" value="bank reference" type="radio" class="form-check-input" 
+            {% if request.form.paymentMethod == 'bank reference' %} checked {% endif %} required>
+            <label class="form-check-label" for="bankReference">PayPal</label>
+          </div>
+
         </div>
 
         <div class="row gy-3">
           <div class="col-md-6">
-            <label for="cc-name" class="form-label">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+            <label for="cc-name" class="form-label">Name on card <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="cc-name" name="ccName" value="{{request.form.ccName}}" placeholder="" required>
             <small class="text-body-secondary">Full name as displayed on card</small>
             <div class="invalid-feedback">
               Name on card is required
@@ -270,24 +292,25 @@
           </div>
 
           <div class="col-md-6">
-            <label for="cc-number" class="form-label">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+            <label for="cc-number" class="form-label">Credit card number <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="cc-number" name="ccNumber" value="{{request.form.ccNumber}}" placeholder="" required>
             <div class="invalid-feedback">
               Credit card number is required
             </div>
           </div>
 
           <div class="col-md-3">
-            <label for="cc-expiration" class="form-label">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+            <label for="cc-expiration" class="form-label">Expiration <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="cc-expiration" name="ccExpiration" value="{{request.form.ccExpiration}}" 
+            maxlength="5" placeholder="" required>
             <div class="invalid-feedback">
               Expiration date required
             </div>
           </div>
 
           <div class="col-md-3">
-            <label for="cc-cvv" class="form-label">CVV</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+            <label for="cc-cvv" class="form-label">CVV <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="cc-cvv" name="ccCVV" maxlength="3" value="{{request.form.ccCVV}}" placeholder="" required>
             <div class="invalid-feedback">
               Security code required
             </div>
@@ -296,7 +319,8 @@
 
         <hr class="my-4">
 
-        <button class="w-50 btn btn-primary " type="submit">Submit</button>
+        <button class="w-40 btn btn-primary " type="submit">Submit</button>
+
       </form>
     </div>
   </div>
@@ -308,7 +332,7 @@
 {% block scripts %}
 
 <script type="module" src="{{ url_for('static', filename='app/auth/get_countries.js') }}"></script>
-<!--<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>-->
+<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>
 <script>
 
 
