@@ -1,2 +1,8 @@
 pylau_env
 __pycache__
+*.log
+logs.log
+app\static\logs\logs.log
+*.mp3
+*.mp4
+*.wave
