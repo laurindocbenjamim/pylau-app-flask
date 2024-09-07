@@ -1,10 +1,19 @@
 import logging
+import os
 
 # Create a logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# Check if the log directory exists
+# Check if the directory exists, if not, create it
+if not os.path.exists('app/static/logs/'):
+    os.makedirs('app/static/logs/')
+
+# check if the file exist, if not, create it
+if not os.path.exists('app/static/logs/logs.log'):
+    # Create the file
+    with open('app/static/logs/logs.log', 'w') as file:
+        file.write('# THIS IS A LOG FILE \n\n\n')
 
 # Create a file handler
 file_handler = logging.FileHandler('app/static/logs/logs.log')
