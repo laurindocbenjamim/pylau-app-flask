@@ -4,6 +4,8 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+# Check if the log directory exists
+
 # Create a file handler
 file_handler = logging.FileHandler('app/static/logs/logs.log')
 file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
