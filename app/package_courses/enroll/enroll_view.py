@@ -4,6 +4,7 @@ import traceback
 import sys
 import os
 
+
 from flask.views import View
 from flask_cors import cross_origin
 from markupsafe import escape
@@ -31,9 +32,7 @@ class EnrollView(View):
         message = ""
         category = ""
 
-        secure = MySecureUtils()
-
-        
+        #secure = MySecureUtils()       
         
         """ First chet  if there is a user token if not rediret the user to the login page
         """
@@ -45,36 +44,36 @@ class EnrollView(View):
         else:
             return redirect(url_for('auth.user.login'))
 
-        if request.method == 'POST':
+        if request.method == 'GET':            
+            
+            # Render the template and then set a cookie
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))
+            
+            return response
+        
+        
+            """
+            Below we catch the POST method request
+            """
+        elif request.method == 'POST':
 
             """
             Gets the cookie from the user request, a token previously 
             passed, check if it is expired. 
             If true redirect the user to the login page.
             """
-            """return [{"csrf_token":request.form.get('csrf_token'),
-                     "csrf_cookie": request.cookies.get('csrf_cookie'),
-                    "form_csrf_cookie": request.form.get('csrf_cookie')
-                     }]"""
-            if not secure.verify_csrf_token(request):
-                return abort(403)
 
-            username = request.cookies.get('username')
-            if self._userToken.is_user_token_expired(username):
+            user_cookie = request.cookies.get('user_cookie')
+           
+            if self._userToken.is_user_token_expired(session.get('user_token')):
                 session.clear()                
                 return redirect(url_for('auth.user.login'))
-            if not validate_form(request.form):
-                flash("Invalid form", "danger")
-            else:
-                flash("Ready to study", "success")
-                #return [f"Ready to create {username}"]
+            if validate_form(request.form):
+                flash("Ready to study", "success")            
+
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))
+            
+            return response
                         
         
-        # Render the template and then set a cookie
-        response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))
         
-        csrf_cookie = secure.set_csrf_cookie(response)        
-        response.set_cookie('username', session.get('user_token'))
-        session['csrf_cookie'] = csrf_cookie
-        return response
-        #return [request.cookies.get('csrf_token'), request.form.get('csrf_token')]
