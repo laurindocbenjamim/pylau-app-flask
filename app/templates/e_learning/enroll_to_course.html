@@ -148,8 +148,7 @@
     <div class="col-md-6 col-lg-7 ">
       <h4 class="mb-3">Billing address</h4>
       <form class="needs-validation" method="post" novalidate>
-        <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="hidden" id="csrf_cookie" name="csrf_cookie" value="{{ session['csrf_cookie'] }}">
+        <input type="hidden" class="form-control" readonly id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">First name <span class="text-danger">*</span></label>
