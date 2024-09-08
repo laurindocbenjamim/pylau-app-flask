@@ -1,7 +1,7 @@
 
 import re
 from flask import Request
-from app.utils import is_valid_email, validate_str_punct_and_digits, validate_str_digits
+from app.utils import is_valid_email, validate_str_and_punct_char, validate_only_str, validate_str_punct_and_digits, validate_str_digits
 
 numbers_pattern = r'^[0-9-]+$'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}

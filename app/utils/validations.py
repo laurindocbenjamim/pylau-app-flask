@@ -2,6 +2,15 @@ import re
 from flask import flash, Request
 
 
+def validate_str_and_punct_char():
+    return True
+def validate_only_str():
+    return True
+def lidate_str_punct_and_digits():
+    return True
+def validate_str_digits():
+    return True
+
 # Validate password strength
 def is_strong_password(password) -> bool:
     if not password or not isinstance(password, str):
