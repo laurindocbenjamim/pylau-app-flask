@@ -4,6 +4,7 @@ from flask import flash, Request
 
 def validate_str_and_punct_char():
     return True
+
 def validate_only_str(s):
     # This pattern allows spaces, accentuated characters, and common punctuation
     pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ\s\'"()]+$'
@@ -11,7 +12,7 @@ def validate_only_str(s):
         return True
     return False
 
-def lidate_str_punct_and_digits(s):
+def validate_str_punct_and_digits(s):
     # This pattern allows spaces, accentuated characters, numbers, and common punctuation
     pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;!?\'"()]+$'
     if re.match(pattern, s):
