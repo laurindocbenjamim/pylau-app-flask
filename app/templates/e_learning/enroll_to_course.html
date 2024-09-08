@@ -204,7 +204,7 @@
           <div class="col-md-5">
             <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
             <select class="form-select" id="country" name="country" required>
-              <option >Choose...</option>
+              <option value="">Choose...</option>
               {% if request.form.country != '' %} 
               <option value="{{request.form.country}}">{{request.form.country}}</option>
               {% endif %}
@@ -281,13 +281,13 @@
           </div>
 
           <div class="col-md-7" id="bankticket" style="display: none;">
-            <div class="input-group mb-3">
+            <!--<div class="input-group mb-3">
               <label class="input-group-text" for="bank-ticket" >Upload</label>
               <input type="file" class="form-control" id="bank-ticket" name="bankTicket" value="{{request.form.bankTicket}}" 
               maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >
               
             </div>
-            <span><b>Formats:</b> <span style="font-size: .9rem; color: #f03a3a;">.png,.jpg,.jpeg,.pdf</span></span>
+            <span><b>Formats:</b> <span style="font-size: .9rem; color: #f03a3a;">.png,.jpg,.jpeg,.pdf</span></span>-->
 
           </div>
 
@@ -348,20 +348,32 @@
 <script>
 
   document.getElementById('bankReference').addEventListener('click', (e)=>{
-    document.getElementById('bankticket').style.display = 'block'
-    document.getElementById('bank-ticket').setAttribute('required', true)
+    var target = document.getElementById('bankticket');     
+    
+    target.style.display = 'block'
+    target.innerHTML += '<div class="input-group mb-3">'
+      +'<label class="input-group-text" for="bank-ticket" >Upload</label>'
+      +'<input type="file" class="form-control" id="bank-ticket" name="bankTicket" value="{{request.form.bankTicket}}"'
+      +' maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >' 
+      +'</div><span><b>Formats:</b> <span style="font-size: .9rem; color: #f03a3a;">.png,.jpg,.jpeg,.pdf</span></span>'
+
+      document.getElementById('bank-ticket').setAttribute('required', true);  
+      
   })
 
   document.getElementById('debit').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'none'
+    document.getElementById('bankticket').innerHTML = ''
   })
 
   document.getElementById('credit').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'none'
+    document.getElementById('bankticket').innerHTML = ''
   })
 
   document.getElementById('paypal').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'none'
+    document.getElementById('bankticket').innerHTML = ''
   })
   
 

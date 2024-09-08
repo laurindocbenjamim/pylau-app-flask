@@ -8,11 +8,11 @@ import os
 from flask.views import View
 from flask_cors import cross_origin
 from markupsafe import escape
-from flask import render_template, session, request, redirect, url_for, flash, jsonify, make_response, abort
+from flask import render_template, session, request, redirect, url_for, flash, jsonify, make_response, current_app
+from werkzeug.utils import secure_filename
 from ...configs_package.modules.logger_config import get_message as set_logger_message
 from app.utils.catch_exception_information import _catch_sys_except_information
-from .controller import validate_form
-from app.configs_package import MySecureUtils
+from .controller import validate_words, validate_file
 
 
 class EnrollView(View):
@@ -29,8 +29,19 @@ class EnrollView(View):
 
     def dispatch_request(self, course=None):
         course = escape(course)
-        message = ""
-        category = ""
+        message = category = ""
+        status_code = 200
+
+        # Method to validate the form fields
+        def is_form_valid():
+            _message = _category ='' 
+            for key, value in request.form.items():
+                status, sms = validate_words(key=key, value=value)
+                if not status:
+                    _message = f'{sms}'
+                    _category = "error"
+                    break
+            return status, _message, _category
 
         #secure = MySecureUtils()       
         
@@ -44,11 +55,10 @@ class EnrollView(View):
         else:
             return redirect(url_for('auth.user.login'))
 
-        if request.method == 'GET':            
+        if request.method == 'GET':    
             
             # Render the template and then set a cookie
-            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))
-            
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))            
             return response
         
         
@@ -56,7 +66,7 @@ class EnrollView(View):
             Below we catch the POST method request
             """
         elif request.method == 'POST':
-
+            
             """
             Gets the cookie from the user request, a token previously 
             passed, check if it is expired. 
@@ -64,15 +74,30 @@ class EnrollView(View):
             """
 
             user_cookie = request.cookies.get('user_cookie')
-           
+            
             if self._userToken.is_user_token_expired(session.get('user_token')):
                 session.clear()                
                 return redirect(url_for('auth.user.login'))
-            if validate_form(request.form):
-                flash("Ready to study", "success")            
-
-            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))
             
+            # Validate the form fields
+            status, message, category = is_form_valid()
+            
+            if not status:
+                # Verify the file
+                status, message = validate_file(request=request)
+                if not status:
+                    category = 'error'
+                else:
+                    file = request.files['bankTicket']
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                    #return redirect(url_for('download_file', name=filename))
+
+                flash(message, category)  
+            else:    
+                flash("Ready to study", "success")          
+
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))            
             return response
                         
         

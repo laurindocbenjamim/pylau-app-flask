@@ -2,6 +2,46 @@ import re
 from flask import flash, Request
 
 
+"""
+ This module contain the global funtios/methods to validate 
+ form fields such as general strings or passwords, emails and 
+ other specific charcters
+
+"""
+
+def validate_only_str(s):
+        # This pattern allows spaces, accentuated characters, and common punctuation
+        pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ\s\'"()]+$'
+        if re.match(pattern, s):
+            return True
+        else:
+            return False
+        
+
+def validate_str_and_punct_char(s):
+    # This pattern allows spaces, accentuated characters, and common punctuation
+    pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ\s.,;!?\'"()]+$'
+    if str(s) != '':
+        if not  re.match(pattern, s):
+            return False
+    return True
+
+def validate_str_digits(s):
+    # This pattern allows spaces, accentuated characters, digits
+    pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\'"()]+$'
+    if str(s) != '':
+        if not  re.match(pattern, s):
+            return False
+    return True
+        
+def validate_str_punct_and_digits(s):
+    # This pattern allows spaces, accentuated characters, numbers, and common punctuation
+    pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;!?\'"()]+$'
+    if str(s) != '':
+        if not  re.match(pattern, s):
+            return False
+    return True
+
 # Validate password strength
 def is_strong_password(password) -> bool:
     if not password or not isinstance(password, str):
@@ -31,7 +71,9 @@ def is_strong_password(password) -> bool:
     return True
 # Validate email
 def is_valid_email(email) -> bool:
-    if not email or not isinstance(email, str):
+    if not email:
+        return False
+    elif not isinstance(email, str):
         return False
 
     email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"

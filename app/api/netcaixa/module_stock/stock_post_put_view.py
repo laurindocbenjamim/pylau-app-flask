@@ -41,12 +41,15 @@ class StockPostPutView(View):
         if request.method =='POST':
             # Filter and validate each of the form field
             for key, value in request.form.items():
-                status, sms = validate_words(key=key, value=value)
-                if not status:
-                    message = f'{sms}'
-                    category = "error"
-                    code = 400
-                    break
+                if 'csrf_token' == key:
+                    continue
+                else:
+                    status, sms = validate_words(key=key, value=value)
+                    if not status:
+                        message = f'{sms}'
+                        category = "error"
+                        code = 400
+                        break
             
             if code == 200:   
                 message = "The product has been stocked successfully."

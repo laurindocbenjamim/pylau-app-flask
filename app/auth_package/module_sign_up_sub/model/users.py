@@ -117,7 +117,7 @@ class Users(UserMixin, db.Model):
     def update_user(user_id, user_object):
         status = False
         try:
-            user = Users.query.filter_by(userID=user_id).first()
+            user = Users.query.filter_by(userID=user_id).first_or_404()
             user.firstname = user_object.firstname
             user.lastname = user_object.lastname
             user.email = user_object.email
@@ -216,8 +216,7 @@ class Users(UserMixin, db.Model):
     """
     def get_user_by_email(email):
         try:
-            #user = Users.query.filter(and_(Users.email==str(email))).first()
-            response = Users.query.filter_by(email=str(email)).first()
+            response = Users.query.filter_by(email=str(email)).first_or_404()
             return True, response
         except SQLAlchemyError as e:
             set_logger_message(f"Error occured on METHOD[get_user_by_email]: \n SQLAlchemyError: {str(e)}")

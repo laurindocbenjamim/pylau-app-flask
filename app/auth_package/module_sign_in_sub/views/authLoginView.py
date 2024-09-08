@@ -4,7 +4,7 @@ import os
 import flask
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template, request, session, redirect, url_for, flash, jsonify,g
+from flask import render_template, make_response, request, session, redirect, url_for, flash, jsonify,g
 from ..controller.authController import validate_form_fields
 from ....configs_package.modules.jwt_config import refresh_jwt_token
 from ....configs_package.modules.logger_config import get_message as set_logger_message
@@ -25,7 +25,7 @@ class AuthLoginView(View):
         recover_account = True
 
         def finalize_the_login(token, username):            
-            return [f"2FA - {two_fa.method_auth}"]             
+                     
             status, user = self.model.get_user_by_email(username)
             
             if status:
@@ -86,20 +86,20 @@ class AuthLoginView(View):
                     status, user = self.model.get_user_by_email(username)
                     
                     # First check if the user exists
-                    if not status and not user :
+                    if not status:                        
                         flash('User not found', 'error')
                     else:
                         # Check if the user has a Token 
                         status, u_token = self.userToken.get_token_by_user(user.email)
                         
-                        if not status and not u_token:
+                        if not status:
                             flash('Something went wrong to check the token', 'error')
                         else:
                             
                             # Check if the user has two-factor authentication enabled
                             status, two_fa = self.TwoFaModel.get_user_two_fa_data(user.userID)
                             
-                            if not status and not two_fa:  
+                            if not status:  
                                 flash('Something went wrong with (2FA)', 'error')
                             else:     
                                 status = user.check_password(password)  
@@ -116,15 +116,14 @@ class AuthLoginView(View):
                                     else:
                                         
                                         # generate a secret code for the user
-                                        status, new_token = self.userToken.refresh_user_token(u_token.token)
+                                        status, new_token = self.userToken.refresh_user_token(u_token.token)                                        
                                         
-                                        
-                                        if status and new_token is None:
+                                        if not status:
                                             flash("User not  identified", 'error') 
                                         else:                                            
                                             status, up_token = self.userToken.update_token(0,u_token.token, new_token, user.email, False)
                                             
-                                            if status and up_token is None:
+                                            if not status:
                                                 flash('Error to update user token', 'error')
                                             else:
                                                 # Create an object of the TwoFAModel class
@@ -172,6 +171,9 @@ class AuthLoginView(View):
                     flask.flash(f'Failed to make login. {type(e).__name__}', 'error')
                     custom_message = "Failed to connect to SMTP. Reconnecting..."
                     error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email", custom_message=custom_message)
-                    set_logger_message(error_info)   
-        
-        return render_template(self.template, title='Login')
+                    set_logger_message(error_info)  
+
+        request.form.get('password', '')
+
+        response = make_response(render_template(self.template, title='Login'))
+        return response
