@@ -4,7 +4,7 @@ from flask import Request
 from app.utils import is_valid_email, validate_str_and_punct_char, validate_only_str, validate_str_punct_and_digits, validate_str_digits
 
 numbers_pattern = r'^[0-9-]+$'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+#ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
 
@@ -13,11 +13,11 @@ def validate_words(key:str, value: str | int | float)-> bool:
     This method is  used to validate the form fields
     """
 
-    if key != 'address2' and key != 'bankticket':
+    if key != 'address2' and key != 'bankTicket':
         if value is None or value =='':
-            return  False, f"{str(key).replace('_', ' ').upper()} is required."
-        elif len(str(value).replace(' ', '')) > 100:
-            return  False, f"Invalid size for field {str(key).replace('_', ' ').upper()}."
+            return  False, f"{str(key).replace(' ', '_').upper()} is required."
+        elif len(str(value).replace(' ', '_')) > 100:
+            return  False, f"Invalid size for field {str(key).replace(' ', '_').upper()}."
     
     # Checking if the fields have just strings and digits
     if 'csrf_token' == key:
@@ -28,17 +28,18 @@ def validate_words(key:str, value: str | int | float)-> bool:
             return False, 'Enter a valid email'
     elif 'address' == key:
         if not validate_str_punct_and_digits(key):
-            return False, f"Invalid characters detected on {str(key).replace('_', ' ').upper()} - {value}"
+            return False, f"Invalid characters detected on {str(key).replace(' ', '_').upper()} - {value}"
     elif 'zip' == key:
         if not re.match(numbers_pattern, value):
-            return False, f"Invalid type value for the {str(key).replace('_', ' ').upper()}"
-    elif not validate_str_digits(value):
-        return False, f"Invalid characters detected on {str(key).replace('_', ' ').upper()} - {value}"
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+    elif value !='':
+        if not validate_str_digits(value):
+            return False, f"Invalid characters detected on {str(key).replace(' ', '_').upper()} - {value}"
     
     return True, 'OK'
 
 
-def validate_file(request: Request):
+"""def validate_file(request: Request):
     # check if the post request has the file part
     if 'bankTicket' not in request.files:
         return False, 'No bank ticket part'
@@ -55,11 +56,11 @@ def validate_file(request: Request):
         return False, "Not allowed file"
         
     # Return True if everything is okay
-    return True
+    return True, 'OK'
         
         
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS"""
     
     

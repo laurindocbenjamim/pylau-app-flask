@@ -12,7 +12,11 @@ from flask import render_template, session, request, redirect, url_for, flash, j
 from werkzeug.utils import secure_filename
 from ...configs_package.modules.logger_config import get_message as set_logger_message
 from app.utils.catch_exception_information import _catch_sys_except_information
-from .controller import validate_words, validate_file
+from app.utils.my_file_factory import validate_file, upload_file
+from .controller import validate_words#, validate_file
+from ...configs_package.modules.logger_config import get_message as set_logger_message
+
+
 
 
 class EnrollView(View):
@@ -72,33 +76,47 @@ class EnrollView(View):
             passed, check if it is expired. 
             If true redirect the user to the login page.
             """
-
             user_cookie = request.cookies.get('user_cookie')
-            
+                
             if self._userToken.is_user_token_expired(session.get('user_token')):
                 session.clear()                
                 return redirect(url_for('auth.user.login'))
             
-            # Validate the form fields
-            status, message, category = is_form_valid()
-            
-            if not status:
-                # Verify the file
-                status, message = validate_file(request=request)
+            try:                
+                
+                # Validate the form fields
+                status, message, category = is_form_valid()
+                
                 if not status:
-                    category = 'error'
+                    flash(message, "error") 
                 else:
-                    file = request.files['bankTicket']
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-                    #return redirect(url_for('download_file', name=filename))
+                    file_field_name='bankTicket'
+                    # Verify the file
+                    if request.form.get('paymentMethod') == 'bank reference':
+                        status, message = validate_file(request=request, file_field_name=file_field_name)
+                    
+                        if not status:
+                            flash(message, "error") 
+                        else:
+                            #file = request.files[f'{file_field_name}']
 
-                flash(message, category)  
-            else:    
-                flash("Ready to study", "success")          
+                            status = upload_file(request_file=request.files, file_field_name=file_field_name)
 
-            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))            
-            return response
+                            if not status: 
+                                flash(f"Failed to upload file. {status}", "error")
+                            else:
+                                flash(f"Ready to study {status}", "success")
+                    else:
+                        flash(f"Ready to study {status}", "success")
+
+            except Exception as e:
+                custom_message = "General error in Enrollment of course."
+                error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="ENROLL COURSE", custom_message=custom_message)
+                set_logger_message(error_info)
+                flash(str(e), 'error')
+            finally:                
+                response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))            
+                return response
                         
         
         

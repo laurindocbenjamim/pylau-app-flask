@@ -147,7 +147,7 @@
     </div>
     <div class="col-md-6 col-lg-7 ">
       <h4 class="mb-3">Billing address</h4>
-      <form class="needs-validation" method="post" novalidate>
+      <form class="needs-validation" method="post" novalidate enctype="multipart/form-data">
         <input type="hidden" class="form-control" readonly id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
         <div class="row g-3">
           <div class="col-sm-6">
@@ -204,7 +204,7 @@
           <div class="col-md-5">
             <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
             <select class="form-select" id="country" name="country" required>
-              <option >Choose...</option>
+              <option value="" >Choose...</option>
               {% if request.form.country != '' %} 
               <option value="{{request.form.country}}">{{request.form.country}}</option>
               {% endif %}
@@ -349,7 +349,7 @@
 
   document.getElementById('bankReference').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'block'
-    document.getElementById('bank-ticket').setAttribute('required', true)
+    //document.getElementById('bank-ticket').setAttribute('required', true)
   })
 
   document.getElementById('debit').addEventListener('click', (e)=>{
