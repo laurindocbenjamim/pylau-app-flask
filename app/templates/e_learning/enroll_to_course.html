@@ -206,7 +206,7 @@
             <select class="form-select" id="country" name="country" required>
               <option value="" >Choose...</option>
               {% if request.form.country != '' %} 
-              <option value="{{request.form.country}}">{{request.form.country}}</option>
+              <option value="{{request.form.country}}" selected>{{request.form.country}}</option>
               {% endif %}
               
             </select>
@@ -349,7 +349,7 @@
 
   document.getElementById('bankReference').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'block'
-    //document.getElementById('bank-ticket').setAttribute('required', true)
+    document.getElementById('bank-ticket').setAttribute('required', true)
   })
 
   document.getElementById('debit').addEventListener('click', (e)=>{
