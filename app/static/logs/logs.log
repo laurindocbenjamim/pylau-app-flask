@@ -110,3 +110,249 @@ MESSAGE:
 401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
  _________________________            DESCRIPTION            ___________________________
  None 
+09/09/2024 02:46:07 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:46:11 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:46:13 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:46:44 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:46:51 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:46:59 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on method[send_simple_email]         
+File name: authLoginView.py        
+Exception-instance: authLoginView.py        
+Exception-classe: <class 'AttributeError'>        
+Exception-object: 'NoneType' object has no attribute 'email'        
+Customized-message: Failed to connect to SMTP. Reconnecting...        
+Line of error: 94        
+ ____ ERROR DETAILS_____: 
+(<class 'AttributeError'>, AttributeError("'NoneType' object has no attribute 'email'"), <traceback object at 0x0000013AA7CC3E40>)        
+TB object: <traceback object at 0x0000013AA7CC3E40>        
+Traceback object: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask-v2\app\auth_package\module_sign_in_sub\views\authLoginView.py", line 94, in dispatch_request
+    status, u_token = self.userToken.get_token_by_user(user.email)
+                                                       ^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'email'
+         
+NAME:Error occured on method[send_simple_email]         
+File name: authLoginView.py        
+Exception-instance: authLoginView.py        
+Exception-classe: <class 'AttributeError'>        
+Exception-object: 'NoneType' object has no attribute 'email'        
+Customized-message: Failed to connect to SMTP. Reconnecting...        
+Line of error: 94        
+ ____ ERROR DETAILS_____: 
+(<class 'AttributeError'>, AttributeError("'NoneType' object has no attribute 'email'"), <traceback object at 0x0000013AA7CC3E40>)        
+TB object: <traceback object at 0x0000013AA7CC3E40>        
+Traceback object: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask-v2\app\auth_package\module_sign_in_sub\views\authLoginView.py", line 94, in dispatch_request
+    status, u_token = self.userToken.get_token_by_user(user.email)
+                                                       ^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'email'
+                     
+ERROR: 
+Error occured on method[send_simple_email]         
+File name: authLoginView.py        
+Exception-instance: authLoginView.py        
+Exception-classe: <class 'AttributeError'>        
+Exception-object: 'NoneType' object has no attribute 'email'        
+Customized-message: Failed to connect to SMTP. Reconnecting...        
+Line of error: 94        
+ ____ ERROR DETAILS_____: 
+(<class 'AttributeError'>, AttributeError("'NoneType' object has no attribute 'email'"), <traceback object at 0x0000013AA7CC3E40>)        
+TB object: <traceback object at 0x0000013AA7CC3E40>        
+Traceback object: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask-v2\app\auth_package\module_sign_in_sub\views\authLoginView.py", line 94, in dispatch_request
+    status, u_token = self.userToken.get_token_by_user(user.email)
+                                                       ^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'email'
+                    
+MESSAGE: 
+Error occured on method[send_simple_email]         
+File name: authLoginView.py        
+Exception-instance: authLoginView.py        
+Exception-classe: <class 'AttributeError'>        
+Exception-object: 'NoneType' object has no attribute 'email'        
+Customized-message: Failed to connect to SMTP. Reconnecting...        
+Line of error: 94        
+ ____ ERROR DETAILS_____: 
+(<class 'AttributeError'>, AttributeError("'NoneType' object has no attribute 'email'"), <traceback object at 0x0000013AA7CC3E40>)        
+TB object: <traceback object at 0x0000013AA7CC3E40>        
+Traceback object: Traceback (most recent call last):
+  File "C:\Users\Utilizador\OneDrive\Documentos\PythonProject\Flask-Projects\pylau-app-flask-v2\app\auth_package\module_sign_in_sub\views\authLoginView.py", line 94, in dispatch_request
+    status, u_token = self.userToken.get_token_by_user(user.email)
+                                                       ^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'email'
+                    
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:47:00 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:11 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:18 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:33 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:55:09 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:57:41 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:Error occured on METHOD[get_user_by_email]: 
+ Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. 
+NAME:Error occured on METHOD[get_user_by_email]: 
+ Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.             
+ERROR: 
+Error occured on METHOD[get_user_by_email]: 
+ Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.            
+MESSAGE: 
+Error occured on METHOD[get_user_by_email]: 
+ Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:57:41 PM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required. 
+NAME:401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.             
+ERROR: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+MESSAGE: 
+401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.            
+ _________________________            DESCRIPTION            ___________________________
+ None 

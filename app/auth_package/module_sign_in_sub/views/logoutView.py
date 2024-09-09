@@ -23,7 +23,7 @@ class LogoutView(View):
             else:
                 # Update the user's historic data
                 status, token = self.userToken.get_token_by_token(escape(user_token))
-                return [status, token]
+                
                 if status and token:                    
                     #self.userToken.expire_the_user_token_by_user(token.username, token.token)
                     status, exp_token = self.userToken.force_user_jwt_token_expiration(user_token)

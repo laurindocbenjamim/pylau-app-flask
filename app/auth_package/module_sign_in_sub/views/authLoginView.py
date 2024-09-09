@@ -87,20 +87,20 @@ class AuthLoginView(View):
                     status, user = self.model.get_user_by_email(username)
                     
                     # First check if the user exists
-                    if not status and not user :
+                    if not status:
                         flash('User not found', 'error')
                     else:
                         # Check if the user has a Token 
                         status, u_token = self.userToken.get_token_by_user(user.email)
                         
-                        if not status and not u_token:
+                        if not status:
                             flash('Something went wrong to check the token', 'error')
                         else:
                             
                             # Check if the user has two-factor authentication enabled
                             status, two_fa = self.TwoFaModel.get_user_two_fa_data(user.userID)
                             
-                            if not status and not two_fa:  
+                            if not status:  
                                 flash('Something went wrong with (2FA)', 'error')
                             else:     
                                 status = user.check_password(password)  
@@ -120,12 +120,12 @@ class AuthLoginView(View):
                                         status, new_token = self.userToken.refresh_user_token(u_token.token)
                                         
                                         
-                                        if status and new_token is None:
-                                            flash("User not  identified", 'error') 
+                                        if not status:
+                                            flash("User not identified", 'error') 
                                         else:                                            
                                             status, up_token = self.userToken.update_token(0,u_token.token, new_token, user.email, False)
                                             
-                                            if status and up_token is None:
+                                            if not status:
                                                 flash('Error to update user token', 'error')
                                             else:
                                                 # Create an object of the TwoFAModel class
