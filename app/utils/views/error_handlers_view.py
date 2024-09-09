@@ -23,7 +23,7 @@ def error_handlers_view(app):
         })
         response.content_type = "application/json"
 
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 404)
         resp.headers['X-Something'] = 'Page Not Found'
 
@@ -42,7 +42,7 @@ def error_handlers_view(app):
         app.logger.error('Internal Server Error: %s', e)
         image='https://static.doofinder.com/main-files/uploads/2019/09/error-500-doofinder.jpg'
         # Render the error page
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 500)
         resp.headers['X-Something'] = 'Internal Server Error'
 
@@ -58,7 +58,7 @@ def error_handlers_view(app):
         message = "Oops! Something went wrong on our end. Please try again later."
         app.logger.error('Internal Server Error: %s', e)
         image=image='https://miro.medium.com/v2/resize:fit:1400/1*2Z41mMgjOxkUUuvIwd7Djw.png'
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 500)
         resp.headers['X-Something'] = 'Generic Error'
 
@@ -76,7 +76,7 @@ def error_handlers_view(app):
         image=image='https://www.prontomarketing.com/wp-content/uploads/2022/12/how-to-fix-400-bad-requst-error-wordpress.png'
         #resp = make_response(render_template('errors/400.html', message=f"{e.code} -{e.name}. Unauthorized 
         #                                     {e.description}", image=image, error_code=error_code), 400)
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 400)
         resp.headers['X-Something'] = 'Unauthorized'
 
@@ -93,7 +93,7 @@ def error_handlers_view(app):
         error_description = e.name
         message = "Oops! Something went wrong on our end. Please try again later."
         image=image='https://www.asktheegghead.com/wp-content/uploads/2019/12/401-error-wordpress-featured-image.jpg'
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 401)
         resp.headers['X-Something'] = 'Unauthorized'
 
@@ -109,7 +109,7 @@ def error_handlers_view(app):
         error_description = e.name
         message = "Oops! Something went wrong on our end. Please try again later."
         image='https://www.online-tech-tips.com/wp-content/uploads/2021/06/http-403.jpeg'
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 403)
         resp.headers['X-Something'] = 'Forbidden'
 
@@ -125,7 +125,7 @@ def error_handlers_view(app):
         error_description = e.name
         message = "Oops! Something went wrong on our end. Please try again later."
         image='https://www.ionos.co.uk/digitalguide/fileadmin/DigitalGuide/Teaser/405-Method-Not-Allowed-t.jpg'
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 405)
         resp.headers['X-Something'] = 'Method Not Allowed'
 
@@ -141,7 +141,7 @@ def error_handlers_view(app):
         error_description = e.name
         message = "Oops! Something went wrong on our end. Please try again later."
         image='https://www.lifewire.com/thmb/3Zne74PQmtY62N1E02VkiNg78bQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc()/shutterstock_717832600-Converted-5a29aaf3b39d030037b2cda9.png'
-        resp = make_response(render_template('errors/error.html', title=title, message=message, error_description=error_description, 
+        resp = make_response(render_template('errors/errors.html', title=title, message=message, error_description=error_description, 
                                              image=image, error_code=error_code), 503)
         resp.headers['X-Something'] = 'Method Not Allowed'
 
