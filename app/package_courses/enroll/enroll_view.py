@@ -54,7 +54,8 @@ class EnrollView(View):
         
         if 'user_token' in session:
             if self._userToken.is_user_token_expired(session.get('user_token')):
-                session.clear()                
+                session.clear()    
+                #request.cookies.add('preview_url', request.url)             
                 return redirect(url_for('auth.user.login'))
         else:
             return redirect(url_for('auth.user.login'))
@@ -91,7 +92,7 @@ class EnrollView(View):
                     flash(message, "error") 
                 else:
                     file_field_name='bankTicket'
-                    # Verify the file
+                    # check if the payment method is by ticket bank
                     if request.form.get('paymentMethod') == 'bank reference':
                         status, message = validate_file(request=request, file_field_name=file_field_name)
                     
@@ -99,7 +100,7 @@ class EnrollView(View):
                             flash(message, "error") 
                         else:
                             #file = request.files[f'{file_field_name}']
-
+                            #
                             status = upload_file(request_file=request.files, file_field_name=file_field_name)
 
                             if not status: 

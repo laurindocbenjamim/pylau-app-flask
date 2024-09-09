@@ -24,8 +24,9 @@ class AuthLoginView(View):
         session.pop('_flashes', None)
         recover_account = True
 
+        #return f"{request.cookies.get('preview_url')}"
         def finalize_the_login(token, username):            
-            return [f"2FA - {two_fa.method_auth}"]             
+                         
             status, user = self.model.get_user_by_email(username)
             
             if status:

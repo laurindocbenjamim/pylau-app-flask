@@ -1,0 +1,70 @@
+09/09/2024 02:54:20 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:<<force_jwt_token_expiration method>> START TO TRY TO DECODE TOKEN 
+NAME:<<force_jwt_token_expiration method>> START TO TRY TO DECODE TOKEN             
+ERROR: 
+<<force_jwt_token_expiration method>> START TO TRY TO DECODE TOKEN            
+MESSAGE: 
+<<force_jwt_token_expiration method>> START TO TRY TO DECODE TOKEN            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:20 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN 
+NAME:<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN             
+ERROR: 
+<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN            
+MESSAGE: 
+<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:20 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:<<force_jwt_token_expiration method>> START TRYING TO DECODE THE TOKEN 
+NAME:<<force_jwt_token_expiration method>> START TRYING TO DECODE THE TOKEN             
+ERROR: 
+<<force_jwt_token_expiration method>> START TRYING TO DECODE THE TOKEN            
+MESSAGE: 
+<<force_jwt_token_expiration method>> START TRYING TO DECODE THE TOKEN            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:20 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN 
+NAME:<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN             
+ERROR: 
+<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN            
+MESSAGE: 
+<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN            
+ _________________________            DESCRIPTION            ___________________________
+ None 
+09/09/2024 02:54:20 AM - app.configs_package.modules.logger_config - DEBUG - 
+
+
+
+========================  DEBUGING  =======================================            
+
+CODE:<<force_jwt_token_expiration method>> THE TOKEN HAS BEEN REFRESHED [!] 
+NAME:<<force_jwt_token_expiration method>> THE TOKEN HAS BEEN REFRESHED [!]             
+ERROR: 
+<<force_jwt_token_expiration method>> THE TOKEN HAS BEEN REFRESHED [!]            
+MESSAGE: 
+<<force_jwt_token_expiration method>> THE TOKEN HAS BEEN REFRESHED [!]            
+ _________________________            DESCRIPTION            ___________________________
+ None 

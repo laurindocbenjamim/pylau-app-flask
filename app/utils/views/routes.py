@@ -1,7 +1,7 @@
 import os
 import pyotp
 import secrets
-from flask import Flask, abort, render_template, redirect,json, url_for, sessions, request, session, jsonify
+from flask import Flask, abort, render_template, redirect,json, url_for, sessions, request, session, jsonify, make_response
 from flask_cors import cross_origin
 from app.auth_package.module_sign_up_sub.model.users import Users
 from ...token_module import UserToken
@@ -103,7 +103,7 @@ def load_routes(app, db, login_manager):
     @app.route('/<string:user_token>')
     @cross_origin(methods=['GET'])
     def index(user_token=None):
-        
+              
         session.pop('_flashes', None)
         session['domain'] = request.root_url
         welcome_title = "Welcome to Data Tuning"
@@ -121,7 +121,12 @@ def load_routes(app, db, login_manager):
         elif 'user_token' in session:
             user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
         #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
-        return render_template('site_home.html', title="Home", welcome_title=welcome_title, welcome_message=welcome_message, domain = request.root_url, total_projects=12, user_token=user_token)
+
+        response = make_response(render_template('site_home.html', title="Home", welcome_title=welcome_title, 
+                                                 welcome_message=welcome_message, 
+                                                 domain = request.root_url, total_projects=12, user_token=user_token))
+        response.set_cookie('current_url', request.url)
+        return response
     
 
     @app.route('/about-us')

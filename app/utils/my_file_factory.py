@@ -37,7 +37,7 @@ def upload_file(request_file: Request.files, file_field_name: str):
 def validate_file(request: Request, file_field_name):
     # check if the post request has the file part
     if f'{file_field_name}' not in request.files:
-        return False, 'No bank ticket part'
+        return False, 'No ticket bank part'
         
     file = request.files[f'{file_field_name}']
     # If the user does not select a file, the browser submits an
@@ -46,7 +46,7 @@ def validate_file(request: Request, file_field_name):
         return False, 'No file has been selected'
         
     if not file:
-        return False, "A bank ticket is required"
+        return False, "A ticket bank is required"
     if not allowed_file(file.filename):
         return False, "Type file not allowed"
         
