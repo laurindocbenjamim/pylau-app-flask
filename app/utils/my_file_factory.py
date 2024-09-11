@@ -30,9 +30,9 @@ def upload_file(request_file: Request.files, file_field_name: str):
         filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
         file.save(filename)
 
-        return True
+        return True, filename
     except Exception as e:
-        return False
+        return False, str(e)
 
 def validate_file(request: Request, file_field_name):
     # check if the post request has the file part

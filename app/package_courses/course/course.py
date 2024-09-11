@@ -34,7 +34,8 @@ class CourseModel(db.Model):
     course_description: Mapped[str] = db.Column(
         db.String(100), nullable=False
     )
-    course_details: Mapped[str] = db.Column(db.String(100), nullable=False)
+    course_details: Mapped[str] = db.Column(db.String(100))
+    course_status: Mapped[bool] = db.Column(db.Boolean(), default=1)
    
     course_date_added = db.Column(db.String(11), default=datetime.now().date())
     course_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
@@ -44,6 +45,20 @@ class CourseModel(db.Model):
     course_timestamp_added = db.Column(db.String(20), default=db.func.current_timestamp())
     course_update_added = db.Column(db.String(20))
 
+    # Serialize the object
+    def serialize(self):
+        return {
+            "course_id": self.course_id,
+            "course_code": self.course_code,
+            "course_description": self.course_description,
+            "course_details": self.course_details,
+            "course_status": self.course_status,
+            "course_date_added": self.course_date_added,
+            "course_year_added": self.course_year_added,
+            "course_month_added": self.course_month_added,
+            "course_timestamp_added": self.course_timestamp_added,
+            "course_update_added": self.course_update_added
+        }
 
     # Method to save the product course to the database
     def create(course: dict = dict)-> any:
@@ -60,9 +75,10 @@ class CourseModel(db.Model):
         """
         try:
             obj = CourseModel(
-                pcourse_code = course['pcourse_code'],
+                course_code = course['course_code'],
                 course_description = course['course_description'],
-                course_details = course['course_details']
+                course_details = course['course_details'],
+                course_status = course['course_status'],
             )
             db.session.add(obj)
             db.session.commit()

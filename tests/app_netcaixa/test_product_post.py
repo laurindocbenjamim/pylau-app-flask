@@ -2,16 +2,29 @@ import pytest
 from app import create_app
 from flask import url_for
 from datetime import datetime
+from flask_wtf.csrf import generate_csrf
 
 
 url = '/netcaixa/stock/product'
+
+@pytest.fixture
+def client():
+    app = create_app(test_config={'TESTING': True}) 
+    with app.test_client() as client:
+        with app.app_context():
+            yield client
 
 def test_post(client):
     """
     This method is used to test the post method
     of the  product
     """
+    # Generate CSRF token
+    with client.session_transaction() as sess:
+        csrf_token = generate_csrf()
+
     dataForm = {  
+                'csrf_token': csrf_token, 
                 'barcode': "39938836",
                 'description': "Arroz Agulha",
                 'category': "Vegetal",
@@ -57,7 +70,13 @@ def test_validate_input_form(client, barcode, description, category, type, detai
     This method is used to test the post method
     of the  product
     """
+
+    # Generate CSRF token
+    with client.session_transaction() as sess:
+        csrf_token = generate_csrf()
+
     dataForm = {  
+                'csrf_token': csrf_token,
                 'barcode': barcode,
                 'description': description,
                 'category': category,

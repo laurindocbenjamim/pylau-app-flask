@@ -1,6 +1,7 @@
 
 import pytest
 from datetime import datetime
+from flask_wtf.csrf import generate_csrf
 
 
 url_of_get = '/api/netcaixa/stock/product'

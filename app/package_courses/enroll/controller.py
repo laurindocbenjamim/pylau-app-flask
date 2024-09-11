@@ -1,7 +1,13 @@
 
 import re
+import random
+from datetime import datetime, timedelta,timezone
 from flask import Request
 from app.utils import is_valid_email, validate_str_and_punct_char, validate_only_str, validate_str_punct_and_digits, validate_str_digits
+from .enroll import EnrollModel
+from ...package_payment.payment.payment import PaymentModel
+from ...package_payment.payment.payment_card import PaymentCardModel
+from ...package_payment.payment.card_transaction import CardTransactionModel
 
 numbers_pattern = r'^[0-9-]+$'
 #ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -39,28 +45,80 @@ def validate_words(key:str, value: str | int | float)-> bool:
     return True, 'OK'
 
 
-"""def validate_file(request: Request):
-    # check if the post request has the file part
-    if 'bankTicket' not in request.files:
-        return False, 'No bank ticket part'
-        
-    file = request.files['bankTicket']
-    # If the user does not select a file, the browser submits an
-    # empty file without a filename.
-    if file.filename == '':
-        return False, 'No selected file'
-        
-    if not file:
-        return False, "No selected file"
-    if not allowed_file(file.filename):
-        return False, "Not allowed file"
-        
-    # Return True if everything is okay
-    return True, 'OK'
-        
-        
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS"""
+# Save the payment transaction
+def create_payment_objects(form: Request.form, **kwargs):
+    
+    # Creating my objects
+    enroll_obj = {}
+    card_obj = {}
+    payment_obj = {}
+    
+    if not form.items():
+        return False, enroll_obj, card_obj, payment_obj 
+
+    """for key, value in form.items():        
+        enroll_obj["firstname"] = value if 'firstName' == key else ''
+        enroll_obj["lastname"] = value if 'lastName' == key else ''
+        enroll_obj["address"] = value if 'address' == key else ''
+        enroll_obj["address2"] = value if 'address2' == key else ''
+        enroll_obj["country"] = value if 'country' == key else ''
+        enroll_obj["state"] = value if 'state' == key else ''
+        enroll_obj["student_zip"] = value if 'zip' == key else ''
+        enroll_obj["enroll_code"] = f'{user_id}DP-{random.choice([1,6, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 5000, 20000])}'           
+        enroll_obj["enroll_obs"] = value if 'obs' == key else 'Enrollement course'
+        enroll_obj["enroll_status"] = 0"""
+           
+    enroll_obj = EnrollModel(
+        student_id = kwargs.get('user_id', 0),
+        student_firstname = form['firstName'],
+        student_lastname = form['lastName'],
+        student_address = form['address'],
+        student_address2 = form['address2'],
+        student_country = form['country'],
+        student_state = 1,
+        same_address = form['sameAddress'],
+        student_zip = form['zip'],
+        enroll_code = f'{kwargs.get('user_id', 0)}DP-{random.choice([1,6, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 5000, 20000])}',                
+        enroll_obs = 'Enrollement course',
+        enroll_status = 0,
+        enroll_date_added = datetime.now().date(),
+        enroll_year_added = datetime.now().strftime('%Y'),
+        enroll_month_added = datetime.now().strftime('%m'),
+        enroll_timestamp_added = datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+    )
+
+    #
+    card_obj = PaymentCardModel(
+                student_id = kwargs.get('user_id', 0),
+                card_number = form['ccNumber'],
+                card_name = form['ccName'],
+                card_exp = form['ccExpiration'],
+                card_cvv = form['ccCVV'],
+                card_date_added = datetime.now(),
+                card_year_added = datetime.now().strftime('%Y'),
+                card_month_added = datetime.now().strftime('%m'),
+                card_timestamp_added = datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+            )
+    
+    payment_obj = PaymentModel(
+                student_id = kwargs.get('user_id', 0),
+                payment_code = f'{kwargs.get('user_id', 0)}DP-{random.choice([1,6, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 5000, 20000])}',
+                payment_method = form['paymentMethod'],              
+                payment_date_added = datetime.now(),
+                payment_year_added = datetime.now().strftime('%Y'),
+                payment_month_added = datetime.now().strftime('%m'),
+                payment_timestamp_added = datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+            )
+    if form['paymentMethod'] != 'bank reference': 
+        payment_obj.card_number = form['ccNumber']
+    else:
+        payment_obj.payment_reference = kwargs.get('filename', "")
+    
+    #return True, enroll_obj.serialize(), card_obj.serialize(), payment_obj.serialize()
+    return True, enroll_obj, card_obj, payment_obj
+
+
+
+
     
     

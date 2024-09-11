@@ -1,6 +1,7 @@
 
 import pytest
 from datetime import datetime
+from flask_wtf.csrf import generate_csrf
 
 """
 This module  is used to test the product price package
@@ -25,7 +26,12 @@ def test_update_prices(client, product_price_id, sale_price_01, sale_price_02, s
 
     """
 
-    data_form = {
+    # Generate CSRF token
+    with client.session_transaction() as sess:
+        csrf_token = generate_csrf()
+
+    dataForm = {  
+                'csrf_token': csrf_token,
         "product_barcode": '---',
         "product_description": "---",
         "sale_price_01": sale_price_01,
@@ -34,7 +40,7 @@ def test_update_prices(client, product_price_id, sale_price_01, sale_price_02, s
         "pos_sale_price": pos_sale_price, 
     }
 
-    response = client.put(f'{url}/update/{product_price_id}', data=data_form)
+    response = client.put(f'{url}/update/{product_price_id}', data=dataForm)
 
     """
     Input[barcode='']

@@ -148,11 +148,13 @@
     <div class="col-md-6 col-lg-7 ">
       <h4 class="mb-3">Billing address</h4>
       <form class="needs-validation" method="post" novalidate enctype="multipart/form-data">
-        <input type="hidden" class="form-control" readonly id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" class="form-control" readonly id="csrf_token" name="csrf_token" 
+         value="{{ csrf_token() }}">
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">First name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="{{request.form.firstName}}" required>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" 
+            {% if "firstname" in session %} value="{{ session['firstname']}}" readonly {% else %} value="{{request.form.firstName}}" {% endif %} required>
             <div class="invalid-feedback">
               Valid first name is required.
             </div>
@@ -160,7 +162,8 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Last name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value="{{request.form.lastName}}" required>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" 
+            {% if "lastname" in session %} value="{{ session['lastname']}}" readonly {% else %} value="{{request.form.lastName}}" {% endif %} required>
             <div class="invalid-feedback">
               Valid last name is required.
             </div>
@@ -181,7 +184,8 @@
             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>            
             <div class="input-group has-validation">
               <span class="input-group-text">@</span>
-              <input type="email" class="form-control" id="email" name="email" value="{{request.form.email}}" placeholder="you@example.com" required>
+              <input type="email" class="form-control" id="email" name="email" 
+              {% if "email" in session %} value="{{ session['email']}}" readonly {% else %} value="{{request.form.email }}" {% endif %} placeholder="you@example.com" required>
               <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
@@ -207,6 +211,8 @@
               <option value="" >Choose...</option>
               {% if request.form.country != '' %} 
               <option value="{{request.form.country}}" selected>{{request.form.country}}</option>
+              {% elif 'country' in session %}
+              <option value="{{ session['country'] }}" selected>{{ session['country'] }}</option>
               {% endif %}
               
             </select>

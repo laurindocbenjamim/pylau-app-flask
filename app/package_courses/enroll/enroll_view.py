@@ -15,6 +15,8 @@ from app.utils.catch_exception_information import _catch_sys_except_information
 from app.utils.my_file_factory import validate_file, upload_file
 from .controller import validate_words#, validate_file
 from ...configs_package.modules.logger_config import get_message as set_logger_message
+from .controller import create_payment_objects
+
 
 
 
@@ -25,16 +27,24 @@ class EnrollView(View):
     """
     methods=['GET', 'POST']
 
-    def __init__(self, enroll, courseModel, userToken ,template) -> None:
+    course_codes = ["PB002401", "PB002403"]
+
+    def __init__(self, enroll, course, userToken, cardTransaction, 
+                 payment, paymentCard ,template) -> None:
         self._enroll = enroll
         self._userToken = userToken
-        self._courseModel = courseModel
+        self._courseModel = course
+        self._cardTransaction = cardTransaction
+        self._paymentCard = paymentCard
+        self._payment = payment
         self._template = template
 
     def dispatch_request(self, course=None):
-        course = escape(course)
+        course = escape(course)  
+        course = str(course).replace('-', ' ')      
         message = category = ""
         status_code = 200
+        course_details = ""
 
         # Method to validate the form fields
         def is_form_valid():
@@ -63,9 +73,8 @@ class EnrollView(View):
         if request.method == 'GET':    
             
             # Render the template and then set a cookie
-            response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))            
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course=course, course_code="PB002401"))            
             return response
-        
         
             """
             Below we catch the POST method request
@@ -101,22 +110,48 @@ class EnrollView(View):
                         else:
                             #file = request.files[f'{file_field_name}']
                             #
-                            status = upload_file(request_file=request.files, file_field_name=file_field_name)
+                            status, filename = upload_file(request_file=request.files, file_field_name=file_field_name)
 
                             if not status: 
                                 flash(f"Failed to upload file. {status}", "error")
                             else:
-                                flash(f"Ready to study {status}", "success")
+                                status, enroll_obj, card_obj, payment_obj = create_payment_objects(
+                                    request.form#, 
+                                    #user_id=session['user_id'],
+                                    #filename=filename                                    
+                                )
+                                                            
+                                flash(f"Ready to study {filename}", "success")
+                                return [enroll_obj, card_obj, payment_obj]
+                                  
                     else:
-                        flash(f"Ready to study {status}", "success")
+                        
+                        status, enroll_obj, card_obj, payment_obj = create_payment_objects(
+                            request.form, 
+                            user_id=session['user_id']                           
+                        )
+                        
+                        
+                        
+                        
+                        st,_str= self._cardTransaction.execute_transaction(
+                            enroll_obj = enroll_obj, 
+                            card_obj = card_obj, 
+                            payment_obj = payment_obj
+                        )
+                        if not st:
+                            flash(_str, 'error')
+                        else:   
+                            flash(f"Ready to study {st}-{_str}", "success")
 
             except Exception as e:
                 custom_message = "General error in Enrollment of course."
                 error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="ENROLL COURSE", custom_message=custom_message)
                 set_logger_message(error_info)
                 flash(str(e), 'error')
+                return f" {str(e)}", ""
             finally:                
-                response = make_response(render_template(self._template, title="Enroll to Python Basic", course="Python Basic", course_code="PB002401"))            
+                response = make_response(render_template(self._template, title="Enroll to Python Basic", course=course, course_code="PB002401"))            
                 return response
                         
         

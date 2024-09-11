@@ -9,6 +9,9 @@ from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
 from .enroll.enroll import EnrollModel
-from .payment.payment import PaymentModel
+from ..package_payment.payment.card_transaction import CardTransactionModel
+from ..package_payment.payment.payment_card import PaymentCardModel
+from ..package_payment.payment.payment import PaymentModel
 
-bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, CourseModel, UserToken, "e_learning/enroll_to_course.html"))
+bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
+CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_learning/enroll_to_course.html"))

@@ -1,8 +1,6 @@
 import pytest
-from app import create_app
-from flask import url_for
 from datetime import datetime
-
+from flask_wtf.csrf import generate_csrf
 
 url = "/netcaixa/stock/create/stock"
 
@@ -32,7 +30,12 @@ Thank you!
 Illinois Tech Team
     """
 
-    dataForm = {
+    # Generate CSRF token
+    with client.session_transaction() as sess:
+        csrf_token = generate_csrf()
+
+    dataForm = {  
+                'csrf_token': csrf_token,
         "product_barcode": "02995",
         "product_description": "Arroz",
         "product_unitary_price": 12.33,
@@ -84,7 +87,12 @@ def test_validate_input_form(
     This method is used to test the post method
     of the  product
     """
-    dataForm = {
+    # Generate CSRF token
+    with client.session_transaction() as sess:
+        csrf_token = generate_csrf()
+
+    dataForm = {  
+                'csrf_token': csrf_token,
         "product_barcode": barcode,
         "product_description": description,
         "product_unitary_price": unitary_price,

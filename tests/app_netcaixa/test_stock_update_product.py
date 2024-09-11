@@ -1,7 +1,6 @@
 import pytest
-from app import create_app
-from flask import url_for
 from datetime import datetime
+from flask_wtf.csrf import generate_csrf
 
 
 url = "/netcaixa/stock/update"
@@ -34,7 +33,12 @@ def test_update_product_stock(client, product_barcode, product_iva):
     Input test: [product_iva=14.45]
     Output: [product_iva=14.45]
     """
-    dataForm = {
+    # Generate CSRF token
+    with client.session_transaction() as sess:
+        csrf_token = generate_csrf()
+
+    dataForm = {  
+                'csrf_token': csrf_token,
         "product_barcode": "02994",
         "product_description": "Arroz",
         "product_unitary_price": 12.33,
