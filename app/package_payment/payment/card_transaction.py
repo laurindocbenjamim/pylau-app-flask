@@ -96,7 +96,7 @@ class CardTransactionModel(db.Model):
             db.session.commit()
             return True, "OK"
         except IntegrityError as e:
-            db.session. ()
+            db.session.rollback()
             custom_message = f"Error: {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
             set_logger_message(error_info)

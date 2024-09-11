@@ -10,6 +10,8 @@ from ...package_payment.payment.payment_card import PaymentCardModel
 from ...package_payment.payment.card_transaction import CardTransactionModel
 
 numbers_pattern = r'^[0-9-]+$'
+numbers_pattern_card_date = r'^[0-9/]+$'
+authorized_country_code_chars = "0123456789-"
 #ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -36,6 +38,23 @@ def validate_words(key:str, value: str | int | float)-> bool:
         if not validate_str_punct_and_digits(key):
             return False, f"Invalid characters detected on {str(key).replace(' ', '_').upper()} - {value}"
     elif 'zip' == key:
+        if len(str(value).replace(' ','')) > 8:
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+        if not re.match(numbers_pattern, value):
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+    elif 'ccNumber' == key:
+        if len(str(value).replace(' ','')) > 20:
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+        if not re.match(numbers_pattern, value):
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+    elif 'ccExpiration' == key:
+        if len(str(value).replace(' ','')) > 5:
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+        if not re.match(numbers_pattern_card_date, value):
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
+    elif 'ccCVV' == key:
+        if len(str(value).replace(' ','')) > 3:
+            return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
         if not re.match(numbers_pattern, value):
             return False, f"Invalid type value for the {str(key).replace(' ', '_').upper()}"
     elif value !='':
