@@ -299,36 +299,36 @@
 
         </div>
 
-        <div class="row gy-3">
+        <div class="row gy-3" id="cc_name">
           <div class="col-md-6">
             <label for="cc-name" class="form-label">Name on card <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="cc-name" name="ccName" value="{{request.form.ccName}}" placeholder="" required>
+            <input type="text" class="form-control" id="cc-name" name="ccName" value="{{request.form.ccName}}" placeholder="" >
             <small class="text-body-secondary">Full name as displayed on card</small>
             <div class="invalid-feedback">
               Name on card is required
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6" id="cc_number">
             <label for="cc-number" class="form-label">Credit card number <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="cc-number" name="ccNumber" value="{{request.form.ccNumber}}" placeholder="" required>
+            <input type="text" class="form-control" id="cc-number" name="ccNumber" value="{{request.form.ccNumber}}" placeholder="" >
             <div class="invalid-feedback">
               Credit card number is required
             </div>
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-3" id="cc_expiration">
             <label for="cc-expiration" class="form-label">Expiration <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="cc-expiration" name="ccExpiration" value="{{request.form.ccExpiration}}" 
-            maxlength="5" placeholder="" required>
+            maxlength="5" placeholder="" >
             <div class="invalid-feedback">
               Expiration date required
             </div>
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-3" id="cc_cvv">
             <label for="cc-cvv" class="form-label">CVV <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" id="cc-cvv" name="ccCVV" maxlength="3" value="{{request.form.ccCVV}}" placeholder="" required>
+            <input type="number" class="form-control" id="cc-cvv" name="ccCVV" maxlength="3" value="{{request.form.ccCVV}}" placeholder="" >
             <div class="invalid-feedback">
               Security code required
             </div>
@@ -353,21 +353,62 @@
 <script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>
 <script>
 
+  var cc_name = document.getElementById('cc-name');
+  cc_name.setAttribute('required', true)
+  var cc_number = document.getElementById('cc-number');
+  cc_number.setAttribute('required', true)
+  var cc_expiration = document.getElementById('cc-expiration')
+  cc_expiration.setAttribute('required', true)
+  var cc_cvv = document.getElementById('cc-cvv')
+  cc_cvv.setAttribute('required', true)
+
   document.getElementById('bankReference').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'block'
     document.getElementById('bank-ticket').setAttribute('required', true)
+    cc_name.removeAttribute('required')
+    //document.getElementById('cc_name').style.display = 'none'
+    cc_number.removeAttribute('required')
+    //document.getElementById('cc_number').style.display = 'none'
+    cc_expiration.removeAttribute('required')
+    //document.getElementById('cc_expiration').style.display = 'none'
+    cc_cvv.removeAttribute('required')
+    //document.getElementById('cc_cvv').style.display = 'none'
   })
 
   document.getElementById('debit').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'none'
+    cc_name.setAttribute('required', true)
+    //cc_document.getElementById('cc_name').style.display = 'block'
+    cc_number.setAttribute('required', true)
+    //document.getElementById('cc_number').style.display = 'block'
+    cc_expiration.setAttribute('required', true)
+    //document.getElementById('cc_expiration').style.display = 'block'
+    cc_cvv.setAttribute('required', true)
+    //document.getElementById('cc_cvv').style.display = 'block'
   })
 
   document.getElementById('credit').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'none'
+    cc_name.setAttribute('required', true)
+    //document.getElementById('cc_name').style.display = 'block'
+    cc_number.setAttribute('required', true)
+    //document.getElementById('cc_number').style.display = 'block'
+    cc_expiration.setAttribute('required', true)
+    //document.getElementById('cc_expiration').style.display = 'block'
+    cc_cvv.setAttribute('required', true)
+    //document.getElementById('cc_cvv').style.display = 'block'
   })
 
   document.getElementById('paypal').addEventListener('click', (e)=>{
     document.getElementById('bankticket').style.display = 'none'
+    cc_name.setAttribute('required', true)
+    //document.getElementById('cc_name').style.display = 'block'
+    cc_number.setAttribute('required', true)
+    //document.getElementById('cc_number').style.display = 'block'
+    cc_expiration.setAttribute('required', true)
+    //document.getElementById('cc_expiration').style.display = 'block'
+    cc_cvv.setAttribute('required', true)
+    //document.getElementById('cc_cvv').style.display = 'block'
   })
   
 

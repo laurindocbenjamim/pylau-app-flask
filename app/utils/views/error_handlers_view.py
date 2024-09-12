@@ -1,7 +1,7 @@
 
 import sys
 import traceback
-from flask import render_template, make_response, json
+from flask import render_template, make_response, json, redirect, url_for
 from ...configs_package.modules.logger_config import logger, get_message
 
 def error_handlers_view(app):
@@ -82,7 +82,8 @@ def error_handlers_view(app):
 
         get_message(e, type='debug')
         
-        return resp
+        #return resp
+        return redirect(url_for('auth.user.login'))
     
         
     @app.errorhandler(401)
@@ -115,7 +116,8 @@ def error_handlers_view(app):
 
         get_message(e, type='debug')
         
-        return resp
+        #return resp
+        return redirect(url_for('auth.user.login'))
 
     @app.errorhandler(405)
     def handle_method_not_allowed_error(e):

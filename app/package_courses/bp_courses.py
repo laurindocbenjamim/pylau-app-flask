@@ -13,5 +13,7 @@ from ..package_payment.payment.card_transaction import CardTransactionModel
 from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
 
+
 bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
 CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_learning/enroll_to_course.html"))
+

@@ -30,11 +30,16 @@
                 <li>
                     <a class="nav-link" href="{{ url_for('elearning') }}" style="font-weight:600;font-size: .8rem;text-transform:uppercase">
                         <span style="color: #50f127;font-weight: 600;">E</span>-<span style="color:#181818">Learning</span> </a>
-                </li>
+                </li>                
                 {% if not current_user.is_authenticated %}
                 <li>
                     <a class="nav-link" href="{{ url_for('auth.user.login') }}"  style="font-size: .8rem;color:#bcbebe">
                         Login</a>
+                </li>
+                {% else %}
+                <li></li>
+                    <a class="nav-link" href="{{ url_for('course.learn.my_learning') }}" style="font-weight:600;font-size: .8rem;text-transform:uppercase">
+                        <span style="color:#181818">My</span><span style="color: #50f127;font-weight: 600;">Learning</span> </a>
                 </li>
                 {% endif %}
             </ul>

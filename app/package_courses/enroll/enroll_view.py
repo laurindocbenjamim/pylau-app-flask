@@ -45,6 +45,7 @@ class EnrollView(View):
         message = category = ""
         status_code = 200
         course_details = ""
+        status = False
 
         # Method to validate the form fields
         def is_form_valid():
@@ -116,33 +117,29 @@ class EnrollView(View):
                                 flash(f"Failed to upload file. {status}", "error")
                             else:
                                 status, enroll_obj, card_obj, payment_obj = create_payment_objects(
-                                    request.form#, 
-                                    #user_id=session['user_id'],
-                                    #filename=filename                                    
+                                    request.form,
+                                    user_id=session['user_id']                                   
                                 )
                                                             
-                                flash(f"Ready to study {filename}", "success")
-                                return [enroll_obj, card_obj, payment_obj]
+                                #flash(f"Ready to study {filename}", "success")
+                                #return [enroll_obj, card_obj, payment_obj]
                                   
                     else:
                         
                         status, enroll_obj, card_obj, payment_obj = create_payment_objects(
                             request.form, 
                             user_id=session['user_id']                           
-                        )
+                        )                        
                         
-                        
-                        
-                        
-                        st,_str= self._cardTransaction.execute_transaction(
+                        status,_str= self._cardTransaction.execute_transaction(
                             enroll_obj = enroll_obj, 
                             card_obj = card_obj, 
                             payment_obj = payment_obj
                         )
-                        if not st:
+                        if not status:
                             flash(_str, 'error')
                         else:   
-                            flash(f"Ready to study {st}-{_str}", "success")
+                            flash(f"Ready to study {status}-{_str}", "success")
 
             except Exception as e:
                 custom_message = "General error in Enrollment of course."
@@ -150,7 +147,9 @@ class EnrollView(View):
                 set_logger_message(error_info)
                 flash(str(e), 'error')
                 return f" {str(e)}", ""
-            finally:                
+            finally:   
+                if status:
+                    return redirect(url_for('course.learn.my_learning', token=session.get('user_token')))             
                 response = make_response(render_template(self._template, title="Enroll to Python Basic", course=course, course_code="PB002401"))            
                 return response
                         

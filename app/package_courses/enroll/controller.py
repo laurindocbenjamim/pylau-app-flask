@@ -22,6 +22,7 @@ def validate_words(key:str, value: str | int | float)-> bool:
     """
 
     if key != 'address2' and key != 'bankTicket':
+        
         if value is None or value =='':
             return  False, f"{str(key).replace(' ', '_').upper()} is required."
         elif len(str(value).replace(' ', '_')) > 100:
