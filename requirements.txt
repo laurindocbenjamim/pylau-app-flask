@@ -18,6 +18,9 @@ flask-bcrypt
 Flask-SQLAlchemy
 flask-migrate
 Flask-WTF
+# Flask JWT-token
+# pip install flask-jwt-extended
+flask-jwt-extended
 bootstrap-flask
 Flask-Caching
 flask-talisman
@@ -44,6 +47,5 @@ pygame
 #!pip install --upgrade PyPDF2[full]
 PyPDF2[full]
 
-# Flask JWT-token
-pip install Flask-JWT-Extended
+
 
