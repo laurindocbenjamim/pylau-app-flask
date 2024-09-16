@@ -35,6 +35,7 @@ class CourseModel(db.Model):
         db.String(100), nullable=False
     )
     course_details: Mapped[str] = db.Column(db.String(100))
+    course_view_url: Mapped[str] = db.Column(db.String(200))
     course_status: Mapped[bool] = db.Column(db.Boolean(), default=1)
    
     course_date_added = db.Column(db.String(11), default=datetime.now().date())
@@ -53,6 +54,7 @@ class CourseModel(db.Model):
             "course_description": self.course_description,
             "course_details": self.course_details,
             "course_status": self.course_status,
+            "course_view_url": self.course_view_url,
             "course_date_added": self.course_date_added,
             "course_year_added": self.course_year_added,
             "course_month_added": self.course_month_added,
@@ -79,6 +81,7 @@ class CourseModel(db.Model):
                 course_description = course['course_description'],
                 course_details = course['course_details'],
                 course_status = course['course_status'],
+                course_view_url = course['course_view_url']
             )
             db.session.add(obj)
             db.session.commit()
@@ -87,7 +90,7 @@ class CourseModel(db.Model):
         
         except SQLAlchemyError as e:
             db.session.rollback()
-            custom_message = "Database config error"
+            custom_message = f"Database config error {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE COURSE", custom_message=custom_message)
             set_logger_message(error_info)
             
@@ -98,3 +101,54 @@ class CourseModel(db.Model):
             set_logger_message(error_info)
            
             return False, str(e)
+        
+    # Method to save the product course to the database
+    def update(course: dict = dict)-> any:
+        """
+        This method is used to save the course object
+        into the database.
+
+        Arguments:
+            'course' -> is expected to be a dictionary with the course fields
+
+        Return:
+            By default the function returns a boolean and the course object if
+            no error occured, if false return a boolean and an exception response
+        """
+        try:
+            obj = CourseModel(
+                course_code = course['course_code'],
+                course_description = course['course_description'],
+                course_details = course['course_details'],
+                course_status = course['course_status'],
+                course_view_url = course['course_view_url']
+            )
+            db.session.add(obj)
+            db.session.commit()
+
+            return True, obj
+        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            custom_message = f"Database config error {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="UPDATE COURSE", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        except Exception as e:
+            db.session.rollback()
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="UPDATE COURSE")
+            set_logger_message(error_info)
+           
+            return False, str(e)
+    
+    # Geat all courses
+    def get():
+        """
+        This method  returns all courses 
+        from database
+        """
+        obj = CourseModel.query.all()
+        if not obj:
+            return {}
+        return obj.serialize()

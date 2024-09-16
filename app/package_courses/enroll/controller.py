@@ -76,20 +76,9 @@ def create_payment_objects(form: Request.form, **kwargs):
     if not form.items():
         return False, enroll_obj, card_obj, payment_obj 
 
-    """for key, value in form.items():        
-        enroll_obj["firstname"] = value if 'firstName' == key else ''
-        enroll_obj["lastname"] = value if 'lastName' == key else ''
-        enroll_obj["address"] = value if 'address' == key else ''
-        enroll_obj["address2"] = value if 'address2' == key else ''
-        enroll_obj["country"] = value if 'country' == key else ''
-        enroll_obj["state"] = value if 'state' == key else ''
-        enroll_obj["student_zip"] = value if 'zip' == key else ''
-        enroll_obj["enroll_code"] = f'{user_id}DP-{random.choice([1,6, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 5000, 20000])}'           
-        enroll_obj["enroll_obs"] = value if 'obs' == key else 'Enrollement course'
-        enroll_obj["enroll_status"] = 0"""
-           
     enroll_obj = EnrollModel(
         student_id = kwargs.get('user_id', 0),
+        course_id =  form['course_id'],
         student_firstname = form['firstName'],
         student_lastname = form['lastName'],
         student_address = form['address'],
@@ -100,6 +89,7 @@ def create_payment_objects(form: Request.form, **kwargs):
         student_zip = form['zip'],
         enroll_code = f'{kwargs.get('user_id', 0)}DP-{random.choice([1,6, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 5000, 20000])}',                
         enroll_obs = 'Enrollement course',
+        enroll_type = "Test",
         enroll_status = 0,
         enroll_date_added = datetime.now().date(),
         enroll_year_added = datetime.now().strftime('%Y'),

@@ -26,7 +26,7 @@ class Config:
 CLASS  USED ON DEVELOPMENT MODE
 """
 class DevelopmentConfig(Config):
-    DATABASE_URI = "sqlite:///test3.db"
+    DATABASE_URI = "sqlite:///dtuning.db"
     UPLOAD_FOLDER = 'app/static/uploads'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
     DEBUG = False
@@ -98,7 +98,7 @@ CLASS USED ON TEST MODE
 """
 class TestingConfig(Config):
     TESTING = True    
-    DATABASE_URI = "sqlite:///test.db"
+    DATABASE_URI = "sqlite:///dataframe.db"
     UPLOAD_FOLDER = 'app/static/uploads'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 

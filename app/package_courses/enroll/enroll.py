@@ -31,6 +31,9 @@ class EnrollModel(db.Model):
     enroll_code: Mapped[str] = db.Column(
         db.String(40), nullable=False, unique=True
     )
+    course_id: Mapped[int] = db.Column(
+        db.Integer(), nullable=False
+    )
     student_id: Mapped[str] = db.Column(
         db.Integer, nullable=False
     )
@@ -57,7 +60,10 @@ class EnrollModel(db.Model):
     )
     student_zip: Mapped[str] = db.Column(
         db.String(10), nullable=False
-    )    
+    ) 
+    enroll_type: Mapped[str] = db.Column(
+        db.String(50), default='7 Days'
+    )   
     enroll_status: Mapped[str] = db.Column(db.Boolean(), default=True)
     enroll_obs: Mapped[str] = db.Column(db.String(100))
    
@@ -73,6 +79,7 @@ class EnrollModel(db.Model):
     def serialize(self):
         return {
             "enroll_id": self.enroll_id, 
+            "course_id": self.course_id,
             "student_id": self.student_id,
             "student_firstname": self.student_firstname,
             "student_lastname": self.student_lastname,
@@ -84,7 +91,8 @@ class EnrollModel(db.Model):
             "student_zip": self.student_zip,
             "enroll_code": self.enroll_code,                
             "enroll_obs": self.enroll_obs,
-            "enroll_status":  self.enroll_status,            
+            "enroll_status":  self.enroll_status,    
+            "enroll_type": self.enroll_type,        
             "enroll_date_added":  self.enroll_date_added,
             "enroll_year_added":  self.enroll_year_added,
             "enroll_month_added":  self.enroll_month_added,
@@ -93,7 +101,7 @@ class EnrollModel(db.Model):
         }
 
     # Method to save the product enroll to the database
-    def create(student_id:int,enroll: dict = dict)-> any:
+    def create(student_id:int, course_id: int,enroll: dict = dict)-> any:
         """
         This method is used to save the enroll object
         into the database.
@@ -108,6 +116,7 @@ class EnrollModel(db.Model):
         try:
             obj = EnrollModel(
                 student_id = student_id,
+                course_id = course_id,
                 student_firstname = enroll['firstname'],
                 student_lastname = enroll['lastname'],
                 student_address = enroll['address'],
@@ -118,7 +127,8 @@ class EnrollModel(db.Model):
                 student_zip = enroll['student_zip'],
                 enroll_code = enroll['enroll_code'],                
                 enroll_obs = enroll['enroll_obs'],
-                enroll_status = enroll['enroll_status'],               
+                enroll_status = enroll['enroll_status'],    
+                enroll_type = enroll['enroll_type'],           
                 enroll_date_added = enroll['enroll_date_added'],
                 enroll_year_added = enroll['enroll_year_added'],
                 enroll_month_added = enroll['enroll_month_added'],
@@ -169,7 +179,7 @@ class EnrollModel(db.Model):
 
             #obj = EnrollModel.query.filter(and_(EnrollModel.enroll_id == id)).first_or_404()
             obj = EnrollModel.query.filter_by(enroll_id = id).first_or_404()
-
+            
             obj.student_firstname = enroll['firstname']
             obj.student_lastname = enroll['lastname']
             obj.student_address = enroll['address']
@@ -178,7 +188,8 @@ class EnrollModel(db.Model):
             obj.student_zip = enroll['student_zip']
             obj.enroll_code = enroll['enroll_code']                
             obj.enroll_obs = enroll['enroll_obs']
-            obj.enroll_status = enroll['enroll_status']            
+            obj.enroll_status = enroll['enroll_status']  
+            obj.enroll_type = enroll['enroll_type'],          
             obj.enroll_date_added = enroll['enroll_date_added']
             obj.enroll_year_added = enroll['enroll_year_added']
             obj.enroll_month_added = enroll['enroll_month_added']
@@ -274,7 +285,8 @@ class EnrollModel(db.Model):
 
             obj.enroll_code = enroll['enroll_code']                
             obj.enroll_obs = enroll['enroll_obs']
-            obj.enroll_status = enroll['enroll_status']            
+            obj.enroll_status = enroll['enroll_status']   
+            obj.enroll_type = enroll['enroll_type'],         
             obj.enroll_date_added = enroll['enroll_date_added']
             obj.enroll_year_added = enroll['enroll_year_added']
             obj.enroll_month_added = enroll['enroll_month_added']
@@ -329,6 +341,62 @@ class EnrollModel(db.Model):
         except Exception as e:
             db.session.rollback()
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET ALL ENROLL")
+            set_logger_message(error_info)
+           
+            return False, str(e)  
+
+    # Method to get all the enroll to the database
+    def check_if_student_enrolled(student_id: str, course_id:int)-> any:
+        """
+        This method is used to get all the student enrollements
+        into the database.
+
+        Return:
+            return a list of dictionary
+        """
+        try:
+
+            #obj = EnrollModel.query.all()
+            obj = EnrollModel.query.filter(and_(EnrollModel.student_id == student_id, EnrollModel.course_id == course_id)).first_or_404()
+            return True, obj        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        except Exception as e:
+            db.session.rollback()
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled")
+            set_logger_message(error_info)
+           
+            return False, str(e)  
+
+
+    # Method to get all the enroll to the database
+    def get_by_student(student_id: str)-> any:
+        """
+        This method is used to get all the student enrollements
+        into the database.
+
+        Return:
+            return a list of dictionary
+        """
+        try:
+
+            obj = EnrollModel.query.filter_by(student_id=student_id).order_by(EnrollModel.course_description).all()
+            return True, obj        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get_by_student", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        except Exception as e:
+            db.session.rollback()
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get_by_student")
             set_logger_message(error_info)
            
             return False, str(e)       

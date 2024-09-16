@@ -97,7 +97,12 @@ class CardTransactionModel(db.Model):
             return True, "OK"
         except IntegrityError as e:
             db.session.rollback()
-            custom_message = f"Error: {str(e)}"
+            if 'course_id' in str(e):
+                custom_message = f"Student already enrolled at the course with ID {enroll_obj.course_id}."
+            elif 'enroll_code' in str(e):
+                custom_message = f"Integrity violation. Unique value required for ENROLL CODE field."
+            else:
+                custom_message = f"Integrity violation. Unique alue required."
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
             set_logger_message(error_info)
             
@@ -105,16 +110,17 @@ class CardTransactionModel(db.Model):
         
         except SQLAlchemyError as e:
             db.session.rollback()
-            custom_message = f"Database config error. {str(e)}"
+            custom_message = f"SQLAlchemyError error. {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
             set_logger_message(error_info)
             
             return False, custom_message
         except Exception as e:
             db.session.rollback()
-            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS")
+            custom_message = f"Exception error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
             set_logger_message(error_info)
            
-            return False, str(e)
+            return False, custom_message
     
    

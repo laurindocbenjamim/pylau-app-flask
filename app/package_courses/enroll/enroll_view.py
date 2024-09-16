@@ -41,9 +41,11 @@ class EnrollView(View):
 
     def dispatch_request(self, course=None):
         course = escape(course)  
-        course = str(course).replace('-', ' ')      
+        course = str(course).replace('-', ' ')   
+        course_id="2401"   
         message = category = ""
-        status_code = 200
+        status_code = 400
+        student_id = 1
         course_details = ""
         status = False
 
@@ -62,26 +64,35 @@ class EnrollView(View):
         
         """ First chet  if there is a user token if not rediret the user to the login page
         """
-        
-        if 'user_token' in session:
-            if self._userToken.is_user_token_expired(session.get('user_token')):
-                session.clear()    
-                #request.cookies.add('preview_url', request.url)             
+        def check_token():
+            if 'user_token' in session:
+                if self._userToken.is_user_token_expired(session.get('user_token')):
+                    session.clear()    
+                    #request.cookies.add('preview_url', request.url)             
+                    return redirect(url_for('auth.user.login'))
+            else:
                 return redirect(url_for('auth.user.login'))
-        else:
-            return redirect(url_for('auth.user.login'))
 
         if request.method == 'GET':    
+            # First check the user token
+            check_token()    
+
+
+            status, resp = self._enroll.check_if_student_enrolled(student_id=student_id, course_id=course_id)
+            if status:
+                return redirect(url_for('course.learn.my_learning', token=session.get('user_token'))) 
             
             # Render the template and then set a cookie
-            response = make_response(render_template(self._template, title="Enroll to Python Basic", course=course, course_code="PB002401"))            
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course=str(course).upper(), course_code=course_id))            
             return response
         
             """
             Below we catch the POST method request
             """
         elif request.method == 'POST':
-            
+            # First check the user token
+            check_token()
+
             """
             Gets the cookie from the user request, a token previously 
             passed, check if it is expired. 
@@ -121,7 +132,11 @@ class EnrollView(View):
                                     user_id=session['user_id']                                   
                                 )
                                                             
-                                #flash(f"Ready to study {filename}", "success")
+                                flash(f"Ready to study {filename}", "success")
+                                if not status:
+                                    flash(enroll_obj, "error")
+                                else:
+                                    status_code=200
                                 #return [enroll_obj, card_obj, payment_obj]
                                   
                     else:
@@ -139,6 +154,7 @@ class EnrollView(View):
                         if not status:
                             flash(_str, 'error')
                         else:   
+                            status_code=200
                             flash(f"Ready to study {status}-{_str}", "success")
 
             except Exception as e:
@@ -148,9 +164,9 @@ class EnrollView(View):
                 flash(str(e), 'error')
                 return f" {str(e)}", ""
             finally:   
-                if status:
+                if status_code==200:
                     return redirect(url_for('course.learn.my_learning', token=session.get('user_token')))             
-                response = make_response(render_template(self._template, title="Enroll to Python Basic", course=course, course_code="PB002401"))            
+                response = make_response(render_template(self._template, title="Enroll to Python Basic", course=str(course).upper(), course_code=course_id))            
                 return response
                         
         
