@@ -100,9 +100,13 @@ class CardTransactionModel(db.Model):
             if 'course_id' in str(e):
                 custom_message = f"Student already enrolled at the course with ID {enroll_obj.course_id}."
             elif 'enroll_code' in str(e):
-                custom_message = f"Integrity violation. Unique value required for ENROLL CODE field."
+                custom_message = f"Integrity violation. Unique value required for the ENROLL CODE field."
+            elif 'card_number' in str(e):
+                custom_message = f"Integrity violation. Unique value required for card number field."
+            elif 'payment_code' in str(e):
+                custom_message = f"Integrity violation. Unique value required for the payment code field."
             else:
-                custom_message = f"Integrity violation. Unique alue required."
+                custom_message = f"Integrity violation. Unique value required."
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
             set_logger_message(error_info)
             

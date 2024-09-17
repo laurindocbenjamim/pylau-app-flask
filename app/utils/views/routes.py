@@ -143,19 +143,7 @@ def load_routes(app, db, login_manager):
         welcome_message = "Discover a world of knowledge with our diverse range of courses"
         return render_template('contact.html' , title="Contact", welcome_title=welcome_title, welcome_message=welcome_message)
     
-    @app.route('/courses')
-    @cross_origin(methods=['GET'])
-    def courses():
-        welcome_title = "Our Courses"
-        welcome_message = "Discover a world of knowledge with our diverse range of courses"
-        return render_template('courses.html', title="Courses",  welcome_title=welcome_title, welcome_message=welcome_message)
     
-    @app.route('/python-courses')
-    @cross_origin(methods=['GET'])
-    def python_courses():
-        welcome_title = "Python Courses"
-        welcome_message = "Master Python programming with our comprehensive courses"
-        return render_template('python-courses.html', title="Python Courses",  welcome_title=welcome_title, welcome_message=welcome_message)
     
     
     @app.route('/elearning')

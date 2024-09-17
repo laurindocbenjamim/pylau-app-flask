@@ -64,6 +64,24 @@
 
 <h2 class="text-center mb-4">Available Python Courses</h2>
 <div class="row">
+    {% if courses %}
+    {% for course in courses %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python Basics Course">
+            <div class="card-body">
+                
+                <span class="course-level {{ course.course_level }} ">{{ course.course_level }}</span>
+                <h5 class="card-title">{{ course.course_description }}</h5>
+                <p class="card-text">{{ course.course_details }}</p>
+                <a href="{{  url_for('course.enroll', course=course.course_description, course_id=course.course_id)}}" class="btn btn-primary">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <!---
+    
     <div class="col-md-4 mb-4">
         <div class="card">
             <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python Basics Course">
@@ -97,9 +115,10 @@
             </div>
         </div>
     </div>
+    -->
 </div>
 
-<div class="row">
+<!--<div class="row">
     <div class="col-md-4 mb-4">
         <div class="card">
             <img src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg" class="card-img-top" alt="Python Web Development Course">
@@ -133,7 +152,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 {% endblock %}
 

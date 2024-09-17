@@ -41,11 +41,11 @@ class EnrollView(View):
 
     def dispatch_request(self, course=None):
         course = escape(course)  
-        course = str(course).replace('-', ' ')   
-        course_id="2401"   
+        #course = str(course).replace('', ' ')   
+        course_id= request.args.get('course_id', 0)   
         message = category = ""
         status_code = 400
-        student_id = 1
+        student_id = session['user_id']
         course_details = ""
         status = False
 
@@ -72,6 +72,8 @@ class EnrollView(View):
                     return redirect(url_for('auth.user.login'))
             else:
                 return redirect(url_for('auth.user.login'))
+            
+           
 
         if request.method == 'GET':    
             # First check the user token
@@ -129,15 +131,20 @@ class EnrollView(View):
                             else:
                                 status, enroll_obj, card_obj, payment_obj = create_payment_objects(
                                     request.form,
-                                    user_id=session['user_id']                                   
+                                    user_id=session['user_id'],
+                                    filename = filename                                   
                                 )
                                                             
-                                flash(f"Ready to study {filename}", "success")
+                                status,_str= self._cardTransaction.execute_transaction(
+                                    enroll_obj = enroll_obj, 
+                                    card_obj = card_obj, 
+                                    payment_obj = payment_obj
+                                )
                                 if not status:
-                                    flash(enroll_obj, "error")
-                                else:
+                                    flash(_str, 'error')
+                                else:   
                                     status_code=200
-                                #return [enroll_obj, card_obj, payment_obj]
+                                    flash(f"Ready to study {status}-{_str}", "success")
                                   
                     else:
                         
