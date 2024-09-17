@@ -92,6 +92,17 @@ class DevelopmentConfig(Config):
             # Set the URI Database configuration to the main app URI database
             self.DATABASE_URI = DATABASE_URI_HEROKU.replace(' ', '').replace('\n','')
 
+        else:
+            DATABASE_URI_HEROKU = 'postgresql://{}:{}@{}:{}/{}'.format(
+                os.getenv('DB_USER'), 
+                os.getenv('DB_PASSWORD'), 
+                os.getenv('DB_SERVER'), 
+                os.getenv('DB_PORT'), 
+                os.getenv('DB_NAME')
+            )
+            # Set the URI Database configuration to the main app URI database
+            self.DATABASE_URI = DATABASE_URI_HEROKU.replace(' ', '').replace('\n','')
+
 
 """
 CLASS USED ON TEST MODE
