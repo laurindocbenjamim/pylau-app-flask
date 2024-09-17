@@ -149,6 +149,28 @@ class CourseModel(db.Model):
         from database
         """
         obj = CourseModel.query.all()
-        if not obj:
-            return {}
-        return obj.serialize()
+        return obj
+    
+    # Geat all courses
+    def get_by_id(course_id:int):
+        """
+        This method  returns all courses 
+        from database
+        """
+        try:
+            obj = CourseModel.query.filter_by(course_id=course_id).first_or_404()
+            return True, obj
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            custom_message = f"Database config error {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET COURSE by ID", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        except Exception as e:
+            db.session.rollback()
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET COURSE by ID")
+            set_logger_message(error_info)
+           
+            return False, str(e)
+    

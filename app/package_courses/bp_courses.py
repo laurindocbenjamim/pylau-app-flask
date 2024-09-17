@@ -1,5 +1,5 @@
 
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask_cors import  CORS, cross_origin
 
 bp_courses = Blueprint("course", __name__, url_prefix='/course')
@@ -13,6 +13,41 @@ from ..package_payment.payment.card_transaction import CardTransactionModel
 from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
 
+
+@bp_courses.route('/list-all')
+@cross_origin(methods=['GET'])
+def get_all():
+    import random
+    from datetime import datetime, timezone
+    data = {
+        "course_code": f"PYB00{random.choice([1000, 10000])}",
+        "course_description": "Python Basic",
+        "course_details": "Basic Python course, a bigginer and fundamental course",
+        "course_status": 1,
+        "course_view_url": "course.learn.python_basic",
+        "course_date_added": datetime.now(),
+        "course_year_added": datetime.now().strftime('%Y'),
+        "course_month_added": datetime.now().strftime('%m'),
+        "course_timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+    }
+
+    data2 = {
+        "course_code": f"PYB00{random.random()}",
+        "course_description": "Python for Data Visualization",
+        "course_details": "Python for Data Visualization, an advanced course",
+        "course_status": 1,
+        "course_view_url": "course.learn.python_for_data_visualize",
+        "course_date_added": datetime.now(),
+        "course_year_added": datetime.now().strftime('%Y'),
+        "course_month_added": datetime.now().strftime('%m'),
+        "course_timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+    }
+    
+    status, obj = CourseModel.create(course=data2)
+
+    courses = CourseModel.get()
+    courses = [] if len(courses) == 0 else courses
+    return render_template('admin/list_courses.html', title="All Courses", courses=courses)
 
 bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
 CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_learning/enroll_to_course.html"))

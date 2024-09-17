@@ -38,8 +38,18 @@ class MyLearningView(View):
         message = category = ""
         status_code = 200
         course_details = ""
-   
-        response = make_response(render_template(self._template, title="My Learning", courses=courses))            
+        current_url="course.learn.my_learning"
+
+        status, enroll = self._enroll.get_by_student(student_id = session['user_id'])
+
+        if status:
+            if len(enroll)>0:
+                for en in enroll:
+                    status, mcourse = self._courseModel.get_by_id(course_id=en.course_id)
+                    if status:
+                        courses.append(mcourse)
+    
+        response = make_response(render_template(self._template, title="My Learning",current_url=current_url, status=status, courses=courses))            
         return response
                         
         

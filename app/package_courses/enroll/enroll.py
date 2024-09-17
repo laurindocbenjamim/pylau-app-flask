@@ -375,7 +375,7 @@ class EnrollModel(db.Model):
 
 
     # Method to get all the enroll to the database
-    def get_by_student(student_id: str)-> any:
+    def get_by_student(student_id: int)-> any:
         """
         This method is used to get all the student enrollements
         into the database.
@@ -385,7 +385,7 @@ class EnrollModel(db.Model):
         """
         try:
 
-            obj = EnrollModel.query.filter_by(student_id=student_id).order_by(EnrollModel.course_description).all()
+            obj = EnrollModel.query.filter_by(student_id=student_id).order_by(EnrollModel.course_id).all()
             return True, obj        
         except SQLAlchemyError as e:
             db.session.rollback()

@@ -121,9 +121,11 @@
             <button type="button" id="sidebarCollapse" class="btn btn-outline-light">
                 <i class="fas fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="{{ url_for('index')}}">
+            {% if 'my_learning' not in current_url %}
+            <a class="navbar-brand" href="{{ url_for('course.learn.my_learning')}}">
                 <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/289-2890745_transparent-data-science-logo-removebg-preview.png?raw=true" alt="Data Tuning Logo" class="logo">
             </a>
+            {% endif %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -131,7 +133,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('elearning')}}">Courses</a>
+                        <a class="nav-link active" href="{{ url_for(current_url)}}">{{ title }}</a>
                     </li>
                 </ul>
                 {% if not current_user.is_authenticated %}
