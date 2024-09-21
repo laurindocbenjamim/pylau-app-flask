@@ -1,5 +1,5 @@
 from flask.views import View   
-from flask import session,redirect, url_for, request, flash,jsonify
+from flask import session,redirect, url_for, request, flash,jsonify, abort, make_response
 from flask_login import login_required, logout_user
 from markupsafe import escape
 
@@ -19,7 +19,7 @@ class LogoutView(View):
             if self.userToken.is_user_token_expired(escape(user_token)):
                 session.clear()
                 logout_user()
-                return [user_token]
+                abort(403)
             else:
                 # Update the user's historic data
                 status, token = self.userToken.get_token_by_token(escape(user_token))
@@ -38,6 +38,7 @@ class LogoutView(View):
                 session.pop('username', None)
                 session.pop('user_token', None)
                 session.pop('email', None)
+                
         else:
             status, obj = self.authUserHistoric.update_auth_user(session.get('user_id'), session.get('email'), False)
             #re, obj2 = self.userToken.expire_the_user_token_by_user(session.get('email'), session.get('user_token'))
@@ -50,4 +51,10 @@ class LogoutView(View):
             session.pop('user_token', None)
             session.pop('email', None)
             #return jsonify({'message': 'User token is required'}), 400
-        return redirect(url_for('auth.user.login'))
+
+        resp = make_response(redirect(url_for('auth.user.login')))
+        resp.set_cookie('USERNAME', '')
+        resp.set_cookie('USER_STATUS', '')
+        resp.set_cookie('USER_ROLE', '')
+        resp.set_cookie('USER_TOKEN', '')
+        return resp
