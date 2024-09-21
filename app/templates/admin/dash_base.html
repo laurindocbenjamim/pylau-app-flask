@@ -392,23 +392,23 @@
               </a>
             </li>
           </ul>
-
+-->
           <hr class="my-3">
 
           <ul class="nav flex-column mb-auto">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('audit.display_logs', user_token=USER_DATA['USER_TOKEN'])}}" target="_blank">
                 <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
-                Settings
+                Logs
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('auth.user.logout', user_token=USER_DATA['USER_TOKEN'])}}" >
                 <svg class="bi"><use xlink:href="#door-closed"/></svg>
                 Sign out
               </a>
             </li>
-          </ul>-->
+          </ul>
         </div>
       </div>
     </div>

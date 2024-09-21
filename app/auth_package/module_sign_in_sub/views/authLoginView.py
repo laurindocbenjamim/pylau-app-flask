@@ -4,7 +4,7 @@ import os
 import flask
 from flask_login import login_user, logout_user
 from flask.views import View
-from flask import render_template, request, session, redirect, url_for, flash, jsonify,g
+from flask import render_template, request, session, redirect, url_for, flash, jsonify,g, make_response
 from ..controller.authController import validate_form_fields
 from ....configs_package.modules.jwt_config import refresh_jwt_token
 from ....configs_package.modules.logger_config import get_message as set_logger_message
@@ -164,15 +164,22 @@ class AuthLoginView(View):
                                                         login_user(user)
                                                         g.user = user  
                                                         flash('Login success', 'success')
-                                                        return redirect(url_for('index', user_token=str(new_token))) 
+                                                        resp = make_response(redirect(url_for('index', user_token=str(new_token))))
+                                                        resp.set_cookie('USERNAME', user.email)
+                                                        resp.set_cookie('USER_STATUS', str(user.active))
+                                                        resp.set_cookie('USER_ROLE', user.role)
+                                                        resp.set_cookie('USER_TOKEN', new_token)
+                                                        return resp
                                                         
                                                                                                          
                                                  
                                     
                 except Exception as e:
+                    login_user(user)
+                    g.user = user  
                     flask.flash(f'Failed to make login. {type(e).__name__}', 'error')
                     custom_message = "Failed to connect to SMTP. Reconnecting..."
-                    error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="send_simple_email", custom_message=custom_message)
+                    error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="Auth Login View", custom_message=custom_message)
                     set_logger_message(error_info)   
-        
-        return render_template(self.template, title='Login')
+        resp = make_response(render_template(self.template, title='Login'))
+        return resp

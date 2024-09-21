@@ -58,10 +58,10 @@
                 </li>
                 <li class="nav-item">
                     {% if 'user_token' in session %}
-                    <a class="nav-link" href="{{ url_for('display_logs', user_token=session['user_token']) }}">Display
+                    <a class="nav-link" href="{{ url_for('audit.display_logs', user_token=session['user_token']) }}">Display
                         Logs</a>
                     {% else %}
-                    <a class="nav-link" href="{{ url_for('display_logs', user_token=user_token) }}">Display Logs</a>
+                    <a class="nav-link" href="{{ url_for('audit.display_logs', user_token=user_token) }}">Display Logs</a>
                     {% endif %}
                 </li>
                 <li class="nav-item">

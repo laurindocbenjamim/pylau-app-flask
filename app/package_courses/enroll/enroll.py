@@ -3,6 +3,7 @@ import traceback
 import sys
 
 import sqlalchemy.exc
+from psycopg2 import errors as pg_errors
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
@@ -330,16 +331,20 @@ class EnrollModel(db.Model):
         try:
 
             obj = EnrollModel.query.order_by(EnrollModel.course_description).all()
-            return True, obj        
+            return True, obj     
+        except pg_errors.UndefinedTable as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET ALL ENROLL", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message   
         except SQLAlchemyError as e:
-            db.session.rollback()
             custom_message = f"Database config error. {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET ALL ENROLL", custom_message=custom_message)
             set_logger_message(error_info)
             
             return False, custom_message
         except Exception as e:
-            db.session.rollback()
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET ALL ENROLL")
             set_logger_message(error_info)
            
@@ -358,16 +363,20 @@ class EnrollModel(db.Model):
 
             #obj = EnrollModel.query.all()
             obj = EnrollModel.query.filter(and_(EnrollModel.student_id == student_id, EnrollModel.course_id == course_id)).first_or_404()
-            return True, obj        
+            return True, obj  
+        except pg_errors.UndefinedTable as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message       
         except SQLAlchemyError as e:
-            db.session.rollback()
             custom_message = f"Database config error. {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled", custom_message=custom_message)
             set_logger_message(error_info)
             
             return False, custom_message
         except Exception as e:
-            db.session.rollback()
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled")
             set_logger_message(error_info)
            
@@ -386,16 +395,20 @@ class EnrollModel(db.Model):
         try:
 
             obj = EnrollModel.query.filter_by(student_id=student_id).order_by(EnrollModel.course_id).all()
-            return True, obj        
+            return True, obj    
+        except pg_errors.UndefinedTable as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message     
         except SQLAlchemyError as e:
-            db.session.rollback()
             custom_message = f"Database config error. {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get_by_student", custom_message=custom_message)
             set_logger_message(error_info)
             
             return False, custom_message
         except Exception as e:
-            db.session.rollback()
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get_by_student")
             set_logger_message(error_info)
            

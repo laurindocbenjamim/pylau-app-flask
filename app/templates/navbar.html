@@ -27,10 +27,16 @@
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>-->
             <ul class="navbar-nav ">
-                <li>
+                <!--<li>
                     <a class="nav-link" href="{{ url_for('elearning') }}" style="font-weight:600;font-size: .8rem;text-transform:uppercase">
                         <span style="color: #50f127;font-weight: 600;">E</span>-<span style="color:#181818">Learning</span> </a>
-                </li>                
+                </li> -->
+                {% if USER_DATA and USER_DATA['USER_ROLE'] =='admin' %}      
+                <li>
+                    <a class="nav-link" href="{{ url_for('admin.dashboard', user_token=USER_DATA['USER_TOKEN']) }}" style="color:#f8f8f8;font-weight:600;font-size: .8rem;text-transform:none;">
+                    Dashboard </a>
+                </li>
+                {% endif %}
                 {% if not current_user.is_authenticated %}
                 <li>
                     <a class="nav-link" href="{{ url_for('auth.user.login') }}"  style="font-size: .8rem;color:#bcbebe">
@@ -53,6 +59,8 @@
                 <i class="fa fa-sign-out me-2"></i>Logout
             </a>
             {% endif %}
+            
+              
         </div>
     </div>
 </nav>

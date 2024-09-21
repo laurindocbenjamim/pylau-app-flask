@@ -1,4 +1,4 @@
-from flask import render_template, abort, flash, redirect, url_for, session, jsonify
+from flask import render_template, abort, flash, redirect, url_for, session, jsonify, request, make_response
 from flask.views import View
 from flask_login import logout_user, login_required
 from markupsafe import escape
@@ -13,6 +13,13 @@ class AdminView(View):
         self.template = template
 
     def dispatch_request(self, user_token):
+
+        USER_DATA = {
+             'USERNAME': request.cookies.get('USERNAME', ''),
+        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
+        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
+        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
+        }
             
         # Check if the token is expired
         if self.userToken.is_user_token_expired(escape(user_token)):
@@ -33,11 +40,17 @@ class AdminView(View):
 
         # Check if the user is identified
 
-        if status and user is not None:
-                
-            if user.email == token.username:
+        if not status:
+            resp = make_response(redirect(url_for('auth.user.logout')))
+            return resp
+        else:   
+            if user.email != token.username:
+                resp = make_response(redirect(url_for('auth.user.logout')))
+                return resp
+            else:
                 session['user_token'] = token.token
                 session['user_id'] = user.userID
                 session['email'] = user.email
-                   
-                return render_template(self.template, user=user, user_token=token.token)
+                resp = make_response(render_template(self.template, title="Dashboard", USER_DATA=USER_DATA, user=user, user_token=token.token))
+                resp.set_cookie('current_url', request.url)
+                return resp

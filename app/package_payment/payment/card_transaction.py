@@ -3,6 +3,7 @@ import traceback
 import sys
 
 import sqlalchemy.exc
+from psycopg2 import errors as pg_errors
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
@@ -95,6 +96,15 @@ class CardTransactionModel(db.Model):
             db.session.add(payment_obj)
             db.session.commit()
             return True, "OK"
+        except pg_errors.UndefinedTable as e:
+            db.session.rollback()
+            custom_message = str(e)
+                        
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        
         except IntegrityError as e:
             db.session.rollback()
             if 'course_id' in str(e):
@@ -119,6 +129,14 @@ class CardTransactionModel(db.Model):
             set_logger_message(error_info)
             
             return False, custom_message
+        
+        except pg_errors.DatabaseError as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CARD TRANSACTIONS", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return custom_message
+        
         except Exception as e:
             db.session.rollback()
             custom_message = f"Exception error. {str(e)}"

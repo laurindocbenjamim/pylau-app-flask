@@ -3,6 +3,7 @@ import traceback
 import sys
 
 import sqlalchemy.exc
+from psycopg2 import errors as pg_errors
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
@@ -96,6 +97,21 @@ class CourseModel(db.Model):
 
             return True, obj
         
+        except pg_errors.UndefinedTable as e:
+            db.session.rollback()
+            custom_message = f"Undefined table error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE COURSE", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        except IntegrityError as e:
+            db.session.rollback()
+            custom_message = "This course code already exists"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE COURSE", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
+        
         except SQLAlchemyError as e:
             db.session.rollback()
             custom_message = f"Database config error {str(e)}"
@@ -157,8 +173,21 @@ class CourseModel(db.Model):
         This method  returns all courses 
         from database
         """
-        obj = CourseModel.query.all()
-        return obj
+        try:
+            obj = CourseModel.query.all()
+            return obj
+        except pg_errors.UndefinedTable as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get all courses", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return custom_message
+        except pg_errors.DatabaseError as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get all courses", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return custom_message
     
     # Geat all courses
     def get_by_id(course_id:int):
@@ -169,13 +198,25 @@ class CourseModel(db.Model):
         try:
             obj = CourseModel.query.filter_by(course_id=course_id).first_or_404()
             return True, obj
+        except pg_errors.UndefinedTable as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="check_if_enrolled", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return False, custom_message
         except SQLAlchemyError as e:
-            db.session.rollback()
             custom_message = f"Database config error {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET COURSE by ID", custom_message=custom_message)
             set_logger_message(error_info)
             
             return False, custom_message
+        except pg_errors.DatabaseError as e:
+            custom_message = f"Database config error. {str(e)}"
+            error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get courses by ID", custom_message=custom_message)
+            set_logger_message(error_info)
+            
+            return custom_message
+        
         except Exception as e:
             db.session.rollback()
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="GET COURSE by ID")

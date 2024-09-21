@@ -1,5 +1,6 @@
 import logging
 import os
+from logging.handlers import TimedRotatingFileHandler
 
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -16,8 +17,10 @@ if not os.path.exists('app/static/logs/logs.log'):
         file.write('# THIS IS A LOG FILE \n\n\n')
 
 # Create a file handler
+#handler = TimedRotatingFileHandler('app.log', when='midnight', interval=1)
+#handler.suffix = "%Y-%m-%d"
 file_handler = logging.FileHandler('app/static/logs/logs.log')
-file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+file_formatter = logging.Formatter('[%(asctime)s] - %(name)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 file_handler.setFormatter(file_formatter)
 
 # Create a console handler

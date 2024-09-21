@@ -66,38 +66,9 @@ def load_routes(app, db, login_manager):
 
         return redirect(url_for('index'))
 
-    @app.route('/app-logs')
-    @cross_origin(methods=['GET'])
-    def display_logs():
 
-        if 'user_token' in session:
-            user_token = session['user_token']
-            if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
-                session.clear()
-                logout_user()
-                return redirect(url_for('auth.user.login'))            
-            
-            if UserToken.is_user_token_expired(user_token):
-                session.clear()
-                logout_user()
-                return redirect(url_for('auth.user.login'))
-        
-            if request.method == 'GET' and user_token is not None:
 
-                status,token = UserToken.get_token_by_token(user_token)
-                
-                # Get the user details using the email address
-                if status and Users.check_email_exists(token.username):
-                    session['user_token'] = token.token          
-
-        #return jsonify({"user": session['user_token']})
-        logs = "app/static/logs/logs.log"
-        log_data =''
-        with open(logs, 'r') as data:
-            log_data = data.read()
-        return render_template('home.html', title='Display Logs', log_data=log_data)
     
-
      # Main route
     @app.route('/')
     @app.route('/<string:user_token>')
@@ -108,6 +79,13 @@ def load_routes(app, db, login_manager):
         session['domain'] = request.root_url
         welcome_title = "Welcome to Data Tuning"
         welcome_message = "Empowering learners with cutting-edge online education"
+    
+        USER_DATA = {
+             'USERNAME': request.cookies.get('USERNAME', ''),
+        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
+        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
+        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
+        }
 
         if user_token is not None:
             if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
@@ -124,7 +102,7 @@ def load_routes(app, db, login_manager):
 
         response = make_response(render_template('site_home.html', title="Home", welcome_title=welcome_title, 
                                                  welcome_message=welcome_message, 
-                                                 domain = request.root_url, total_projects=12, user_token=user_token))
+                                                 domain = request.root_url, total_projects=12, USER_DATA=USER_DATA, user_token=user_token))
         response.set_cookie('current_url', request.url)
         return response
     
@@ -257,3 +235,7 @@ def load_routes(app, db, login_manager):
     bp_courses.register_blueprint(bp_learn)   
      
     app.register_blueprint(bp_courses)
+
+    # Importing the blueprint of the audit package
+    from ...package_auditapp.bp_auditapp import bp_audit
+    app.register_blueprint(bp_audit)
