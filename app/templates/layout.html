@@ -141,7 +141,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>    
     <!--<script src="{{ url_for('static', filename='assets/js/offcanvas-navbar.js') }}"></script>-->
     <script type="module" src="{{ url_for('static', filename='app/webscrapping/webscrapping_component.js') }}"></script>
-
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>
