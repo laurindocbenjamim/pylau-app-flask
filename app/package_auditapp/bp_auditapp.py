@@ -1,4 +1,8 @@
 
+import aiofiles
+import os
+from quart import Quart, render_template, websocket
+from flask_caching import Cache
 from flask_cors import CORS, cross_origin
 from flask_login import logout_user
 from markupsafe import escape
@@ -10,6 +14,7 @@ from app.token_module import UserToken
 bp_audit = Blueprint("audit", __name__, url_prefix="/audit")
 
 
+
 def read_log_in_chunk(file_path, chunck_size=1024):
     with open(file_path, 'r') as data:
         while True:
@@ -19,7 +24,7 @@ def read_log_in_chunk(file_path, chunck_size=1024):
             yield chunck
 
 @bp_audit.route('/')
-@cross_origin(methods=['GET'])
+#@cross_origin(methods=['GET'])
 def audit():
 
     if 'user_token' in session:
@@ -42,19 +47,23 @@ def audit():
             if status and Users.check_email_exists(token.username):
                 session['user_token'] = token.token
 
-    resp = make_response(render_template('home.html', title='Audit App', log='audit/logs'))
+    resp = make_response(render_template('audit/audit.html', title='Audit App', log='audit/logs'))
     return resp
     
 
 @bp_audit.route('/logs')
 @cross_origin(methods=['GET'])
+#@cache.cached(timeout=60, query_string=True)
 def display_logs():
 
     # Generate logs chunck
     def generate():
         file_path = "app/static/logs/logs.log"
-        for chunck in read_log_in_chunk(file_path):
-            yield chunck
+        if not os.path.exists(file_path):
+            yield "=============== File not found =============== "
+        else:
+            for chunck in read_log_in_chunk(file_path):
+                yield chunck
 
     if 'user_token' in session:
         user_token = session['user_token']
@@ -79,6 +88,10 @@ def display_logs():
     #return jsonify({"user": session['user_token']})
     logs = "app/static/logs/logs.log"
     
+    try:
+        return Response(generate(), mimetype='text/plain')
+    except Exception as e:
+        return Response(generate(), mimetype='text/plain')
 
-    return Response(generate(), mimetype='text/plain')
+    
     

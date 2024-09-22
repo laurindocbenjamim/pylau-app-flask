@@ -114,6 +114,9 @@ class TestingConfig(Config):
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
+
+    CACHE_TYPE = 'simple' 
+
     SMTP_HOST = os.environ.get('SMTP_HOST') 
     SMTP_PORT = os.environ.get('SMTP_PORT')# 587 by default
     SMTP_USER = os.environ.get('SMTP_USER')

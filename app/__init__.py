@@ -5,7 +5,9 @@ import os
 import secrets
 from datetime import datetime, timedelta
 from flask_wtf import CSRFProtect
+from flask_caching import Cache
 from flask import Flask, current_app, request, session, jsonify, render_template
+from quart import Quart, render_template, websocket
 from flask import make_response
 from flask_cors import CORS, cross_origin
 
@@ -22,6 +24,7 @@ from .configs_package.modules.load_database import db
 def create_app(JDBC="sqlite",test_config=None):
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    
     
     if test_config is None:
         # Load  the  instance config if it exists, when not testing
@@ -42,6 +45,13 @@ def create_app(JDBC="sqlite",test_config=None):
     #app.secret_key = '20CHiteECulO081190#'
     csrf = CSRFProtect(app=app)
     
+
+    #
+    cache = Cache(app)
+    #
+    #Quart(app)
+
+
     # Login Manager is needed for the the application 
     # to be able to log in and log out users
 
