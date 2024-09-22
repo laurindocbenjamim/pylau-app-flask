@@ -46,6 +46,8 @@ openai
 pygame
 #!pip install --upgrade PyPDF2[full]
 PyPDF2[full]
+# pip install quart
+quart
 
 
 
