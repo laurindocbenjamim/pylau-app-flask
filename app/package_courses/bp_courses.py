@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template, make_response
+from flask import Blueprint, render_template, make_response, request
 from flask_cors import  CORS, cross_origin
 
 bp_courses = Blueprint("course", __name__, url_prefix='/course')
@@ -19,6 +19,14 @@ from ..package_payment.payment.payment import PaymentModel
 def get_all():
     import random
     from datetime import datetime, timezone
+
+    USER_DATA = {
+             'USERNAME': request.cookies.get('USERNAME', ''),
+        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
+        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
+        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
+        }
+    
     data = [{
         "course_code": f"PYB00{random.choice([1000, 10000])}",
         "course_description": "Python Basic",
@@ -51,9 +59,11 @@ def get_all():
 
     courses = CourseModel.get()
     courses = [] if len(courses) == 0 else courses
-    response = make_response(render_template('admin/list_courses.html', title="All Courses", courses=courses))
+    response = make_response(render_template('admin/list_courses.html', title="All Courses", USER_DATA=USER_DATA, courses=courses))
     return response
 
+
+#
 bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
 CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_learning/enroll_to_course.html"))
 

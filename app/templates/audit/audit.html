@@ -89,11 +89,12 @@
     }
     fetchLog();
 
-
+    /*
     function findWord() {
         const text = $('#editor').val();
         const word = $('#findWord').val();
-        $.post('/find', { text: text, word: word }, function(data) {
+        $.post(`${root}/audit/find`, { text: text, word: word }, 
+        function(data) {
           $('#result').html('Occurrences: ' + data.join(', '));
         });
       }
@@ -101,7 +102,7 @@
       function goToLine() {
         const text = $('#editor').val();
         const line = $('#lineNumber').val();
-        $.post('/goto', { text: text, line: line }, function(data) {
+        $.post( `${root}/audit/goto`, { text: text, line: line }, function(data) {
           if (data.error) {
             $('#result').html(data.error);
           } else {
@@ -109,6 +110,37 @@
           }
         });
       }
+        */
+
+
+      function goToLine(){
+         // Select the meta tag with the name attribute 'csrf-token'
+         const metaToken = document.querySelector('meta[name="csrf-token"]');
+        
+         // Get the content attribute value
+        const token = metaToken ? metaToken.getAttribute('content') : null;
+         
+        const text = document.getElementById('editor').value;
+        const lineNumber = document.getElementById('lineNumber').value;
+
+        const dataForm = new FormData({'text': text, 'line': lineNumber })
+        
+        fetch(`${root}/audit/goto`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          //body: dataForm
+          body: JSON.stringify({ text: text, line: lineNumber })
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('result').innerHTML = 'Occurrences: ' + data.join(', ');
+        })
+        .catch(error => console.error('Error:', error));
+      }
+
 
 </script>
 {% endblock %}
