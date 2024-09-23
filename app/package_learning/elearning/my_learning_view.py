@@ -49,7 +49,7 @@ class MyLearningView(View):
                     if status:
                         courses.append(mcourse)
     
-        response = make_response(render_template(self._template, title="My Learning",current_url=current_url, status=status, courses=courses))            
+        response = make_response(render_template(self._template, title="My Learning",current_url=current_url, status=status, my_courses=courses))            
         return response
                         
         

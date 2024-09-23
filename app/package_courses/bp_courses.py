@@ -8,6 +8,7 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
+from .course.courses_content import CourseContentModel
 from .enroll.enroll import EnrollModel
 from ..package_payment.payment.card_transaction import CardTransactionModel
 from ..package_payment.payment.payment_card import PaymentCardModel
@@ -47,7 +48,7 @@ def get_all():
         "course_status": 1,
         "course_image": "https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg",
         "course_view_url": "course.learn.python_for_data_visualize",
-        "course_level": "Advanced",
+        "course_level": "advanced",
         "course_date_added": datetime.now(),
         "course_year_added": datetime.now().strftime('%Y'),
         "course_month_added": datetime.now().strftime('%m'),
