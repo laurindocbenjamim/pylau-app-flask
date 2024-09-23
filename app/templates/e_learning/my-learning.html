@@ -64,23 +64,31 @@ document.getElementById('greetingOutput').textContent = greeting;
                     <div class="card-body">
                         <h5 class="card-title fs-5"><i class="fas fa-book me-2"></i> <b>{{ course.course_description }}</b> </h5>
                         <p class="card-text fs-6" >{{ course.course_details }}.</p>
-                        <div class="d-flex justify-content-betwee">
-                            <button class="btn btn-outline-info btn-sm">
-                                <i class="fa-regular fa-circle-play" ></i> <span style="font-size: .8rem;">{{ course.course_total_lessons }} videos</span>
-                            </button>
-                            <button class="btn btn-outline-info btn-sm">
-                                <i class="fa-solid fa-terminal"></i> <span style="font-size: .8rem;">{{ course.course_total_labs }} Labs</span>
-                            </button>
-                            <button class="btn btn-outline-info btn-sm">
-                                <i class="fa-regular fa-file-excel"></i> <span style="font-size: .8rem;">{{ course.course_total_quizzes }} quiz</span>
-                            </button>
-                            <a href="{{ url_for(course.course_view_url)}}" class="btn btn-info btn-sm" type="button" style="color: #ffffff;">Start</a>
-                            <!--<div class="d-grid gap-2 col-5 d-md-flex justify-content-md-end">
-                                <a href="{{ url_for(course.course_view_url)}}" class="btn btn-info btn-sm" type="button" style="color: #ffffff;">Start</a>
-                            </div>-->
-                        </div>
-
                         
+                        <a href="{{ url_for(course.course_view_url)}}" class="btn btn-info btn-sm" type="button" style="color: #ffffff;">Start</a>             
+                        {% if not course.course_is_certified %}
+                
+                        <a href="#" class="card-link" title="Uncertified course"> 
+                            <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-not-certified-48.png?raw=true" alt="warranty-card"/>
+                        </a>
+                        {% else %}
+                        <a href="#" class="card-link" title="Certified course"> 
+                            <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-certified-48.png?raw=true" alt="warranty-card"/>
+                        </a>
+                        {% endif %}    
+                    </div>
+                    <div class="card-footer text-body-secondary text-end">
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fa-regular fa-circle-play" ></i> <span style="font-size: .8rem;">{{ course.course_total_lessons }} videos</span>
+                        </button>
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fa-solid fa-terminal"></i> <span style="font-size: .8rem;">{{ course.course_total_labs }} Labs</span>
+                        </button>
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fa-regular fa-file-excel"></i> <span style="font-size: .8rem;">{{ course.course_total_quizzes }} quiz</span>
+                        </button>
+                        
+
                     </div>
                 </div>
             </div>

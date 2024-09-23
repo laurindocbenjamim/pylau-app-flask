@@ -40,6 +40,9 @@
     .beginner { background-color: #3498db; color: white; }
     .intermediate { background-color: #f39c12; color: white; }
     .advanced { background-color: #e74c3c; color: white; }
+    .card-link{
+        text-decoration: none;
+    }
 </style>
 
 {% endblock %}
@@ -74,7 +77,21 @@
                 <span class="course-level {{ course.course_level }} ">{{ course.course_level }}</span>
                 <h5 class="card-title">{{ course.course_description }}</h5>
                 <p class="card-text">{{ course.course_details }}</p>
-                <a href="{{  url_for('course.enroll', course=course.course_description, course_id=course.course_id)}}" target="_blank" class="btn btn-primary">Enroll Now</a>
+                
+               
+            </div>
+            <div class="card-footer text-body-secondary text-end">
+                {% if not course.course_is_certified %}
+                
+                <a href="#" class="card-link" title="Uncertified course"> 
+                    <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-not-certified-48.png?raw=true" alt="warranty-card"/>
+                </a>
+                {% else %}
+                <a href="#" class="card-link" title="Certified course"> 
+                    <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-certified-48.png?raw=true" alt="warranty-card"/>
+                </a>
+                {% endif %}
+    <a href="{{  url_for('course.enroll', course=course.course_description, course_id=course.course_id)}}" class="card-link btn btn-primary btn-sm">Enroll Now</a>
             </div>
         </div>
     </div>

@@ -42,6 +42,7 @@ class CourseModel(db.Model):
     course_image: Mapped[str] = db.Column(db.String(255))
     course_view_url: Mapped[str] = db.Column(db.String(200))
     course_status: Mapped[bool] = db.Column(db.Boolean(), default=1)
+    course_is_certified: Mapped[bool] = db.Column(db.Boolean(), default=0)
     course_total_lessons: Mapped[int] = db.Column(db.Integer)
     course_total_quizzes: Mapped[int] = db.Column(db.Integer)
     course_total_labs: Mapped[int] = db.Column(db.Integer)
@@ -62,6 +63,7 @@ class CourseModel(db.Model):
             "course_description": self.course_description,
             "course_details": self.course_details,
             "course_status": self.course_status,
+            "course_is_certified": self.course_is_certified,
             "course_level": self.course_level,
             "course_image": self.course_image,
             "course_view_url": self.course_view_url,
@@ -94,6 +96,7 @@ class CourseModel(db.Model):
                 course_description = course['course_description'],
                 course_details = course['course_details'],
                 course_status = course['course_status'],
+                course_is_certified = course['course_is_certified'],
                 course_view_url = course['course_view_url'],
                 course_level = course['course_level'],
                 course_image = course['course_image'],
@@ -155,6 +158,7 @@ class CourseModel(db.Model):
             obj.course_description = course['course_description']
             obj.course_details = course['course_details']
             obj.course_status = course['course_status']
+            obj.course_is_certified = course['course_is_certified']
             obj.course_view_url = course['course_view_url']
             obj.course_image = course['course_image']
             obj.course_total_lessons = course['course_total_lessons']
