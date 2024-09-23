@@ -45,7 +45,7 @@ class EnrollView(View):
         course_id= request.args.get('course_id', 0)   
         message = category = ""
         status_code = 400
-        student_id = session['user_id']
+        student_id = session.get('user_id', '')
         course_details = ""
         status = False
 
@@ -65,7 +65,7 @@ class EnrollView(View):
         """ First chet  if there is a user token if not rediret the user to the login page
         """
         def check_token():
-            if 'user_token' in session:
+            if 'user_token' in session or session.get('user_token') is not None or session.get('user_token') !='':
                 if self._userToken.is_user_token_expired(session.get('user_token')):
                     session.clear()    
                     #request.cookies.add('preview_url', request.url)             
@@ -79,6 +79,8 @@ class EnrollView(View):
             # First check the user token
             check_token()    
 
+            if not student_id or student_id is None or student_id =='':
+                return redirect(url_for('auth.user.login'))
 
             status, resp = self._enroll.check_if_student_enrolled(student_id=student_id, course_id=course_id)
             if status:

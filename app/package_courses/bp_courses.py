@@ -9,6 +9,7 @@ from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
 from .course.courses_content import CourseContentModel
+from ..package_learning.elearning.course_progress import CourseProgressModel
 from .enroll.enroll import EnrollModel
 from ..package_payment.payment.card_transaction import CardTransactionModel
 from ..package_payment.payment.payment_card import PaymentCardModel
@@ -35,7 +36,10 @@ def get_all():
         "course_status": 1,
         "course_view_url": "course.learn.python_basic",
         "course_image": "https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg",
-        "course_level": "Beginner",
+        "course_level": "beginner",
+        "course_total_lessons": "4",
+        "course_total_quizzes": "2",
+        "course_total_labs": "1",
         "course_date_added": datetime.now(),
         "course_year_added": datetime.now().strftime('%Y'),
         "course_month_added": datetime.now().strftime('%m'),
@@ -49,14 +53,40 @@ def get_all():
         "course_image": "https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg",
         "course_view_url": "course.learn.python_for_data_visualize",
         "course_level": "advanced",
+        "course_total_lessons": "7",
+        "course_total_quizzes": "2",
+        "course_total_labs": "2",
         "course_date_added": datetime.now(),
         "course_year_added": datetime.now().strftime('%Y'),
         "course_month_added": datetime.now().strftime('%m'),
         "course_timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
     }]
+
+    courses_rogress = [{
+        "course_id": 1,
+        "student_id": 1,
+        "total_lesson_completed": 0,
+        "last_lesson_completed": "",
+        "date_added": datetime.now(),
+        "year_added": datetime.now().strftime('%Y'),
+        "month_added": datetime.now().strftime('%m'),
+        "timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+    },
+    {
+        "course_id": 2,
+        "student_id": 1,
+        "total_lesson_completed": 0,
+        "last_lesson_completed": "",
+        "date_added": datetime.now(),
+        "year_added": datetime.now().strftime('%Y'),
+        "month_added": datetime.now().strftime('%m'),
+        "timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+    }
+    ]
     
     for item in data:
         status, obj = CourseModel.create(course=item)
+        status, obj = CourseProgressModel.create(column=courses_rogress)
 
     courses = CourseModel.get()
     courses = [] if len(courses) == 0 else courses

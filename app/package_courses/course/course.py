@@ -42,7 +42,10 @@ class CourseModel(db.Model):
     course_image: Mapped[str] = db.Column(db.String(255))
     course_view_url: Mapped[str] = db.Column(db.String(200))
     course_status: Mapped[bool] = db.Column(db.Boolean(), default=1)
-   
+    course_total_lessons: Mapped[int] = db.Column(db.Integer)
+    course_total_quizzes: Mapped[int] = db.Column(db.Integer)
+    course_total_labs: Mapped[int] = db.Column(db.Integer)
+
     course_date_added = db.Column(db.String(11), default=datetime.now().date())
     course_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
     course_month_added = db.Column(
@@ -62,6 +65,9 @@ class CourseModel(db.Model):
             "course_level": self.course_level,
             "course_image": self.course_image,
             "course_view_url": self.course_view_url,
+            "course_total_lessons": self.course_total_lessons,
+            "course_total_quizzes": self.course_total_quizzes,
+            "course_total_labs": self.course_total_labs,
             "course_date_added": self.course_date_added,
             "course_year_added": self.course_year_added,
             "course_month_added": self.course_month_added,
@@ -90,7 +96,10 @@ class CourseModel(db.Model):
                 course_status = course['course_status'],
                 course_view_url = course['course_view_url'],
                 course_level = course['course_level'],
-                course_image = course['course_image']
+                course_image = course['course_image'],
+                course_total_lessons = course['course_total_lessons'],
+                course_total_quizzes = course['course_total_quizzes'],
+                course_total_labs = course['course_total_labs'],
             )
             db.session.add(obj)
             db.session.commit()
@@ -127,7 +136,7 @@ class CourseModel(db.Model):
             return False, str(e)
         
     # Method to save the product course to the database
-    def update(course: dict = dict)-> any:
+    def update(course: dict = dict, course_id:int =0)-> any:
         """
         This method is used to save the course object
         into the database.
@@ -140,15 +149,18 @@ class CourseModel(db.Model):
             no error occured, if false return a boolean and an exception response
         """
         try:
-            obj = CourseModel(
-                course_code = course['course_code'],
-                course_description = course['course_description'],
-                course_details = course['course_details'],
-                course_status = course['course_status'],
-                course_view_url = course['course_view_url'],
-                course_image = course['course_image']
-            )
-            db.session.add(obj)
+            obj = CourseModel.query.filter_by(course_id=course_id).first_or_404()
+
+            obj.course_code = course['course_code']
+            obj.course_description = course['course_description']
+            obj.course_details = course['course_details']
+            obj.course_status = course['course_status']
+            obj.course_view_url = course['course_view_url']
+            obj.course_image = course['course_image']
+            obj.course_total_lessons = course['course_total_lessons']
+            obj.course_total_quizzes = course['course_total_quizzes']
+            obj.course_total_labs = course['course_total_labs']
+            
             db.session.commit()
 
             return True, obj
