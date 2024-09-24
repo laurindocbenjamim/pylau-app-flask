@@ -10,7 +10,7 @@ from flask import Flask, current_app, request, session, jsonify, render_template
 from quart import Quart, render_template, websocket
 from flask import make_response
 from flask_cors import CORS, cross_origin
-
+from flask_talisman import Talisman
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from .configs_package import DevelopmentConfig, TestingConfig, ProductionConfig
@@ -25,6 +25,27 @@ def create_app(JDBC="sqlite",test_config=None):
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     
+
+    """
+    These options can be added to a Set-Cookie header to improve their security. Flask has 
+    configuration options to set these on the session cookie. 
+    They can be set on other cookies too.
+    """
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE='Lax',
+        PERMANENT_SESSION_LIFETIME=600,
+    )
+
+    # Flask-Talisman is an extension that simplifies the process of adding security headers, including CSP, to your Flask application.
+    # https://github.com/GoogleCloudPlatform/flask-talisman
+    """Talisman(app, content_security_policy={
+        'default-src': ['\'self\''],
+        'img-src': ['\'self\'', 'data:'],
+        'script-src': ['\'self\'', 'https://trustedscripts.example.com'],
+        'style-src': ["'self'"]
+    })"""
     
     if test_config is None:
         # Load  the  instance config if it exists, when not testing

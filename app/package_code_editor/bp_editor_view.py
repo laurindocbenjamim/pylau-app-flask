@@ -1,6 +1,6 @@
 
 import subprocess
-from flask import Blueprint, render_template, url_for, redirect, request, session, make_response
+from flask import Blueprint, render_template, url_for, redirect, request, session, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
 
@@ -15,14 +15,17 @@ def laub_editor():
     course_content = {}
 
     response = make_response(render_template('e_learning/code_editor/my_code_editor.html', title="LAUBCode"))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response)
     response.set_cookie('current_page', "course.learn.laubcode") 
     return response
 
 
-@bp_editor.route('/debug-python')
-@cross_origin(methods=['POST'])
+@bp_editor.route('/debug-python',methods=['POST'])
+#@cross_origin(methods=['POST'])
 def editor_run_python_code():
     code = request.form['code']
+    return jsonify([{"code": code}])
     try:
         output = subprocess.check_output(['python', '-c', code], stderr=subprocess.STDOUT, universal_newlines=True)
     except subprocess.CalledProcessError as e:

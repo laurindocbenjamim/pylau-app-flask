@@ -28,6 +28,8 @@ def laubcode():
     course_content = {}
 
     response = make_response(render_template('e_learning/code_editor/my_code_editor.html', title="LAUBCode"))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response)
     response.set_cookie('current_page', "course.learn.laubcode") 
     return response
 
@@ -41,7 +43,10 @@ def python_basic():
     if user_id is not None and user_id !='':
         course_content = CourseContentModel.get_content_by_course_id(course_id=course_id)
 
-    response = make_response(render_template('e_learning/courses_content/python_courses/python-basic.html', title="Python Basic", course_content=course_content, current_url="course.learn.python_basic"))
+    response = make_response(render_template('e_learning/courses_content/python_courses/python-basic.html', 
+                                             title="Python Basic", course_content=course_content, current_url="course.learn.python_basic"))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response)
     response.set_cookie('current_page', "course.learn.python_basic") 
     return response
 
@@ -51,6 +56,5 @@ def python_for_data_visualize():
     current_url="course.learn.python_basic"
     return f"Python for Data visualization"
 
-from ..package_code_editor.bp_editor_view import bp_editor
-bp_learn.register_blueprint(bp_editor)
+
 

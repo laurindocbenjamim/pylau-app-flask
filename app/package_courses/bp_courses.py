@@ -95,6 +95,8 @@ def get_all():
     courses = CourseModel.get()
     courses = [] if len(courses) == 0 else courses
     response = make_response(render_template('admin/list_courses.html', title="All Courses", USER_DATA=USER_DATA, courses=courses))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response)
     return response
 
 
@@ -109,6 +111,8 @@ def courses():
     welcome_title = "Our Courses"
     welcome_message = "Discover a world of knowledge with our diverse range of courses"
     response = make_response(render_template('courses.html', title="Courses",  welcome_title=welcome_title, welcome_message=welcome_message))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response)
     return response
     
 @bp_courses.route('/python-courses')
@@ -121,5 +125,7 @@ def python_courses():
     courses = [] if len(courses) == 0 else courses
 
     response = make_response(render_template('python-courses.html', title="Python Courses", courses=courses,  welcome_title=welcome_title, welcome_message=welcome_message))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response) 
     return response
 

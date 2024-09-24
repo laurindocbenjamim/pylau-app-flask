@@ -103,6 +103,8 @@ def load_routes(app, db, login_manager):
         response = make_response(render_template('site_home.html', title="Home", welcome_title=welcome_title, 
                                                  welcome_message=welcome_message, 
                                                  domain = request.root_url, total_projects=12, USER_DATA=USER_DATA, user_token=user_token))
+        from ..config_headers import set_header_params
+        set_header_params(response)       
         response.set_cookie('current_url', request.url)
         return response
     
@@ -234,6 +236,9 @@ def load_routes(app, db, login_manager):
 
     # Importing the blueprint of my learning 
     from ...package_learning import bp_learn
+    from ...package_code_editor.bp_editor_view import bp_editor
+
+    bp_learn.register_blueprint(bp_editor)
     bp_courses.register_blueprint(bp_learn)   
      
     app.register_blueprint(bp_courses)

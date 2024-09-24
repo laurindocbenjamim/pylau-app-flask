@@ -326,7 +326,6 @@
                 // Get the content attribute value
                 const token = metaToken ? metaToken.getAttribute('content') : null;
 
-                alert(baseUrl + '/learn/laubcode/debug-python')
                 const dataForm = new FormData();
                 dataForm.append("code", code)
 
@@ -334,7 +333,7 @@
                 myHeaders.append("Content-Type", "application/json");
                 myHeaders.append("Authorization", `Bearer ${token}`)
                
-                fetch(baseUrl + '/learn/laubcode/debug-python',
+                fetch(baseUrl + '/course/learn/laubcode/debug-python',
                 {
                     method: "POST",
                     //body: JSON.stringify({ code: code }),
@@ -342,8 +341,9 @@
                     headers: myHeaders,
                   }
                 )
-                .then(response => response.json())
+                //.then(response => response.json())
                 .then(data => {
+                    
                     if(data){
                         console.log("Code execution result:", data);
                     }

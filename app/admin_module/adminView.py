@@ -41,16 +41,22 @@ class AdminView(View):
         # Check if the user is identified
 
         if not status:
-            resp = make_response(redirect(url_for('auth.user.logout')))
-            return resp
+            response = make_response(redirect(url_for('auth.user.logout')))
+            from ..utils.config_headers import set_header_params
+            set_header_params(response)
+            return response
         else:   
             if user.email != token.username:
-                resp = make_response(redirect(url_for('auth.user.logout')))
-                return resp
+                response = make_response(redirect(url_for('auth.user.logout')))
+                from ..utils.config_headers import set_header_params
+                set_header_params(response)
+                return response
             else:
                 session['user_token'] = token.token
                 session['user_id'] = user.userID
                 session['email'] = user.email
-                resp = make_response(render_template(self.template, title="Dashboard", USER_DATA=USER_DATA, user=user, user_token=token.token))
-                resp.set_cookie('current_url', request.url)
-                return resp
+                response = make_response(render_template(self.template, title="Dashboard", USER_DATA=USER_DATA, user=user, user_token=token.token))
+                from ..utils.config_headers import set_header_params
+                set_header_params(response)
+                response.set_cookie('current_url', request.url)
+                return response
