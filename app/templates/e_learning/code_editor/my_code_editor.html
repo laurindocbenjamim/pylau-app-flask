@@ -469,7 +469,23 @@
             try {
                 if(scriptToRun !=''){
                     let output = pyodide.runPython(scriptToRun);
-                    document.getElementById('consoleOutput').innerHTML += output + '\n';
+
+                    if(output === 'undefined'){
+                        document.getElementById('consoleOutput').innerHTML += `
+                        Probably no variable hasbeen set to be printed.
+                        Follow the example below:
+                        a=12
+                        b=11
+                        soma=a+b
+                        # Use the 'print' command to get the response on browser console
+                        print(soma)
+                        # Put the setted variable alone after the end of each block of code 
+                        soma
+                        ` + '\n';
+                    }else{
+                        document.getElementById('consoleOutput').innerHTML += output + '\n';
+                    }
+                    
                 }
                 
             } catch (err) {
