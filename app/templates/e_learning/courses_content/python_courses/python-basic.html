@@ -1,0 +1,176 @@
+{% extends "e_learning/e-learning.html" %}
+
+{% block style %} 
+<style>
+
+    .navbar {
+        background-color: var(--primary-color);
+        
+    }
+    .navbar-brand, .nav-link, .navbar-text {
+        color: #fff !important;
+    }
+    .btn-outline-light:hover {
+        color: var(--primary-color);
+    }
+    #sidebar {
+        background: #fff;
+        color: #131313;
+        border: 1px solid #b9b9b9;
+    }
+    #sidebar .nav-link {
+        color: #131313 !important;
+        font-size: .8rem;
+        
+    }
+    #sidebar .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+    #sidebar .nav-link.active {
+        background-color: rgba(255,255,255,0.1);
+    }
+    .submenu .nav-link{
+        text-decoration: underline;
+    }
+</style>
+
+{%endblock%}
+
+{% block content %}
+<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block">
+    <div class="position-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="#programming">
+                    <i class="fas fa-code me-2"></i>Module 01
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#python">Introduction to Python</a>
+                    </li>
+                    
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#data-science">
+                    <i class="fas fa-code me-2"></i>Module 02
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    <h6 class="mb-1 text-body-secondary">Python Basic</h6>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#machine-learning">Variables and data types</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#data-analysis">Basic operators</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('course.learn.laubcode')}}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
+                    </li>
+                </ul>
+            </li>
+            <!--<li class="nav-item">
+                <a class="nav-link" href="#web-development">
+                    <i class="fas fa-code me-2"></i></i>Web Development
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#frontend">Frontend</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#backend">Backend</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#mobile-development">
+                    <i class="fas fa-mobile-alt me-2"></i>Mobile Development
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#devops">
+                    <i class="fas fa-cogs me-2"></i>DevOps
+                </a>
+            </li>-->
+        </ul>
+    </div>
+</nav>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Python Basic</h1>
+    </div>
+
+    <section id="javascript-courses">
+        <div class="row">
+
+            {% if course_content %}
+            {% for content in course_content %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-book me-2"></i>{{ content.content_description }}</h5>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <!--
+            
+            
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-rocket me-2"></i>Advanced JavaScript</h5>
+                        <p class="card-text">Dive deep into advanced JavaScript concepts and techniques.</p>
+                        <a href="https://d-tuning.com/courses/advanced-javascript" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-cubes me-2"></i>JavaScript Frameworks</h5>
+                        <p class="card-text">Explore popular JavaScript frameworks like React, Vue, and Angular.</p>
+                        <a href="https://d-tuning.com/courses/javascript-frameworks" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+    </section>
+
+    <section id="javascript-demo">
+        <h3 class="mt-5">JavaScript Demo</h3>
+        <p>Try out this interactive JavaScript demo:</p>
+        <div class="code-snippet">
+            <pre><code id="js-code">
+function greet() {
+const name = document.getElementById('nameInput').value;
+const greeting = `Hello, ${name}! Welcome to JavaScript learning.`;
+document.getElementById('greetingOutput').textContent = greeting;
+}
+            </code></pre>
+        </div>
+        <div class="mb-3">
+            <label for="nameInput" class="form-label">Enter your name:</label>
+            <input type="text" class="form-control" id="nameInput" placeholder="Your name">
+        </div>
+        <button onclick="greet()" class="btn btn-primary">Greet Me!</button>
+        <p id="greetingOutput" class="mt-3"></p>
+    </section>
+
+    <section id="javascript-resources">
+        <h3 class="mt-5">Additional Resources</h3>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><i class="fas fa-external-link-alt me-2"></i>MDN Web Docs - JavaScript</a></li>
+            <li class="list-group-item"><a href="https://javascript.info/"><i class="fas fa-external-link-alt me-2"></i>JavaScript.info</a></li>
+            <li class="list-group-item"><a href="https://www.w3schools.com/js/"><i class="fas fa-external-link-alt me-2"></i>W3Schools JavaScript Tutorial</a></li>
+        </ul>
+    </section>
+</main>
+{% endblock %}

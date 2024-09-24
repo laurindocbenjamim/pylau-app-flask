@@ -185,6 +185,8 @@ def load_routes(app, db, login_manager):
     app.register_blueprint(bp_project_view)
 
     from ...admin_module.bp_admin_view import bp as bp_admin_view
+    from ...package_user.bp_user import bp_user
+    bp_admin_view.register_blueprint(bp_user)
     app.register_blueprint(bp_admin_view)
 
     from ...test_forms.bp_form import bp as bp_form

@@ -35,12 +35,17 @@ class MyLearningView(View):
         course = escape(course)  
         course = str(course).replace('-', ' ')      
         courses = []
+        user_id = session.get('user_id', None)
         message = category = ""
         status_code = 200
         course_details = ""
         current_url="course.learn.my_learning"
 
-        status, enroll = self._enroll.get_by_student(student_id = session['user_id'])
+        if user_id is None or not isinstance(user_id, int) or user_id ==0:
+            return redirect(url_for('auth.user.login'))
+
+
+        status, enroll = self._enroll.get_by_student(student_id = user_id)
 
         if status:
             if len(enroll)>0:
@@ -49,7 +54,8 @@ class MyLearningView(View):
                     if status:
                         courses.append(mcourse)
     
-        response = make_response(render_template(self._template, title="My Learning",current_url=current_url, status=status, my_courses=courses))            
+        response = make_response(render_template(self._template, title="My Learning",current_url=current_url, status=status, my_courses=courses))  
+        response.set_cookie('current_page', "course.learn.my_learning")          
         return response
                         
         

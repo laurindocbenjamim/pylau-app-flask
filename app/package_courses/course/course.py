@@ -46,6 +46,7 @@ class CourseModel(db.Model):
     course_total_lessons: Mapped[int] = db.Column(db.Integer)
     course_total_quizzes: Mapped[int] = db.Column(db.Integer)
     course_total_labs: Mapped[int] = db.Column(db.Integer)
+    course_total_modules: Mapped[int] = db.Column(db.Integer)
 
     course_date_added = db.Column(db.String(11), default=datetime.now().date())
     course_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
@@ -70,6 +71,7 @@ class CourseModel(db.Model):
             "course_total_lessons": self.course_total_lessons,
             "course_total_quizzes": self.course_total_quizzes,
             "course_total_labs": self.course_total_labs,
+            "course_total_modules": self.course_total_modules,
             "course_date_added": self.course_date_added,
             "course_year_added": self.course_year_added,
             "course_month_added": self.course_month_added,
@@ -103,6 +105,7 @@ class CourseModel(db.Model):
                 course_total_lessons = course['course_total_lessons'],
                 course_total_quizzes = course['course_total_quizzes'],
                 course_total_labs = course['course_total_labs'],
+                course_total_modules = course['course_total_modules']
             )
             db.session.add(obj)
             db.session.commit()
@@ -164,6 +167,7 @@ class CourseModel(db.Model):
             obj.course_total_lessons = course['course_total_lessons']
             obj.course_total_quizzes = course['course_total_quizzes']
             obj.course_total_labs = course['course_total_labs']
+            obj.course_total_modules = course['course_total_modules']
             
             db.session.commit()
 

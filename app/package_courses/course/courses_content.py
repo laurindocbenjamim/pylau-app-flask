@@ -35,6 +35,7 @@ class CourseContentModel(db.Model):
     content_type: Mapped[str] = db.Column(
         db.String(100), nullable=False
     )
+    content_module: Mapped[str] = db.Column(db.String(100))
     content_file: Mapped[str] = db.Column(
         db.String(100), nullable=False
     )
@@ -54,6 +55,7 @@ class CourseContentModel(db.Model):
         return {
             "course_content_id": self.course_content_id,
             "course_id": self.course_id,
+            "content_module": self.content_module,
             "content_type": self.content_type,
             "content_file": self.content_file,
             "content_description": self.content_description,
@@ -82,7 +84,8 @@ class CourseContentModel(db.Model):
             obj = CourseContentModel(
                 course_id = course['course_id'],
                 content_type = course['content_type'],
-                content_file = ['content_file'],
+                content_module = course['content_module'],
+                content_file = course['content_file'],
                 content_description = course['content_description'],
                 content_thumbnail = course['content_thumbnail'],
                 content_status = course['content_status'],           
@@ -127,7 +130,7 @@ class CourseContentModel(db.Model):
             return False, str(e)
         
     # Method to save the product course to the database
-    def update(course: dict = dict)-> any:
+    def update(course: dict = dict, course_id:int=0)-> any:
         """
         This method is used to save the course object
         into the database.
@@ -140,16 +143,15 @@ class CourseContentModel(db.Model):
             no error occured, if false return a boolean and an exception response
         """
         try:
-            obj = CourseContentModel(
-                course_id = course['course_id'],
-                content_type = course['content_type'],
-                content_file = ['content_file'],
-                content_description = course['content_description'],
-                content_thumbnail = course['content_thumbnail'],
-                content_status = course['content_status'],           
-                content_update_added = course['content_update_added']
-            )
-            db.session.add(obj)
+            obj = CourseContentModel.query.filter(and_(CourseContentModel.course_id==course_id)).first_or_404()
+            
+            obj.content_type = course['content_type']
+            obj.content_module = course['content_module']
+            obj.content_file = course['content_file']
+            obj.content_description = course['content_description']
+            obj.content_thumbnail = course['content_thumbnail']
+            obj.content_status = course['content_status']           
+            obj.content_update_added = course['content_update_added']
             db.session.commit()
 
             return True, obj

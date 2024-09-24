@@ -6,3 +6,7 @@ from ..token_module.userTokenModel import UserToken
 
 bp = Blueprint('admin', __name__, url_prefix='/admin', template_folder='templates')
 bp.add_url_rule('/dashboard/<string:user_token>', view_func=AdminView.as_view('dashboard', Users, UserToken, template='admin/dashboard.html'))
+
+#from ..auth_package import UsersView
+
+#bp.add_url_rule('/dashboard/<string:user_token>', view_func=UsersView.as_view('dashboard', Users, UserToken, template='admin/dashboard.html'))

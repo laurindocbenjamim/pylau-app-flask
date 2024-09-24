@@ -20,4 +20,6 @@ def init_db_server(app):
 
     # This function is used to migrate the database
     Migrate(app, db)
+
+    
     
