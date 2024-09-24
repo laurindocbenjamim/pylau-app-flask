@@ -67,7 +67,7 @@
                         <a class="nav-link" href="#data-analysis">Basic operators</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('course.learn.laubcode')}}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
+                        <a class="nav-link" href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
                     </li>
                 </ul>
             </li>

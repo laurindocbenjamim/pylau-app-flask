@@ -35,7 +35,7 @@ def create_app(JDBC="sqlite",test_config=None):
         SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE='Lax',
-        PERMANENT_SESSION_LIFETIME=600,
+        #PERMANENT_SESSION_LIFETIME=600,
     )
 
     # Flask-Talisman is an extension that simplifies the process of adding security headers, including CSP, to your Flask application.

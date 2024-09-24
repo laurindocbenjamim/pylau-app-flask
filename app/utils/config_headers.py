@@ -26,3 +26,5 @@ def set_header_params(response: make_response):
         Forces the browser to honor the response content type instead of trying to detect it, which can be abused to generate a cross-site scripting (XSS) attack.
     """
     response.headers['X-Content-Type-Options'] = 'nosniff'
+
+    
