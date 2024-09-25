@@ -48,7 +48,7 @@ class EnrollView(View):
         student_id = session.get('user_id', '')
         course_details = ""
         status = False
-
+    
         # Method to validate the form fields
         def is_form_valid():
             _message = _category ='' 
