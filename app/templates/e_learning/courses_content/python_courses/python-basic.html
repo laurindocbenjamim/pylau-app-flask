@@ -24,13 +24,45 @@
         
     }
     #sidebar .nav-link:hover {
-        background-color: rgba(255,255,255,0.1);
+        border-radius: 0;
+        background-color: rgb(221, 221, 221);
     }
     #sidebar .nav-link.active {
-        background-color: rgba(255,255,255,0.1);
+        border-radius: 0;
+        background-color: rgb(221, 221, 221);
+        color: #0f5ef1 !important;
     }
     .submenu .nav-link{
-        text-decoration: underline;
+        text-decoration: underline rgb(221, 221, 221);
+    }
+    
+    .video-section {
+        text-align: center;
+        margin: 4rem 0;
+    }
+    .video-container {
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding-bottom: 45%;
+    }
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+        
+        .video-container {
+            width: 100%;
+            padding-bottom: 56.25%;
+        }
     }
 </style>
 
@@ -40,7 +72,7 @@
 <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block">
     <div class="position-sticky">
         <ul class="nav flex-column">
-            <li class="nav-item">
+            <!--<li class="nav-item">
                 <a class="nav-link active" href="#programming">
                     <i class="fas fa-code me-2"></i>Module 01
                     <i class="fas fa-chevron-down float-end"></i>
@@ -70,7 +102,38 @@
                         <a class="nav-link" href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
                     </li>
                 </ul>
+            </li>-->
+
+            {% if modules %}
+            {% for m in modules %}
+            
+            <li class="nav-item">
+                {% if m == 1 or m == "1" %}
+                <a class="nav-link active" href="#programming"> 
+                {% else %}
+                    <a class="nav-link" href="#programming">
+                {% endif %}
+                    <i class="fas fa-code me-2"></i>Module {{m}}
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <ul class="nav flex-column submenu">
+                    {% if course_content %}
+                    {% for content in course_content %}
+                    {%  if content.content_module == m %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#python" onclick='getContent("{{content.content_file}}")'>{{ content.content_description }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    
+                </ul>
             </li>
+            {% endfor %}
+            {% endif %}
+
+
+            
             <!--<li class="nav-item">
                 <a class="nav-link" href="#web-development">
                     <i class="fas fa-code me-2"></i></i>Web Development
@@ -173,4 +236,34 @@ document.getElementById('greetingOutput').textContent = greeting;
         </ul>
     </section>
 </main>
+{% endblock %}
+{% block script %}
+<script>
+    
+    const iframeComponent = `
+    <section class="video-section container fade-in">
+            <h2>Learn More About Our Approach</h2>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/FuXJln-UtNQ" title="TechInnovate: Revolutionizing Business with Data Science" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=FuXJln-UtNQ" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+        </section>
+    `;
+
+    function getContent(address){
+       document.getElementById('javascript-demo').innerHTML = iframeComponent
+
+       /* await fetch(`${window.location.origin}/course/learn/python-basic/get/1`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data)=>{
+            console.log(data)
+        }).catch((err)=> console.log(err))
+        */
+    }
+</script>
 {% endblock %}

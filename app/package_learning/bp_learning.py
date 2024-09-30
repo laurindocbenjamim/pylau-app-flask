@@ -1,6 +1,7 @@
 
 
-from flask import Blueprint, render_template, session, request, make_response
+import json
+from flask import Blueprint, render_template, session, request, make_response, jsonify
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
 
@@ -38,17 +39,42 @@ def laubcode():
 def python_basic():
     user_id = session.get('user_id', None)
     course_id = request.args.get('userID')
-    course_content = {}
+    course_content = []
+    modules = []
+    modules_content = []
     
     if user_id is not None and user_id !='':
-        course_content = CourseContentModel.get_content_by_course_id(course_id=course_id)
+        cc_model = CourseContentModel
+        status, course_content = cc_model.get_content_by_course_id(course_id=course_id)
+        contents = cc_model.convert_to_list(course_content)
 
+        if contents and status and len(contents) > 0:
+            for obj in contents:
+                if obj['content_module'] not in modules:
+                    modules.append(obj['content_module'])
+        
     response = make_response(render_template('e_learning/courses_content/python_courses/python-basic.html', 
-                                             title="Python Basic", course_content=course_content, current_url="course.learn.python_basic"))
+                                             title="Python Basic", course_content=course_content, modules=modules, current_url="course.learn.python_basic"))
     from ..utils.config_headers import set_header_params
     set_header_params(response)
     response.set_cookie('current_page', "course.learn.python_basic") 
     return response
+
+@bp_learn.route('/python-basic/get/<int:courseID>')
+@cross_origin(methods=['GET'])
+def python_basic_get(courseID):
+    user_id = session.get('user_id', None)
+    course_id = escape(courseID) #request.args.get('courseID')
+    course_content = []
+    modules = []
+    modules_content = []
+    
+    if user_id is not None and user_id !='':
+        dd = []
+        cc_model = CourseContentModel
+        status, course_content = cc_model.get_content_by_course_id(course_id=course_id)
+        return jsonify({"content": cc_model.convert_to_list(course_content)})
+    return jsonify({"content": []})
 
 @bp_learn.route('/python-for-data-visualize')
 @cross_origin(methods=['GET'])

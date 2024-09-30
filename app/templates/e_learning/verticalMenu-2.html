@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertical Menu</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .vertical-menu {
+            width: 200px;
+        }
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+        }
+        .vertical-menu a:hover {
+            background-color: #ccc;
+        }
+        .vertical-menu a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+        .submenu {
+            display: none;
+        }
+        .submenu a {
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vertical-menu">
+        <a href="#" class="menu-item" data-content="Home Content">Home <i class="fas fa-home"></i></a>
+        <a href="#" class="menu-item" data-content="Services Content">Services <i class="fas fa-concierge-bell"></i></a>
+        <div class="submenu">
+            <a href="#" class="submenu-item" data-content="Web Development Content">Web Development</a>
+            <a href="#" class="submenu-item" data-content="App Development Content">App Development</a>
+        </div>
+        <a href="#" class="menu-item" data-content="Contact Content">Contact <i class="fas fa-envelope"></i></a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const submenuItems = document.querySelectorAll('.submenu-item');
+    
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all menu items
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    // Add active class to the clicked menu item
+                    this.classList.add('active');
+                    // Toggle submenu visibility
+                    const submenu = this.nextElementSibling;
+                    if (submenu && submenu.classList.contains('submenu')) {
+                        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+                    }
+                    // Store link name and content to localStorage
+                    localStorage.setItem('selectedLink', this.textContent.trim());
+                    localStorage.setItem('linkContent', this.getAttribute('data-content'));
+                });
+            });
+    
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all submenu items
+                    submenuItems.forEach(i => i.classList.remove('active'));
+                    // Add active class to the clicked submenu item
+                    this.classList.add('active');
+                    // Store link name and content to localStorage
+                    localStorage.setItem('selectedLink', this.textContent.trim());
+                    localStorage.setItem('linkContent', this.getAttribute('data-content'));
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>

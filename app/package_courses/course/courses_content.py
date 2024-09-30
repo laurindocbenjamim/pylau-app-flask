@@ -7,7 +7,7 @@ from psycopg2 import errors as pg_errors
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, select
 from werkzeug.security import check_password_hash
 
 
@@ -30,7 +30,7 @@ class CourseContentModel(db.Model):
         db.Integer, primary_key=True, autoincrement=True
     )
     course_id: Mapped[str] = db.Column(
-        db.String(100), nullable=False, unique=True
+        db.String(100), nullable=False
     )
     content_type: Mapped[str] = db.Column(
         db.String(100), nullable=False
@@ -68,6 +68,27 @@ class CourseContentModel(db.Model):
             "content_update_added": self.content_update_added
         }
 
+    def convert_to_list(obj):
+        objects = []
+        for i, item in enumerate(obj):
+            objects.append(
+                {   "course_content_id": item.course_content_id,
+                    "course_id": item.course_id,
+                    "content_module": item.content_module,
+                    "content_type": item.content_type,
+                    "content_file": item.content_file,
+                    "content_description": item.content_description,
+                    "content_thumbnail": item.content_thumbnail,
+                    "content_status": item.content_status,           
+                    "content_date_added": item.content_date_added,
+                    "content_year_added": item.content_year_added,
+                    "content_month_added": item.content_month_added,
+                    "content_timestamp_added": item.content_timestamp_added,
+                    "content_update_added": item.content_update_added
+                }
+            )
+        return objects
+    
     # Method to save the product course to the database
     def create(course: dict = dict)-> any:
         """
@@ -178,19 +199,19 @@ class CourseContentModel(db.Model):
         """
         try:
             obj = CourseContentModel.query.all()
-            return obj
+            return False, obj
         except pg_errors.UndefinedTable as e:
             custom_message = f"Database config error. {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get all courses content", custom_message=custom_message)
             set_logger_message(error_info)
             
-            return custom_message
+            return False, custom_message
         except pg_errors.DatabaseError as e:
             custom_message = f"Database config error. {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get all courses content", custom_message=custom_message)
             set_logger_message(error_info)
             
-            return custom_message
+            return False, custom_message
     
     # Geat all courses
     def get_content_by_course_id(course_id:int):
@@ -199,7 +220,12 @@ class CourseContentModel(db.Model):
         from database
         """
         try:
-            obj = CourseContentModel.query.filter_by(course_id=course_id).first_or_404()
+            #obj = CourseContentModel.query.filter_by(course_id=course_id).first_or_404()
+            #query = select(CourseContentModel).where(CourseContentModel.course_id == course_id)
+            #user_data = db.session.query(CourseContentModel).filter(CourseContentModel.course_id == course_id).all()
+            obj = CourseContentModel.query.filter_by(course_id=course_id).all()
+            
+            #return True, db.session.execute(query).scalars().all()
             return True, obj
         except pg_errors.UndefinedTable as e:
             custom_message = f"Database config error. {str(e)}"
@@ -218,7 +244,7 @@ class CourseContentModel(db.Model):
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="get_content_by_course_id", custom_message=custom_message)
             set_logger_message(error_info)
             
-            return custom_message
+            return False, custom_message
         
         except Exception as e:
             db.session.rollback()

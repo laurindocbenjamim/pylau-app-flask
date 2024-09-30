@@ -65,6 +65,7 @@ class CardTransactionModel(db.Model):
             "update_added":  self.update_added,
         }
     
+    
     # Method to save the product payment to the database
     def execute_transaction(**kwargs)-> any:
         """
