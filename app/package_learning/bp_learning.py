@@ -1,7 +1,9 @@
 
 
 import json
-from flask import Blueprint, render_template, session, request, make_response, jsonify
+import os
+import stat
+from flask import Blueprint, render_template, session, request, make_response, jsonify, current_app
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
 
@@ -75,6 +77,60 @@ def python_basic_get(courseID):
         status, course_content = cc_model.get_content_by_course_id(course_id=course_id)
         return jsonify({"content": cc_model.convert_to_list(course_content)})
     return jsonify({"content": []})
+
+@bp_learn.route('/notes/new/<int:courseID>/<string:lesson>', methods=['POST'])
+@cross_origin(methods=['POST'])
+def save_my_notes(courseID, lesson):
+    user_id = session.get('user_id', None)
+    lesson = escape(lesson)
+    course_id = escape(courseID) #request.args.get('courseID')
+   
+    comment = request.form.get('comment', None)
+    lesson = request.form.get('lesson', None)
+
+    from datetime import datetime, timezone
+    from ..package_comments.study_notes import StudyNotes
+    
+
+    file_path = f'/user_notes/user{user_id}_c{course_id}_{str(lesson).lower().replace(' ', '_')}.json'
+    
+    new_comment = {
+        'user': user_id,
+        'course_id': course_id,
+        'comment': comment,
+        'lesson': lesson,
+        'timestamp': datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
+    }
+    
+    st, resp = StudyNotes().add_comment(file_path=file_path, new_comment=new_comment)
+    #Remove write permissions
+    #os.chmod(file_path, stat.S_IREAD)
+    
+    return jsonify({"status": st, "sms": resp}, 200)
+
+@bp_learn.route('/notes/get/<int:courseID>/<string:lesson>', methods=['GET'])
+@cross_origin(methods=['GET'])
+def get_my_notes(courseID, lesson):
+    user_id = session.get('user_id', None)
+    lesson = escape(lesson)
+    course_id = escape(courseID) #request.args.get('courseID')
+   
+    from ..package_comments.study_notes import StudyNotes
+    
+
+    file_path = f'/user_notes/user{user_id}_c{course_id}_{str(lesson).lower().replace(' ', '_')}.json'
+    
+    # Set permissions (read, write, execute for owner; read, execute for group and others)
+    #os.chmod(current_app.config['UPLOAD_FOLDER']+'/user_notes', 0o755) 
+    #os.chmod(current_app.config['UPLOAD_FOLDER']+file_path, 0o644) 
+    
+    #resp = StudyNotes().load_comments(file_path=file_path)
+
+    #Remove write permissions
+    #os.chmod(current_app.config['UPLOAD_FOLDER']+file_path, stat.S_IREAD)
+    
+    return jsonify({"status": True, "notes": current_app.config['UPLOAD_FOLDER']+file_path}, 200)
+
 
 @bp_learn.route('/python-for-data-visualize')
 @cross_origin(methods=['GET'])

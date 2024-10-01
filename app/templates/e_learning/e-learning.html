@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
     <base href="{{ url_for('index')}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{title}} {% endblock %} - Data Tuning</title>
@@ -89,6 +90,7 @@
         .btn-primary:hover {
             background-color: #27ae60;
             border-color: #27ae60;
+            
         }
         #sidebarCollapse {
             display: none;
@@ -112,6 +114,16 @@
             margin-bottom: 20px;
             color: #abb2bf;
         }
+        .comments {
+            margin: 1;
+            border: 1px solid #abb2bf;
+            border-radius: 0px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            color: #000000;
+        }
+
     </style>
 
     {% block style %} {% endblock %}
@@ -183,6 +195,11 @@
             // For example, clearing session data and redirecting to a login page
         }
 
+        const token = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+
+            
          // JavaScript Demo functionality
          function greet() {
             const name = document.getElementById('nameInput').value;
@@ -233,6 +250,41 @@
                 });
             });
         });
+        
+
+
+        function postThisNote(lesson){
+            const token = document
+            .querySelector('meta[name="token"]')
+            .getAttribute("content");
+    
+            const courseID = 0
+            const endpoint = `${window.location.origin}/course/learn/notes/new/${courseID}/${lesson}`;
+            var comment = document.getElementById('newComment').value
+            alert(comment)
+            const headers = new Headers()
+            headers.append('X-CSRF-Token', token)
+            headers.append("Authorization", ` Bearer ${token}`);
+            const formData = new FormData()
+            formData.append("comment", comment)
+    
+            fetch(endpoint,
+            {
+                method: "POST",
+                headers: headers, // Add the CSRF token to the headers
+                body: formData,  //JSON.stringify({"comment": comment}),            
+            }
+            )
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data)=>{
+                console.log(data)
+            }).catch((err)=> console.log(err))
+        }
     </script>
 
     {% block script %}{%endblock%}

@@ -28,6 +28,7 @@ CLASS  USED ON DEVELOPMENT MODE
 class DevelopmentConfig(Config):
     DATABASE_URI = "sqlite:///dtuning.db"
     UPLOAD_FOLDER = 'app/static/uploads'
+    FILES_FOLDER = 'app/static/files'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
     DEBUG = False
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
@@ -111,6 +112,7 @@ class TestingConfig(Config):
     TESTING = True    
     DATABASE_URI = "sqlite:///dataframe.db"
     UPLOAD_FOLDER = 'app/static/uploads'
+    FILES_FOLDER = 'app/static/files'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
@@ -142,4 +144,5 @@ CLASS  USED ON PRODUCTION MODE
 class ProductionConfig(Config):
     DATABASE_URI = 'mysql://user@localhost/foo'
     UPLOAD_FOLDER = 'app/static/uploads'
+    FILES_FOLDER = 'app/static/files'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}

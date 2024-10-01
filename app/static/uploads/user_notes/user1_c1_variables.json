@@ -1,0 +1,18 @@
+[
+    {
+        "user": 1,
+        "course_id": "1",
+        "comment": "ddadad",
+        "lesson": "Variables",
+        "timestamp": "2024/10/01 00:41:28",
+        "id": 1
+    },
+    {
+        "user": 1,
+        "course_id": "1",
+        "comment": "ddadad",
+        "lesson": "Variables",
+        "timestamp": "2024/10/01 00:41:44",
+        "id": 2
+    }
+]

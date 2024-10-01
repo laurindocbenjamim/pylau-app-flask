@@ -22,7 +22,7 @@ def upload_file(request_file: Request.files, file_field_name: str):
 
         # Check if the folder to store the tickets exists, if not, create it
         if not os.path.exists(UPLOAD_FOLDER):
-            os.makedirs(UPLOAD_FOLDER)
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
         #file.save(os.path.join(UPLOAD_FOLDER, filename))
 
@@ -57,3 +57,19 @@ def validate_file(request: Request, file_field_name):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def check_or_create_file(file_path):
+
+    # Check if the folder to store the tickets exists, if not, create it
+    if not os.path.exists(f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'):
+        os.makedirs(file_path, exist_ok=True)
+    return f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
+
+def saveIntoFile(file_directory: str, data):
+    file_path = f'{current_app.config['UPLOAD_FOLDER']}/{file_directory}'
+
+    # Check if the folder to store the tickets exists, if not, create it
+    if not os.path.exists(file_path):
+        os.makedirs(file_path, exist_ok=True)
+
+    return True
