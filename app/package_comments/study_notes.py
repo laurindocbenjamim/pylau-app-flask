@@ -6,39 +6,44 @@ from flask import current_app
 
 class StudyNotes(object):
 
-    def check_or_create_file(self,file_path):
+    myFILE_PATH = myFILE_DIRECTORY = ''
+
+    def __init__(self, file_path,file_directory) -> None:
+        self.myFILE_PATH = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
+        self.myFILE_DIRECTORY = f'{current_app.config['UPLOAD_FOLDER']}/{file_directory}' 
+
+    def check_or_create_file(self):
         # Check if the folder to store the tickets exists, if not, create it
         try:
-            if not os.path.exists(file_path):
-                os.makedirs(file_path, exist_ok=True)
+            if not os.path.exists(self.myFILE_DIRECTORY):
+                os.makedirs(self.myFILE_DIRECTORY, exist_ok=True)
         except Exception:
-            return file_path
+            return self.myFILE_DIRECTORY
 
-    def load_comments(self,file_path):
+    def load_comments(self):
         """Load comments from a JSON file."""
 
-        file_path = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
-        if os.path.exists(file_path):
-            with open(file_path, 'r') as file:
+        if os.path.exists(self.myFILE_PATH):
+            with open(self.myFILE_PATH, 'r') as file:
                 return json.load(file)
         return []
 
-    def save_comments(self,file_path, comments):
+    def save_comments(self, comments):
         """Save comments to a JSON file."""
-        with open(f'{current_app.config['UPLOAD_FOLDER']}/{file_path}', 'w') as file:
+        with open(self.myFILE_PATH, 'w') as file:
             json.dump(comments, file, indent=4)
 
-    def add_comment(self,file_path, new_comment):
+    def add_comment(self, new_comment):
         """Add a new comment to the JSON file."""
          # check if the file path exists if not create it        
-        self.check_or_create_file(current_app.config['UPLOAD_FOLDER']+'/user_notes')
+        self.check_or_create_file()
 
         # Set permissions (read, write, execute for owner; read, execute for group and others)
         #os.chmod(current_app.config['UPLOAD_FOLDER']+'/user_notes', 0o755) 
         #os.chmod(current_app.config['UPLOAD_FOLDER']+file_path, 0o644) 
         try:       
             # load the existent comments
-            comments = self.load_comments(file_path)
+            comments = self.load_comments()
 
             # Update the ID of the comments
             if isinstance(comments, list):
@@ -53,13 +58,30 @@ class StudyNotes(object):
 
             # add and save the new comment
             comments.append(new_comment)
-            self.save_comments(file_path, comments)
+            self.save_comments(comments)
             #os.chmod(file_path, stat.S_IREAD)
             return True, 'OK'
         except Exception as e:
             return False, str(e)
 
-
+    def remove(self,id):
+        try:
+            # load the existent comments
+            comments = self.load_comments()
+            # Update the ID of the comments
+            if isinstance(comments, list):
+                if len(comments) > 0:
+                    for key,item in comments:
+                        if id in item[key]:
+                            comments.pop(key)
+            return True
+        except Exception as e:
+            return str(e)
+    
+    def clean_entire_json(self):
+        # Open the JSON file in write mode and truncate its content
+        with open(self.myFILE_PATH, 'w') as file:
+            file.truncate()
 """ if len(comments) > 0:
                 last_item = comments[-1]
                 if 'id' in last_item:

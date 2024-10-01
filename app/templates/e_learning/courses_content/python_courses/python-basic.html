@@ -385,8 +385,10 @@ document.getElementById('greetingOutput').textContent = greeting;
                 if (data.status === false | data.status === 'false') {
                     console.log(data)
                 } else {
-                    comment.value = ''
+                    document.getElementById('newComment').value = ''
+                    document.querySelector('.comments').innerHTML = ''
                     setTimeout(() => {
+                        getComments(localStorage.getItem('courseID'), localStorage.getItem('topicCont'))
                         document.getElementById('noteForm').style.display = 'none'
                     }, 400)
                 }
@@ -415,14 +417,22 @@ document.getElementById('greetingOutput').textContent = greeting;
             })
             .then((data) => {
                 
-                console.log(data)
+                console.log(data) 
+                
                 if(data[0].notes.length > 0){
-                    document.getElementById('lesson').innerText = `Topic: ${data[0].notes[0].lesson}`
-                    document.querySelector('.comments').innerHTML += 
-                    `<p style="color: #1fd346;font-size: .8rem;">Created at ${data[0].notes[0].timestamp}</p>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp; ${data[0].notes[0].comment}</p>
-                    
-                    `;
+                    try{
+                        for(let i=0; i <= data[0].notes.length; i++){
+                           
+                            document.getElementById('lesson').innerText = `Topic: ${data[0].notes[i].lesson}`
+                            document.querySelector('.comments').innerHTML += 
+                            `<p style="color: #1fd346;font-size: .8rem;">Created at ${data[0].notes[i].timestamp}</p>
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp; ${data[0].notes[i].comment}</p>
+                            
+                            `;
+                        }
+                    }catch(err){
+                        console.log(err)
+                    }                    
                     
                 }
             }).catch((err) => console.log(err))

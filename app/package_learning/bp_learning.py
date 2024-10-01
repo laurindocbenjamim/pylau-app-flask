@@ -102,7 +102,8 @@ def save_my_notes(courseID, lesson):
         'timestamp': datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
     }
     
-    st, resp = StudyNotes().add_comment(file_path=file_path, new_comment=new_comment)
+    st, resp = StudyNotes(file_path=file_path, file_directory='/user_notes')\
+        .add_comment(new_comment=new_comment)
     #Remove write permissions
     #os.chmod(file_path, stat.S_IREAD)
     
@@ -124,12 +125,12 @@ def get_my_notes(courseID, lesson):
     #os.chmod(current_app.config['UPLOAD_FOLDER']+'/user_notes', 0o755) 
     #os.chmod(current_app.config['UPLOAD_FOLDER']+file_path, 0o644) 
     
-    #resp = StudyNotes().load_comments(file_path=file_path)
+    resp = StudyNotes(file_path=file_path, file_directory='/user_notes').load_comments()
 
     #Remove write permissions
     #os.chmod(current_app.config['UPLOAD_FOLDER']+file_path, stat.S_IREAD)
     
-    return jsonify({"status": True, "notes": current_app.config['UPLOAD_FOLDER']+file_path}, 200)
+    return jsonify({"status": True, "notes": resp }, 200)
 
 
 @bp_learn.route('/python-for-data-visualize')
