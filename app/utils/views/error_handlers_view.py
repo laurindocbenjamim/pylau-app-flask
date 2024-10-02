@@ -33,12 +33,12 @@ def error_handlers_view(app):
 
         return response
     
-    """@app.errorhandler(500)
+    @app.errorhandler(500)
     def page_not_found(e):
 
         title = f"{e.code} {e.name}"
         error_code=e.code
-        error_description = e.name
+        error_description = e.description
         message = "Oops! Something went wrong on our end. Please try again later."
         # Log the error
         app.logger.error('Internal Server Error: %s', e)
@@ -51,9 +51,9 @@ def error_handlers_view(app):
         set_header_params(response)
         get_message(e, type='debug')
         
-        return response"""
+        return response
     
-    """@app.errorhandler(Exception)
+    @app.errorhandler(Exception)
     def handle_generic_error(e):
         title = "General error"
         error_code="Exp."
@@ -68,7 +68,7 @@ def error_handlers_view(app):
         set_header_params(response)
         get_message(e, type='debug')
         
-        return response"""
+        return response
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
