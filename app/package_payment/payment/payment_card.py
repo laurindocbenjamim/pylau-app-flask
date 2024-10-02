@@ -6,7 +6,7 @@ import sqlalchemy.exc
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, Sequence
 from werkzeug.security import check_password_hash
 
 
@@ -24,25 +24,26 @@ class PaymentCardModel(db.Model):
     """
 
     __tablename__ = "payment_card"
-
+    # CREATE SEQUENCE card_id_seq START WITH 1 INCREMENT BY 1;
+    # ALTER TABLE payment_card ALTER COLUMN card_id SET DEFAULT  nextval('card_id_seq');
     card_id: Mapped[int] = db.Column(
-        db.Integer, primary_key=True, autoincrement=True
+        db.Integer, Sequence('card_id_seq'), primary_key=True, autoincrement=True
     )
     student_id: Mapped[str] = db.Column(
         db.Integer, nullable=False
     )     
     card_number: Mapped[str] = db.Column(db.String(100), unique=True)
     card_name: Mapped[str] = db.Column(db.String(100))
-    card_exp: Mapped[str] = db.Column(db.String(100))
-    card_cvv: Mapped[str] = db.Column(db.String(100))
+    card_exp: Mapped[str] = db.Column(db.String(20))
+    card_cvv: Mapped[str] = db.Column(db.String(10))
    
     card_date_added = db.Column(db.String(11), default=datetime.now().date())
     card_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
     card_month_added = db.Column(
         db.String(20), default=datetime.now().strftime("%m")
     )
-    card_timestamp_added = db.Column(db.String(20), default=db.func.current_timestamp())
-    card_update_added = db.Column(db.String(20))
+    card_timestamp_added = db.Column(db.String(50), default=db.func.current_timestamp())
+    card_update_added = db.Column(db.String(50))
 
     # Method to serialize the object
     def serialize(self):

@@ -6,7 +6,7 @@ import sqlalchemy.exc
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, Sequence
 from werkzeug.security import check_password_hash
 
 
@@ -25,8 +25,10 @@ class PaymentModel(db.Model):
 
     __tablename__ = "payments"
 
+    # CREATE SEQUENCE payment_id_seq START WITH 1 INCREMENT BY 1;
+    # ALTER TABLE payments ALTER COLUMN payment_id SET DEFAULT  nextval('payment_id_seq');
     payment_id: Mapped[int] = db.Column(
-        db.Integer, primary_key=True, autoincrement=True
+        db.Integer, Sequence('payment_id_seq'), primary_key=True, autoincrement=True
     )
     student_id: Mapped[str] = db.Column(
         db.Integer, nullable=False
@@ -39,13 +41,13 @@ class PaymentModel(db.Model):
     )      
     payment_reference: Mapped[str] = db.Column(db.String(100))
     card_number: Mapped[str] = db.Column(db.String(100))   
-    payment_date_added = db.Column(db.String(11), default=datetime.now().date())
-    payment_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
+    payment_date_added = db.Column(db.String(10), default=datetime.now().date())
+    payment_year_added = db.Column(db.String(10), default=datetime.now().strftime("%Y"))
     payment_month_added = db.Column(
         db.String(20), default=datetime.now().strftime("%m")
     )
-    payment_timestamp_added = db.Column(db.String(20), default=db.func.current_timestamp())
-    payment_update_added = db.Column(db.String(20))
+    payment_timestamp_added = db.Column(db.String(50), default=db.func.current_timestamp())
+    payment_update_added = db.Column(db.String(50))
 
     # Method to serialize the object
     def serialize(self):

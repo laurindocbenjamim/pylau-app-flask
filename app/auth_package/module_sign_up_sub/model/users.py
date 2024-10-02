@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import and_
+from sqlalchemy import and_, Sequence
 from werkzeug.security import check_password_hash
 
 
@@ -19,7 +19,10 @@ class Users(UserMixin, db.Model):
 
     __tablename__ = 'users'
 
-    userID:Mapped[int] = db.Column(db.Integer, primary_key=True, autoincrement=True)   
+    # CREATE SEQUENCE user_id_seq START WITH 1 INCREMENT BY 1;
+    # ALTER TABLE users ALTER COLUMN user_id SET DEFAULT nextval('user_id_seq')
+
+    userID:Mapped[int] = db.Column(db.Integer, Sequence('user_id_seq'), primary_key=True, autoincrement=True)   
     username:Mapped[str] = db.Column(db.String(100), nullable=False, unique=True)
     firstname:Mapped[str] = db.Column(db.String(100), nullable=False)
     lastname:Mapped[str] = db.Column(db.String(100), nullable=False)

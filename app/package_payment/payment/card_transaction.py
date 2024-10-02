@@ -7,7 +7,7 @@ from psycopg2 import errors as pg_errors
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, Sequence
 from werkzeug.security import check_password_hash
 
 
@@ -27,8 +27,11 @@ class CardTransactionModel(db.Model):
 
     __tablename__ = "card_transactions"
 
+    # CREATE SEQUENCE transaction_id_seq START WITH 1 INCREMENT BY 1;
+    # ALTER TABLE card_transactions ALTER COLUMN transaction_id SET DEFAULT  nextval('transaction_id_seq');
+
     transaction_id: Mapped[int] = db.Column(
-        db.Integer, primary_key=True, autoincrement=True
+        db.Integer, Sequence('transaction_id_seq'), primary_key=True, autoincrement=True
     )
     student_id: Mapped[str] = db.Column(
         db.Integer, nullable=False
@@ -46,8 +49,8 @@ class CardTransactionModel(db.Model):
     month_added = db.Column(
         db.String(20), default=datetime.now().strftime("%m")
     )
-    timestamp_added = db.Column(db.String(20), default=db.func.current_timestamp())
-    update_added = db.Column(db.String(20))
+    timestamp_added = db.Column(db.String(50), default=db.func.current_timestamp())
+    update_added = db.Column(db.String(50))
 
     # Method to serialize the object
     def serialize(self):

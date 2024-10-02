@@ -5,7 +5,7 @@ from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
-from sqlalchemy import and_, desc
+from sqlalchemy import and_, desc, Sequence
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone, date
@@ -19,7 +19,10 @@ from flask import current_app
 
 class UserToken(db.Model):
     __tablename__ = 'user_token'
-    token_id:Mapped[int] = db.Column(db.Integer, primary_key=True)
+
+    # CREATE SEQUENCE token_id_seq START WITH 1 INCREMENT BY 1;
+    # ALTER TABLE user_token ALTER COLUMN token_id SET DEFAULT nextval('token_id_seq')
+    token_id:Mapped[int] = db.Column(db.Integer, Sequence('token_id_seq'), primary_key=True)
     #user_id:Mapped[int] = db.Column(db.Integer, db.ForeignKey('users.userID'))
     username:Mapped[str] = db.Column(db.String(100), nullable=False)
     token:Mapped[str] = db.Column(db.String(255), unique=True, nullable=False)

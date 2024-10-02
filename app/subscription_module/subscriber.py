@@ -4,7 +4,7 @@ import traceback
 from sqlalchemy.orm import Mapped
 
 from sqlalchemy.exc import SQLAlchemyError  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, Sequence
 from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone, date
@@ -15,7 +15,9 @@ from ..configs_package.modules.logger_config import get_message as set_logger_me
 
 class Subscriber(db.Model):
     __tablename__ = 'subscribers'
-    subscriber_id:Mapped[int] = db.Column(db.Integer, primary_key=True)
+    # CREATE SEQUENCE subscriber_id_seq START WITH 1  INCREMENT BY 1;
+    # ALTER TABLE subscribers ALTER COLUMN subscriber_id SET DEFAULT nextval('subscriber_id_seq');
+    subscriber_id:Mapped[int] = db.Column(db.Integer, Sequence('subscriber_id_seq'), primary_key=True)    
     email:Mapped[str] = db.Column(db.String(100), nullable=False)
     is_active:Mapped[str] = db.Column(db.Boolean(), default=True)    
     year_added = db.Column(db.String(5), default=datetime.now().strftime('%Y'))

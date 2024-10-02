@@ -7,7 +7,7 @@ from psycopg2 import errors as pg_errors
 from sqlalchemy.orm import Mapped
 import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound  # Import SQLAlchemyError
-from sqlalchemy import and_
+from sqlalchemy import and_, Sequence
 from werkzeug.security import check_password_hash
 
 
@@ -26,8 +26,10 @@ class CourseModel(db.Model):
 
     __tablename__ = "courses"
 
+    # CREATE SEQUENCE course_id_seq START WITH 1 INCREMENT BY 1;
+    # ALTER TABLE courses ALTER COLUMN course_id SET DEFAULT nexval('course_id_seq')
     course_id: Mapped[int] = db.Column(
-        db.Integer, primary_key=True, autoincrement=True
+        db.Integer, Sequence('course_id_seq'), primary_key=True, autoincrement=True
     )
     course_code: Mapped[str] = db.Column(
         db.String(100), nullable=False, unique=True
