@@ -45,7 +45,7 @@ def python_basic():
     modules = []
     modules_content = []
     
-    if user_id is None or user_id !='':
+    if user_id is None or user_id =='':
         return redirect(url_for('auth.user.login'))
     else:
         cc_model = CourseContentModel
