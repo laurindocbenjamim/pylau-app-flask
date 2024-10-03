@@ -38,7 +38,7 @@ def laubcode():
 
 @bp_learn.route('/python-basic/<int:courseID>/<string:user_token>')
 @cross_origin(methods=['GET'])
-def python_basic(courseID, user_token):
+def python_basic(courseID=None, user_token=None):
     user_id = session.get('user_id', None)
     course_id = request.args.get('userID')
     course_content = []
