@@ -36,9 +36,9 @@ def laubcode():
     response.set_cookie('current_page', "course.learn.laubcode") 
     return response
 
-@bp_learn.route('/python-basic/<int:courseID>/<string:user_token>')
+@bp_learn.route('/python-basic')
 @cross_origin(methods=['GET'])
-def python_basic(courseID=None, user_token=None):
+def python_basic():
     user_id = session.get('user_id', None)
     course_id = request.args.get('userID')
     course_content = []
