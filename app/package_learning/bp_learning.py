@@ -3,7 +3,7 @@
 import json
 import os
 import stat
-from flask import Blueprint, render_template, session, request, make_response, jsonify, current_app
+from flask import Blueprint, render_template, session, request, make_response, jsonify, current_app, redirect, url_for
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
 
@@ -40,12 +40,14 @@ def laubcode():
 @cross_origin(methods=['GET'])
 def python_basic():
     user_id = session.get('user_id', None)
-    course_id = request.args.get('userID')
+    course_id = request.args.get('courseID')
     course_content = []
     modules = []
     modules_content = []
     
-    if user_id is not None and user_id !='':
+    if user_id is None or user_id !='':
+        return redirect(url_for('auth.user.login'))
+    else:
         cc_model = CourseContentModel
         status, course_content = cc_model.get_content_by_course_id(course_id=course_id)
         contents = cc_model.convert_to_list(course_content)
