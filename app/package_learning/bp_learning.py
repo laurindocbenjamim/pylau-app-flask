@@ -56,7 +56,7 @@ def python_basic():
             for obj in contents:
                 if obj['content_module'] not in modules:
                     modules.append(obj['content_module'])
-        return jsonify({"contents": contents})
+        
     response = make_response(render_template('e_learning/courses_content/python_courses/python-basic.html', 
                                              title="Python Basic", course_content=course_content, modules=modules, current_url="course.learn.python_basic"))
     from ..utils.config_headers import set_header_params
