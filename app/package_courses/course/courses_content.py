@@ -104,10 +104,10 @@ class CourseContentModel(db.Model):
         """
         try:
             obj = CourseContentModel(
-                course_id = course['course_id'],
-                content_type = course['content_type'],
-                content_module = course['content_module'],
-                content_file = course['content_file'],
+                course_id = int(course['course_id']),
+                content_type = str(course['content_type']).replace(' ', '').lower(),
+                content_module = str(course['content_module']).replace(' ', ''),
+                content_file = str(course['content_file']).replace(' ', ''),
                 content_description = course['content_description'],
                 content_thumbnail = course['content_thumbnail'],
                 content_status = course['content_status'],           
@@ -167,9 +167,9 @@ class CourseContentModel(db.Model):
         try:
             obj = CourseContentModel.query.filter(and_(CourseContentModel.course_id==course_id)).first_or_404()
             
-            obj.content_type = course['content_type']
-            obj.content_module = course['content_module']
-            obj.content_file = course['content_file']
+            obj.content_type = str(course['content_type']).replace(' ', '').lower()
+            obj.content_module = str(course['content_module']).replace(' ', '')
+            obj.content_file = str(course['content_file']).replace(' ', '')
             obj.content_description = course['content_description']
             obj.content_thumbnail = course['content_thumbnail']
             obj.content_status = course['content_status']           
