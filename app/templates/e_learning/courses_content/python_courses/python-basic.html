@@ -180,7 +180,7 @@
                         {% if content.content_module | int == module | int %}
                         <li class="nav-item"></li>
                             <p>New content ... {{content.content_module}} --- {{module}}</p>
-                            <p>content -- {{content.content_type}} --- {{module}}</p>
+                            <p>content -- {{content.content_type}} --- {{content.content_description}}</p>
                         </li>
                         {% if content.content_type == 'video' or content.content_type == 'local-video' or
                         content.content_type == 'youtube-video' %}
