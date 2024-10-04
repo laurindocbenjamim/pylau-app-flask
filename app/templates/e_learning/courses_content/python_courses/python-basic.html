@@ -177,8 +177,11 @@
                         {% if course_content %}
                         {% for content in course_content %}
                         
-                        {% if content.content_module | int == module | int %}                       
-                        {% if content.content_type | string === 'video' %}
+                        {% if content.content_module | int == module | int %}  
+                        <li class="nav-item">
+                            <a class="nav-link">Test me ... {{ content.content_type === 'video' }}</a>
+                        </li>                     
+                        {% if content.content_type === "video" %}
                         <li class="nav-item">
                             <a class="nav-link" href="#python"
                                 onclick='getContent("{{content.course_id}}","{{content.content_type}}", "{{content.content_file}}", "{{content.content_description}}")'>
