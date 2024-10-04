@@ -179,14 +179,17 @@
                         
                         {% if content.content_module | int == module | int %}  
                                              
-                        {% if content.content_type | trim == "video" %}
+                        {% if content.content_type | trim == "video" 
+                        or content.content_type | trim == "local-video" 
+                        or content.content_type | trim == "youtube-video"
+                        %}
                         <li class="nav-item">
                             <a class="nav-link" href="#python"
                                 onclick='getContent("{{content.course_id}}","{{content.content_type}}", "{{content.content_file}}", "{{content.content_description}}")'>
                                 {{ content.content_description }}
                             </a>
                         </li>
-                        {% elif content.content_type | string == "lab" %}
+                        {% elif content.content_type | trim == "lab" %}
                         <li class="nav-item"></li>
                         <a class="nav-link"
                             href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}"
