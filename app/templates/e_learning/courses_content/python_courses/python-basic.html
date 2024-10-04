@@ -178,19 +178,19 @@
                         {% for content in course_content %}
                         
                         {% if content.content_module | int == module | int %}
-                        <li class="nav-item"></li>
-                            <p>New content ... {{content.content_module}} --- {{module}}</p>
-                            <p>content -- {{content.content_type}} --- {{content.content_description}}</p>
+                        <li class="nav-item">
+                            <span>New content ... {{content.content_module}} --- {{module}}</p>
+                            <span>content -- {{content.content_type}} --- {{content.content_description}}</p>
                         </li>
-                        {% if content.content_type == 'video' or content.content_type == 'local-video' or
-                        content.content_type == 'youtube-video' %}
+                        {% if content.content_type | string == "video" or content.content_type | string == "local-video" or
+                        content.content_type | string == "youtube-video" %}
                         <li class="nav-item">
                             <a class="nav-link" href="#python"
                                 onclick='getContent("{{content.course_id}}","{{content.content_type}}", "{{content.content_file}}", "{{content.content_description}}")'>
                                 {{ content.content_description }}
                             </a>
                         </li>
-                        {% elif content.content_type =='lab' %}
+                        {% elif content.content_type | string == "lab" %}
                         <li class="nav-item"></li>
                         <a class="nav-link"
                             href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}"
