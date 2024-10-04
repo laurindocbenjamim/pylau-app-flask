@@ -178,10 +178,8 @@
                         {% for content in course_content %}
                         
                         {% if content.content_module | int == module | int %}  
-                        <li class="nav-item">
-                            <a class="nav-link">Test me ... {{ content.content_type }}</a>
-                        </li>                     
-                        {% if content.content_type == "video" %}
+                                             
+                        {% if content.content_type | string == "video" %}
                         <li class="nav-item">
                             <a class="nav-link" href="#python"
                                 onclick='getContent("{{content.course_id}}","{{content.content_type}}", "{{content.content_file}}", "{{content.content_description}}")'>
@@ -193,7 +191,11 @@
                         <a class="nav-link"
                             href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}"
                             target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
-            </li>
+            </li>       
+                        {% else %}
+                        <li class="nav-item"></li>
+                            <a class="nav-link">Test me ... {{ content.content_type }}</a>
+                        </li>
                         {% endif %}
                         {% else %}
                         <li class="nav-item"><a class="nav-link">
