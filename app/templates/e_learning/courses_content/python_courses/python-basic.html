@@ -162,27 +162,27 @@
         <ul class="nav flex-column">
 
             {% if modules %}
-            {% for m in modules %}
+            {% for module in modules %}
 
             <li class="nav-item">
-                {% if m == 1 or m == "1" %}
+                {% if module | int == 1 %}
                 <a class="nav-link active" href="#programming">
                     {% else %}
                     <a class="nav-link" href="#programming">
                         {% endif %}
-                        <i class="fas fa-code me-2"></i>Module {{m}}
+                        <i class="fas fa-code me-2"></i>Module {{module}}
                         <i class="fas fa-chevron-down float-end"></i>
                     </a>
                     <ul class="nav flex-column submenu">
                         {% if course_content %}
                         {% for content in course_content %}
-                        {% if content['content_module'] == m %}
-                        {% if content['content_type'] == 'video' or content['content_type'] == 'local-video' or
-                        content['content_type'] == 'youtube-video' %}
+                        {% if content.content_module | int == module | int %}
+                        {% if content.content_type == 'video' or content.content_type == 'local-video' or
+                        content.content_type == 'youtube-video' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#python" 
-                                >
-                                {{ content['content_description'] }}
+                            <a class="nav-link" href="#python"
+                                onclick='getContent("{{content.course_id}}","{{content.content_type}}", "{{content.content_file}}", "{{content.content_description}}")'>
+                                {{ content.content_description }}
                             </a>
                         </li>
                         {% elif content.content_type =='lab' %}
@@ -191,11 +191,11 @@
                             href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}"
                             target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
             </li>
-                        {% endif %}
+            {% endif %}
 
-                        {% endif %}
-                        {% endfor %}
-                        {% else %}
+            {% endif %}
+            {% endfor %}
+            {% else %}
             <li class="nav-item"><a class="nav-link">
                 <span>No contents</span>
             </a></li>

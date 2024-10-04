@@ -73,9 +73,9 @@ class CourseContentModel(db.Model):
         objects = []
         for i, item in enumerate(obj):
             objects.append(
-                {   "course_content_id": item.course_content_id,
-                    "course_id": item.course_id,
-                    "content_module": item.content_module,
+                {   "course_content_id": int(item.course_content_id),
+                    "course_id": int(item.course_id),
+                    "content_module": int(item.content_module),
                     "content_type": item.content_type,
                     "content_file": item.content_file,
                     "content_description": item.content_description,
