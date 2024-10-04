@@ -191,13 +191,16 @@
                             href="{{ url_for('course.learn.laubcode', userID=session.get('user_id', None), user_token=session.get('user_token', None))}}"
                             target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Laboratory</a>
             </li>
-            {% endif %}
-
+                        {% endif %}
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link">
+                            <span>No contents!</span>
+                        </a></li>
             {% endif %}
             {% endfor %}
             {% else %}
             <li class="nav-item"><a class="nav-link">
-                <span>No contents</span>
+                <span>No modules!</span>
             </a></li>
             {% endif %}
 
