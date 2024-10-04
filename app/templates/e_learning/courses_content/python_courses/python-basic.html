@@ -176,10 +176,12 @@
                     <ul class="nav flex-column submenu">
                         {% if course_content %}
                         {% for content in course_content %}
-                        <li class="nav-item">
-                            <span>New content ... {{content.content_module}} --- {{module}}</span>
-                        </li>
+                        
                         {% if content.content_module | int == module | int %}
+                        <li class="nav-item"></li>
+                            <p>New content ... {{content.content_module}} --- {{module}}</p>
+                            <p>content -- {{content.content_type}} --- {{module}}</p>
+                        </li>
                         {% if content.content_type == 'video' or content.content_type == 'local-video' or
                         content.content_type == 'youtube-video' %}
                         <li class="nav-item">
