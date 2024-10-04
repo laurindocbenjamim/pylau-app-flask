@@ -177,7 +177,7 @@
                         {% if course_content %}
                         {% for content in course_content %}
                         <li class="nav-item">
-                            <span>New content ...</span>
+                            <span>New content ... {{content.content_module}} == {{module}}</span>
                         </li>
                         {% if content.content_module | int == module | int %}
                         {% if content.content_type == 'video' or content.content_type == 'local-video' or
