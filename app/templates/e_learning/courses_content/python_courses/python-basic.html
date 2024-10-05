@@ -264,7 +264,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3 border-bottom">
                 <li class="breadcrumb-item">
-                    <a class="link-body-emphasis" href="#">
+                    <a class="link-body-emphasis" href="{{ url_for('course.learn.my_learning')}}">
                         <i class="fas fa-home"></i>
                         <span class="visually-hidden">Home</span>
                     </a>
@@ -312,7 +312,7 @@
         </section>
 
 
-        <section id="javascript-demo">
+        <section id="content-container">
             <h3 class="mt-5">Introduction to Python</h3>
             <h1>Overview of Python Programming Language</h1>
             <div class="">
@@ -447,12 +447,12 @@
                     </video>${formButtons}`;
 
         if (String(fileType).trim() === 'video' | String(fileType).trim() === 'local-video') {
-            document.getElementById('javascript-demo').innerHTML = videoTag
+            document.getElementById('content-container').innerHTML = videoTag
         } else if (String(fileType).trim() === 'youtube-video') {
-            document.getElementById('javascript-demo').innerHTML = iframe
+            document.getElementById('content-container').innerHTML = iframe
         }
 
-        document.getElementById('javascript-demo').innerHTML += ``;
+        document.getElementById('content-container').innerHTML += ``;
 
         getComments(courseID, topicCont)
 
