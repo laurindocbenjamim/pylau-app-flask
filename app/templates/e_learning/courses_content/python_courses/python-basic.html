@@ -387,8 +387,8 @@
         localStorage.setItem('topicCont', topicCont.trim())
         localStorage.setItem('courseID', courseID.trim())
         topic = topicCont.trim()
-        alert(String(content_file).trimStart() + ' - '+ String(topicCont).trimEnd() + '__'+String(fileType).trim())
-        alert(content_file.trimStart() + ' - '+ topicCont.trim() + '__'+String(fileType).trim())
+        //alert(String(content_file).trimStart() + ' - '+ String(topicCont).trimEnd() + '__'+String(fileType).trim())
+        //alert(content_file.trimStart() + ' - '+ topicCont.trim() + '__'+String(fileType).trim())
         const formButtons = `<div class="row ">
 
                 <div class="col-md-1">
@@ -450,7 +450,7 @@
             
     `;
 
-        if (String(fileType).trim() === 'local-video') {
+        if (String(fileType).trim() === 'video' | String(fileType).trim() === 'local-video') {
             document.getElementById('javascript-demo').innerHTML = videoTag
         } else if (String(fileType).trim() === 'youtube-video') {
             document.getElementById('javascript-demo').innerHTML = iframe
