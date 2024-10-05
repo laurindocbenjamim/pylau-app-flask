@@ -383,7 +383,7 @@
     var course_id = 0;
     var lesson = '';
 
-    if(localStorage.getItem(autoPlay) ===null){
+    if(localStorage.getItem(autoPlay) === null | localStorage.getItem(autoPlay) === 'null'){
         localStorage.setItem(autoPlay, 1) 
     }
 
