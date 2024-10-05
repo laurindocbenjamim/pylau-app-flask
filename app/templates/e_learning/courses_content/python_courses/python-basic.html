@@ -384,9 +384,9 @@
     var lesson = '';
 
     function getContent(courseID, fileType, content_file, topicCont) {
-        localStorage.setItem('topicCont', topicCont.trimStart())
-        localStorage.setItem('courseID', courseID.trimStart())
-        topic = topicCont.trimStart()
+        localStorage.setItem('topicCont', topicCont.trim())
+        localStorage.setItem('courseID', courseID.trim())
+        topic = topicCont.trim()
         alert(String(content_file).trimStart() + ' - '+ String(topicCont).trimEnd() + '__'+String(fileType).trim())
         alert(content_file.trimStart() + ' - '+ topicCont.trim() + '__'+String(fileType).trim())
         const formButtons = `<div class="row ">
@@ -410,7 +410,7 @@
                         <textarea class="form-control" placeholder="Leave a comment here" id="newComment" name="newComment" style="height: 100px"></textarea>
                         <label for="newComment">Comments</label>
                     </div>
-                    <button type="button" onclick="postThisNote('${Number(courseID.trimStart())}', '${String(topic).trimStart()}')" class="btn btn-primary">Save</button>
+                    <button type="button" onclick="postThisNote('${Number(courseID.trim())}', '${String(topic).trim()}')" class="btn btn-primary">Save</button>
                 </form>
              </div>`;
 
@@ -419,7 +419,7 @@
         <p> Watch the video carefully and then apractice your skills by making  the exercices</p>
     <section class="video-section container fade-in">
             <div class="video-container mb-3">
-                <iframe class="iframe-video" src="${String(content_file).trimStart()}?autoplay=${localStorage.getItem('autoplay')}" title="TechInnovate: Revolutionizing Business with Data Science" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class="iframe-video" src="${String(content_file).trim()}?autoplay=${localStorage.getItem('autoplay')}" title="TechInnovate: Revolutionizing Business with Data Science" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>            
             ${formButtons}
         </section>
@@ -432,16 +432,16 @@
         
             
                 <video autoplay id="videoPlayer" class="w-100" controls>`;
-        if (String(fileType).trimStart() === 'local-video') {
+        if (String(fileType).trim() === 'local-video') {
 
 
             videoTag += `
-                    <source src="${window.location.origin + '/static/' + String(content_file).trimStart()}" type="video/mp4">`;
+                    <source src="${window.location.origin + '/static/' + String(content_file).trim()}" type="video/mp4">`;
 
 
-        } else if (String(fileType).trimStart() === 'video') {
+        } else if (String(fileType).trim() === 'video') {
             videoTag += `
-                    <source src="${String(content_file).trimStart()}" type="video/mp4">`;
+                    <source src="${String(content_file).trim()}" type="video/mp4">`;
         }
         videoTag += ` Your browser does not support the video tag.
                 </video>
@@ -450,9 +450,9 @@
             
     `;
 
-        if (String(fileType).trimStart() === 'local-video') {
+        if (String(fileType).trim() === 'local-video') {
             document.getElementById('javascript-demo').innerHTML = videoTag
-        } else if (String(fileType).trimStart() === 'youtube-video') {
+        } else if (String(fileType).trim() === 'youtube-video') {
             document.getElementById('javascript-demo').innerHTML = iframe
         }
 
