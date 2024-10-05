@@ -444,11 +444,7 @@
                     <source src="${String(content_file).trim()}" type="video/mp4">`;
         }
         videoTag += ` Your browser does not support the video tag.
-                </video>
-               
-                ${formButtons}
-            
-    `;
+                    </video>${formButtons}`;
 
         if (String(fileType).trim() === 'video' | String(fileType).trim() === 'local-video') {
             document.getElementById('javascript-demo').innerHTML = videoTag
