@@ -398,7 +398,7 @@
                 <div class="col-md-1">
                     <div class="form-check form-switch">`;
 
-                        if(localStorage,getItem(autoPlay) === 1){
+                        if(localStorage.getItem(autoPlay) === 1){
                             formButtons += `<input class="form-check-input" type="checkbox" onclick="setAutoplay(event)" role="switch" id="flexSwitchCheckChecked" checked>`;
                         }else{
                             formButtons += `<input class="form-check-input" type="checkbox" onclick="setAutoplay(event)" role="switch" id="flexSwitchCheckChecked" >`;
