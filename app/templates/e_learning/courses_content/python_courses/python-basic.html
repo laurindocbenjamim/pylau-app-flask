@@ -480,13 +480,13 @@
     function postThisNote(courseID, lesson) {
 
         const endpoint = `${window.location.origin}/course/learn/notes/new/${courseID}/${lesson}`;
-        var comment = document.getElementById('newComment').value
+        var comment = document.getElementById('newComment')
 
         const headers = new Headers()
         headers.append('X-CSRF-Token', csrfToken)
         headers.append("Authorization", ` Bearer ${csrfToken}`);
         const formData = new FormData()
-        formData.append("comment", comment)
+        formData.append("comment", comment.value)
         formData.append("course_id", courseID)
         formData.append("lesson", lesson)
 
@@ -508,8 +508,10 @@
                 if (data.status === false | data.status === 'false') {
                     console.log(data)
                 } else {
-                    document.getElementById('newComment').value = ''
+                    
+                    comment.value = ''
                     document.querySelector('.comments').innerHTML = ''
+                    
                     setTimeout(() => {
                         getComments(localStorage.getItem('courseID'), localStorage.getItem('topicCont'))
                         document.getElementById('noteForm').style.display = 'none'
@@ -540,9 +542,10 @@
             })
             .then((data) => {
 
-                console.log(data)
-
+                //console.log(data)
+                
                 if (data[0].notes.length > 0) {
+                    document.querySelector('.comments').innerHTML = ''
                     try {
                         for (let i = 0; i <= data[0].notes.length; i++) {
 
