@@ -114,7 +114,24 @@ def courses():
     from ..utils.config_headers import set_header_params
     set_header_params(response)
     return response
-    
+
+@bp_courses.route('/new')
+@cross_origin(methods=['GET'])
+def new_course():
+    welcome_title = "New"
+    welcome_message = "Enter a new course"
+    USER_DATA = {
+             'USERNAME': request.cookies.get('USERNAME', ''),
+        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
+        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
+        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
+        }
+    response = make_response(render_template('admin/form_course.html', title="New Course",USER_DATA=USER_DATA,  welcome_title=welcome_title, welcome_message=welcome_message))
+    from ..utils.config_headers import set_header_params
+    set_header_params(response)
+    return response
+
+
 @bp_courses.route('/python-courses')
 @cross_origin(methods=['GET'])
 def python_courses():

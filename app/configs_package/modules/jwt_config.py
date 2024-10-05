@@ -208,12 +208,16 @@ def refresh_jwt_token(token):
 # This method forces the jwt user expiration token 
 def force_jwt_token_expiration(token):
     secret_key = current_app.config['SECRET_KEY']
-    new_token = None
+    new_token = ''
+    
+    if not token or token is None or token == new_token:
+        return False, new_token
     try:
+        
         set_logger_message(f"<<force_jwt_token_expiration method>> START TO TRY TO DECODE TOKEN")
         # First try to decode the token. If it's expired it will raise an exception
         jwt.decode(token, secret_key, algorithms="HS256")  
-
+        
         # If the token is expired generate a new one
         set_logger_message(f"<<force_jwt_token_expiration method>> START TRYING TO REFRESH THE TOKEN")
 
@@ -229,29 +233,31 @@ def force_jwt_token_expiration(token):
 
         return True, new_token
 
-    except jwt.ExpiredSignatureError as e:     
-
+    except jwt.ExpiredSignatureError as e:
         set_logger_message(f"JWT <<force_jwt_token_expiration method>> ExpiredSignatureError: {str(traceback.format_exc())}")
+        return False, str(e)
         
     except Exception as e:
 
         set_logger_message(f"JWT <<force_jwt_token_expiration method>> Exception: {str(traceback.format_exc())}")
 
-        return False, None
+        return False, ''
     else:
-        return True, None
+        return True, ''
 
 def is_user_token_expired(token):
     secret_key = current_app.config['SECRET_KEY'] 
 
-    if not token or '':
-        return None        
+    if not token or token == '':
+        return True, ''     
+       
     try:
-        response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
-        return False
+        #response = jwt.decode(token, secret_key, leeway=10, algorithms="HS256", options={'verify_exp': True})['user']
+        response = jwt.decode(token, secret_key, algorithms="HS256")
+        return False, response
     except jwt.ExpiredSignatureError as e:
         set_logger_message(f"JWT <<decode_token method>> ExpiredSignatureError: {str(traceback.format_exc())}")
-        return True
+        return True, str(e)
     
 def filter_token_from_headers(headers):
     token = headers["Authorization"]

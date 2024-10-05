@@ -22,10 +22,10 @@ class AdminView(View):
         }
             
         # Check if the token is expired
-        if self.userToken.is_user_token_expired(escape(user_token)):
+        """ if self.userToken.is_user_token_expired(escape(user_token)):
             session.clear()
             logout_user()
-            return redirect(url_for('auth.user.login'))
+            return redirect(url_for('auth.user.login'))"""
             
             
         status,token = self.userToken.get_token_by_token(escape(user_token))

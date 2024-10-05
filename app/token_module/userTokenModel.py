@@ -166,6 +166,7 @@ class UserToken(db.Model):
             return False, str(e)
     # This method forces the jwt user expiration token 
     def force_user_jwt_token_expiration(token):
+        #status, resp = 
         return force_jwt_token_expiration(token)
     
     # Delete a token by the token_id
