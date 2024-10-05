@@ -387,8 +387,8 @@
         localStorage.setItem('topicCont', topicCont.trimStart())
         localStorage.setItem('courseID', courseID.trimStart())
         topic = topicCont.trimStart()
-        alert(String(content_file).trimStart() + ' - '+ String(topicCont).trimStart() + '__'+String(fileType).trimStart())
-        alert(content_file.trimStart() + ' - '+ topicCont.trimStart() + '__'+String(fileType).trimStart())
+        alert(String(content_file).trimStart() + ' - '+ String(topicCont).trimEnd() + '__'+String(fileType).trim())
+        alert(content_file.trimStart() + ' - '+ topicCont.trim() + '__'+String(fileType).trim())
         const formButtons = `<div class="row ">
 
                 <div class="col-md-1">
