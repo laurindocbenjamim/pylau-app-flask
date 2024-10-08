@@ -21,7 +21,7 @@ def validate_str_punct_and_digits(s):
 
 def validate_str_digits(s):
      # This pattern allows spaces, accentuated characters, numbers, and common punctuation
-    pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.\'"()]+$'
+    pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s._\'"()]+$'
     if re.match(pattern, s):
         return True
     return False

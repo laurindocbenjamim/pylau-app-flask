@@ -9,3 +9,10 @@ if token2 == token1:
     print("Equals")
 else:
     print("different")
+name ="Python Basic Level".split(' ')
+#s = next(['' for i in name])
+i=''
+
+for k,l in enumerate(name):
+    i+= str(l[0])
+    print(i)

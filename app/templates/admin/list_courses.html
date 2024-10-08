@@ -29,7 +29,7 @@
     <h1 class="h2">Courses</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <a href="{{ url_for('course.new_course',userID=session.get('user_id'),user_token=session.get('user_token')) }}" type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i> New</a>
+        <a href="{{ url_for('course.post',userID=session.get('user_id'),user_token=session.get('user_token')) }}" type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i> New</a>
       </div>
       <!--<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
         <svg class="bi"><use xlink:href="#calendar3"/></svg>
@@ -72,7 +72,7 @@
               <a class="lessons-button" title="Total of quizzes"><i class="fa-regular fa-file-excel"></i> {{ course.course_total_quizzes }}</a>
               
             </td>
-            <td>{{ course.course_level }}</td>
+            <td>{{ course.course_level.upper() }}</td>
             <td>{{ course.course_status }}</td>
             <td>
               <div class="btn-group" role="group">

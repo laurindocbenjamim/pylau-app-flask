@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
 # Method to save file 
-def upload_file(request_file: Request.files, file_field_name: str):
+def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
     """
     This method is used to upload files
     Parameters: 
@@ -18,7 +18,7 @@ def upload_file(request_file: Request.files, file_field_name: str):
     try:
         #filename = secure_filename(file.filename)
 
-        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/tickets'
+        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{kwargs.get('folder', 'files')}'
 
         # Check if the folder to store the tickets exists, if not, create it
         if not os.path.exists(UPLOAD_FOLDER):

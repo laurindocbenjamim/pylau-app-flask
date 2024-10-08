@@ -14,6 +14,14 @@ from .enroll.enroll import EnrollModel
 from ..package_payment.payment.card_transaction import CardTransactionModel
 from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
+from ..package_courses.course.course_post_update_view import CoursePostUpdateView
+from ..utils import __get_cookies
+
+bp_courses.add_url_rule("/post",view_func=CoursePostUpdateView.as_view("post",CourseModel, UserToken, __get_cookies, "admin/form_course.html"))
+
+#
+bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
+CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_learning/enroll_to_course.html"))
 
 
 @bp_courses.route('/list-all')
@@ -21,15 +29,8 @@ from ..package_payment.payment.payment import PaymentModel
 def get_all():
     import random
     from datetime import datetime, timezone
-
-    USER_DATA = {
-             'USERNAME': request.cookies.get('USERNAME', ''),
-        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
-        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
-        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
-        }
     
-    data = [{
+    """data = [{
         "course_code": f"PYB00{random.choice([1000, 10000])}",
         "course_description": "Python Basic",
         "course_details": "Basic Python course, a bigginer and fundamental course",
@@ -46,25 +47,7 @@ def get_all():
         "course_year_added": datetime.now().strftime('%Y'),
         "course_month_added": datetime.now().strftime('%m'),
         "course_timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
-    },
-    {
-        "course_code": f"PYB00{random.random()}",
-        "course_description": "Python for Data Visualization",
-        "course_details": "Python for Data Visualization, an advanced course",
-        "course_status": 1,
-        "course_is_certified": 0,
-        "course_image": "https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg",
-        "course_view_url": "course.learn.python_for_data_visualize",
-        "course_level": "advanced",
-        "course_total_lessons": "7",
-        "course_total_quizzes": "2",
-        "course_total_labs": "2",
-        "course_total_modules": 1,
-        "course_date_added": datetime.now(),
-        "course_year_added": datetime.now().strftime('%Y'),
-        "course_month_added": datetime.now().strftime('%m'),
-        "course_timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
-    }]
+    }]"""
 
     courses_rogress = [{
         "course_id": 1,
@@ -88,21 +71,20 @@ def get_all():
     }
     ]
     
-    for item in data:
+    """for item in data:
         status, obj = CourseModel.create(course=item)
-        status, obj = CourseProgressModel.create(column=courses_rogress)
+        status, obj = CourseProgressModel.create(column=courses_rogress)"""
 
     courses = CourseModel.get()
     courses = [] if len(courses) == 0 else courses
-    response = make_response(render_template('admin/list_courses.html', title="All Courses", USER_DATA=USER_DATA, courses=courses))
-    from ..utils.config_headers import set_header_params
+
+    from ..utils import __get_cookies, set_header_params
+
+    response = make_response(render_template('admin/list_courses.html', title="All Courses", USER_DATA=__get_cookies, courses=courses))    
     set_header_params(response)
     return response
 
 
-#
-bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
-CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_learning/enroll_to_course.html"))
 
 
 @bp_courses.route('/courses')
@@ -110,8 +92,11 @@ CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_
 def courses():
     welcome_title = "Our Courses"
     welcome_message = "Discover a world of knowledge with our diverse range of courses"
-    response = make_response(render_template('courses.html', title="Courses",  welcome_title=welcome_title, welcome_message=welcome_message))
-    from ..utils.config_headers import set_header_params
+
+    from ..utils import __get_cookies, set_header_params
+
+    response = make_response(render_template('courses.html', title="Courses",  welcome_title=welcome_title, USER_DATA=__get_cookies, welcome_message=welcome_message))
+    
     set_header_params(response)
     return response
 
@@ -120,14 +105,10 @@ def courses():
 def new_course():
     welcome_title = "New"
     welcome_message = "Enter a new course"
-    USER_DATA = {
-             'USERNAME': request.cookies.get('USERNAME', ''),
-        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
-        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
-        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
-        }
-    response = make_response(render_template('admin/form_course.html', title="New Course",USER_DATA=USER_DATA,  welcome_title=welcome_title, welcome_message=welcome_message))
-    from ..utils.config_headers import set_header_params
+    
+    from ..utils import __get_cookies, set_header_params
+    response = make_response(render_template('admin/form_course.html', title="New Course",USER_DATA=__get_cookies,  welcome_title=welcome_title, welcome_message=welcome_message))
+    
     set_header_params(response)
     return response
 
@@ -141,8 +122,10 @@ def python_courses():
     courses = CourseModel.get()
     courses = [] if len(courses) == 0 else courses
 
-    response = make_response(render_template('python-courses.html', title="Python Courses", courses=courses,  welcome_title=welcome_title, welcome_message=welcome_message))
-    from ..utils.config_headers import set_header_params
+    from ..utils import __get_cookies, set_header_params
+
+    response = make_response(render_template('python-courses.html', title="Python Courses",USER_DATA=__get_cookies, courses=courses,  welcome_title=welcome_title, welcome_message=welcome_message))
+    
     set_header_params(response) 
     return response
 
