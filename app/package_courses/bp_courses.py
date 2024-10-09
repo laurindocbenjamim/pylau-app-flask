@@ -8,7 +8,8 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
-from .course.courses_content import CourseContentModel
+from .content.courses_content import CourseContentModel
+from .content.course_content_post_view import CourseContentPostUpdateView
 from ..package_learning.elearning.course_progress import CourseProgressModel
 from .enroll.enroll import EnrollModel
 from ..package_payment.payment.card_transaction import CardTransactionModel
@@ -18,6 +19,8 @@ from ..package_courses.course.course_post_update_view import CoursePostUpdateVie
 from ..utils import __get_cookies
 
 bp_courses.add_url_rule("/post",view_func=CoursePostUpdateView.as_view("post",CourseModel, UserToken, __get_cookies, "admin/form_course.html"))
+
+bp_courses.add_url_rule("/content/post",view_func=CourseContentPostUpdateView.as_view("content_post",CourseContentModel, UserToken, __get_cookies, "admin/form_course_content.html"))
 
 #
 bp_courses.add_url_rule("/enroll/<string:course>",view_func=EnrollView.as_view("enroll",EnrollModel, 
@@ -30,25 +33,6 @@ def get_all():
     import random
     from datetime import datetime, timezone
     
-    """data = [{
-        "course_code": f"PYB00{random.choice([1000, 10000])}",
-        "course_description": "Python Basic",
-        "course_details": "Basic Python course, a bigginer and fundamental course",
-        "course_status": 1,
-        "course_is_certified": 0,
-        "course_view_url": "course.learn.python_basic",
-        "course_image": "https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg",
-        "course_level": "beginner",
-        "course_total_lessons": "4",
-        "course_total_quizzes": "2",
-        "course_total_labs": "1",
-        "course_total_modules": 1,
-        "course_date_added": datetime.now(),
-        "course_year_added": datetime.now().strftime('%Y'),
-        "course_month_added": datetime.now().strftime('%m'),
-        "course_timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
-    }]"""
-
     courses_rogress = [{
         "course_id": 1,
         "student_id": 1,
@@ -72,7 +56,6 @@ def get_all():
     ]
     
     """for item in data:
-        status, obj = CourseModel.create(course=item)
         status, obj = CourseProgressModel.create(column=courses_rogress)"""
 
     courses = CourseModel.get()
