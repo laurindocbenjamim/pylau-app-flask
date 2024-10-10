@@ -12,6 +12,7 @@ CORS(bp_learn)
 
 from ..token_module.userTokenModel import UserToken
 from ..package_courses.enroll.enroll_view import EnrollView
+
 from ..package_courses.course.course import CourseModel
 from ..package_courses.enroll.enroll import EnrollModel
 from ..package_courses.content.courses_content import CourseContentModel
@@ -20,7 +21,10 @@ from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
 
 from .elearning.my_learning_view import MyLearningView
-bp_learn.add_url_rule("my-learning", view_func=MyLearningView.as_view("my_learning",EnrollModel, CourseModel, UserToken, "e_learning/my-learning.html"))
+bp_learn.add_url_rule("/my-learning", view_func=MyLearningView.as_view("my_learning",EnrollModel, CourseModel, UserToken, "e_learning/my-learning.html"))
+
+from .elearning.study_this_course_view import StudyThisCourseView
+bp_learn.add_url_rule("/this/<string:course>", view_func=StudyThisCourseView.as_view("this_course",CourseContentModel, CourseModel, UserToken, 'e_learning/courses_content/python_courses/study-this-course.html'))
 
 
 @bp_learn.route('/laubcode-editor')

@@ -80,10 +80,23 @@
                   Option
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{{ url_for('course.content_post', courseID=course.course_id, description=course.course_description, user_token=session.get('user_token'))}}"><i class="fa-regular fa-edit"></i> Add content</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('course.content_post', courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}"><i class="fa-regular fa-edit"></i> Add content</a></li>
                   <li><a class="dropdown-item" href="#"><i class="fa-regular fa-trash-can"></i> Remove</a></li>
                   <li><a class="dropdown-item" href="#"><i class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for(course.course_view_url.replace(' ',''))}}" target="_blank" ><i class="fa-regular fa-eye"></i> View</a></li>
+                  <!--<li>
+                    <a class="dropdown-item" href="{{ url_for(course.course_view_url.replace(' ',''), 
+                      courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}" 
+                      target="_blank" ><i class="fa-regular fa-eye"></i> 
+                      View
+                    </a>
+                  </li>-->
+                  <li>
+                    <a class="dropdown-item" href="{{ url_for('course.learn.this_course', 
+                      course=course.course_description,courseID=course.course_id, user_token=session.get('user_token')) }}" 
+                      target="_blank" ><i class="fa-regular fa-eye"></i> 
+                      View
+                    </a>
+                  </li>
                 </ul>
               </div>
             </td>
