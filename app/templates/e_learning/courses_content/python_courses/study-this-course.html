@@ -200,6 +200,13 @@
                                 {{ content.content_description }}
                             </a>
                         </li>
+                        {% elif content.content_type | trim == "text" or  content.content_type | trim == "html" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#python"
+                                onclick='getHtmlContent("{{content.course_id | trim }}","{{content.content_type | trim }}", "{{content.content_file | trim }}", "{{content.content_description}}")'>
+                                {{ content.content_description }}
+                            </a>
+                        </li>
                         {% elif content.content_type | trim == "lab" %}
                         <li class="nav-item"></li>
                         <a class="nav-link"
@@ -266,93 +273,11 @@
             </ol>
         </nav>
 
-        <section id="javascript-courses">
-            <div class="row">
-
-                <!--
-            
-            
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-rocket me-2"></i>Advanced JavaScript</h5>
-                        <p class="card-text">Dive deep into advanced JavaScript concepts and techniques.</p>
-                        <a href="https://d-tuning.com/courses/advanced-javascript" class="btn btn-primary">Start Learning</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-cubes me-2"></i>JavaScript Frameworks</h5>
-                        <p class="card-text">Explore popular JavaScript frameworks like React, Vue, and Angular.</p>
-                        <a href="https://d-tuning.com/courses/javascript-frameworks" class="btn btn-primary">Start Learning</a>
-                    </div>
-                </div>
-            </div>
-            -->
-            </div>
-        </section>
-
 
         <section id="content-container">
-            <h3 class="mt-5">Introduction to Python</h3>
-            <h1>Overview of Python Programming Language</h1>
-            <div class="">
-                <pre>
-    <p>Python is a high-level, interpreted programming language known for its readability and simplicity. It was created by Guido van Rossum and first released in 1991.</p>
-    
-    <h2>Key Features</h2>
-    <ul>
-        <li><strong>Readability:</strong> Python's syntax emphasizes readability and simplicity, making it easy to learn and use.</li>
-        <li><strong>Interpreted:</strong> Python code is executed line by line, which makes debugging easier.</li>
-        <li><strong>Dynamic Typing:</strong> Variable types are determined at runtime, allowing for more flexibility.</li>
-        <li><strong>Garbage Collection:</strong> Automatic memory management helps prevent memory leaks.</li>
-        <li><strong>Extensive Libraries:</strong> Python has a rich standard library and a vast ecosystem of third-party packages.</li>
-    </ul>
-    
-    <h2>Programming Paradigms</h2>
-    <p>Python supports multiple programming paradigms, including:</p>
-    <ul>
-        <li>Procedural Programming</li>
-        <li>Object-Oriented Programming</li>
-        <li>Functional Programming</li>
-    </ul>
-    
-    <h2>Applications</h2>
-    <p>Python is used in a wide range of applications, such as:</p>
-    <ul>
-        <li>Web Development</li>
-        <li>Data Analysis and Visualization</li>
-        <li>Artificial Intelligence and Machine Learning</li>
-        <li>Scientific Computing</li>
-        <li>Automation and Scripting</li>
-    </ul>
-    
-    <h2>Conclusion</h2>
-    <p>Python's versatility, ease of use, and extensive libraries make it a popular choice for both beginners and experienced developers. Its wide range of applications and supportive community continue to drive its growth and adoption.</p>
-            </pre>
-            </div>
+            
         </section>
 
-        <section id="my-notes">
-            <h4 class="mt-5">My Notes</h4>
-            <p id="lesson">Lesson</p>
-            <div class="col-lg-12 mt-2 ">
-                <div class="comments">
-
-                </div>
-            </div>
-        </section>
-
-        <!--<section id="javascript-resources">
-        <h3 class="mt-5">Additional Resources</h3>
-        <ul class="list-group">
-            <li class="list-group-item"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><i class="fas fa-external-link-alt me-2"></i>MDN Web Docs - JavaScript</a></li>
-            <li class="list-group-item"><a href="https://javascript.info/"><i class="fas fa-external-link-alt me-2"></i>JavaScript.info</a></li>
-            <li class="list-group-item"><a href="https://www.w3schools.com/js/"><i class="fas fa-external-link-alt me-2"></i>W3Schools JavaScript Tutorial</a></li>
-        </ul>
-    </section>-->
 </main>
 {% endblock %}
 {% block script %}
@@ -580,6 +505,36 @@
 
                 } else {
                     document.querySelector('.comments').innerHTML = '<p>You have not create notes yet...</p>'
+                }
+            }).catch((err) => console.log(err))
+    }
+
+
+    async function getHtmlContent(courseID, fileType, content_file, topicCont){
+        localStorage.setItem('courseID', courseID.trim())
+        localStorage.setItem('fileType', fileType.trim())
+        localStorage.setItem('topicCont', topicCont.trim())
+        localStorage.setItem('contentFile', content_file.trim())
+
+        topicTitle.innerText = topicCont
+        topic = topicCont.trim()
+
+        await fetch(`${window.location.origin}/course/content/read-file/${topicCont}?courseID=${courseID}&&lesson=${lesson}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+
+                console.log(data)
+                
+                if (data[0].content) {
+                    
+                    document.getElementById('content-container').innerHTML = data[0].content
+                } else {
+                    document.querySelector('.comments').innerHTML = '<p>You have no content yet...</p>'
                 }
             }).catch((err) => console.log(err))
     }

@@ -1,6 +1,7 @@
 
-from flask import Blueprint, render_template, make_response, request
+from flask import Blueprint, render_template, make_response, request, jsonify
 from flask_cors import  CORS, cross_origin
+from markupsafe import escape
 
 bp_courses = Blueprint("course", __name__, url_prefix='/course')
 CORS(bp_courses)
@@ -111,4 +112,15 @@ def python_courses():
     
     set_header_params(response) 
     return response
+
+
+@bp_courses.route('/content/read-file/<string:topic>')
+@cross_origin(methods=['GET'])
+def read_file_content(topic):
+    topic = escape(topic)
+    from ..utils.my_file_factory import read_html_file
+
+    file_path ="html/overview-python.html"
+    content = read_html_file(file_path=file_path)
+    return  jsonify({"topic": topic, "content": content},200)
 
