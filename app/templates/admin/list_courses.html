@@ -92,7 +92,7 @@
                   </li>-->
                   <li>
                     <a class="dropdown-item" href="{{ url_for('course.learn.this_course', 
-                      course=course.course_description,courseID=course.course_id, user_token=session.get('user_token')) }}" 
+                      course=course.course_description,courseID=course.course_id, userID=session.get('user_id', None), user_token=session.get('user_token')) }}" 
                       target="_blank" ><i class="fa-regular fa-eye"></i> 
                       View
                     </a>

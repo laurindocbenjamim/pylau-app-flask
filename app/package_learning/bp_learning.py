@@ -64,7 +64,7 @@ def python_basic():
         #return jsonify({"modules": modules, "contents": contents, "status": [True  if int(c.content_module)  == modules[0] else False for c in course_content]
         #                , "module": modules[0] == 1 })
     response = make_response(render_template('e_learning/courses_content/python_courses/python-basic.html', 
-                                             title="Python Basic", course_content=course_content, modules=modules, current_url="course.learn.python_basic"))
+                                             title="Python Basic", course_id=course_id, course="Python Basic",  course_content=course_content, modules=modules, current_url="course.learn.python_basic"))
     from ..utils.config_headers import set_header_params
     set_header_params(response)
     response.set_cookie('current_page', "course.learn.python_basic") 

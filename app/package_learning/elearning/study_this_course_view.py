@@ -51,10 +51,10 @@ class StudyThisCourseView(View):
                         modules.append(int(obj['content_module']))
     
         response = make_response(render_template(self._template, 
-                                             title=course, course_content=course_content, modules=modules, current_url="course.learn.python_basic"))
+                                             title=course, course_id=course_id, course=course, course_content=course_content, modules=modules, current_url="course.learn.this_course"))
         from ...utils.config_headers import set_header_params
         set_header_params(response)
-        response.set_cookie('current_page', "course.learn.study_this_course") 
+        response.set_cookie('current_page', "course.learn.this_course") 
         return response
                         
         

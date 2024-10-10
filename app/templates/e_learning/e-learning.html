@@ -147,7 +147,10 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for(current_url, userID=session.get('user_id', None), user_token=session.get('user_token', None) )}}">{{ title }}</a>
+                        <a class="nav-link active" 
+                        href="{{ url_for(current_url, course=title,courseID=course_id, userID=session.get('user_id', None), user_token=session.get('user_token', None) )}}">
+                        {{ title }}
+                    </a>
                     </li>
                 </ul>
                 {% if not current_user.is_authenticated %}
