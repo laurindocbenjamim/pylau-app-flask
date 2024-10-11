@@ -100,28 +100,6 @@
               </div>
             </div>  
 
-            <div class="col-12">
-              <label for="thumbnail" class="form-label">Thumbnail <span class="text-body-secondary">(Optional)</span></label>
-              <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="{{request.form.thumbnail}}" 
-              maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >
-              <div class="invalid-feedback">
-                Please enter a valid thumbnail.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="contentFileName" class="form-label">Content file name <span class="text-danger">*</span></label>
-              <div class="input-group has-validation">
-                <input type="text" class="form-control" id="contentFileName" name="contentFileName" placeholder="View URL" value="{{ request.form.contentFileName }}" 
-                required maxlength="200"
-                oninput="this.value = this.value.replace(/[^\w\s]/gi, '.')">
-                <div class="invalid-feedback">
-                  Valid content file name is required. 
-                </div>
-              </div>
-            </div>
-
-
             <div class="col-md-5">
               <label for="countentType" class="form-label">Content type</label>
               <select class="form-select" id="countentType" name="countentType" required>
@@ -177,6 +155,27 @@
               </div>
             </div>
 
+
+            <div class="col-12">
+              <label for="thumbnail" class="form-label">Thumbnail <span class="text-body-secondary">(Optional)</span></label>
+              <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="{{request.form.thumbnail}}" 
+              maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >
+              <div class="invalid-feedback">
+                Please enter a valid thumbnail.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="contentFileName" class="form-label">Content file name <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="contentFileName" name="contentFileName" placeholder="View URL" value="{{ request.form.contentFileName }}" 
+                required maxlength="200"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '.')">
+                <div class="invalid-feedback">
+                  Valid content file name is required. 
+                </div>
+              </div>
+            </div>
 
           </div>
 

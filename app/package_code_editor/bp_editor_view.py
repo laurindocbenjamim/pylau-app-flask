@@ -3,6 +3,7 @@ import subprocess
 from flask import Blueprint, render_template, url_for, redirect, request, session, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
+from ..utils import __get_cookies
 
 bp_editor = Blueprint('laubcode', __name__, url_prefix='/laubcode')
 CORS(bp_editor)
@@ -49,4 +50,19 @@ def editor_run_python_code():
 
      
     return run_general_command_line(code)
+
+
+@bp_editor.route('/save-code/<string:fileName>', methods=['GET', 'POST'])
+def save_script(fileName):
+    fileName = escape(fileName)
+
+    from ..utils import __get_cookies, set_header_params
+    if request.method == 'POST':
+        return jsonify([{"code": request.form.get('code')}])
     
+    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", USER_DATA=__get_cookies))    
+    set_header_params(response)
+    return response
+    
+
+
