@@ -71,6 +71,10 @@ class CourseContentModel(db.Model):
 
     def convert_to_list(obj):
         objects = []
+        
+        if not obj:
+            return objects
+        
         for i, item in enumerate(obj):
             objects.append(
                 {   "course_content_id": int(item.course_content_id),
@@ -218,6 +222,11 @@ class CourseContentModel(db.Model):
         """
         This method  returns all courses 
         from database
+
+        Args:
+            course_id
+        Return:
+            This method return two variables, True if no exception occure and a list of object with the course's content
         """
         try:
             #obj = CourseContentModel.query.filter_by(course_id=course_id).first_or_404()

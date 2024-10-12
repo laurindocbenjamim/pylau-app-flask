@@ -31,30 +31,6 @@ CourseModel, UserToken, CardTransactionModel,PaymentModel, PaymentCardModel, "e_
 @bp_courses.route('/list-all')
 @cross_origin(methods=['GET'])
 def get_all():
-    import random
-    from datetime import datetime, timezone
-    
-    courses_rogress = [{
-        "course_id": 1,
-        "student_id": 1,
-        "total_lesson_completed": 0,
-        "last_lesson_completed": "",
-        "date_added": datetime.now(),
-        "year_added": datetime.now().strftime('%Y'),
-        "month_added": datetime.now().strftime('%m'),
-        "timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
-    },
-    {
-        "course_id": 2,
-        "student_id": 1,
-        "total_lesson_completed": 0,
-        "last_lesson_completed": "",
-        "date_added": datetime.now(),
-        "year_added": datetime.now().strftime('%Y'),
-        "month_added": datetime.now().strftime('%m'),
-        "timestamp_added": datetime.now(tz=timezone.utc).strftime('%Y/%m/%d %H:%M:%S')
-    }
-    ]
     
     """for item in data:
         status, obj = CourseProgressModel.create(column=courses_rogress)"""
@@ -113,6 +89,22 @@ def python_courses():
     set_header_params(response) 
     return response
 
+@bp_courses.route('/view-content/<int:courseID>/<string:description>')
+@cross_origin(methods=['GET'])
+def list_course_content(courseID, description):
+    course_id = escape(courseID)
+    _course = escape(description)
+    user_token = escape(request.args.get('user_token'))
+
+    status, content = CourseContentModel.get_content_by_course_id(course_id=course_id)
+    content = CourseContentModel.convert_to_list(content)
+
+    from ..utils import __get_cookies, set_header_params
+
+    response = make_response(render_template('admin/list_courses_content.html', title="Courses Content", USER_DATA=__get_cookies, 
+                                             courses=_course, content= content))    
+    set_header_params(response)
+    return response
 
 @bp_courses.route('/content/read-file/<string:topic>')
 @cross_origin(methods=['GET'])
