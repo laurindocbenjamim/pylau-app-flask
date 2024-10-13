@@ -1,6 +1,7 @@
 
 import json
 import os
+import glob
 import stat
 from flask import current_app
 
@@ -62,6 +63,76 @@ class CodeEditorFactory(object):
         except Exception as e:
             return f"An error occurred: {e}"
     
+
+    def load_file_with_glob(directory):
+        """
+            Method to load the file's directory
+            using the GLOB library
+
+            Args: directory
+
+            Return:
+                return a list of files
+        
+        """
+        content = []
+        if directory =='':
+            return content
+        try:
+
+            for file_path in glob.glob(directory):
+                with open(file_path, 'r') as file:
+                    content.append(file.read())
+                return content
+        except FileNotFoundError:
+            return "Directory not found"
+        except Exception as e:
+            return f"{str(e)}"
+
+    def load_files(directory):
+        """
+        Load all the files within the provided directory
+
+        Args:
+            The name of the files directory
+        
+        Returns:
+            A list of the loaded files
+        """
+
+        _DIRECTORY = f'{current_app.config['UPLOAD_FOLDER']}/{directory}'
+
+        content = []
+        filelist = []
+        try:
+            # Add read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+
+            # Verify permissions
+        
+            for filename in os.listdir(_DIRECTORY):
+                filelist.append(filename)
+                """
+                # Read the file content
+                file_path = os.path.join(directory, filename)
+                with open(file_path, 'r') as file:
+                    content = file.read()"""
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
+
+            return filelist
+        except PermissionError as e:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
+            return f"Permission denied: {e}"
+        except FileNotFoundError as e:
+            return f"{str(e)}"
+        except Exception as e:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
+            return f"{str(e)}"
+        
+
     def save_comments(self, comments):
         """Save comments to a JSON file."""
         with open(self.myFILE_PATH, 'w') as file:

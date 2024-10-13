@@ -1,9 +1,10 @@
 
 import subprocess
-from flask import Blueprint, render_template, url_for, redirect, request, session, jsonify, make_response
+from flask import Blueprint, render_template, url_for, redirect, request, session, jsonify, make_response, current_app
 from flask_cors import CORS, cross_origin
+from .code_editor_factory import CodeEditorFactory
 from markupsafe import escape
-from ..utils import __get_cookies
+from ..utils import __get_cookies, set_header_params
 
 bp_editor = Blueprint('laubcode', __name__, url_prefix='/laubcode')
 CORS(bp_editor)
@@ -26,7 +27,7 @@ def laub_editor():
     course_content = {}
 
     response = make_response(render_template('e_learning/code_editor/my_code_editor.html', title="LAUBCode"))
-    from ..utils.config_headers import set_header_params
+    #from ..utils.config_headers import set_header_params
     set_header_params(response)
     response.set_cookie('current_page', "course.learn.laubcode") 
     return response
@@ -56,11 +57,26 @@ def editor_run_python_code():
 def save_script(fileName):
     fileName = escape(fileName)
 
-    from ..utils import __get_cookies, set_header_params
+    
     if request.method == 'POST':
         return jsonify([{"code": request.form.get('code')}])
     
     response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", USER_DATA=__get_cookies))    
+    set_header_params(response)
+    return response
+
+
+@bp_editor.route('/load-file')
+def load_file():
+    
+
+    directory = "html"
+    filelist = CodeEditorFactory.load_files(directory=directory)
+    
+    if not isinstance(filelist, list):
+        filelist = ["404", filelist]
+
+    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
     set_header_params(response)
     return response
     
