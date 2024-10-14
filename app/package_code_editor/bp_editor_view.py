@@ -64,7 +64,7 @@ def save_root_script(fileName, fileFormat):
     if request.method == 'POST':
         return jsonify([{"code": request.form.get('code')}])
     
-    directory = "root"
+    directory = "laubcode/root"
     filecontent = CodeEditorFactory.read_file(f'{directory}/{fileName}.{fileFormat}')
 
     return jsonify({"filename": f'{fileName}.{fileFormat}', "content": filecontent})
