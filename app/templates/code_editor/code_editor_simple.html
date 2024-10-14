@@ -336,6 +336,9 @@
                           <a class="navbar-brand" href="#">Preview</a>
                           <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" aria-current="page" id="current-file" href="#">filename</a>
+                                  </li>
                               <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="#">Home</a>
                               </li>
@@ -345,7 +348,8 @@
                             
                           </div>
                         </div>
-                      </nav>
+                      </nav>I 
+                      
                     <div class="preview">..</div>                    
                 </div>
 
@@ -359,8 +363,79 @@
             editor.setTheme("ace/theme/monokai");
             editor.session.setMode("ace/mode/javascript");
             editor.setValue(`// Welcome to the LaubCoder Code Editor!
-    // Start coding here...
-    `);
+                // Start coding here...
+                `);
+                //Line number
+        //editor.renderer.setShowGutter(true); // or false to hide
+        //Highlight Active Line
+        editor.setHighlightActiveLine(true); // or false to disable
+
+        // Show print margin
+        editor.setShowPrintMargin(false); // or true to show
+
+        editor.setOptions({
+            fontSize: "11pt",
+            showLineNumbers: true,
+            enableSnippets: true,
+            showGutter: true,
+            vScrollBarAlwaysVisible: true,
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+        });
+        editor.commands.addCommand({
+            name: 'save',
+            bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+            exec: function (editor) {
+                //alert('Content saved!');
+            }
+        });
+
+        editor.commands.addCommand({
+            name: 'copy',
+            bindKey: { win: 'Ctrl-C', mac: 'Command-C' },
+            exec: function (editor) {
+                //alert('Content copied!');
+            }
+        });
+
+        // Add command to paste data
+        editor.commands.addCommand({
+            name: 'paste',
+            bindKey: { win: 'Ctrl-V', mac: 'Command-V' },
+            exec: function (editor) {
+                //alert('Content saved!');
+            }
+        });
+
+        // Add formatter function
+        editor.commands.addCommand({
+            name: 'format',
+            bindKey: { win: 'Ctrl-Shift-F', mac: 'Command-Shift-F' },
+            exec: function (editor) {
+                ace.require("ace/ext/beautify").beautify(editor.session);
+            }
+        });
+
+
+        /*
+        var customSnippets = `
+        snippet log
+            console.log('\${1:message}');
+        snippet func
+            function \${1:name}(\${2:params}) {
+                \${3:// body}
+            }
+        `;
+
+        var snippetManager = ace.require("ace/snippets").snippetManager;
+        var id = editor.session.$mode.$id;
+        var m = snippetManager.files[id];
+        m.scope = editor.session.$mode.$id;
+        m.snippetText = customSnippets;
+        m.snippet = snippetManager.parseSnippetFile(customSnippets, m.scope);
+        snippetManager.register(m.snippet, m.scope);
+        */
+
 
     localStorage.setItem('savedCode',`// Welcome to the LaubCoder Code Editor!
     // Start coding here...`);
@@ -372,6 +447,7 @@
             const runBtn = document.getElementById('run-btn');
             const saveBtn = document.getElementById('save-btn');
             const lineNumber = document.getElementById('line-number');
+            
             const columnNumber = document.getElementById('column-number');
             const browser = document.getElementById('browser')
             const previewCode = document.querySelector('.preview')
@@ -558,6 +634,7 @@
                 const endpoint = `${window.location.origin}/course/learn/laubcode/save-code/${chunk[0]}/${chunk[1]}`;
                 localStorage.setItem('filename', filename.trim())      
                 fileName.textContent = filename.trim()
+                document.getElementById('current-file').textContent = filename.trim()
                 
                 const headers = new Headers()
                 headers.append('X-CSRF-Token', csrfToken)
