@@ -31,8 +31,8 @@ class CodeEditorFactory(object):
         except Exception:
             return self.myFILE_DIRECTORY
 
-    def load_comments(self):
-        """Load comments from a JSON file."""
+    def load_script(self):
+        """Load script from a JSON file."""
 
         if os.path.exists(self.myFILE_PATH):
             with open(self.myFILE_PATH, 'r') as file:
@@ -174,34 +174,73 @@ class CodeEditorFactory(object):
             return f"{str(e)}"
         
 
-    def save_comments(self, comments):
-        """Save comments to a JSON file."""
-        with open(self.myFILE_PATH, 'w') as file:
-            json.dump(comments, file, indent=4)
+    def save_code(self, script):
+        """Save script to a JSON file."""
 
-    def add_comment(self, new_comment):
+        try:
+            # Add read and execute permissions for the user, group, and others
+            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+
+            # Verify permissions
+
+            with open(self.myFILE_PATH, 'w') as file:
+                json.dump(script, file, indent=4)
+            return True, 'OK'
+        except PermissionError as e:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(self.myFILE_DIRECTORY, 0)
+            return f"Permission denied: {e}"
+        except FileNotFoundError as e:
+            return f"{str(e)}"
+        except Exception as e:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(self.myFILE_DIRECTORY, 0)
+            return f"{str(e)}"
+
+    def add_code(self, new_script):
+        """Add a new comment to the JSON file."""
+         # check if the file path exists if not create it        
+        self.check_or_create_file()
+
+        try:   
+            
+            # Add read and execute permissions for the user, group, and others
+            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            
+            # load the existent script
+            script = self.load_script()
+            # add and save the new comment
+      
+            self.save_code(new_script)
+            #os.chmod(file_path, stat.S_IREAD)
+            return True, 'OK'
+        except Exception as e:
+            self.save_code(script)
+            return False, str(e)
+
+    def add_update_code(self, new_script):
         """Add a new comment to the JSON file."""
          # check if the file path exists if not create it        
         self.check_or_create_file()
 
         try:       
-            # load the existent comments
-            comments = self.load_comments()
+            # load the existent script
+            script = self.load_script()
 
-            # Update the ID of the comments
-            if isinstance(comments, list):
-                if len(comments) > 0:
-                    last_item = comments[-1] if type(comments[-1]) is dict else {}
+            # Update the ID of the script
+            if isinstance(script, list):
+                if len(script) > 0:
+                    last_item = script[-1] if type(script[-1]) is dict else {}
                     if 'id' in last_item.keys():
-                        new_comment['id'] = 1 + last_item.get('id')
+                        new_script['id'] = 1 + last_item.get('id')
                     else:
-                        new_comment['id'] = 1
+                        new_script['id'] = 1
                 else:
-                    new_comment['id'] = 1
+                    new_script['id'] = 1
 
             # add and save the new comment
-            comments.append(new_comment)
-            self.save_comments(comments)
+            script.append(new_script)
+            self.save_code(script)
             #os.chmod(file_path, stat.S_IREAD)
             return True, 'OK'
         except Exception as e:
@@ -209,14 +248,14 @@ class CodeEditorFactory(object):
 
     def remove(self,id):
         try:
-            # load the existent comments
-            comments = self.load_comments()
-            # Update the ID of the comments
-            if isinstance(comments, list):
-                if len(comments) > 0:
-                    for key,item in comments:
+            # load the existent script
+            script = self.load_script()
+            # Update the ID of the script
+            if isinstance(script, list):
+                if len(script) > 0:
+                    for key,item in script:
                         if id in item[key]:
-                            comments.pop(key)
+                            script.pop(key)
             return True
         except Exception as e:
             return str(e)
@@ -225,8 +264,8 @@ class CodeEditorFactory(object):
         # Open the JSON file in write mode and truncate its content
         with open(self.myFILE_PATH, 'w') as file:
             file.truncate()
-""" if len(comments) > 0:
-                last_item = comments[-1]
+""" if len(script) > 0:
+                last_item = script[-1]
                 if 'id' in last_item:
                     pass
                     #new_comment['id'] = last_item.get('id') + 1
@@ -234,11 +273,11 @@ class CodeEditorFactory(object):
                     pass
                     new_comment['id'] = 1
             # add and save the new comment
-            if isinstance(comments, list):
+            if isinstance(script, list):
                 pass"""
 
 # Example usage
-file_path = 'comments.json'
+file_path = 'script.json'
 new_comment = {
     'user': 'John Doe',
     'comment': 'This is a sample comment.',
