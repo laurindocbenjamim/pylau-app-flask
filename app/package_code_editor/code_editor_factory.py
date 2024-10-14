@@ -179,13 +179,13 @@ class CodeEditorFactory(object):
 
         try:
             # Add read and execute permissions for the user, group, and others
-            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            #os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
 
             # Verify permissions
 
-            with open(self.myFILE_PATH, 'w') as file:
-                json.dump(script, file, indent=4)
-            return True, 'OK'
+            #with open(self.myFILE_PATH, 'w') as file:
+                #json.dump(script, file, indent=4)
+            return True, self.myFILE_DIRECTORY
         except PermissionError as e:
             # Revoke read and execute permissions for the user, group, and others
             os.chmod(self.myFILE_DIRECTORY, 0)
@@ -197,26 +197,42 @@ class CodeEditorFactory(object):
             os.chmod(self.myFILE_DIRECTORY, 0)
             return f"{str(e)}"
 
-    def add_code(self, new_script):
+    def save_html_script(self, new_script, encoding='utf-8'):
         """Add a new comment to the JSON file."""
          # check if the file path exists if not create it        
         self.check_or_create_file()
 
-        try:   
+        """
+        Save the given HTML content to a file.
+
+        Parameters:
+        html_content (str): The HTML content to save.
+        file_path (str): The path to the file where the HTML content will be saved.
+        """
+
+        resp ="?"
+        try:
+            # Set read and write permissions for the owner, and read-only for others
+            os.chmod(self.myFILE_PATH, 0o644)
+
+            with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
+                resp = file.write(new_script)
             
-            # Add read and execute permissions for the user, group, and others
-            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
-            
-            # load the existent script
-            script = self.load_script()
-            # add and save the new comment
-      
-            self.save_code(new_script)
-            #os.chmod(file_path, stat.S_IREAD)
-            return True, 'OK'
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return True, resp
+        except PermissionError as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"Permission denied: {e}"
+        except FileNotFoundError as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"{str(e)}"
         except Exception as e:
-            self.save_code(script)
-            return False, str(e)
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"{str(e)}"
 
     def add_update_code(self, new_script):
         """Add a new comment to the JSON file."""

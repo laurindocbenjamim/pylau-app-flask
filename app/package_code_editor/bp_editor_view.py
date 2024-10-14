@@ -59,16 +59,17 @@ def editor_run_python_code():
 def save_root_script(fileName, fileFormat):
     fileName = escape(fileName)
     fileFormat = escape(fileFormat)
-
+    status = resp = ''
     directory = "laubcode/root"
 
     if request.method == 'POST':
         new_script = request.form.get('code')
 
         editor = CodeEditorFactory(f'{directory}/{request.form.get('filename')}', directory)
-        status, resp = editor.add_code(new_script)
+        if '.html' in request.form.get('filename'):
+            status, resp = editor.save_html_script(new_script)
         
-        return jsonify({"code": request.form.get('code'), "filename": editor.myFILE_PATH}, 200)
+        return jsonify({"code": resp, "filename": editor.myFILE_PATH}, 200)
     
 
     filecontent = CodeEditorFactory.read_file(directory,f'{directory}/{fileName}.{fileFormat}')
