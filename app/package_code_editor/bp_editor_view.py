@@ -34,6 +34,7 @@ def laub_editor():
 
 
 @bp_editor.route('/cont', methods=['GET', 'POST'])
+@cross_origin(methods=['GET'])
 def cont():
 
     if request.method == 'POST':
@@ -53,24 +54,26 @@ def editor_run_python_code():
     return run_general_command_line(code)
 
 
-@bp_editor.route('/save-code/<string:fileName>', methods=['GET', 'POST'])
-def save_script(fileName):
+@bp_editor.route('/save-code/<string:fileName>/<string:fileFormat>', methods=['GET', 'POST'])
+#@cross_origin(methods=['GET', 'POST'])
+def save_root_script(fileName, fileFormat):
     fileName = escape(fileName)
+    fileFormat = escape(fileFormat)
 
     
     if request.method == 'POST':
         return jsonify([{"code": request.form.get('code')}])
     
-    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", USER_DATA=__get_cookies))    
-    set_header_params(response)
-    return response
+    directory = "root"
+    filecontent = CodeEditorFactory.read_file(f'{directory}/{fileName}.{fileFormat}')
 
+    return jsonify({"filename": f'{fileName}.{fileFormat}', "content": filecontent})
 
-@bp_editor.route('/load-file')
-def load_file():
+@bp_editor.route('/root/load-scripts')
+def load_root_script():
     
 
-    directory = "html"
+    directory = "laubcode/root"
     filelist = CodeEditorFactory.load_files(directory=directory)
     
     if not isinstance(filelist, list):
@@ -79,6 +82,20 @@ def load_file():
     response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
     set_header_params(response)
     return response
+
+
+@bp_editor.route('/user/load-scripts')
+def load_users_script():
     
+
+    directory = "laubcode/users"
+    filelist = CodeEditorFactory.load_files(directory=directory)
+    
+    if not isinstance(filelist, list):
+        filelist = ["404", filelist]
+
+    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
+    set_header_params(response)
+    return response
 
 

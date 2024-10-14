@@ -66,7 +66,7 @@
             <td>Module {{ course.content_module }}</td>
             <td>
               <a
-                href="{{ url_for('course.learn.laubcode.save_script',fileName=course.content_description.lower().replace(' ', '-'), courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}" target="_blank">
+                href="{{ url_for('course.learn.laubcode.load_root_script',fileName=course.content_description.lower().replace(' ', '-'), courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}" target="_blank">
                 {{ course.content_description.lower().replace(' ', '-') }}
               </a>
             </td>

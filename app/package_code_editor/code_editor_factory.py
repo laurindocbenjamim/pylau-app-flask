@@ -63,6 +63,30 @@ class CodeEditorFactory(object):
         except Exception as e:
             return f"An error occurred: {e}"
     
+    def read_file(file_path, encoding='utf-8'):
+        """
+        Reads an HTML file and parses it into a BeautifulSoup object for easy HTML processing.
+
+        Args:
+            file_path (str): The path to the HTML file.
+        
+        Returns:
+            Parsed HTML content.
+        """
+
+        _FILE_PATH = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
+        html_content =""
+        try:
+            #if os.path.exists(self.myFILE_PATH):
+            with open(_FILE_PATH, 'r', encoding=encoding) as file:
+                # Read the entire HTML file content
+                html_content = file.read()
+            return html_content
+        except FileNotFoundError:
+            return f"File not found: {file_path}"
+        except Exception as e:
+            return f"An error occurred: {e}"
+    
 
     def load_file_with_glob(directory):
         """
