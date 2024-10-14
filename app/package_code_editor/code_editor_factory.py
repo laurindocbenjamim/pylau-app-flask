@@ -63,7 +63,7 @@ class CodeEditorFactory(object):
         except Exception as e:
             return f"An error occurred: {e}"
     
-    def read_file(file_path, encoding='utf-8'):
+    def read_file(directory,file_path, encoding='utf-8'):
         """
         Reads an HTML file and parses it into a BeautifulSoup object for easy HTML processing.
 
@@ -75,16 +75,33 @@ class CodeEditorFactory(object):
         """
 
         _FILE_PATH = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
-        html_content =""
+        _DIRECTORY = f'{current_app.config['UPLOAD_FOLDER']}/{directory}'
+        content =""
         try:
-            #if os.path.exists(self.myFILE_PATH):
-            with open(_FILE_PATH, 'r', encoding=encoding) as file:
-                # Read the entire HTML file content
-                html_content = file.read()
-            return html_content
+
+            # Add read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+
+            if os.path.exists(_FILE_PATH):
+                with open(_FILE_PATH, 'r', encoding=encoding) as file:
+                    # Read the entire HTML file content
+                    content = file.read()
+
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
+
+            return content
+        except PermissionError as e:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
+            return f"Permission denied: {e}"
         except FileNotFoundError:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
             return f"File not found: {file_path}"
         except Exception as e:
+            # Revoke read and execute permissions for the user, group, and others
+            os.chmod(_DIRECTORY, 0)
             return f"An error occurred: {e}"
     
 

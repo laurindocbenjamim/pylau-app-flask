@@ -146,7 +146,7 @@
             background-color: #3c3c3c;
             color: #d4d4d4;
             border: none;
-            padding: 5px 10px;
+            padding: 1px 5px;
             margin-right: 10px;
             border-radius: 3px;
             cursor: pointer;
@@ -174,7 +174,7 @@
         }
         .preview{
             width: 90%;
-            height: 700px;
+            height: 500px;
             border: 1px solid #ced4da;
             padding: 10px;
             border-radius: 5px;
@@ -186,11 +186,11 @@
         .minimize-browser{
             opacity: 1;
             height: 0px;
-            
+            transition: opacity 0.2s ease;
         }
         .expand-browser{
             padding: 3rem 4rem;
-            height: 80%;
+            height: 600px;
             transition: background-color 0.3s ease, left 0.3s ease;
         }
 
@@ -272,7 +272,7 @@
                         </select>
                     </div>
                     <div>
-                        <button id="run-btn"><i class="fas fa-play"></i> Run</button>
+                        <button id="run-btn" style="background-color: #3cd644;color:#000"><i class="fas fa-play"></i> Run</button>
                         <button id="save-btn"><i class="fas fa-save"></i> Save</button>
                     </div>
                 </div>
@@ -298,7 +298,7 @@
                               </li>
                               
                             </ul>
-                              <button class="btn btn-outline-secondary" onclick="closeBrowser()" type="submit"><i class="fa fa-close text-danger"></i></button>
+                              <button class="btn btn-outline-info rounded-circle" onclick="closeBrowser()" type="submit"><i class="fa fa-close text-black"></i></button>
                             
                           </div>
                         </div>
@@ -353,10 +353,13 @@
                 const code = editor.getValue();
 
                 if(languageSelect.value === 'html'){
-                    browser.style.display = 'block'
+                    
                     browser.classList.add('expand-browser')
                     //previewCode.classList.add('expand-browser')
                     previewCode.innerHTML = code;
+                    setTimeout((e)=>{
+                        browser.style.display = 'block'
+                    }, 400)
                 }
                 try {
                     const result = eval(code);
@@ -387,7 +390,7 @@
             }
 
             function closeBrowser(e){
-                browser.classList.add('minimize-browser')
+                browser.classList.remove('minimize-browser')
                 setTimeout((e)=>{
                     browser.style.display = 'none'
                 }, 400)
@@ -450,7 +453,7 @@
                         document.getElementById('fa-plus').style.display='block'
                         document.getElementById('fa-minus').style.display='none'
                         submenu.style.display = 'none'
-                    }, 400)
+                    }, 500)
                 }else{
                     submenu.classList.add('show')
                     
@@ -458,7 +461,7 @@
                         document.getElementById('fa-plus').style.display='none'
                         document.getElementById('fa-minus').style.display='block'
                         submenu.style.display = 'block'
-                    }, 400)
+                    }, 500)
                 }
             }
 
