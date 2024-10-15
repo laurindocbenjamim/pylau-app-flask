@@ -67,7 +67,7 @@
             <td>
               {% if course.content_type | trim == 'text' or course.content_type | trim == 'script' %}
               <a
-                href="{{ url_for('course.learn.laubcode.load_root_script',fileName=course.content_description.rstrip().lower().replace(' ', '-'), courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}" target="_blank">
+                href="{{ url_for('course.learn.laubcode.load_root_script',fileName=course.content_description.rstrip().lower().replace(' ', '-'), courseID=course.course_id, description=course.course_description.rstrip(), user_token=session.get('user_token')) }}" target="_blank">
                 {{ course.content_description.rstrip().lower().replace(' ', '-') }}
               </a>
               {% else %}

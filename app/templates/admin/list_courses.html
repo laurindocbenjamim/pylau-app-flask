@@ -69,7 +69,7 @@
         <td>{{ course.course_code }}</td>
         <td>
           <a
-            href="{{ url_for('course.list_course_content', courseID=course.course_id.rstrip(), description=course.course_description.rstrip(), user_token=session.get('user_token')) }}">
+            href="{{ url_for('course.list_course_content', courseID=course.course_id, description=course.course_description.rstrip(), user_token=session.get('user_token')) }}">
             {{ course.course_description }}
           </a>
         </td>
