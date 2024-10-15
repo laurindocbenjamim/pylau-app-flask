@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-beautify.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -292,7 +293,7 @@
             <div class="editor-container">
                 <div class="toolbar">
                     <div style="margin-left: 2%; ">
-                        <span id="filename" style="">
+                        <span id="filename" tabindex="0" style="">
                                 example.js
                         </span>
                         <select id="language-select">
@@ -338,7 +339,9 @@
                           <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" id="current-file" href="#">example.js</a>
+                                    <a class="nav-link" aria-current="page"  id="current-file" href="#">
+                                        <span tabindex="0">example.js</span>
+                                    </a>
                                   </li>
                               <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="#">Home</a>
@@ -351,7 +354,8 @@
                         </div>
                       </nav>
                       
-                    <div class="preview">..</div>                    
+                    <!--<div class="preview">..</div>-->  
+                    <iframe id="output" class="preview"></iframe>                  
                 </div>
 
             </div>
@@ -387,7 +391,11 @@
             name: 'copy',
             bindKey: { win: 'Ctrl-C', mac: 'Command-C' },
             exec: function (editor) {
-                document.execCommand('copy');
+                navigator.clipboard.writeText(editor.getSelectedText()).then(function() {
+                    console.log('Text copied to clipboard');
+                }).catch(function(err) {
+                    console.error('Could not copy text: ', err);
+                });
             }
         });
 
@@ -395,8 +403,28 @@
         editor.commands.addCommand({
             name: 'paste',
             bindKey: { win: 'Ctrl-V', mac: 'Command-V' },
-            exec: function (editor) {
-                document.execCommand('paste');
+            exec: async function (editor) {
+                // With No permition 
+                /*navigator.clipboard.readText().then(function(text) {
+                    editor.insert(text);
+                }).catch(function(err) {
+                    console.error('Could not read text from clipboard: ', err);
+                });*/
+
+                // With permition request
+                try {
+                    // Request permission to read from the clipboard
+                    const permission = await navigator.permissions.query({ name: 'clipboard-read' });
+                    if (permission.state === 'granted' || permission.state === 'prompt') {
+                        const text = await navigator.clipboard.readText();
+                        editor.insert(text);
+                    } else {
+                        console.error('Clipboard permission denied');
+                    }
+                } catch (err) {
+                    console.error('Could not read text from clipboard: ', err);
+                }
+
             }
         });
 
@@ -468,6 +496,26 @@
                 //fileName.textContent = localStorage.getItem('filename')
             }
 
+            // Add click event listener
+            fileName.addEventListener('click', function() {
+                let text = fileName.textContent
+                fileName.textContent = ''
+                let inputField = document.createElement('input')
+                inputField.setAttribute('type', 'text')
+                inputField.setAttribute('id','newFileName')
+                inputField.style.borderRadius = '4px'
+                inputField.style.backgroundColor = '#666'
+                inputField.style.color = '#fff'
+                inputField.style.width = '100px'
+                inputField.value = String(text).trim()
+                inputField.focus();
+                fileName.append(inputField)
+                //var newText = prompt('Enter new text:');
+                //if (newText !== null) {
+                    //editableDiv.textContent = newText;
+                //}
+            });
+
             toggleMenu.addEventListener('click', () => {
                 verticalMenu.classList.toggle('collapsed');
                 toggleMenu.querySelector('i').classList.toggle('fa-chevron-left');
@@ -493,6 +541,13 @@
                     //alert(link.textContent.trim())
                 })
             })
+
+            async function oututIframeScript(code){
+                var iframe = document.getElementById('output');
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(code);
+                iframe.contentWindow.document.close();
+            }
     
             runBtn.addEventListener('click', () => {
                 const code = editor.getValue();
@@ -501,7 +556,8 @@
                     
                     browser.classList.add('expand-browser')
                     //previewCode.classList.add('expand-browser')
-                    previewCode.innerHTML = code;
+                    //previewCode.innerHTML = code;
+                    oututIframeScript(code)
                     setTimeout((e)=>{
                         browser.style.display = 'block'
                     }, 400)
@@ -511,13 +567,15 @@
                     try {
                         const result = eval(code);
                         console.log("Code execution result:", result);
-                        previewCode.innerHTML = result;
+                        //previewCode.innerHTML = result;
+                        oututIframeScript(result)
                         setTimeout((e)=>{
                             browser.style.display = 'block'
                         }, 400)
                     } catch (error) {
                         console.error("Error executing code:", error);
-                        previewCode.innerHTML = "Error executing code:" + error;
+                        //previewCode.innerHTML = "Error executing code:" + error;
+                        oututIframeScript(`Error executing code: ${error}`)
                         setTimeout((e)=>{
                             browser.style.display = 'block'
                         }, 400)
@@ -619,7 +677,10 @@
                     .then((data) => {
                         console.log(data)
                           
-                    }).catch((err) => console.log(err))
+                    }).catch((err) => {
+                        console.log(err)
+                        progressBar.style.backgroundColor = 'red'
+                    })
             }
             
 
