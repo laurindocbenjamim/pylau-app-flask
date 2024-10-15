@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -292,7 +293,7 @@
                 <div class="toolbar">
                     <div style="margin-left: 2%; ">
                         <span id="filename" style="">
-                                filename.code
+                                example.js
                         </span>
                         <select id="language-select">
                             <option value="javascript">JavaScript</option>
@@ -337,7 +338,7 @@
                           <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" id="current-file" href="#">filename</a>
+                                    <a class="nav-link" aria-current="page" id="current-file" href="#">example.js</a>
                                   </li>
                               <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="#">Home</a>
@@ -348,7 +349,7 @@
                             
                           </div>
                         </div>
-                      </nav>I 
+                      </nav>
                       
                     <div class="preview">..</div>                    
                 </div>
@@ -373,20 +374,12 @@
         // Show print margin
         editor.setShowPrintMargin(false); // or true to show
 
-        editor.setOptions({
-            fontSize: "11pt",
-            showLineNumbers: true,
-            enableSnippets: true,
-            showGutter: true,
-            vScrollBarAlwaysVisible: true,
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-        });
+        
         editor.commands.addCommand({
             name: 'save',
             bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
             exec: function (editor) {
-                //alert('Content saved!');
+                document.execCommand('save');
             }
         });
 
@@ -394,7 +387,7 @@
             name: 'copy',
             bindKey: { win: 'Ctrl-C', mac: 'Command-C' },
             exec: function (editor) {
-                //alert('Content copied!');
+                document.execCommand('copy');
             }
         });
 
@@ -403,7 +396,16 @@
             name: 'paste',
             bindKey: { win: 'Ctrl-V', mac: 'Command-V' },
             exec: function (editor) {
-                //alert('Content saved!');
+                document.execCommand('paste');
+            }
+        });
+
+        // Add command to paste data
+        editor.commands.addCommand({
+            name: 'cut',
+            bindKey: { win: 'Ctrl-X', mac: 'Command-X' },
+            exec: function (editor) {
+                document.execCommand('paste');
             }
         });
 
@@ -416,7 +418,16 @@
             }
         });
 
-
+        
+        editor.setOptions({
+            fontSize: "11pt",
+            showLineNumbers: true,
+            enableSnippets: true,
+            showGutter: true,
+            vScrollBarAlwaysVisible: true,
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+        });
         /*
         var customSnippets = `
         snippet log
@@ -494,15 +505,25 @@
                     setTimeout((e)=>{
                         browser.style.display = 'block'
                     }, 400)
+
+                }else if(languageSelect.value === 'javascript'){
+
+                    try {
+                        const result = eval(code);
+                        console.log("Code execution result:", result);
+                        previewCode.innerHTML = result;
+                        setTimeout((e)=>{
+                            browser.style.display = 'block'
+                        }, 400)
+                    } catch (error) {
+                        console.error("Error executing code:", error);
+                        previewCode.innerHTML = "Error executing code:" + error;
+                        setTimeout((e)=>{
+                            browser.style.display = 'block'
+                        }, 400)
+                    }
                 }
-                try {
-                    const result = eval(code);
-                    console.log("Code execution result:", result);
-                    //alert("Code executed successfully. Check the console for output.");
-                } catch (error) {
-                    console.error("Error executing code:", error);
-                    //alert("Error executing code. Check the console for details.");
-                }
+                
             });
     
             saveBtn.addEventListener('click', () => {
@@ -539,7 +560,7 @@
                 progressBar.setAttribute('aria-valuenow', 0);
 
                 const filename = document.getElementById('filename')
-                const chunk = String(filename).trim().split('.')
+                const chunk = String(filename.textContent).trim().split('.')
 
                 const endpoint = `${window.location.origin}/course/learn/laubcode/save-code/${chunk[0]}/${chunk[1]}`;
                         
@@ -548,7 +569,7 @@
                 headers.append("Authorization", ` Bearer ${csrfToken}`);
                 const formData = new FormData()
                 formData.append("code", code)
-                formData.append('filename', localStorage.getItem('filename'))
+                formData.append('filename', String(filename.textContent).trim())
                 //formData.append("course_id", courseID)
                 //formData.append("lesson", lesson)
         
@@ -659,7 +680,40 @@
 
             }
 
-            
+             /*
+            * Code to integrate AI on autocomplete and sugestion 
+            */
+
+            async function fetchSuggestions(editor, session, pos, prefix) {
+                const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+                    },
+                    body: JSON.stringify({
+                        prompt: editor.getValue(),
+                        max_tokens: 50,
+                        n: 1,
+                        stop: ["\n"]
+                    })
+                });
+                const data = await response.json();
+                return data.choices.map(choice => ({
+                    caption: choice.text.trim(),
+                    value: choice.text.trim(),
+                    meta: 'AI Suggestion'
+                }));
+            }
+    
+            ace.require("ace/ext/language_tools").addCompleter({
+                getCompletions: function(editor, session, pos, prefix, callback) {
+                    fetchSuggestions(editor, session, pos, prefix).then(suggestions => {
+                        callback(null, suggestions);
+                    });
+                }
+            });
+
 
         </script>
     </body>

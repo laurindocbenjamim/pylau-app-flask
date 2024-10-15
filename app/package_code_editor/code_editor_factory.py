@@ -215,7 +215,7 @@ class CodeEditorFactory(object):
             # Set read and write permissions for the owner, and read-only for others
             os.chmod(self.myFILE_PATH, 0o644)
 
-            with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
+            with open(self.myFILE_PATH, 'w') as file:
                 resp = file.write(new_script)
             
             # Revoke write privileges
@@ -233,6 +233,7 @@ class CodeEditorFactory(object):
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
             return False, f"{str(e)}"
+    
 
     def add_update_code(self, new_script):
         """Add a new comment to the JSON file."""

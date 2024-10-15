@@ -66,10 +66,10 @@ def save_root_script(fileName, fileFormat):
         new_script = request.form.get('code')
 
         editor = CodeEditorFactory(f'{directory}/{request.form.get('filename')}', directory)
-        if '.html' in request.form.get('filename'):
-            status, resp = editor.save_html_script(new_script)
+        #if '.html' in request.form.get('filename'):
+        status, resp = editor.save_html_script(new_script)
         
-        return jsonify({"code": resp, "filename": editor.myFILE_PATH}, 200)
+        return jsonify({"status": status, "code": new_script, "response": resp, "filename": editor.myFILE_PATH}, 200)
     
 
     filecontent = CodeEditorFactory.read_file(directory,f'{directory}/{fileName}.{fileFormat}')
