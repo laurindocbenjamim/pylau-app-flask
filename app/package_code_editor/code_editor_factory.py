@@ -3,6 +3,7 @@ import json
 import os
 import glob
 import stat
+from bs4 import BeautifulSoup
 from flask import current_app
 
 class CodeEditorFactory(object):
@@ -53,11 +54,15 @@ class CodeEditorFactory(object):
         _FILE_PATH = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
 
         try:
+
+            
             #if os.path.exists(self.myFILE_PATH):
             with open(_FILE_PATH, 'r', encoding='utf-8') as file:
                 # Read the entire HTML file content
                 html_content = file.read()
-                return html_content
+            
+            soupe = BeautifulSoup(html_content, 'html.parser')
+            return soupe.prettify()
         except FileNotFoundError:
             return f"File not found: {file_path}"
         except Exception as e:
@@ -90,7 +95,9 @@ class CodeEditorFactory(object):
             # Revoke read and execute permissions for the user, group, and others
             os.chmod(_DIRECTORY, 0)
 
-            return content
+            #return content
+            soupe = BeautifulSoup(content, 'html.parser')
+            return soupe.prettify()
         except PermissionError as e:
             # Revoke read and execute permissions for the user, group, and others
             os.chmod(_DIRECTORY, 0)
