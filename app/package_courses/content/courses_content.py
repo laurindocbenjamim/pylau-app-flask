@@ -134,7 +134,7 @@ class CourseContentModel(db.Model):
             return False, custom_message
         except IntegrityError as e:
             db.session.rollback()
-            custom_message = "This course code already exists"
+            custom_message = f"This course code already exists {str(e)}"
             error_info = _catch_sys_except_information(sys=sys, traceback=traceback, location="CREATE COURSE CONTENT", custom_message=custom_message)
             set_logger_message(error_info)
             
