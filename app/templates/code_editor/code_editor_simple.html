@@ -544,8 +544,8 @@
             
             let inputField = document.createElement('input')
             
-            // Add click event listener
-            fileName.addEventListener('click', function() {
+            // Add a double click event listener
+            fileName.addEventListener('dblclick', function() {
                 let text = fileName.textContent
                 //fileName.textContent = ''
                 
@@ -573,12 +573,18 @@
                 // Add event listener to the input field to handle Enter key
                 inputField.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
-                        localStorage.setItem('filename', inputField.value)
+                        
+                        if(String(fileName.textContent).trim() !== String(inputField.value).trim()){
+                            saveNewFileName(fileName.textContent, inputField.value)
+                        }
+                        localStorage.setItem('filename', String(inputField.value))
                         event.preventDefault(); // Prevent default Enter key behavior
-                        fileName.textContent = inputField.value;                        
+                        fileName.textContent = String(inputField.value);                        
                         fileTitle.style.display = 'none';
                         fileTitle.remove()
                         fileName.style.display = 'block';
+                        location.reload(true)
+                        
                     }
                 });
             }catch(err){console.log(err)}
@@ -694,9 +700,75 @@
                 headers.append("Authorization", ` Bearer ${csrfToken}`);
                 const formData = new FormData()
                 formData.append("code", code)
-                formData.append('filename', String(filename.textContent).trim())
+                formData.append('filename', String(filename.textContent))
                 //formData.append("course_id", courseID)
                 //formData.append("lesson", lesson)
+        
+                fetch(endpoint,
+                    {
+                        method: "POST",
+                        headers: headers, // Add the CSRF token to the headers
+                        body: formData,  //JSON.stringify({"comment": comment}),            
+                    }
+                ).then(response => {
+                    const reader = response.body.getReader();
+                    const contentLength = +response.headers.get('Content-Length');
+                    let receivedLength = 0;
+        
+                    return new ReadableStream({
+                        start(controller) {
+                            function push() {
+                                reader.read().then(({ done, value }) => {
+                                    if (done) {
+                                        controller.close();
+                                        progressBar.style.width = '100%';
+                                        progressBar.setAttribute('aria-valuenow', 100);
+                                        return;
+                                    }
+                                    receivedLength += value.length;
+                                    const progress = (receivedLength / contentLength) * 100;
+                                    progressBar.style.backgroundColor = '#3cd644'
+                                    progressBar.style.width = progress + '%';
+                                    progressBar.style.color ='#fff'
+                                    progressBar.textContent =  progress + '%';
+                                    progressBar.setAttribute('aria-valuenow', progress);
+                                    controller.enqueue(value);
+                                    push();
+                                });
+                            }
+                            push();
+                        }
+                    });
+                })
+                .then(stream => new Response(stream))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        console.log(data)
+                          
+                    }).catch((err) => {
+                        console.log("Error: "+err)
+                        progressBar.style.backgroundColor = 'red'
+                    })
+            }
+
+            async function saveNewFileName(oldFileName, newFileName){  
+                const progressBar = document.getElementById('myBar');
+                progressBar.style.width = '0%';
+                progressBar.setAttribute('aria-valuenow', 0);
+
+                const endpoint = `${window.location.origin}/course/learn/laubcode/rename-file-name`;
+                        
+                const headers = new Headers()
+                headers.append('X-CSRF-Token', csrfToken)
+                headers.append("Authorization", ` Bearer ${csrfToken}`);
+                const formData = new FormData()
+                formData.append("old_filename", String(oldFileName))
+                formData.append('new_filename', String(newFileName).trim())
         
                 fetch(endpoint,
                     {

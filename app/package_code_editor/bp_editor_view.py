@@ -80,6 +80,24 @@ def save_root_script(fileName, fileFormat):
 
     return jsonify({"filename": f'{fileName}.{fileFormat}', "content": filecontent})
 
+@bp_editor.route('/rename-file-name', methods=['POST'])
+#@cross_origin(methods=['GET', 'POST'])
+def rename_file_name():
+    directory = "laubcode/root"
+
+    old_filename = request.form.get('old_filename')
+    new_filename = request.form.get('new_filename')
+
+    editor = CodeEditorFactory(f'{directory}/{str(old_filename)}', directory)
+    
+    try:
+        status, resp = editor.rename_file(new_filename.replace(' ', ''))
+    except Exception as e:
+        status=False
+        resp = str(e)
+        
+    return jsonify({"status": status, "new_filename": new_filename, "response": resp, "filename": editor.myFILE_PATH}, 200)
+    
 @bp_editor.route('/root/load-scripts')
 def load_root_script():
     

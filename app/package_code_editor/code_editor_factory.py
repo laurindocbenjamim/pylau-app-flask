@@ -266,6 +266,33 @@ class CodeEditorFactory(object):
         except Exception as e:
             return False, str(e)
 
+    def rename_file(self, new_file_name):
+        """ Method to rename the filename """
+        try:
+
+            # Set read and write permissions for the owner, and read-only for others
+            os.chmod(self.myFILE_PATH, 0o644)
+
+            # Rename the file
+            os.rename(self.myFILE_PATH, f'{self.myFILE_DIRECTORY}/{new_file_name}')
+            
+            # Revoke write privileges
+            os.chmod(f'{self.myFILE_DIRECTORY}/{new_file_name}', 0o444)
+
+            return True, "OK"
+        except PermissionError as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"Permission denied: {e}"
+        except FileNotFoundError as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"{str(e)}"
+        except Exception as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"{str(e)}"
+
     def remove(self,id):
         try:
             # load the existent script
