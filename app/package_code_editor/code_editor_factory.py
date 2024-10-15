@@ -215,9 +215,12 @@ class CodeEditorFactory(object):
             # Set read and write permissions for the owner, and read-only for others
             os.chmod(self.myFILE_PATH, 0o644)
 
-            with open(self.myFILE_PATH, 'w') as file:
-                resp = file.write(new_script)
-            
+            if '.html' in str(self.myFILE_PATH):
+                with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
+                    resp = file.write(new_script)
+            elif '.js' in str(self.myFILE_PATH):
+                with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
+                    resp = file.write(new_script)
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
             return True, resp

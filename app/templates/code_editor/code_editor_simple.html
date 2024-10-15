@@ -293,9 +293,9 @@
             <div class="editor-container">
                 <div class="toolbar">
                     <div style="margin-left: 2%; ">
-                        <span id="filename" tabindex="0" style="">
-                                example.js
+                        <span id="file-title" tabindex="0" style="display:none">                            
                         </span>
+                        <span id="filename">example.js</span>
                         <select id="language-select">
                             <option value="javascript">JavaScript</option>
                             <option value="python">Python</option>
@@ -348,11 +348,27 @@
                               </li>
                               
                             </ul>
-                              <button class="btn btn-outline-info rounded-circle" onclick="closeBrowser()" type="submit"><i class="fa fa-close text-black"></i></button>
+                            <button class="btn btn-primary rounded-circle" onclick="closeBrowser()" type="submit"><i class="fa fa-close text-black"></i></button>
                             
                           </div>
                         </div>
                       </nav>
+
+                      <!--<nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
+                        <div class="container-fluid">
+                          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                          </button>
+                  
+                          <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
+                            <a class="navbar-brand col-lg-3 me-0" href="#">Home</a>
+                            
+                            <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+                              <button class="btn btn-primary rounded-circle"><i class="fa fa-close text-black"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      </nav>-->
                       
                     <!--<div class="preview">..</div>-->  
                     <iframe id="output" class="preview"></iframe>                  
@@ -360,8 +376,17 @@
 
             </div>
         </div>
-    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
         <script>
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                    e.preventDefault();
+                }
+            });
+
+            
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             const editor = ace.edit("editor");
@@ -446,6 +471,15 @@
             }
         });
 
+        // Add custom key binding for select all
+        editor.commands.addCommand({
+            name: 'selectAll',
+            bindKey: {win: 'Ctrl-A', mac: 'Command-A'},
+            exec: function(editor) {
+                editor.selectAll();
+            }
+        });
+
         
         editor.setOptions({
             fontSize: "11pt",
@@ -491,30 +525,63 @@
             const browser = document.getElementById('browser')
             const previewCode = document.querySelector('.preview')
             var fileName = document.getElementById('filename')
+            var fileTitle = document.getElementById('file-title')
             
+            // Load the file content when the entire page is loaded
             if(localStorage.getItem('filename')){
-                //fileName.textContent = localStorage.getItem('filename')
+                fileName.textContent = localStorage.getItem('filename')
+                // Assign the onLoadHandler function to the window's load event
+                window.addEventListener('load', (e)=>{
+                    openFile(e, fileName.textContent)
+                });
+                
+            }else{
+                fileName.textContent = 'example.js'
+                window.addEventListener('load', (e)=>{
+                    openFile(e, fileName.textContent)
+                });
             }
-
+            
+            let inputField = document.createElement('input')
+            
             // Add click event listener
             fileName.addEventListener('click', function() {
                 let text = fileName.textContent
-                fileName.textContent = ''
-                let inputField = document.createElement('input')
+                //fileName.textContent = ''
+                
+
                 inputField.setAttribute('type', 'text')
                 inputField.setAttribute('id','newFileName')
                 inputField.style.borderRadius = '4px'
-                inputField.style.backgroundColor = '#666'
-                inputField.style.color = '#fff'
+                inputField.style.backgroundColor = '#fff'
+                inputField.style.color = '#000'
                 inputField.style.width = '100px'
                 inputField.value = String(text).trim()
                 inputField.focus();
-                fileName.append(inputField)
+
+                //fileTitle.remove()
+                fileTitle.append(inputField)  
+                this.style.display = 'none'
+                fileTitle.style.display = 'block'
                 //var newText = prompt('Enter new text:');
                 //if (newText !== null) {
                     //editableDiv.textContent = newText;
                 //}
             });
+
+            try{
+                // Add event listener to the input field to handle Enter key
+                inputField.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        localStorage.setItem('filename', inputField.value)
+                        event.preventDefault(); // Prevent default Enter key behavior
+                        fileName.textContent = inputField.value;                        
+                        fileTitle.style.display = 'none';
+                        fileTitle.remove()
+                        fileName.style.display = 'block';
+                    }
+                });
+            }catch(err){console.log(err)}
 
             toggleMenu.addEventListener('click', () => {
                 verticalMenu.classList.toggle('collapsed');
@@ -678,7 +745,7 @@
                         console.log(data)
                           
                     }).catch((err) => {
-                        console.log(err)
+                        console.log("Error: "+err)
                         progressBar.style.backgroundColor = 'red'
                     })
             }
