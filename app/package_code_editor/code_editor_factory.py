@@ -220,7 +220,10 @@ class CodeEditorFactory(object):
         resp ="?"
         try:
             # Set read and write permissions for the owner, and read-only for others
+            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
             os.chmod(self.myFILE_PATH, 0o644)
+            #os.chmod(self.myFILE_DIRECTORY, 0o644)
+            
 
             if '.html' in str(self.myFILE_PATH):
                 with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
@@ -230,6 +233,8 @@ class CodeEditorFactory(object):
                     resp = file.write(new_script)
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
+            #os.chmod(self.myFILE_DIRECTORY, 0)
+            #os.chmod(self.myFILE_DIRECTORY, 0o444)
             return True, resp
         except PermissionError as e:
             # Revoke write privileges
