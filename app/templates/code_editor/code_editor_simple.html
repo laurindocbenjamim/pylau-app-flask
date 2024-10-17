@@ -285,11 +285,38 @@
             opacity: 1;
             display: block;
         }
+
+        .ai-chat-section #chatbox {
+            height: 450px;
+            overflow-y: auto;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .ai-chat-section .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+        .ai-chat-section .user-message {
+            background-color: #17a2b8;
+            color: #fff;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .ai-chat-section .bot-message {
+            background-color: rgba(255,255,255,0.1);
+            color: #fff;
+            align-self: flex-start;
+        }
         
-        .input-group {
+        .ai-chat-section .input-group {
             position: relative;
         }
-        #user-prompt {
+        .ai-chat-section #user-prompt {
             background-color: rgba(255,255,255,0.1);
             border: none;
             color: #fff;
@@ -297,10 +324,10 @@
             height: 70px;
             border-radius: 35px;
         }
-        #user-prompt::placeholder {
+        .ai-chat-section #user-prompt::placeholder {
             color: rgba(255,255,255,0.5);
         }
-        #send-prompt {
+        .ai-chat-section #send-prompt {
             position: absolute;
             right: 10px;
             top: 50%;
@@ -316,14 +343,14 @@
             justify-content: center;
             z-index: 10;
         }
-        #send-prompt:hover {
+        .ai-chat-section #send-prompt:hover {
             background-color: #138496;
         }
 
 
         @media (max-width: 768px) {
             .vertical-menu {
-                width: 60px;
+                width: 105px;
             }
 
             .vertical-menu .submenu span {
@@ -528,6 +555,7 @@
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
+                <div id="chatbox"></div>
             </div>
             <!--- Browser windows -->
             <div class="browser" id="browser">
@@ -582,6 +610,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='app/chat_box.js')}}"></script>
     <script>
 
         document.addEventListener('keydown', function (e) {
@@ -1129,7 +1158,7 @@
 
         async function editOptions(e,option){
             e.preventDefault()
-            alert(option)
+            
         }
 
         async function getSuggestion(prompt, session, pos, prefix) {
