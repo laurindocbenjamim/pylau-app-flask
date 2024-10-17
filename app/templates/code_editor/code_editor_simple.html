@@ -19,6 +19,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-beautify.js"></script>
+    <script src="https://unpkg.com/prettier@2.7.1/standalone.js"></script>
+    <script src="https://unpkg.com/prettier@2.7.1/parser-html.js"></script>
     <style>
         body,
         html {
@@ -265,7 +267,7 @@
 
         .expand-browser {
             padding: 3rem 4rem;
-            height: 600px;
+            height: 95%;
             transition: background-color 0.3s ease, left 0.3s ease;
         }
 
@@ -505,7 +507,7 @@
                                     <li><a class="dropdown-item" href="#" onclick="editOptions(event,'paste')">Paste</a>
                                     </li>
                                     <li><a class="dropdown-item" href="#"
-                                            onclick="editOptions(event,'formmat-doc')">Format Document</a></li>
+                                            onclick="editOptions(event,'format-doc')">Format Document</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -819,6 +821,31 @@
         var fileName = document.getElementById('filename')
         var fileTitle = document.getElementById('file-title')
 
+        function checkLanguage(languageSelect) {
+            if (languageSelect === 'py' || languageSelect === '.py') {
+                return 'python'
+            } else if (languageSelect === 'js' || languageSelect === '.js') {
+                return 'javascript'
+            } else if (languageSelect === 'tjs' || languageSelect === '.tjs') {
+                return 'typescript'
+            }
+            return languageSelect
+        }
+
+        function formatCode(script) {
+            const language = checkLanguage(languageSelect)
+            if(script && language){                
+                
+                alert(language)
+                const formattedContent = prettier.format(script, {
+                    parser: `${language}`,
+                    plugins: prettierPlugins
+                });
+                return formattedContent
+            }
+            return script
+        }
+
         // Load the file content when the entire page is loaded
         if (localStorage.getItem('filename')) {
             fileName.textContent = localStorage.getItem('filename')
@@ -970,10 +997,12 @@
         }
 
         function closeBrowser(e) {
-            browser.classList.remove('minimize-browser')
-            setTimeout((e) => {
-                browser.style.display = 'none'
-            }, 400)
+            if (!browser.classList.contains('minimize-browser')) {
+                browser.classList.remove('minimize-browser')
+                setTimeout((e) => {
+                    browser.style.display = 'none'
+                }, 400)
+            }
         }
 
 
@@ -1120,6 +1149,7 @@
 
         //const submenu = document.getElementById('submenu')
         async function showContent(event) {
+
             event.preventDefault()
             const submenu = event.currentTarget.nextElementSibling;
             if (submenu.classList.contains('show')) {
@@ -1143,6 +1173,17 @@
         //
         async function openFile(event, filename) {
             event.preventDefault()
+
+
+            // close the preview container
+            if (!browser.classList.contains('minimize-browser')) {
+
+                browser.classList.remove('minimize-browser')
+                setTimeout((e) => {
+                    browser.style.display = 'none'
+                }, 400)
+            }
+
 
             const chunk = String(filename).trim().split('.')
             const formatFile = chunk[1]
@@ -1170,12 +1211,16 @@
                 .then((data) => {
                     //console.log(data)
                     languageSelect = String(formatFile).replace('.', '')
-                    editor.session.setMode(`ace/mode/${languageSelect}`);
+
+
+                    editor.session.setMode(`ace/mode/${checkLanguage(languageSelect)}`);
                     editor.setValue(`${data.content}`)
 
                 }).catch((err) => console.log(err))
 
         }
+
+
 
         /*
        * Code to integrate AI on autocomplete and sugestion 
@@ -1206,7 +1251,27 @@
         async function editOptions(e, option) {
             e.preventDefault()
 
+            if (option === 'copy') {
+                navigator.clipboard.writeText(editor.getSelectedText()).then(function () {
+                    alert('Copied to clipboard');
+                }, function (err) {
+                    console.error('Could not copy text: ', err);
+                });
+            } else if (option === 'paste') {
+                /*navigator.clipboard.readText().then(function(text) {
+                    editor.setValue(text);
+                }).catch(function(err) {
+                    console.error('Failed to read clipboard contents: ', err);
+                });*/
+            } else if (option === 'format-doc') {
+                alert(option)
+                const script = editor.getValue();
+                const formattedContent = formatCode(script)
+                editor.setValue(`${formattedContent}`)
+            }
         }
+
+        
 
         async function getSuggestion(prompt, session, pos, prefix) {
             endpoint = `${window.location.origin}/data-science/code-suggestion`;
