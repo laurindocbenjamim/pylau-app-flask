@@ -270,10 +270,10 @@
         }
 
 
-        
+
         .ai-chat-section {
             display: none;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 10px;
             margin-top: 10px;
@@ -281,7 +281,7 @@
             transition: background-color 2s ease, left 0.3s ease;
         }
 
-        .ai-chat-section.show{
+        .ai-chat-section.show {
             opacity: 1;
             display: block;
         }
@@ -289,44 +289,50 @@
         .ai-chat-section #chatbox {
             height: 450px;
             overflow-y: auto;
-            background-color: rgba(255,255,255,0.05);
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             padding: 20px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
         .ai-chat-section .message {
             margin-bottom: 15px;
             padding: 10px;
             border-radius: 20px;
             max-width: 80%;
         }
+
         .ai-chat-section .user-message {
             background-color: #17a2b8;
             color: #fff;
             align-self: flex-end;
             margin-left: auto;
         }
+
         .ai-chat-section .bot-message {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             color: #fff;
             align-self: flex-start;
         }
-        
+
         .ai-chat-section .input-group {
             position: relative;
         }
+
         .ai-chat-section #user-prompt {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             border: none;
             color: #fff;
             padding: 20px 50px 20px 20px;
             height: 70px;
             border-radius: 35px;
         }
+
         .ai-chat-section #user-prompt::placeholder {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
+
         .ai-chat-section #send-prompt {
             position: absolute;
             right: 10px;
@@ -343,6 +349,7 @@
             justify-content: center;
             z-index: 10;
         }
+
         .ai-chat-section #send-prompt:hover {
             background-color: #138496;
         }
@@ -396,18 +403,18 @@
     <div class="custom-container">
 
         <a href="#" id="logo" class="logo" title="LaubCode">
-            <img  src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-developer-96.png?raw=true"
-            width="30" height="30" alt="logo" srcset="">
+            <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-developer-96.png?raw=true"
+                width="30" height="30" alt="logo" srcset="">
             <span style="font-size: .8rem; color:#3cd644;display:block;">LaubCode</span>
         </a>
-        
+
         <div class="vertical-menu" id="verticalMenu">
 
             <button class="toggle-menu" id="toggleMenu">
                 <i class="fas fa-chevron-left"></i>
             </button>
             <ul>
-                
+
                 <li>
                     <a href="#" id="my-projects" onclick="showContent(event)">
                         <i class="fas fa-folder"></i><span>Projects</span>
@@ -429,6 +436,30 @@
                                 {% elif 'js' in filename %}
                                 <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/javascript-icon.png?raw=true"
                                     width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'py' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/javascript-icon.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'java' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-java-48.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'css' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-css-48.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'scss' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-css-48.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'csv' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-csv-30.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'xlsx' in filename or 'xls' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-excel-48.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'mp4' in filename or 'wave' in filename or 'mkv' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-video-64.png?raw=true"
+                                    width="20" height="20" alt="javascript-file" srcset="">
+                                {% elif 'mp3' in filename or 'm4a' in filename %}
+                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-audio-40.png?raw=true"
+                                    width="15" height="15" alt="javascript-file" srcset="">
                                 {% endif %}
                                 <span>{{ filename }}</span>
                             </a>
@@ -442,7 +473,8 @@
                 </li>
                 <li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
                 <li><a href="#"><i class="fas fa-question-circle"></i><span>Help</span></a></li>
-                <li><a href="#" id="chat-ai" onclick="chatWithAI(event)"><i class="fa-regular fa-comments"></i><span>AI chat</span></a></li>
+                <li><a href="#" id="chat-ai" onclick="chatWithAI(event)"><i class="fa-regular fa-comments"></i><span>AI
+                            chat</span></a></li>
             </ul>
         </div>
 
@@ -450,62 +482,72 @@
 
             <header class="p-3 mb-3 border-bottom">
                 <div class="container">
-                  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                                
-                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                      <li>                    
-                        <a class="nav-link px-2 link-secondary" id="file-title" tabindex="0" style="display:none"></a>
-                        <a class="nav-link px-2 link-secondary" id="filename">example.js</a>
-                    </li>
-                    
-                      <!--<li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>-->
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                          <button class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Edit
-                          </button>
-                          <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#" onclick="editOptions(event,'copy')">Copy</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editOptions(event,'paste')">Paste</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editOptions(event,'formmat-doc')">Format Document</a></li>
-                          </ul>
-                        </li>
-                      </ul>
-            
-                    <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" >
-                        <select id="language-select">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+                        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                            <li>
+                                <a class="nav-link px-2 link-secondary" id="file-title" tabindex="0"
+                                    style="display:none"></a>
+                                <a class="nav-link px-2 link-secondary" id="filename">example.js</a>
+                            </li>
+
+                            <!--<li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>-->
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Edit
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item" href="#" onclick="editOptions(event,'copy')">Copy</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#" onclick="editOptions(event,'paste')">Paste</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="editOptions(event,'formmat-doc')">Format Document</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                            <!--<select id="language-select">
                             <option value="javascript">JavaScript</option>
                             <option value="python">Python</option>
                             <option value="html">HTML</option>
                             <option value="css">CSS</option>
-                        </select>
-                        <select id="theme-select">
-                            <option value="monokai">Monokai</option>
-                            <option value="github">GitHub</option>
-                            <option value="tomorrow_night">Tomorrow Night</option>
-                            <option value="solarized_dark">Solarized Dark</option>
-                        </select>
-                        <button id="run-btn" style="background-color: #3cd644;color:#000"><i class="fas fa-play"></i>
-                            Run</button>
-                        <button id="save-btn"><i class="fas fa-save"></i> Save</button>
+                        </select>-->
+                            <select id="theme-select">
+                                <option value="monokai">Monokai</option>
+                                <option value="github">GitHub</option>
+                                <option value="tomorrow_night">Tomorrow Night</option>
+                                <option value="solarized_dark">Solarized Dark</option>
+                            </select>
+                            <button id="run-btn" style="background-color: #3cd644;color:#000"><i
+                                    class="fas fa-play"></i>
+                                Run</button>
+                            <button id="save-btn"><i class="fas fa-save"></i> Save</button>
+                        </div>
+
+                        <div class="dropdown text-end">
+                            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                                    class="rounded-circle">
+                            </a>
+                            <ul class="dropdown-menu text-small">
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </div>
                     </div>
-            
-                    <div class="dropdown text-end">
-                      <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                      </a>
-                      <ul class="dropdown-menu text-small">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
-              </header>
+            </header>
 
             <!--<div class="toolbar">
                 <div style="margin-left: 2%; ">
@@ -550,7 +592,8 @@
             <!--  Chat with AI -->
             <div class="ai-chat-section">
                 <div class="input-group">
-                    <input type="text" id="user-prompt" name="user-prompt" class="form-control" placeholder="Type your message here...">
+                    <input type="text" id="user-prompt" name="user-prompt" class="form-control"
+                        placeholder="Type your message here...">
                     <button class="btn btn-primary" type="button" id="send-prompt">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -636,7 +679,7 @@
         // Show print margin
         editor.setShowPrintMargin(false); // or true to show
 
-          // HTML content with escaped characters
+        // HTML content with escaped characters
         // HTML content with escaped characters
         var htmlContent = `&lt;!DOCTYPE html&gt;
         &lt;html&gt;
@@ -763,7 +806,8 @@
         const verticalMenu = document.getElementById('verticalMenu');
         const toggleMenu = document.getElementById('toggleMenu');
         const logo = document.getElementById('logo')
-        const languageSelect = document.getElementById('language-select');
+        //const languageSelect = document.getElementById('language-select');
+        let languageSelect = null;
         const themeSelect = document.getElementById('theme-select');
         const runBtn = document.getElementById('run-btn');
         const saveBtn = document.getElementById('save-btn');
@@ -845,9 +889,9 @@
             logo.classList.toggle('logo-on-left')
         });
 
-        languageSelect.addEventListener('change', (e) => {
-            editor.session.setMode(`ace/mode/${e.target.value}`);
-        });
+        //languageSelect.addEventListener('change', (e) => {
+        //    editor.session.setMode(`ace/mode/${e.target.value}`);
+        //});
 
         themeSelect.addEventListener('change', (e) => {
             editor.setTheme(`ace/theme/${e.target.value}`);
@@ -875,7 +919,7 @@
         runBtn.addEventListener('click', () => {
             const code = editor.getValue();
 
-            if (languageSelect.value === 'html') {
+            if (languageSelect === 'html') {
 
                 browser.classList.add('expand-browser')
                 //previewCode.classList.add('expand-browser')
@@ -885,7 +929,7 @@
                     browser.style.display = 'block'
                 }, 100)
 
-            } else if (languageSelect.value === 'javascript') {
+            } else if (languageSelect === 'javascript') {
 
                 try {
                     const result = eval(code);
@@ -1101,6 +1145,7 @@
             event.preventDefault()
 
             const chunk = String(filename).trim().split('.')
+            const formatFile = chunk[1]
 
             const endpoint = `${window.location.origin}/course/learn/laubcode/save-code/${chunk[0]}/${chunk[1]}`;
             localStorage.setItem('filename', filename.trim())
@@ -1124,6 +1169,8 @@
                 })
                 .then((data) => {
                     //console.log(data)
+                    languageSelect = String(formatFile).replace('.', '')
+                    editor.session.setMode(`ace/mode/${languageSelect}`);
                     editor.setValue(`${data.content}`)
 
                 }).catch((err) => console.log(err))
@@ -1156,9 +1203,9 @@
             }));
         }
 
-        async function editOptions(e,option){
+        async function editOptions(e, option) {
             e.preventDefault()
-            
+
         }
 
         async function getSuggestion(prompt, session, pos, prefix) {
@@ -1184,22 +1231,22 @@
         }
 
 
-        async function chatWithAI(event){
+        async function chatWithAI(event) {
             event.preventDefault()
             const chat = document.querySelector('.ai-chat-section')
-            
-            if(chat.classList.contains('show')){
+
+            if (chat.classList.contains('show')) {
                 chat.classList.remove('show')
-                setTimeout(()=>{
+                setTimeout(() => {
                     chat.style.display = 'none'
                 }, 100)
-            }else{
+            } else {
                 chat.classList.add('show')
-                setTimeout(()=>{
+                setTimeout(() => {
                     chat.style.display = 'block'
                 }, 100)
             }
-            
+
         }
 
         ace.require("ace/ext/language_tools").addCompleter({
@@ -1210,7 +1257,7 @@
             }
         });
 
-        async function promptAI(prompt){
+        async function promptAI(prompt) {
             endpoint = `${window.location.origin}/data-science/code-suggestion`;
 
             const headers = new Headers()
@@ -1219,7 +1266,7 @@
 
             const formData = new FormData()
             formData.append('prompt', prompt)
-            
+
             try {
                 const response = await fetch(endpoint, {
                     method: 'POST',
@@ -1234,16 +1281,16 @@
             }
         }
 
-        document.getElementById('send-prompt').addEventListener('click', (e)=>{
+        document.getElementById('send-prompt').addEventListener('click', (e) => {
             e.preventDefault()
             const prompt = document.getElementById('user-prompt').value
             endpoint = `${window.location.origin}/data-science/code-suggestion`;
-            
-            if(prompt){
-               //const response = promptAI(prompt) 
-               //console.log(response)
+
+            if (prompt) {
+                //const response = promptAI(prompt) 
+                //console.log(response)
             }
-            
+
         })
 
     </script>
