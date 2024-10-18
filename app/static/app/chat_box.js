@@ -33,14 +33,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
+    let count_request=0
     function addMessage(message, isUser = false) {
+        count_request+=1;
+        message = String(message).replace('```', '')
+        message = String(message).replace('```', '')
+
         const messageElement = document.createElement('div');
+        const editor = messageElement.cloneNode(true)
+
+        const newId = `editor${count_request}`
+        editor.id = newId;
+
         messageElement.classList.add('message');
         messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
         messageElement.textContent = message;
+
         chatbox.appendChild(messageElement);
-        chatbox.scrollTop = chatbox.scrollHeight;
+        
+        chatbox.scrollTop = chatbox.scrollHeight;        
+
+    }
+
+    function createSmalCodeEditor(id,language, content){
+        
+        // Initialize Ace Editor
+        var editor = ace.edit(`${id}`);
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode(`ace/mode/${language}`);
+
+        editor.setValue(content);
     }
 
     async function botResponse(message) {

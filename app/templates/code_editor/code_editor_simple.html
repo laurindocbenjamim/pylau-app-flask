@@ -836,7 +836,6 @@
             const language = checkLanguage(languageSelect)
             if(script && language){                
                 
-                alert(language)
                 const formattedContent = prettier.format(script, {
                     parser: `${language}`,
                     plugins: prettierPlugins
