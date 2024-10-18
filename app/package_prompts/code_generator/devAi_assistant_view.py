@@ -31,7 +31,8 @@ class DevAiAssistantView(View):
                 If true then generate the required script.
                 If false return the message in 'Make a request'.
 
-                I just want you to return the requested code ready tob deployed.
+                I just want you to return the requested code ready to be deployed.
+
 
                 """
 

@@ -1,9 +1,11 @@
 <!--<!DOCTYPE HTML-->
 <html>
-  <head>
-    <title>Test</title>
-    <style>
-      form{
+ <head>
+  <title>
+   Test
+  </title>
+  <style>
+   form{
 
            padding: 1rem 2rem;
 
@@ -13,9 +15,9 @@
 
            display: flex;
 
-
-
            flex-direction: column;
+
+
 
 
 
@@ -23,40 +25,94 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
        }
-    </style>
-  </head>
-  <body>
-    <h1>Welcome to my first page</h1>
-    <div class="container">
-      <section>
-        <form accept-charset="utf-8" action="" method="get">
-          <input id="" name="" type="text" value="Name" />
-          <input id="" name="" type="email" value="Username" />
-          <input id="" name="" type="password" value="Password" />
-          <input type="button" value="submit" />
-        </form>
-      </section>
-    </div>
-    <div>
-      <textarea id="myTextarea"></textarea>
-      <button onclick="copyText()">Copy</button>
-      <button onclick="pasteText()">Paste</button>
-    </div>
-    <script>
-      function copyText() {
+  </style>
+ </head>
+ <body>
+  <h1>
+   Welcome to my first page
+  </h1>
+  <div class="container">
+   <section>
+    <form accept-charset="utf-8" action="" method="get">
+     <input id="" name="" type="text" value="Name"/>
+     <input id="" name="" type="email" value="Username"/>
+     <input id="" name="" type="password" value="Password"/>
+     <input type="button" value="submit"/>
+    </form>
+   </section>
+  </div>
+  <div>
+   <textarea id="myTextarea"></textarea>
+   <button onclick="copyText()">
+    Copy
+   </button>
+   <button onclick="pasteText()">
+    Paste
+   </button>
+  </div>
+  <script>
+   function copyText() {
+
+
+
           var copyText = document.getElementById("myTextarea");
+
+
+
           copyText.select();
+
+
+
           document.execCommand("copy");
+
+
+
           alert("Copied the text: " + copyText.value);
+
+
+
           }
+
+
+
+
+
+
 
           function pasteText() {
+
+
+
               var pasteText = document.getElementById("myTextarea");
+
+
+
               pasteText.focus(); document.execCommand("paste");
+
+
+
               alert("Pasted the text: " + pasteText.value);
 
+
+
+
+
+
+
           }
-    </script>
-  </body>
+  </script>
+ </body>
 </html>
