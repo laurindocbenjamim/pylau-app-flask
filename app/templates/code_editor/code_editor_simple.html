@@ -1252,7 +1252,7 @@
 
             if (option === 'copy') {
                 navigator.clipboard.writeText(editor.getSelectedText()).then(function () {
-                    alert('Copied to clipboard');
+                    //alert('Copied to clipboard');
                 }, function (err) {
                     console.error('Could not copy text: ', err);
                 });
@@ -1263,7 +1263,7 @@
                     console.error('Failed to read clipboard contents: ', err);
                 });*/
             } else if (option === 'format-doc') {
-                alert(option)
+                
                 const script = editor.getValue();
                 const formattedContent = formatCode(script)
                 editor.setValue(`${formattedContent}`)
