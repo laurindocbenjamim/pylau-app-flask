@@ -361,7 +361,7 @@
 
         @media (max-width: 768px) {
             .vertical-menu {
-                width: 105px;
+                width: 110px;
             }
 
             .vertical-menu .submenu span {
@@ -653,8 +653,31 @@
                 <iframe id="output" class="preview"></iframe>
             </div>
 
+            <!-- Footer -->
+             
+            <footer class="d-flex flex-wrap justify-content-between align-items-center bg-ligh py-3 my-4 border-top">
+                <div class="col-md-4 d-flex align-items-center">
+                  <a href="#" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-developer-96.png?raw=true"
+                width="30" height="30" alt="logo" srcset="">
+                  </a>
+                  <span class="mb-3 mb-md-0 text-body-light">&copy; 2023 Data Tuning, Tech</span>
+                </div>
+            
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                  <li class="ms-3"><a class="text-body-secondary" href=""><i class="fa-brands fa-facebook" style="color: #fff;"></i></a></li>
+                  <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-instagram" style="color: #fff;"></i></a></li>
+                  <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-twitter" style="color: #fff;"></i></a></li>
+                </ul>
+              </footer>
+
+            <!-- End footer -->
+
         </div>
     </div>
+
+    <!---- Including Footer -->
+    {% include './footer.html' %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='app/chat_box.js')}}"></script>
