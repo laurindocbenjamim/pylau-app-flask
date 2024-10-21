@@ -925,8 +925,8 @@
         const consoleOutput = document.getElementById('consoleOutput');
         const clearConsole = document.getElementById('clearConsole')
 
-        consoleOutput.innerHTML = '#laubcode\\editor\main$: \n\n'
-        
+        consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+
         function checkLanguage(languageSelect) {
             if (languageSelect === 'py' || languageSelect === '.py') {
                 return 'python'
@@ -1111,13 +1111,13 @@
                         },300)
                     }
                    
-                    consoleOutput.innerHTML = '#laubcode\\editor\main$: \n\n'
+                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
                     debug_python_script(code, consoleOutput, checkLanguage(languageSelect))
                     //runPythonScript(code)
                 }
                 
             }else{
-                consoleOutput.innerHTML = '#laubcode\\editor\main$: \n\n'
+                consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
                 consoleOutput.innerHTML += 'Unsupported language!!!'
             }
 
