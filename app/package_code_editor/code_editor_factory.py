@@ -244,6 +244,9 @@ class CodeEditorFactory(object):
             elif '.js' in str(self.myFILE_PATH):
                 with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
                     resp = file.write(new_script)
+            elif '.py' in str(self.myFILE_PATH):
+                with open(self.myFILE_PATH, 'w') as file:
+                    resp = file.write(new_script)
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
             #os.chmod(self.myFILE_DIRECTORY, 0)
