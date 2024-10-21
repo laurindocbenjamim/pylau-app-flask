@@ -36,7 +36,7 @@
                 
                 if (data) {
                     console.log("Code execution result:", data);
-                    //consoleOutput.innerHTML += '$: \n\n' + JSON.stringify(data.output) + '\n';
+                    //consoleOutput.innerHTML += '#laubcode\\editor\main$: \n\n' + JSON.stringify(data.output) + '\n';
                     
                     consoleOutput.innerHTML += '<pre>' + data.output + '</pre>'
                 } else {
@@ -77,7 +77,7 @@ async function runPythonScript(scriptToRun) {
     `);
     consoleOutput.innerHTML += `Python Version: ${pythonVersion} \n` 
     consoleOutput.innerHTML += 'Check your browser console in case of existing "print" commands in your code \n'
-    consoleOutput.innerHTML += '$: \n\n';
+    consoleOutput.innerHTML += '#laubcode\\editor\main$: \n\n';
     
     //let result = pyodide.runPython("print(2 + 2)");
     /*await pyodide.runPythonAsync(`
