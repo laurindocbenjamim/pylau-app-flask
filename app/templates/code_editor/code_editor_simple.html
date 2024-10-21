@@ -531,8 +531,8 @@
                         {% endif %}
                     </ul>
                 </li>
-                <li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
-                <li><a href="#"><i class="fas fa-question-circle"></i><span>Help</span></a></li>
+                <!--<li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i><span>Help</span></a></li>-->
                 <li><a href="#" id="chat-ai" onclick="chatWithAI(event)"><i class="fa-regular fa-comments"></i><span>AI
                             chat</span></a></li>
             </ul>
@@ -1106,6 +1106,9 @@
                     //runPythonScript(code)
                 }
                 
+            }else{
+                consoleOutput.innerHTML = '$RESPONSE: \n\n'
+                consoleOutput.innerHTML += 'Unsupported language!!!'
             }
 
         });
@@ -1450,13 +1453,17 @@
 
             if (chat.classList.contains('show')) {
                 chat.classList.remove('show')
+                laubCodeConsole.classList.add('minimize-browser')
                 setTimeout(() => {
                     chat.style.display = 'none'
+                    laubCodeConsole.style.display = 'block'
                 }, 100)
             } else {
+                laubCodeConsole.classList.remove('minimize-browser')
                 chat.classList.add('show')
                 setTimeout(() => {
                     chat.style.display = 'block'
+                    laubCodeConsole.style.display = 'none'
                 }, 100)
             }
 
