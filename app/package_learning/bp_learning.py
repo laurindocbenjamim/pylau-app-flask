@@ -3,6 +3,8 @@
 import json
 import os
 import stat
+import ast
+
 from flask import Blueprint, render_template, session, request, make_response, jsonify, current_app, redirect, url_for
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
@@ -27,6 +29,7 @@ from .elearning.study_this_course_view import StudyThisCourseView
 bp_learn.add_url_rule("/this/<string:course>", view_func=StudyThisCourseView.as_view("this_course",CourseContentModel, CourseModel, UserToken, 'e_learning/courses_content/python_courses/study-this-course.html'))
 
 
+#
 @bp_learn.route('/laubcode-editor')
 @cross_origin(methods=['GET'])
 def laubcode():

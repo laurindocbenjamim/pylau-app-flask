@@ -48,6 +48,8 @@ pygame
 PyPDF2[full]
 # pip install quart
 quart
+#pip install Flask-Limiter
+Flask-Limiter
 
 
 

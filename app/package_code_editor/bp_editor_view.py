@@ -1,14 +1,33 @@
 
 import subprocess
+import ast
 from flask import Blueprint, render_template, url_for, redirect, request, session, jsonify, make_response, current_app
 from flask_cors import CORS, cross_origin
 from .code_editor_factory import CodeEditorFactory
+
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from markupsafe import escape
 from ..utils import __get_cookies, set_header_params
 
 bp_editor = Blueprint('laubcode', __name__, url_prefix='/laubcode')
+
+
+# Rate limiter to prevent abuse
+#limiter = Limiter(get_remote_address, app=current_app, default_limits = ["1/second"])
+#limiter.limit("60/hour")(bp_editor)
+#limiter.exempt(doc)
+
 CORS(bp_editor)
 
+# Sanitize input using Python's ast to validate safe code
+def sanitize_python_code(code):
+    try:
+        # Parse the code without executing it
+        ast.parse(code)
+        return True, ""
+    except Exception as e:
+        return False, str(e)
 
 # Use the subprocess library to run any command line
 def run_general_command_line(command):
@@ -34,6 +53,7 @@ def laub_editor():
 
 
 @bp_editor.route('/cont', methods=['GET', 'POST'])
+#@limiter.limit("5 per minute")
 @cross_origin(methods=['GET'])
 def cont():
 
@@ -45,13 +65,26 @@ def cont():
 
 
 @bp_editor.route('/debug-python',methods=['POST'])
+
 #@cross_origin(methods=['POST'])
 def editor_run_python_code():
     code = request.form.get('code', None)
     language = request.form.get('language', None)
 
+    # Sanitize input
+    is_safe, error = sanitize_python_code(code)
+    if not is_safe:
+        return jsonify({"error": "Invalid Python code: " + error}), 400
      
-    return run_general_command_line(code)
+    #return run_general_command_line(code)
+    try:
+        # Execute the code using subprocess (safer than exec)
+        result = subprocess.run(['python3', '-c', code], capture_output=True, text=True, timeout=5)
+        if result.stderr:
+            return jsonify({"output": result.stderr}), 400
+        return jsonify({"output": result.stdout}), 200
+    except subprocess.TimeoutExpired:
+        return jsonify({"error": "Code execution timed out"}), 400
 
 
 @bp_editor.route('/save-code/<string:fileName>/<string:fileFormat>', methods=['GET', 'POST'])

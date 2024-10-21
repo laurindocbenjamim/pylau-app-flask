@@ -1,6 +1,9 @@
 import os
 import pyotp
 import secrets
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from markupsafe import escape
 from flask import Flask, abort, render_template, redirect,json, url_for, sessions, request, session, jsonify, make_response
 from flask_cors import cross_origin
 from app.auth_package.module_sign_up_sub.model.users import Users
@@ -10,8 +13,18 @@ from flask_login import logout_user
 from markupsafe import escape
 
 def load_routes(app, db, login_manager):
-    # Initialize the login manager
 
+
+    # Rate limiter to prevent abuse
+    limiter = Limiter(
+        get_remote_address,
+        app=app,
+        default_limits=["5 per minute"]
+    )
+
+
+    # Initialize the login manager
+    
     @login_manager.user_loader
     def load_user(user_id):
         return Users.query.get(int(user_id))
@@ -237,6 +250,8 @@ def load_routes(app, db, login_manager):
     # Importing the blueprint of my learning 
     from ...package_learning import bp_learn
     from ...package_code_editor.bp_editor_view import bp_editor
+
+    limiter.limit("60/hour")(bp_editor)
 
     bp_learn.register_blueprint(bp_editor)
     bp_courses.register_blueprint(bp_learn)   

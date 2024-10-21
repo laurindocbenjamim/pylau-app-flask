@@ -359,6 +359,45 @@
         }
 
 
+        /* ------ Console css */
+        .console {
+            height: 200px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            font-family: monospace;
+            overflow-y: auto;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .console-title {
+            font-weight: bold;
+        }
+
+        .console-clear {
+            background-color: transparent;
+            color: #ecf0f1;
+            border: none;
+            cursor: pointer;
+        }
+
+        .console-clear:hover {
+            border-radius: 4px;
+            padding: .2rem .3rem;
+            background-color: #445464;
+        }
+
+        .console-output {
+            white-space: pre-wrap;
+        }
+
+
         @media (max-width: 768px) {
             .vertical-menu {
                 width: 110px;
@@ -580,7 +619,7 @@
             <!--- Code editor windows -->
             <div id="editor"></div>
 
-            <!--- Console windows -->
+            <!--- Browser windows -->
             <div class="progress-bar">
                 <div class="progress mt-3">
                     <div id="myBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
@@ -592,6 +631,15 @@
             <div class="status-bar">
                 Line: <span id="line-number">1</span>, Column: <span id="column-number">1</span>
             </div>
+            <!-- Console -->
+            <div class="console" id="console">
+                <div class="console-header">
+                    <div class="console-title">Console</div>
+                    <button class="console-clear" id="clearConsole">Clear</button>
+                </div>
+                <div class="console-output" id="consoleOutput"></div>
+            </div>
+            <!-- end console -->
 
             <!--  Chat with AI -->
             <div class="ai-chat-section">
@@ -655,7 +703,7 @@
 
             <!-- Footer -->
              
-            <footer class="d-flex flex-wrap justify-content-between align-items-center bg-ligh py-3 my-4 border-top">
+            <!--<footer class="d-flex flex-wrap justify-content-between align-items-center bg-ligh py-3 my-4 border-top">
                 <div class="col-md-4 d-flex align-items-center">
                   <a href="#" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                     <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-developer-96.png?raw=true"
@@ -669,7 +717,7 @@
                   <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-instagram" style="color: #fff;"></i></a></li>
                   <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-twitter" style="color: #fff;"></i></a></li>
                 </ul>
-              </footer>
+              </footer>-->
 
             <!-- End footer -->
 
@@ -680,7 +728,10 @@
     {% include './footer.html' %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='app/debug_python_script.js')}}"></script>
+    <script src="{{ url_for('static', filename='app/debug_javascript_code.js')}}"></script>
     <script src="{{ url_for('static', filename='app/chat_box.js')}}"></script>
+    
     <script>
 
         document.addEventListener('keydown', function (e) {
@@ -845,6 +896,9 @@
         const previewCode = document.querySelector('.preview')
         var fileName = document.getElementById('filename')
         var fileTitle = document.getElementById('file-title')
+        const laubCodeConsole = document.getElementById('console')
+        const consoleOutput = document.getElementById('consoleOutput');
+        const clearConsole = document.getElementById('clearConsole')
 
         function checkLanguage(languageSelect) {
             if (languageSelect === 'py' || languageSelect === '.py') {
@@ -858,7 +912,9 @@
         }
 
         function formatCode(script) {
+
             const language = checkLanguage(languageSelect)
+
             if(script && language){                
                 
                 const formattedContent = prettier.format(script, {
@@ -940,6 +996,11 @@
             logo.classList.toggle('logo-on-left')
         });
 
+        clearConsole.addEventListener('click', () => {
+            //consoleOutput.innerText
+            consoleOutput.innerHTML = ''
+        })
+
         //languageSelect.addEventListener('change', (e) => {
         //    editor.session.setMode(`ace/mode/${e.target.value}`);
         //});
@@ -969,18 +1030,21 @@
 
         runBtn.addEventListener('click', () => {
             const code = editor.getValue();
-
-            if (languageSelect === 'html') {
+            consoleOutput.innerHTML = ''; // Clear previous output
+            
+            if (checkLanguage(languageSelect) === 'html') {
 
                 browser.classList.add('expand-browser')
+                laubCodeConsole.classList.remove('minimize-browser')
                 //previewCode.classList.add('expand-browser')
                 //previewCode.innerHTML = code;
                 oututIframeScript(code)
                 setTimeout((e) => {
+                    laubCodeConsole.style.display = 'none'
                     browser.style.display = 'block'
                 }, 100)
 
-            } else if (languageSelect === 'javascript') {
+            } else if (checkLanguage(languageSelect) === 'javascript') {
 
                 try {
                     const result = eval(code);
@@ -988,6 +1052,7 @@
                     //previewCode.innerHTML = result;
                     oututIframeScript(result)
                     setTimeout((e) => {
+                        laubCodeConsole.style.display = 'none'
                         browser.style.display = 'block'
                     }, 100)
                 } catch (error) {
@@ -995,9 +1060,29 @@
                     //previewCode.innerHTML = "Error executing code:" + error;
                     oututIframeScript(`Error executing code: ${error}`)
                     setTimeout((e) => {
+                        laubCodeConsole.style.display = 'none'
                         browser.style.display = 'block'
                     }, 100)
                 }
+            }else if (checkLanguage(languageSelect) === 'python') {
+                
+                if(code !==''){
+                    
+                    if(!laubCodeConsole.classList.contains('minimize-browser')){
+                        laubCodeConsole.classList.add('minimize-browser')
+                        browser.classList.remove('minimize-browser')
+
+                        setTimeout(()=>{
+                            browser.style.display = 'none'
+                            laubCodeConsole.style.display = 'block'
+                        },300)
+                    }
+                   
+                    consoleOutput.innerHTML = '$RESPONSE: \n\n'
+                    debug_python_script(code, consoleOutput, checkLanguage(languageSelect))
+                    //runPythonScript(code)
+                }
+                
             }
 
         });
@@ -1221,6 +1306,8 @@
             headers.append('X-CSRF-Token', csrfToken)
             headers.append("Authorization", ` Bearer ${csrfToken}`);
 
+            const language = checkLanguage(formatFile)
+           
             fetch(endpoint,
                 {
                     headers: headers, // Add the CSRF token to the headers            
@@ -1237,7 +1324,7 @@
                     languageSelect = String(formatFile).replace('.', '')
 
 
-                    editor.session.setMode(`ace/mode/${checkLanguage(languageSelect)}`);
+                    editor.session.setMode(`ace/mode/${language}`);
                     editor.setValue(`${data.content}`)
 
                 }).catch((err) => console.log(err))
@@ -1299,15 +1386,24 @@
 
         async function getSuggestion(prompt, session, pos, prefix) {
             endpoint = `${window.location.origin}/data-science/code-suggestion`;
+
+            // Creating header
+            const headers = new Headers()
+            headers.append('X-CSRF-Token', csrfToken)
+            headers.append("Authorization", ` Bearer ${csrfToken}`);
+
+            //Creating dform data
+            const formData = new FormData()
+            formData.append('prompt', prompt)
+
             try {
                 const response = await fetch(endpoint, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: headers,
                     body: JSON.stringify({ prompt: prompt })
                 });
                 const data = await response.json();
+                
                 //return data.choices[0].text;
                 return data.choices.map(choice => ({
                     caption: choice.text.trim(),
