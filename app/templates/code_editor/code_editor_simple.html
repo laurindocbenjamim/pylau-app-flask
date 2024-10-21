@@ -925,6 +925,8 @@
         const consoleOutput = document.getElementById('consoleOutput');
         const clearConsole = document.getElementById('clearConsole')
 
+        consoleOutput.innerHTML = '#laubcode\\editor\main$: \n\n'
+        
         function checkLanguage(languageSelect) {
             if (languageSelect === 'py' || languageSelect === '.py') {
                 return 'python'
