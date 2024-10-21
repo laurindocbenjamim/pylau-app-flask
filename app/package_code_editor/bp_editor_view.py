@@ -38,6 +38,14 @@ def run_general_command_line(command):
     return output 
 
 
+@bp_editor.route('/list-dirs')
+@cross_origin(methods=['GET'])
+def list_dirs():
+    import os
+    _DIRECTORY = f'{current_app.config['UPLOAD_FOLDER']}/laubcode'
+    dirss = os.listdir(_DIRECTORY)
+    return jsonify({"dirs": dirss})
+
 @bp_editor.route('/editor')
 @cross_origin(methods=['GET'])
 def laub_editor():
@@ -94,6 +102,7 @@ def save_root_script(fileName, fileFormat):
     fileFormat = escape(fileFormat)
     status = resp = ''
     directory = "laubcode/root"
+    directories=[]
 
     if request.method == 'POST':
         new_script = request.form.get('code')
@@ -106,12 +115,12 @@ def save_root_script(fileName, fileFormat):
             status=False
             resp = str(e)
         
-        return jsonify({"status": status, "code": new_script, "response": resp, "filename": editor.myFILE_PATH}, 200)
+        return jsonify({"status": status, "code": new_script, "directories": directories, "response": resp, "filename": editor.myFILE_PATH}, 200)
     
 
     filecontent = CodeEditorFactory.read_file(directory,f'{directory}/{fileName}.{fileFormat}')
 
-    return jsonify({"filename": f'{fileName}.{fileFormat}', "content": filecontent})
+    return jsonify({"filename": f'{fileName}.{fileFormat}', "directories": directories, "content": filecontent})
 
 @bp_editor.route('/rename-file-name', methods=['POST'])
 #@cross_origin(methods=['GET', 'POST'])
@@ -132,26 +141,32 @@ def rename_file_name():
     return jsonify({"status": status, "new_filename": new_filename, "response": resp, "filename": editor.myFILE_PATH}, 200)
     
 @bp_editor.route('/root/load-scripts')
+@cross_origin(methods=['GET'])
 def load_root_script():
     
 
+    editor = CodeEditorFactory(None, None)
     directory = "laubcode/root"
-    filelist = CodeEditorFactory.load_files(directory=directory)
+    content_dirs = editor.list_directories("laubcode")
+
+    filelist = editor.load_files(directory=directory)
     
     if not isinstance(filelist, list):
         filelist = ["404", filelist]
 
-    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
+    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directories=content_dirs, directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
     set_header_params(response)
     return response
 
 
 @bp_editor.route('/user/load-scripts')
+@cross_origin(methods=['GET'])
 def load_users_script():
     
+    editor = CodeEditorFactory(None, None)
 
     directory = "laubcode/users"
-    filelist = CodeEditorFactory.load_files(directory=directory)
+    filelist = editor.load_files(directory=directory)
     
     if not isinstance(filelist, list):
         filelist = ["404", filelist]
@@ -159,5 +174,7 @@ def load_users_script():
     response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
     set_header_params(response)
     return response
+
+
 
 

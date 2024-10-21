@@ -464,6 +464,19 @@
                         <i class="fa-solid fa-minus" id="fa-minus"></i>
                         <i class="fa-regular fa-plus" id="fa-plus"></i>
                     </a>
+                    <!--<ul class="submenu">
+                        {% if directories %}
+                        {% for dir in directories %}
+                            <li>
+                                <a class="nav-link" href="#">
+                                    <img src="https://img.icons8.com/?size=100&id=dINnkNb1FBl4&format=png&color=000000" width="15"
+                                    height="15" alt="html-file" srcset="">
+                                    <span>{{ dir }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {% endif %}
+                    </ul>-->
                     <ul class="submenu" id="submenu">
                         {% if filelist %}
                         {% if '404' not in filelist %}
@@ -1076,6 +1089,12 @@
                             browser.style.display = 'none'
                             laubCodeConsole.style.display = 'block'
                         },300)
+                    }else{
+                        browser.classList.remove('minimize-browser')
+                        setTimeout(()=>{
+                            browser.style.display = 'none'
+                            laubCodeConsole.style.display = 'block'
+                        },300)
                     }
                    
                     consoleOutput.innerHTML = '$RESPONSE: \n\n'
@@ -1112,6 +1131,11 @@
                     browser.style.display = 'none'
                 }, 400)
             }
+            
+            if(!laubCodeConsole.classList.contains('minimize-browser')){
+                laubCodeConsole.classList.add('minimize-browser')                
+            }
+            laubCodeConsole.style.display='block'
         }
 
 
@@ -1283,7 +1307,7 @@
         async function openFile(event, filename) {
             event.preventDefault()
 
-
+            
             // close the preview container
             if (!browser.classList.contains('minimize-browser')) {
 

@@ -109,10 +109,14 @@ def list_course_content(courseID, description):
 @bp_courses.route('/content/read-file/<string:topic>')
 @cross_origin(methods=['GET'])
 def read_file_content(topic):
+    formatFile = escape(request.args.get('format'))
     topic = escape(topic)
+    topic = str(topic).lower().replace(' ','-')
     from ..utils.my_file_factory import read_html_file
 
     file_path ="html/overview-python.html"
+    file_path =f"laubcode/root/{topic}.{formatFile}"
+    
     content = read_html_file(file_path=file_path)
     return  jsonify({"topic": topic, "content": content},200)
 

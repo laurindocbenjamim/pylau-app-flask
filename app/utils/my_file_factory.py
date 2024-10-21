@@ -37,13 +37,17 @@ def read_html_file(file_path):
     _FILE_PATH = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
 
     try:
-        #if os.path.exists(self.myFILE_PATH):
+        #if not os.path.exists(_FILE_PATH):
+        #    return 
         with open(_FILE_PATH, 'r', encoding='utf-8') as file:
             # Read the entire HTML file content
             html_content = file.read()
             return html_content
     except FileNotFoundError:
-        return f"File not found: {file_path}"
+        # Open the file in append mode, create if it doesn't exist
+        with open(_FILE_PATH, 'a+') as file:
+            file.write('<pre><h1>Hello, World!</h1></pre>')
+        return f"File not found. The file as been created. {_FILE_PATH}"
     except Exception as e:
         return f"An error occurred: {e}"
 

@@ -14,6 +14,19 @@ class CodeEditorFactory(object):
         self.myFILE_PATH = f'{current_app.config['UPLOAD_FOLDER']}/{file_path}'
         self.myFILE_DIRECTORY = f'{current_app.config['UPLOAD_FOLDER']}/{file_directory}' 
 
+
+    def list_directories(self, root_directory):
+            
+        # load all directories
+        try:
+            _DIRECTORY = f'{current_app.config['UPLOAD_FOLDER']}/{root_directory}'
+            dirss = os.listdir(_DIRECTORY)
+
+            return dirss
+        except Exception:
+            return False
+        
+
     def check_or_create_file(self):
         """
         Description
@@ -137,7 +150,7 @@ class CodeEditorFactory(object):
         except Exception as e:
             return f"{str(e)}"
 
-    def load_files(directory):
+    def load_files(self,directory):
         """
         Load all the files within the provided directory
 
