@@ -20,6 +20,7 @@ class AuthLoginView(View):
         self.authUserHistoric = authUserHistoric
         self.template = template
 
+    
     def dispatch_request(self):
         session.pop('_flashes', None)
         recover_account = True

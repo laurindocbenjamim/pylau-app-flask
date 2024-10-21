@@ -51,7 +51,7 @@ def init_login_app(login_manager, db):
     """
         
     
-
+    
     bp_auth.add_url_rule('/login', view_func=AuthLoginView.as_view('login', Users, UserToken, TwoFAModel, AuthUserHistoric,  template='auth/auth.html'))
     bp_auth.add_url_rule('/send-otp/email/<string:user_token>', view_func=SendAuthCodeEmailView.as_view('send-otp-email', UserToken, Users, TwoFAModel, template='auth/2fa.html'))
     bp_auth.add_url_rule('/otp/verify/<string:user_token>', view_func=VerifyAuthOtpCodeView.as_view('verify-otp',  UserToken, Users, TwoFAModel, AuthUserHistoric, template='auth/2fa.html'))

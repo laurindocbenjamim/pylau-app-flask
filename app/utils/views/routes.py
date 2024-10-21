@@ -19,7 +19,7 @@ def load_routes(app, db, login_manager):
     limiter = Limiter(
         get_remote_address,
         app=app,
-        default_limits=["5 per minute"]
+        default_limits=["200 per day", "50 per hour"]
     )
 
 
@@ -30,6 +30,49 @@ def load_routes(app, db, login_manager):
         return Users.query.get(int(user_id))
        
     
+
+    
+     # Main route
+    @app.route('/')
+    @app.route('/<string:user_token>')
+    @limiter.limit("100 per hour", error_message='chill!')
+    @cross_origin(methods=['GET'])
+    def index(user_token=None):
+              
+        session.pop('_flashes', None)
+        session['domain'] = request.root_url
+        welcome_title = "Welcome to Data Tuning"
+        welcome_message = "Empowering learners with cutting-edge online education"
+    
+        USER_DATA = {
+             'USERNAME': request.cookies.get('USERNAME', ''),
+        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
+        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
+        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
+        }
+
+        if user_token is not None:
+            if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
+                abort(401)
+            token = escape(user_token)
+            session['user_token'] = escape(user_token) if 'user_id' in session else None 
+            
+            if user_token == 'favicon.ico': 
+                session.pop('user_token', None)
+                user_token = ''
+        elif 'user_token' in session:
+            user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
+        #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
+
+        response = make_response(render_template('site_home.html', title="Home", welcome_title=welcome_title, 
+                                                 welcome_message=welcome_message, 
+                                                 domain = request.root_url, total_projects=12, USER_DATA=USER_DATA, user_token=user_token))
+        from ..config_headers import set_header_params
+        set_header_params(response)       
+        response.set_cookie('current_url', request.url)
+        return response
+    
+
     """
     @login_manager.request_loader
     def request_loader(request):
@@ -79,48 +122,6 @@ def load_routes(app, db, login_manager):
 
         return redirect(url_for('index'))
 
-
-
-    
-     # Main route
-    @app.route('/')
-    @app.route('/<string:user_token>')
-    @cross_origin(methods=['GET'])
-    def index(user_token=None):
-              
-        session.pop('_flashes', None)
-        session['domain'] = request.root_url
-        welcome_title = "Welcome to Data Tuning"
-        welcome_message = "Empowering learners with cutting-edge online education"
-    
-        USER_DATA = {
-             'USERNAME': request.cookies.get('USERNAME', ''),
-        'USER_STATUS': request.cookies.get('USER_STATUS', ''),
-        'USER_ROLE': request.cookies.get('USER_ROLE', ''),
-        'USER_TOKEN': request.cookies.get('USER_TOKEN', '')
-        }
-
-        if user_token is not None:
-            if len(escape(user_token)) < 100 or len(escape(user_token)) > 200:
-                abort(401)
-            token = escape(user_token)
-            session['user_token'] = escape(user_token) if 'user_id' in session else None 
-            
-            if user_token == 'favicon.ico': 
-                session.pop('user_token', None)
-                user_token = ''
-        elif 'user_token' in session:
-            user_token = session.pop('user_token', None) if session['user_token'] == 'favicon.ico' else session['user_token']
-        #return jsonify({'status': 'success', 'message': 'Welcome to the home page', 'user_token': user_token})
-
-        response = make_response(render_template('site_home.html', title="Home", welcome_title=welcome_title, 
-                                                 welcome_message=welcome_message, 
-                                                 domain = request.root_url, total_projects=12, USER_DATA=USER_DATA, user_token=user_token))
-        from ..config_headers import set_header_params
-        set_header_params(response)       
-        response.set_cookie('current_url', request.url)
-        return response
-    
 
     @app.route('/about-us')
     @cross_origin(methods=['GET'])
@@ -188,6 +189,10 @@ def load_routes(app, db, login_manager):
     from ...auth_package import bp_auth as bp_auth_login_view_child, init_login_app
     init_register_app()
     init_login_app(login_manager=login_manager, db=db)
+
+    #limiter.limit("10 per minute")(bp_auth_login_view_child)
+    limiter.limit("10 per minute")(bp_auth_register_parent)
+
     bp_auth_register_parent.register_blueprint(bp_auth_login_view_child)
     app.register_blueprint(bp_auth_register_parent)
     #"""
@@ -201,6 +206,9 @@ def load_routes(app, db, login_manager):
 
     from ...admin_module.bp_admin_view import bp as bp_admin_view
     from ...package_user.bp_user import bp_user
+    
+    limiter.limit("50 per minute")(bp_admin_view)
+
     bp_admin_view.register_blueprint(bp_user)
     app.register_blueprint(bp_admin_view)
 
