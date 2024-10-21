@@ -31,6 +31,7 @@ class Users(UserMixin, db.Model):
     country_code:Mapped[str] = db.Column(db.String(6), nullable=False)
     phone:Mapped[str] = db.Column(db.String(100), nullable=False)
     password:Mapped[str] = db.Column(db.String(255), nullable=False)
+    image_profile:Mapped[str] = db.Column(db.String(255))
     role:Mapped[str] = db.Column(db.String(100), default='user')
     active:Mapped[bool] = db.Column(db.Boolean(), default=False)
     date_added = db.Column(db.Date(), default=db.func.current_date())
@@ -85,6 +86,7 @@ class Users(UserMixin, db.Model):
             'country_code': self.country_code,
             'phone': self.phone,
             'status': self.active,
+            'image_profile': self.image_profile,
             'role': self.role,
             'date_added': self.date_added,
             'date_updated': self.date_updated
@@ -127,6 +129,7 @@ class Users(UserMixin, db.Model):
             user.country = user_object.country
             user.country_code = user_object.country_code
             user.phone = user_object.phone
+            user.image_profile = user_object.image_profile
             user.role = user_object.role
             user.active = user_object.active
             user.date_updated = datetime.now()

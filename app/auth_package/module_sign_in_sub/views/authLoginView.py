@@ -40,6 +40,7 @@ class AuthLoginView(View):
                 session['phone'] = user.phone
                 session['active'] = user.active
                 session['role'] = user.role
+                session['image_profile'] = user.image_profile
                 session['date_added'] = user.date_added
                 session['date_updated'] = user.date_updated
                 session['user_token'] = token
@@ -158,6 +159,7 @@ class AuthLoginView(View):
                                                         session['phone'] = user.phone
                                                         session['active'] = user.active
                                                         session['role'] = user.role
+                                                        session['image_profile'] = user.image_profile
                                                         session['date_added'] = user.date_added
                                                         session['date_updated'] = user.date_updated
                                                         session['user_token'] = new_token

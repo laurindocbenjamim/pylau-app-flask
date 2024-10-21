@@ -5,7 +5,9 @@ from flask import flash, Request
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
 
-def load_user_obj(form = Request.form, role='user', active=0):
+def load_user_obj(form = Request.form, role='user', image_profile='', active=0):
+    if image_profile =='':
+        image_profile = 'https://img.icons8.com/?size=100&id=kDoeg22e5jUY&format=png&color=000000'
     return Users(
         firstname = form.get('firstname'),
         lastname = form.get('lastname'),
@@ -16,6 +18,7 @@ def load_user_obj(form = Request.form, role='user', active=0):
         phone = form.get('phone'),
         password = generate_password_hash(form.get('password')),        
         role = role,
+        image_profile = image_profile,
         active = 1 if form.get('two_fa_auth_method') == 'normal' else active
         )
         

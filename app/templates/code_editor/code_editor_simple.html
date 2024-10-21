@@ -592,10 +592,18 @@
                         <div class="dropdown text-end">
                             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/Laurindo-02-removebg-preview.png?raw=true" alt="mdo" width="32" height="32"
+
+                                {% if 'image_profile' in session %}
+                                <img src="{{ session.get('image_profile')}}" alt="mdo" width="32" height="32"
                                     class="rounded-circle">
+                                {% else %}
+                                <img src="https://img.icons8.com/?size=100&id=7rcs0z3sdioE&format=png&color=000000" alt="mdo" width="32" height="32"
+                                class="rounded-circle">
+                                {% endif %}
                             </a>
                             <ul class="dropdown-menu text-small">
+                                <li><a class="dropdown-item" >{{ session.get('firstname')}} {{ session.get('lastname')}}</a></li>
+                                <li><a class="dropdown-item" style="text-decoration: underline;" >{{ session.get('email')}}</a></li>
                                 <li><a class="dropdown-item" >New project...</a></li>
                                 <li><a class="dropdown-item" >Settings</a></li>
                                 <li><a class="dropdown-item" >Profile</a></li>
