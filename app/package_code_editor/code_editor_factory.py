@@ -217,7 +217,7 @@ class CodeEditorFactory(object):
             os.chmod(self.myFILE_DIRECTORY, 0)
             return f"{str(e)}"
 
-    def save_html_script(self, new_script, encoding='utf-8'):
+    def save_file_script(self, new_script, encoding='utf-8'):
         """Add a new comment to the JSON file."""
          # check if the file path exists if not create it        
         self.check_or_create_file()
@@ -244,7 +244,7 @@ class CodeEditorFactory(object):
             elif '.js' in str(self.myFILE_PATH):
                 with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
                     resp = file.write(new_script)
-            elif '.py' in str(self.myFILE_PATH):
+            elif '.py' in str(self.myFILE_PATH)  or '.css' in str(self.myFILE_PATH):
                 with open(self.myFILE_PATH, 'w') as file:
                     resp = file.write(new_script)
             # Revoke write privileges

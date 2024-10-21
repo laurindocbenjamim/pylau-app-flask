@@ -110,7 +110,7 @@ def save_root_script(fileName, fileFormat):
         editor = CodeEditorFactory(f'{directory}/{str(request.form.get('filename')).replace(' ', '')}', directory)
         #if '.html' in request.form.get('filename'):
         try:
-            status, resp = editor.save_html_script(new_script)
+            status, resp = editor.save_file_script(new_script)
         except Exception as e:
             status=False
             resp = str(e)
