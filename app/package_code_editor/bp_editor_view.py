@@ -1,6 +1,7 @@
 
 import subprocess
 import ast
+import re
 from flask import Blueprint, render_template, url_for, redirect, request, session, jsonify, make_response, current_app
 from flask_cors import CORS, cross_origin
 from .code_editor_factory import CodeEditorFactory
@@ -29,6 +30,14 @@ def sanitize_python_code(code):
     except Exception as e:
         return False, str(e)
 
+def validate_only_string(s):
+        # This pattern allows spaces, accentuated characters, and common punctuation
+        pattern = r'^[A-Za-zÀ-ÖØ-öø-ÿ\s._-\'"()]+$'
+        if re.match(pattern, s):
+            return True
+        else:
+            return False
+        
 # Use the subprocess library to run any command line
 def run_general_command_line(command):
     try:
@@ -60,17 +69,6 @@ def laub_editor():
     return response
 
 
-@bp_editor.route('/cont', methods=['GET', 'POST'])
-#@limiter.limit("5 per minute")
-@cross_origin(methods=['GET'])
-def cont():
-
-    if request.method == 'POST':
-        return jsonify([{"email": request.form.get('email')}])
-    
-    return render_template('contact.html', title="CONNTT")
-
-
 
 @bp_editor.route('/debug-python',methods=['POST'])
 
@@ -78,11 +76,15 @@ def cont():
 def editor_run_python_code():
     code = request.form.get('code', None)
     language = request.form.get('language', None)
+    fields = [code, language]
 
     # Sanitize input
-    is_safe, error = sanitize_python_code(code)
-    if not is_safe:
-        return jsonify({"error": "Invalid Python code: " + error}), 400
+    for field in fields:
+        is_safe, error = sanitize_python_code(field)
+        if not is_safe:
+            #break
+            return jsonify({"error": "Invalid Python code: " + error}), 400
+    
      
     #return run_general_command_line(code)
     try:
@@ -99,16 +101,31 @@ def editor_run_python_code():
 def create_file():
     status = True
     message = ""
+    authorized_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
     
     filename =  request.form.get('filename')
     file_directory =  request.form.get('fileDirectory')
+    fields = [file_directory, filename]
+
+    # Validate the entry point
+    if any(char not in authorized_chars for char in filename):
+        return jsonify({"error": "Invalid characteres for field 'filename'"}), 400
+    elif any(char not in authorized_chars for char in file_directory):
+        return jsonify({"error": "Invalid characteres: 'file_directory'"}), 400 
+    
+    # Sanitize input
+    for field in fields:
+        is_safe, error = sanitize_python_code(field)
+        if not is_safe:
+            #break
+            return jsonify({"error": "Invalid Python code: " + error}), 400
 
     editor = CodeEditorFactory(f'laubcode/{file_directory}/{str(filename).replace(' ', '')}', 
                                f'laubcode/{file_directory}')
     script = ""
-    if '.htm' in filename: script="""<!-- Write here yout script -->"""
-    elif '.js' in filename or '.css' in filename: script="""/*--Write here yout script--*/"""
-    elif '.py' in filename: script="""#-- Write here yout script --"""
+    if '.htm' in filename: script="""<!-- Write your script below -->"""
+    elif '.js' in filename or '.css' in filename: script="""/*--Write your script below--*/"""
+    elif '.py' in filename: script="""#-- Write your script below --"""
     
     try:
         status, message = editor.create_file(script)
@@ -130,6 +147,11 @@ def save_root_script(fileName, fileFormat):
     if request.method == 'POST':
         new_script = request.form.get('code')
 
+
+        is_safe, error = sanitize_python_code(new_script)
+        if not is_safe:
+            return jsonify({"error": "Invalid Python code: " + error}), 400
+        
         editor = CodeEditorFactory(f'{directory}/{str(request.form.get('filename')).replace(' ', '')}', directory)
         #if '.html' in request.form.get('filename'):
         try:
@@ -149,10 +171,26 @@ def save_root_script(fileName, fileFormat):
 #@cross_origin(methods=['GET', 'POST'])
 def rename_file_name():
     directory = "laubcode/root"
+    authorized_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
 
     old_filename = request.form.get('old_filename')
     new_filename = request.form.get('new_filename')
 
+    # Validate the entry point
+    if any(char not in authorized_chars for char in old_filename):
+        return jsonify({"error": "Invalid characteres for field 'old_filename'"}), 400
+    elif any(char not in authorized_chars for char in new_filename):
+        return jsonify({"error": "Invalid characteres: 'new_filename'"}), 400 
+    
+    fields = [old_filename, new_filename]
+
+    # Sanitize input
+    for field in fields:
+        is_safe, error = sanitize_python_code(field)
+        if not is_safe:
+            #break
+            return jsonify({"error": "Invalid Python code: " + error}), 400
+        
     editor = CodeEditorFactory(f'{directory}/{str(old_filename)}', directory)
     
     try:

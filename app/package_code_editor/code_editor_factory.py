@@ -27,6 +27,7 @@ class CodeEditorFactory(object):
             return False
         
 
+    
     def check_or_create_file(self):
         """
         Description

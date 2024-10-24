@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     // Create a URLSearchParams object
     const urlParams = new URLSearchParams(queryString);
-
+ 
     // Get the value of a specific parameter
     const fileName = urlParams.get('fileName'); // "shirt"
     const courseID = urlParams.get('courseID'); // "shirt"
