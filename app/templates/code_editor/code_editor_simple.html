@@ -1041,7 +1041,7 @@
                     fileTitle.style.display = 'none';
                     fileTitle.remove()
                     fileName.style.display = 'block';
-                    location.reload(true)
+                    //location.reload(true)
 
                 }
             });
@@ -1320,6 +1320,14 @@
                 })
                 .then((data) => {
                     console.log(data)
+
+                    localStorage.setItem('filename', String(inputField.value))
+                    event.preventDefault(); // Prevent default Enter key behavior
+                    fileName.textContent = String(inputField.value);
+                    fileTitle.style.display = 'none';
+                    fileTitle.remove()
+                    fileName.style.display = 'block';
+                    //location.reload(true)
 
                 }).catch((err) => {
                     console.log("Error: " + err)

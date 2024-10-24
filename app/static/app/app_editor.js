@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
             if(data[0].message.includes('WinError')){
                 alert(data[0].message)
             }else{
-                update_the_page()
+                //update_the_page()
             }
         }).catch((err) => {
             console.log("Error: " + err)
