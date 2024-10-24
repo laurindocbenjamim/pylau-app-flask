@@ -94,6 +94,29 @@ def editor_run_python_code():
     except subprocess.TimeoutExpired:
         return jsonify({"error": "Code execution timed out"}), 400
 
+@bp_editor.route('/root/create-file',  methods=['POST'])
+@cross_origin(methods=['POST'])
+def create_file():
+    status = True
+    message = ""
+    
+    filename =  request.form.get('filename')
+    file_directory =  request.form.get('fileDirectory')
+
+    editor = CodeEditorFactory(f'laubcode/{file_directory}/{str(filename).replace(' ', '')}', 
+                               f'laubcode/{file_directory}')
+    script = ""
+    if '.htm' in filename: script="""<!-- Write here yout script -->"""
+    elif '.js' in filename or '.css' in filename: script="""/*--Write here yout script--*/"""
+    elif '.py' in filename: script="""#-- Write here yout script --"""
+    
+    try:
+        status, message = editor.create_file(script)
+    except Exception as e:
+        status=False
+        message = str(e)
+        
+    return jsonify({"status": status, "message": message}, 200)
 
 @bp_editor.route('/save-code/<string:fileName>/<string:fileFormat>', methods=['GET', 'POST'])
 #@cross_origin(methods=['GET', 'POST'])
@@ -144,7 +167,7 @@ def rename_file_name():
 @cross_origin(methods=['GET'])
 def load_root_script():
     
-
+    filename = escape(request.args.get('fileName'))
     editor = CodeEditorFactory(None, None)
     directory = "laubcode/root"
     content_dirs = editor.list_directories("laubcode")
@@ -154,7 +177,7 @@ def load_root_script():
     if not isinstance(filelist, list):
         filelist = ["404", filelist]
 
-    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", directories=content_dirs, directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
+    response = make_response(render_template('code_editor/code_editor_simple.html', title="LaubCode", filename=f'{filename}.html', directories=content_dirs, directory=directory, filelist=filelist, USER_DATA=__get_cookies))    
     set_header_params(response)
     return response
 

@@ -401,6 +401,17 @@
             border-bottom: 1px solid #3b4e61;
         }
 
+        #resizer {
+            width: 2px;
+            
+            cursor: ew-resize;
+            background-color: #858585;
+            position: absolute;
+            margin-left: 247px;
+            top: 0;
+            height: 100%;
+          }
+
 
         @media (max-width: 768px) {
             .vertical-menu {
@@ -482,6 +493,16 @@
                         {% endif %}
                     </ul>-->
                     <ul class="submenu" id="submenu">
+                        <li style="margin-bottom: 2%;cursor:pointer;">
+                            <span class="badge borde border-light-subtle text-light-emphasis rounded-pill" title="Create file" id="create-new-file" 
+                            style="cursor:pointer;text-align:center; border:none">
+                                <i class="fa-solid fa-file-circle-plus" style="color: #3bec24;margin-bottom: 5%; margin-top:5%"></i>
+                            </span>
+                            <!--<button class="btn btn-primary rounded-circle p-3 lh-1" type="button" id="create-new-file" title="create file">
+                                <i class="fa-solid fa-file-circle-plus" style="color: #3bec24;margin-bottom: 5%; margin-top:5%"></i>
+                            </button>-->
+                            </li>
+                        <li id="new-filename-inputfield"></li>
                         {% if filelist %}
                         {% if '404' not in filelist %}
                         {% for filename in filelist %}
@@ -536,7 +557,9 @@
                 <li><a href="#" id="chat-ai" onclick="chatWithAI(event)"><i class="fa-regular fa-comments"></i><span>AI
                             chat</span></a></li>
             </ul>
+            <!--<div id="resizer"></div>-->
         </div>
+        
 
         <div class="editor-container">
 
@@ -616,6 +639,7 @@
                     </div>
                 </div>
             </header>
+            
 
             <!--<div class="toolbar">
                 <div style="margin-left: 2%; ">
@@ -753,6 +777,9 @@
     {% include './footer.html' %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="{{ url_for('static', filename='app/app_editor.js')}}"></script>
+    <script src="{{ url_for('static', filename='assets/js/editor_controller.js')}}"></script>
     <script src="{{ url_for('static', filename='app/debug_python_script.js')}}"></script>
     <script src="{{ url_for('static', filename='app/debug_javascript_code.js')}}"></script>
     <script src="{{ url_for('static', filename='app/chat_box.js')}}"></script>
@@ -768,7 +795,7 @@
 
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-        const editor = ace.edit("editor");
+        //const editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.session.setMode("ace/mode/javascript");
         editor.setValue(`// Welcome to the LaubCoder Code Editor!
@@ -906,6 +933,7 @@
         localStorage.setItem('savedCode', `// Welcome to the LaubCoder Code Editor!
     // Start coding here...`);
 
+        const serverFilename = '{{ filename }}'
         const verticalMenu = document.getElementById('verticalMenu');
         const toggleMenu = document.getElementById('toggleMenu');
         const logo = document.getElementById('logo')
@@ -954,6 +982,10 @@
         }
 
         // Load the file content when the entire page is loaded
+        if(serverFilename !== null && serverFilename !== 'None' && serverFilename !==''){
+            localStorage.setItem('filename',  serverFilename)
+        }
+        
         if (localStorage.getItem('filename')) {
             fileName.textContent = localStorage.getItem('filename')
             // Assign the onLoadHandler function to the window's load event
@@ -1222,7 +1254,7 @@
                 })
                 .then((data) => {
                     console.log(data)
-
+                   
                 }).catch((err) => {
                     console.log("Error: " + err)
                     progressBar.style.backgroundColor = 'red'

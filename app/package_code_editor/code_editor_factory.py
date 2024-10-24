@@ -44,6 +44,43 @@ class CodeEditorFactory(object):
                 os.makedirs(self.myFILE_DIRECTORY, exist_ok=True)
         except Exception:
             return self.myFILE_DIRECTORY
+        
+    def create_file(self, new_script, encoding='utf-8'):
+        """Create a new file"""
+         # check if the file path exists if not create it        
+        self.check_or_create_file()
+
+        """
+       
+        """
+
+        resp ="?"
+        try:
+            # Set read and write permissions for the owner, and read-only for others
+            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            os.chmod(self.myFILE_PATH, 0o644)
+            #os.chmod(self.myFILE_DIRECTORY, 0o644)
+            resp ="File already exists"
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            #os.chmod(self.myFILE_DIRECTORY, 0)
+            #os.chmod(self.myFILE_DIRECTORY, 0o444)
+            return True, resp
+        except PermissionError as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"Permission denied: {e}"
+        except FileNotFoundError as e:
+            with open(self.myFILE_PATH, 'a+') as file:
+                resp = file.write(new_script)
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return True, f"{str(resp)}"
+        except Exception as e:
+            # Revoke write privileges
+            os.chmod(self.myFILE_PATH, 0o444)
+            return False, f"{str(e)}"
+    
 
     def load_script(self):
         """Load script from a JSON file."""
