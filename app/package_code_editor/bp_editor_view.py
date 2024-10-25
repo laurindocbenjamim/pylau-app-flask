@@ -123,13 +123,9 @@ def create_file():
 
     editor = CodeEditorFactory(f'laubcode/{file_directory}/{str(filename).replace(' ', '')}', 
                                f'laubcode/{file_directory}')
-    script = ""
-    if '.htm' in filename: script="""<!-- Write your script below -->"""
-    elif '.js' in filename or '.css' in filename: script="""/*--Write your script below--*/"""
-    elif '.py' in filename: script="""#-- Write your script below --"""
     
     try:
-        status, message = editor.create_file(script)
+        status, message = editor.create_file(filename)
         status_code =200
     except Exception as e:
         status=False

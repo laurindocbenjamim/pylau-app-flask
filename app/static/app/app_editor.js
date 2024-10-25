@@ -125,7 +125,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
             data[0].message
           )}</pre>`;
         }else{
-            //update_the_page()
+            update_the_page()
+            //location.reload(true)
         }
       })
       .catch((err) => {

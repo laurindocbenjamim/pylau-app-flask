@@ -46,7 +46,7 @@ class CodeEditorFactory(object):
         except Exception:
             return self.myFILE_DIRECTORY
         
-    def create_file(self, new_script, encoding='utf-8'):
+    def create_file(self,filename, encoding='utf-8'):
         """Create a new file"""
          # check if the file path exists if not create it        
         self.check_or_create_file()
@@ -54,6 +54,10 @@ class CodeEditorFactory(object):
         """
        
         """
+        script = ""
+        if '.htm' in filename: script="""<!-- Write your script below -->"""
+        elif '.js' in filename or '.css' in filename: script="""/*--Write your script below--*/"""
+        elif '.py' in filename: script="""#-- Write your script below --"""
 
         resp ="?"
         try:
@@ -63,7 +67,7 @@ class CodeEditorFactory(object):
             #os.chmod(self.myFILE_DIRECTORY, 0o644)
             """if not os.path.exists(self.myFILE_PATH):
                 with open(self.myFILE_PATH, 'a+') as file:
-                    resp = file.write(new_script)
+                    resp = file.write(script)
             else:
                 resp ='File already exists'"""
             if os.path.exists(self.myFILE_PATH):
@@ -81,7 +85,7 @@ class CodeEditorFactory(object):
             os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
             #os.chmod(self.myFILE_PATH, 0o644)
             with open(self.myFILE_PATH, 'a+') as file:
-                resp = file.write(new_script)
+                resp = file.write(script)
             # Revoke write privileges
             os.chmod(self.myFILE_DIRECTORY, 0)
             os.chmod(self.myFILE_PATH, 0o444)
@@ -363,6 +367,9 @@ class CodeEditorFactory(object):
             os.chmod(self.myFILE_PATH, 0o444)
             return False, f"Permission denied: {e}"
         except FileNotFoundError as e:
+
+            self.create_file(self.myFILE_PATH)
+
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
             return False, f"{str(e)}"

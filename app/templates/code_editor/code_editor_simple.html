@@ -792,6 +792,23 @@
             }
         });
 
+        function update_the_page() {
+            // Get the query string from the current URL
+            const queryString = window.location.search;
+        
+            // Create a URLSearchParams object
+            const urlParams = new URLSearchParams(queryString);
+        
+            // Get the value of a specific parameter
+            const fileName = urlParams.get("fileName"); // "shirt"
+            const courseID = urlParams.get("courseID"); // "shirt"
+            const description = urlParams.get("description"); // "shirt"
+            const user_token = urlParams.get("user_token"); // "shirt"
+        
+            window.location.href = `${window.location.origin}/course/learn/laubcode/root/load-scripts?
+            fileName=${fileName}&&courseID=${courseID}&&description=${description}&&user_token=${user_token}`;
+          }
+
 
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -1333,13 +1350,14 @@
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
                     }else{
                         localStorage.setItem('filename', String(inputField.value))
+                        update_the_page()
                     } 
-                    
+
                     fileName.textContent = String(inputField.value);
                     fileTitle.style.display = 'none';
                     fileTitle.remove()
                     fileName.style.display = 'block';
-                    //location.reload(true)
+                  
 
                 }).catch((err) => {
                     console.log("Error: " + err)
