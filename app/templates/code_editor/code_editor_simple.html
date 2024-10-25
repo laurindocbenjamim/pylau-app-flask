@@ -1254,9 +1254,17 @@
                 })
                 .then((data) => {
                     console.log(data)
+                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+                    if(data[1] == 400){
+                        consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
+                    }
                    
                 }).catch((err) => {
                     console.log("Error: " + err)
+                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+                    
+                    consoleOutput.innerHTML += `<pre class="text-danger">${String(err)}</pre>`;
+                    
                     progressBar.style.backgroundColor = 'red'
                 })
         }
@@ -1320,9 +1328,13 @@
                 })
                 .then((data) => {
                     console.log(data)
-
-                    localStorage.setItem('filename', String(inputField.value))
-                    event.preventDefault(); // Prevent default Enter key behavior
+                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+                    if(data[1] == 400){
+                        consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
+                    }else{
+                        localStorage.setItem('filename', String(inputField.value))
+                    } 
+                    
                     fileName.textContent = String(inputField.value);
                     fileTitle.style.display = 'none';
                     fileTitle.remove()
@@ -1331,6 +1343,9 @@
 
                 }).catch((err) => {
                     console.log("Error: " + err)
+                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'                   
+                    consoleOutput.innerHTML += `<pre class="text-danger">${String(err)}</pre>`;
+                    
                     progressBar.style.backgroundColor = 'red'
                 })
         }

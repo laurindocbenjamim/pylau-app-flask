@@ -101,6 +101,7 @@ def editor_run_python_code():
 def create_file():
     status = True
     message = ""
+    status_code =400
     authorized_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
     
     filename =  request.form.get('filename')
@@ -109,16 +110,16 @@ def create_file():
 
     # Validate the entry point
     if any(char not in authorized_chars for char in filename):
-        return jsonify({"error": "Invalid characteres for field 'filename'"}), 400
+        return jsonify({"message": "Invalid characteres for field 'filename'"}), 400
     elif any(char not in authorized_chars for char in file_directory):
-        return jsonify({"error": "Invalid characteres: 'file_directory'"}), 400 
+        return jsonify({"message": "Invalid characteres: 'file_directory'"}), 400 
     
     # Sanitize input
     for field in fields:
         is_safe, error = sanitize_python_code(field)
         if not is_safe:
             #break
-            return jsonify({"error": "Invalid Python code: " + error}), 400
+            return jsonify({"message": "Invalid Python code: " + error}), 400
 
     editor = CodeEditorFactory(f'laubcode/{file_directory}/{str(filename).replace(' ', '')}', 
                                f'laubcode/{file_directory}')
@@ -129,11 +130,12 @@ def create_file():
     
     try:
         status, message = editor.create_file(script)
+        status_code =200
     except Exception as e:
         status=False
         message = str(e)
         
-    return jsonify({"status": status, "message": message}, 200)
+    return jsonify({"status": status, "message": message}, status_code)
 
 @bp_editor.route('/save-code/<string:fileName>/<string:fileFormat>', methods=['GET', 'POST'])
 #@cross_origin(methods=['GET', 'POST'])
@@ -141,6 +143,7 @@ def save_root_script(fileName, fileFormat):
     fileName = escape(fileName)
     fileFormat = escape(fileFormat)
     status = resp = ''
+    status_code =400
     directory = "laubcode/root"
     directories=[]
 
@@ -150,17 +153,18 @@ def save_root_script(fileName, fileFormat):
 
         is_safe, error = sanitize_python_code(new_script)
         if not is_safe:
-            return jsonify({"error": "Invalid Python code: " + error}), 400
+            return jsonify({"message": "Invalid Python code: " + error}), 400
         
         editor = CodeEditorFactory(f'{directory}/{str(request.form.get('filename')).replace(' ', '')}', directory)
         #if '.html' in request.form.get('filename'):
         try:
             status, resp = editor.save_file_script(new_script)
+            status_code =200
         except Exception as e:
             status=False
             resp = str(e)
         
-        return jsonify({"status": status, "code": new_script, "directories": directories, "response": resp, "filename": editor.myFILE_PATH}, 200)
+        return jsonify({"status": status, "directories": directories, "message": resp}, status_code)
     
 
     filecontent = CodeEditorFactory.read_file(directory,f'{directory}/{fileName}.{fileFormat}')
@@ -172,15 +176,16 @@ def save_root_script(fileName, fileFormat):
 def rename_file_name():
     directory = "laubcode/root"
     authorized_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
+    status_code =400
 
     old_filename = request.form.get('old_filename')
     new_filename = request.form.get('new_filename')
 
     # Validate the entry point
     if any(char not in authorized_chars for char in old_filename):
-        return jsonify({"error": "Invalid characteres for field 'old_filename'"}), 400
+        return jsonify({"message": "Invalid characteres for field 'old_filename'"}), 400
     elif any(char not in authorized_chars for char in new_filename):
-        return jsonify({"error": "Invalid characteres: 'new_filename'"}), 400 
+        return jsonify({"message": "Invalid characteres: 'new_filename'"}), 400 
     
     fields = [old_filename, new_filename]
 
@@ -189,17 +194,18 @@ def rename_file_name():
         is_safe, error = sanitize_python_code(field)
         if not is_safe:
             #break
-            return jsonify({"error": "Invalid Python code: " + error}), 400
+            return jsonify({"message": "Invalid Python code: " + error}), 400
         
     editor = CodeEditorFactory(f'{directory}/{str(old_filename)}', directory)
     
     try:
         status, resp = editor.rename_file(new_filename.replace(' ', ''))
+        status_code=200
     except Exception as e:
         status=False
         resp = str(e)
         
-    return jsonify({"status": status, "new_filename": new_filename, "response": resp, "filename": editor.myFILE_PATH}, 200)
+    return jsonify({"status": status, "new_filename": new_filename, "message": resp, "filename": editor.myFILE_PATH}, status_code)
     
 @bp_editor.route('/root/load-scripts')
 @cross_origin(methods=['GET'])
