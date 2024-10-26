@@ -6,3 +6,5 @@ from .executesql import execute_sql
 from .catch_exception_information import _catch_sys_except_information
 from .my_file_factory import validate_file, upload_file, saveIntoFile
 from .config_headers import set_header_params
+from .sanitize_factory.sanitize_web_content import sanitize_web_content
+from .sanitize_factory.sanitize_python_script import sanitize_python_code

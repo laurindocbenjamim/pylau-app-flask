@@ -50,6 +50,10 @@ PyPDF2[full]
 quart
 #pip install Flask-Limiter
 Flask-Limiter
+#pip install bleach
+bleach
+#pip install Js2Py
+#Js2Py
 
 
 

@@ -40,12 +40,12 @@
                     
                     consoleOutput.innerHTML += '<pre>' + data.output + '</pre>'
                 } else {
-                    consoleOutput.innerHTML += '<pre>Failed! ' + data.output + '</pre>'
+                    consoleOutput.innerHTML += '<pre class="text-danger">Failed! ' + data.output + '</pre>'
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                consoleOutput.innerHTML += '<pre>Error! ' + data.output + '</pre>'
+            .catch(err => {
+                console.error('Error:', err);
+                consoleOutput.innerHTML += '<pre class="text-danger">Error! ' + err + '</pre>'
             });
     }
 

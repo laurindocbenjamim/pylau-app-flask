@@ -10,6 +10,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from markupsafe import escape
 from ..utils import __get_cookies, set_header_params
+from ..utils import sanitize_web_content, sanitize_python_code
 
 bp_editor = Blueprint('laubcode', __name__, url_prefix='/laubcode')
 
@@ -22,7 +23,7 @@ bp_editor = Blueprint('laubcode', __name__, url_prefix='/laubcode')
 CORS(bp_editor)
 
 # Sanitize input using Python's ast to validate safe code
-def sanitize_python_code(code):
+def sanitize_python_code_2(code):
     try:
         # Parse the code without executing it
         ast.parse(code)
@@ -83,7 +84,7 @@ def editor_run_python_code():
         is_safe, error = sanitize_python_code(field)
         if not is_safe:
             #break
-            return jsonify({"error": "Invalid Python code: " + error}), 400
+            return jsonify({"message": "Invalid Python code: " + error}), 400
     
      
     #return run_general_command_line(code)
@@ -94,7 +95,7 @@ def editor_run_python_code():
             return jsonify({"output": result.stderr}), 400
         return jsonify({"output": result.stdout}), 200
     except subprocess.TimeoutExpired:
-        return jsonify({"error": "Code execution timed out"}), 400
+        return jsonify({"message": "Code execution timed out"}), 400
 
 @bp_editor.route('/root/create-file',  methods=['POST'])
 @cross_origin(methods=['POST'])
@@ -145,11 +146,6 @@ def save_root_script(fileName, fileFormat):
 
     if request.method == 'POST':
         new_script = request.form.get('code')
-
-
-        is_safe, error = sanitize_python_code(new_script)
-        if not is_safe:
-            return jsonify({"message": "Invalid Python code: " + error}), 400
         
         editor = CodeEditorFactory(f'{directory}/{str(request.form.get('filename')).replace(' ', '')}', directory)
         #if '.html' in request.form.get('filename'):
@@ -182,15 +178,6 @@ def rename_file_name():
         return jsonify({"message": "Invalid characteres for field 'old_filename'"}), 400
     elif any(char not in authorized_chars for char in new_filename):
         return jsonify({"message": "Invalid characteres: 'new_filename'"}), 400 
-    
-    fields = [old_filename, new_filename]
-
-    # Sanitize input
-    for field in fields:
-        is_safe, error = sanitize_python_code(field)
-        if not is_safe:
-            #break
-            return jsonify({"message": "Invalid Python code: " + error}), 400
         
     editor = CodeEditorFactory(f'{directory}/{str(old_filename)}', directory)
     

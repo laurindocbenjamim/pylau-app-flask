@@ -5,6 +5,7 @@ import glob
 import stat
 from bs4 import BeautifulSoup
 from flask import current_app
+from ..utils import sanitize_web_content, sanitize_python_code
 
 class CodeEditorFactory(object):
 
@@ -290,14 +291,19 @@ class CodeEditorFactory(object):
             
 
             if '.html' in str(self.myFILE_PATH):
+                #sanitized_content = sanitize_web_content(new_script)
                 with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
                     resp = file.write(new_script)
             elif '.js' in str(self.myFILE_PATH):
+                #sanitized_content = sanitize_web_content(new_script)
                 with open(self.myFILE_PATH, 'w', encoding=encoding) as file:
                     resp = file.write(new_script)
             elif '.py' in str(self.myFILE_PATH)  or '.css' in str(self.myFILE_PATH):
-                with open(self.myFILE_PATH, 'w') as file:
-                    resp = file.write(new_script)
+                # Test with unsafe code
+                is_safe, errors = sanitize_python_code(new_script)
+                if is_safe:
+                    with open(self.myFILE_PATH, 'w') as file:
+                        resp = file.write(new_script)
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
             #os.chmod(self.myFILE_DIRECTORY, 0)
@@ -368,11 +374,11 @@ class CodeEditorFactory(object):
             return False, f"Permission denied: {e}"
         except FileNotFoundError as e:
 
-            self.create_file(self.myFILE_PATH)
+            return self.create_file(self.myFILE_PATH)
 
             # Revoke write privileges
-            os.chmod(self.myFILE_PATH, 0o444)
-            return False, f"{str(e)}"
+            #os.chmod(self.myFILE_PATH, 0o444)
+            #return False, f"{str(e)}"
         except Exception as e:
             # Revoke write privileges
             os.chmod(self.myFILE_PATH, 0o444)
