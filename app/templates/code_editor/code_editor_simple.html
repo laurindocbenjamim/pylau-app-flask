@@ -155,6 +155,10 @@
             background-color: red;
         }
 
+        #my-projects-menunu{
+            height: 100px;
+        }
+
         #fa-minus {
             display: none;
             margin-left: 10px;
@@ -473,7 +477,7 @@
             </button>
             <ul>
 
-                <li>
+                <li id="my-projects-menu">
                     <a href="#" id="my-projects" onclick="showContent(event)">
                         <i class="fas fa-folder"></i><span>Projects</span>
                         <i class="fa-solid fa-minus" id="fa-minus"></i>
@@ -554,8 +558,11 @@
                 </li>
                 <!--<li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
                 <li><a href="#"><i class="fas fa-question-circle"></i><span>Help</span></a></li>-->
-                <li><a href="#" id="chat-ai" onclick="chatWithAI(event)"><i class="fa-regular fa-comments"></i><span>AI
-                            chat</span></a></li>
+                
+            </ul>
+            <ul>
+                <li><a href="#" id="chat-ai" onclick="chatWithAI(event)" style="border-top: 1px solid #3f3e3e;"><i class="fa-regular fa-comments"></i><span>AI
+                    chat</span></a></li>
             </ul>
             <!--<div id="resizer"></div>-->
         </div>
