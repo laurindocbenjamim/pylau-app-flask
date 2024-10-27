@@ -68,6 +68,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
     //formData.append("course_id", courseID)
     //formData.append("lesson", lesson)
 
+    consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
+
     fetch(endpoint, {
       method: "POST",
       headers: headers, // Add the CSRF token to the headers
@@ -112,29 +114,22 @@ document.addEventListener("DOMContentLoaded", (e) => {
       })
       .then((data) => {
         console.log(data);
-        element.style.display = "none";
-        /*if (data[0].message.includes("WinError")) {
-          alert(data[0].message);
-        } else {
-          //update_the_page()
-        }*/
+        element.style.display = "none";      
 
-        consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
         if (data[1] === 400) {
           consoleOutput.innerHTML += `<pre class="text-danger">${String(
             data[0].message
           )}</pre>`;
         }else{
           if(data[0].status){ 
-            //update_the_page()
+            update_the_page()
             //location.reload(true)    
           }            
         }
       })
       .catch((err) => {
-        console.log("Error: " + err);
-        consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
-        consoleOutput.innerHTML += `<pre class="text-danger">${String(
+        console.log("Error: " + err);        
+        consoleOutput.innerHTML += `<pre class="text-danger">Failed to create file: \n${String(
           err
         )}</pre>`;
 
