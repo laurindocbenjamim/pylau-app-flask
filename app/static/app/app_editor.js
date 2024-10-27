@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
           )}</pre>`;
         }else{
           if(data[0].status){ 
-            update_the_page()
+            //update_the_page()
             //location.reload(true)    
           }            
         }

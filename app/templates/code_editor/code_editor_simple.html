@@ -505,7 +505,7 @@
                         <li id="new-filename-inputfield" style="margin-bottom: 2%; margin-left:3%;"></li>
                         {% if filelist %}
                         {% if '404' not in filelist %}
-                        {% for filename in filelist %}
+                        {% for filename in filelist|sort %}
 
                         <li>
                             <a class="nav-link" href="#" title="{{ filename }}"
