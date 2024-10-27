@@ -17,6 +17,7 @@ from ..package_payment.payment.card_transaction import CardTransactionModel
 from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
 from ..package_courses.course.course_post_update_view import CoursePostUpdateView
+from ..package_code_editor.code_editor_factory import CodeEditorFactory
 from ..utils import __get_cookies
 
 bp_courses.add_url_rule("/post",view_func=CoursePostUpdateView.as_view("post",CourseModel, UserToken, __get_cookies, "admin/form_course.html"))
@@ -109,14 +110,17 @@ def list_course_content(courseID, description):
 @bp_courses.route('/content/read-file/<string:topic>')
 @cross_origin(methods=['GET'])
 def read_file_content(topic):
-    formatFile = escape(request.args.get('format'))
+    fileFormat = escape(request.args.get('format'))
     topic = escape(topic)
-    topic = str(topic).lower().replace(' ','-')
+    fileName = str(topic).lower().replace(' ','-')
+    directory = "laubcode/root"
     from ..utils.my_file_factory import read_html_file
 
-    file_path ="html/overview-python.html"
-    file_path =f"laubcode/root/{topic}.{formatFile}"
+    #file_path ="html/overview-python.html"
+    file_path =f"laubcode/root/{topic}.{fileFormat}"
     
-    content = read_html_file(file_path=file_path)
-    return  jsonify({"topic": topic, "content": content},200)
+    filecontent = CodeEditorFactory.read_file(directory,f'{directory}/{fileName}.{fileFormat}')
+    
+    #content = read_html_file(file_path=file_path)
+    return  jsonify({"topic": topic, "content": filecontent},200)
 

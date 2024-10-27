@@ -519,7 +519,7 @@
         topicTitle.innerText = topicCont
         topic = topicCont.trim()
         
-        await fetch(`${window.location.origin}/course/content/read-file/${topicCont}?format=html&&courseID=${courseID}&&lesson=${lesson}`)
+        await fetch(`${window.location.origin}/course/content/read-file/${String(topicCont).trim()}?format=html&&courseID=${courseID}&&lesson=${lesson}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
