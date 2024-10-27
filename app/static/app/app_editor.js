@@ -120,13 +120,15 @@ document.addEventListener("DOMContentLoaded", (e) => {
         }*/
 
         consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
-        if (data[1] == 400) {
+        if (data[1] === 400) {
           consoleOutput.innerHTML += `<pre class="text-danger">${String(
             data[0].message
           )}</pre>`;
         }else{
+          if(data[0].status){ 
             update_the_page()
-            //location.reload(true)
+            //location.reload(true)    
+          }            
         }
       })
       .catch((err) => {

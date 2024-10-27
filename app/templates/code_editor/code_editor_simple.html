@@ -1272,9 +1272,14 @@
                 .then((data) => {
                     console.log(data)
                     consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
-                    if(data[1] == 400){
+                    if(data[1] === 400){
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
-                    }
+                    }else{                        
+                        if(data[0].status){
+                            
+                        }
+                        
+                    } 
                    
                 }).catch((err) => {
                     console.log("Error: " + err)
@@ -1346,11 +1351,15 @@
                 .then((data) => {
                     console.log(data)
                     consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
-                    if(data[1] == 400){
+                    
+                    if(data[1] === 400){
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
-                    }else{
-                        localStorage.setItem('filename', String(inputField.value))
-                        update_the_page()
+                    }else{                        
+                        if(data[0].status){
+                            localStorage.setItem('filename', String(inputField.value))
+                            update_the_page()
+                        }
+                        
                     } 
 
                     fileName.textContent = String(inputField.value);
