@@ -63,9 +63,11 @@ class CodeEditorFactory(object):
         resp ="?"
         try:
             # Set read and write permissions for the owner, and read-only for others
-            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            #os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
             #os.chmod(self.myFILE_PATH, 0o644)
             #os.chmod(self.myFILE_DIRECTORY, 0o644)
+            # Add write permission to the directory
+            os.chmod(self.myFILE_DIRECTORY, 0o777)
             """if not os.path.exists(self.myFILE_PATH):
                 with open(self.myFILE_PATH, 'a+') as file:
                     resp = file.write(script)
@@ -74,7 +76,8 @@ class CodeEditorFactory(object):
             if os.path.exists(self.myFILE_PATH):
                 resp ='File already exists'
             # Revoke write privileges
-            os.chmod(self.myFILE_PATH, 0o444)
+            os.chmod(self.myFILE_DIRECTORY, 0o555)
+            #os.chmod(self.myFILE_PATH, 0o444)
             os.chmod(self.myFILE_DIRECTORY, 0)
             #os.chmod(self.myFILE_DIRECTORY, 0o444)
             return True, resp
@@ -83,13 +86,16 @@ class CodeEditorFactory(object):
             os.chmod(self.myFILE_PATH, 0o444)
             return False, f"Permission denied: {e}"
         except FileNotFoundError as e:
-            os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            #os.chmod(self.myFILE_DIRECTORY, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
             #os.chmod(self.myFILE_PATH, 0o644)
+            os.chmod(self.myFILE_DIRECTORY, 0o777)
             with open(self.myFILE_PATH, 'a+') as file:
                 resp = file.write(script)
             # Revoke write privileges
+            # Revoke write permission from the directory
+            os.chmod(self.myFILE_DIRECTORY, 0o555)
             os.chmod(self.myFILE_DIRECTORY, 0)
-            os.chmod(self.myFILE_PATH, 0o444)
+            #os.chmod(self.myFILE_PATH, 0o444)
             return True, f"{str(resp)}"
         except Exception as e:
             # Revoke write privileges
