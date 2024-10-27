@@ -161,9 +161,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
   document.addEventListener("click", function (event) {
     const button = document.getElementById("newFile");
-    if (!button.contains(event.target)) {
+    //if (!button.contains(event.target)) {
       //button.style.display = 'none'
       //alert('Mouse clicked outside the button!');
-    }
+    //}
   });
 });

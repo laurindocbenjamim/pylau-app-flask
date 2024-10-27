@@ -805,8 +805,10 @@
             const description = urlParams.get("description"); // "shirt"
             const user_token = urlParams.get("user_token"); // "shirt"
         
-            window.location.href = `${window.location.origin}/course/learn/laubcode/root/load-scripts?
+            try{
+                window.location.href = `${window.location.origin}/course/learn/laubcode/root/load-scripts?
             fileName=${fileName}&&courseID=${courseID}&&description=${description}&&user_token=${user_token}`;
+            }catch(err){ console.log(err)}
           }
 
 
@@ -1225,7 +1227,8 @@
             formData.append('filename', String(filename.textContent))
             //formData.append("course_id", courseID)
             //formData.append("lesson", lesson)
-
+            
+            consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
             fetch(endpoint,
                 {
                     method: "POST",
@@ -1271,7 +1274,7 @@
                 })
                 .then((data) => {
                     console.log(data)
-                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+                    
                     if(data[1] === 400){
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
                     }else{                        
@@ -1282,10 +1285,8 @@
                     } 
                    
                 }).catch((err) => {
-                    console.log("Error: " + err)
-                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
-                    
-                    consoleOutput.innerHTML += `<pre class="text-danger">${String(err)}</pre>`;
+                    console.log("Error: " + err)                                        
+                    consoleOutput.innerHTML += `<pre class="text-danger">Failed to save the project: ${String(err)}</pre>`;
                     
                     progressBar.style.backgroundColor = 'red'
                 })
@@ -1304,6 +1305,8 @@
             const formData = new FormData()
             formData.append("old_filename", String(oldFileName))
             formData.append('new_filename', String(newFileName).trim())
+            
+            consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
 
             fetch(endpoint,
                 {
@@ -1350,8 +1353,7 @@
                 })
                 .then((data) => {
                     console.log(data)
-                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
-                    
+                                       
                     if(data[1] === 400){
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
                     }else{                        
@@ -1370,8 +1372,8 @@
 
                 }).catch((err) => {
                     console.log("Error: " + err)
-                    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'                   
-                    consoleOutput.innerHTML += `<pre class="text-danger">${String(err)}</pre>`;
+                                       
+                    consoleOutput.innerHTML += `<pre class="text-danger">Failed to save the file: \n${String(err)}</pre>`;
                     
                     progressBar.style.backgroundColor = 'red'
                 })
@@ -1430,7 +1432,9 @@
             headers.append("Authorization", ` Bearer ${csrfToken}`);
 
             const language = checkLanguage(formatFile)
-           
+
+            consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
+
             fetch(endpoint,
                 {
                     headers: headers, // Add the CSRF token to the headers            
@@ -1443,14 +1447,22 @@
                     return response.json();
                 })
                 .then((data) => {
-                    //console.log(data)
+                    console.log(data)
                     languageSelect = String(formatFile).replace('.', '')
+                    
+                    if(data[1]===400){                        
+                        consoleOutput.innerHTML +=`<pre class="text-danger">${data[0].content}<pre>`;
+                    }else{
+                        
+                        editor.session.setMode(`ace/mode/${language}`);
+                        editor.setValue(`${data[0].content}`)
+                        
+                    }
 
-
-                    editor.session.setMode(`ace/mode/${language}`);
-                    editor.setValue(`${data.content}`)
-
-                }).catch((err) => console.log(err))
+                }).catch((err) => {
+                    console.log(err)
+                    consoleOutput.innerHTML +=`<pre class="text-danger">Failed to open file: \n${err}<pre>`;
+                })
 
         }
 
@@ -1533,8 +1545,10 @@
                     value: choice.text.trim(),
                     meta: 'AI Suggestion'
                 }));
-            } catch (error) {
-                console.error('Error fetching suggestion:', error);
+            } catch (err) {
+                console.error('Error fetching suggestion:', err);
+                consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
+                consoleOutput.innerHTML +=`<pre class="text-danger">\n${err}<pre>`;
             }
         }
 
@@ -1578,7 +1592,7 @@
 
             const formData = new FormData()
             formData.append('prompt', prompt)
-
+            consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
             try {
                 const response = await fetch(endpoint, {
                     method: 'POST',
@@ -1587,8 +1601,9 @@
                 });
                 const data = await response.json();
                 return data
-            } catch (error) {
-                console.error('Error fetching suggestion:', error);
+            } catch (err) {
+                console.error('Error fetching suggestion:', err);                
+                consoleOutput.innerHTML +=`<pre class="text-danger">Failed to prompt: \n${err}<pre>`;
                 return false
             }
         }
