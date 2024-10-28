@@ -15,7 +15,7 @@ class EmotionDetectorView(View):
         self._emotionDetector = EmotionDetector
         self._template = template
 
-    def dispatch_request(self) -> any:
+    def dispatch_request(self, user_token=None) -> any:
 
         user_token = escape(request.args.get('user_token'))
         status = 200

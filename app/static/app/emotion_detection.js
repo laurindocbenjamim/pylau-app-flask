@@ -90,7 +90,7 @@ document
     progressProcess.style.display = "block";
     try { 
       const res = await fetch(
-        `${baseUrl}/data-science/project/emotion-detector`,
+        `${baseUrl}/data-science/project/emotion-detector/${csrfToken}`,
         {
           method: "POST",
           body: dataForm,
