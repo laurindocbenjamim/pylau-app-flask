@@ -43,6 +43,9 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
     e.preventDefault();   
     
     const baseUrl = window.location.origin;
+    const headers = new Headers();
+    headers.append("X-CSRF-Token", csrfToken);
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
     const dataForm = new FormData();
     //const data = [{'name': 'laurindo', 'age': 12},{'name': 'mauro', 'age': 111}]    
 
@@ -64,6 +67,7 @@ document.getElementById('sentimentAnalyserForm').addEventListener('submit', asyn
             `${baseUrl}/data-science/project/emotion-detector/${ token }`,
             {
               method: 'POST',
+              headers: headers,
               body: dataForm
             },
           );
