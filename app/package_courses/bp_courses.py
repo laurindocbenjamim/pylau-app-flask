@@ -122,5 +122,6 @@ def read_file_content(topic):
     filecontent = CodeEditorFactory.read_file(directory,f'{directory}/{fileName}.{fileFormat}')
     
     #content = read_html_file(file_path=file_path)
-    return  jsonify({"topic": topic, "content": filecontent},200)
+    #return  jsonify({"topic": topic, "content": filecontent},200)
+    return jsonify({"filename": f'{fileName}.{fileFormat}', "content": filecontent}, 200)
 

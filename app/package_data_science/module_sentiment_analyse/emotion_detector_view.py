@@ -15,34 +15,34 @@ class EmotionDetectorView(View):
         self._emotionDetector = EmotionDetector
         self._template = template
 
-    def dispatch_request(self, user_token) -> any:
+    def dispatch_request(self) -> any:
 
-        user_token = escape(user_token)
+        user_token = escape(request.args.get('user_token'))
         status = 200
         message = "Teste"
         category = "info"
         emotions = []
 
         if request.method == "GET":
-            if user_token == "401":
+            """if user_token == "401":
                 return redirect(url_for("auth.user.login"))
             # Check if the token is expired
             if self._userToken.is_user_token_expired(user_token):
                 session.clear()
                 logout_user()
-                session["current_route"] = "data_science.project.emotion_detector"
-                return redirect(url_for("auth.user.login"))
+                session["current_route"] = "auth.user.login"
+                return redirect(url_for("auth.user.login"))"""
 
-            status, token = self._userToken.get_token_by_token(user_token)
+            """status, token = self._userToken.get_token_by_token(user_token)
             if status == False:
                 session.clear()
                 logout_user()
-                session["current_route"] = "data_science.project.emotion_detector"
+                session["current_route"] = "auth.user.login"
                 return redirect(url_for("auth.user.login"))
             if not token:
                 session.clear()
                 logout_user()
-                session["current_route"] = "data_science.project.emotion_detector"
+                session["current_route"] = "auth.user.login"
                 return redirect(url_for("auth.user.login"))
             else:
                 user_token = token.token
@@ -52,16 +52,16 @@ class EmotionDetectorView(View):
                 if status == False:
                     session.clear()
                     logout_user()
-                    session["current_route"] = "data_science.project.emotion_detector"
+                    session["current_route"] = "auth.user.login"
                     return redirect(url_for("auth.user.login"))
                 else:
-                    pass
+                    pass"""
 
         """
         """
         if request.method == "POST":
 
-            if user_token == "401":
+            """if user_token == "401":
                 session.clear()
                 logout_user()
                 return jsonify(
@@ -86,7 +86,7 @@ class EmotionDetectorView(View):
                         "redirectUrl": "auth/user/login",
                     },
                     401,
-                )
+                )"""
 
             comment = request.form.get("comment", None)
             if comment is None or comment == "":

@@ -27,7 +27,8 @@ function filterString(input) {
 }
 
 function cleanForm() {
-  var inputs = document
+  try{
+    var inputs = document
     .getElementById("subscriberForm")
     .getElementsByTagName("input");
   // Clear all input type="text" fields
@@ -39,6 +40,7 @@ function cleanForm() {
       inputs[i].value = "";
     }
   }
+  }catch(err){}
 }
 
 var navCharts = document.getElementById('nav-charts')
@@ -55,8 +57,8 @@ document
 
     //const data = [{'name': 'laurindo', 'age': 12},{'name': 'mauro', 'age': 111}]
 
-    var token = document
-      .querySelector('meta[name="token"]')
+    var csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
       .getAttribute("content");
     var progressBar = document.querySelector(".progress-bar");
     var progressProcess = document.getElementById("progress-process");
@@ -78,16 +80,21 @@ document
     if (comment.length > 500) {
       return;
     }
+
+    const headers = new Headers();
+    headers.append("X-CSRF-Token", csrfToken);
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
     var obj = new Sentiment(1, comment);
     dataForm.append("comment", obj.comment);
     //
     progressProcess.style.display = "block";
-    try {
+    try { 
       const res = await fetch(
-        `${baseUrl}/data-science/project/emotion-detector/${token}`,
+        `${baseUrl}/data-science/project/emotion-detector`,
         {
           method: "POST",
           body: dataForm,
+          headers: headers
         }
       );
 

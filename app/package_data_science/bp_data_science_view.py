@@ -15,6 +15,3 @@ bp_data_science.add_url_rule("/code-suggestion", view_func=CodeSuggestionOpenAIV
 
 bp_data_science.register_blueprint(bp_projects)
 
-@bp_data_science.route('/ttst')
-def ttt():
-    return f"OLlla"
