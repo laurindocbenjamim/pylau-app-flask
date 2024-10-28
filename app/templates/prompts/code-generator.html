@@ -373,14 +373,21 @@
                     alert("Invalid input value")
                 }  
                 else{
-
+                    const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+                    
+            const headers = new Headers();
+    headers.append("X-CSRF-Token", csrfToken);
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
                     dataForm.append('prompt', message)
                     addMessage(message, true);
-
+                    
                     const res = await fetch(
                         `${baseUrl}/ai/dev-ai`,
                         {
                             method: 'POST',
+                            headers: headers,
                             body: dataForm
                         },
                     );
