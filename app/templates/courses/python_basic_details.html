@@ -1,0 +1,146 @@
+{% extends "site.html" %}
+{% block title %}{{ title | trim }}{% endblock %}
+
+{% block styles %}
+<style>
+    .jumbotron {
+        background-image: linear-gradient(rgba(52, 152, 219, 0.7), rgba(46, 204, 113, 0.7)), url('https://d-tuning.com/assets/python-hero-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 100px 0;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .btn-primary {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+
+    .course-level {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .beginner {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .intermediate {
+        background-color: #f39c12;
+        color: white;
+    }
+
+    .advanced {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .card-link {
+        text-decoration: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="col-lg-6 px-0">
+        <h1 class="display-4 fw-bold lh-1 text-body-emphasis">{{ title }}</h1>
+        
+        
+    </div>
+</div>
+
+<div class="container my-5">
+
+
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+          
+            <p class="lead">
+                {% if course_content %}
+                    {{ course_content['course_description'] }}
+                {% endif %}
+            </p>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                {% if not course_payment_link %}
+                <span></span>
+                {% elif course_payment_link !='' or course_payment_link != 'Null' or course_payment_link != 'None' %}
+                <a href="{{  course_payment_link | trim }}" target="_blank" class="card-link btn btn-primary btn-s">ENROLL NOW</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+            <img class="rounded-lg-3"
+                src="https://page-images.websim.ai/Introduction%20to%20Python_1024x495xMcX91ZnPkVAmUE2bEx39b066e88dcc8.jpg"
+                alt="" width="720">
+        </div>
+    </div>
+</div>
+
+<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-light">
+    <div class="col-lg-7 px-0">
+       
+        <p> {% if course_content %}
+            {% if course_content['course_description_2'] %}
+            {{ course_content['course_description_2'] }}
+            {% endif %}
+        {% endif %}</p>
+     
+            <h4 class="fst-italic">What You’ll Learn:</h4>
+
+            <ol>
+                {% if course_content['course_objectives'] %}
+                 {% for i in range(course_content['course_objectives']|length) %}
+                 <li> {{ course_content['course_objectives'][i] }}</li>
+                 {% endfor %}
+                {% endif %}
+            </ol>
+
+            <p>
+                {% if course_content['course_detail'] %}
+                {{ course_content['course_detail'] }}
+                {% endif %}
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                {% if not course_payment_link %}
+                <span></span>
+                {% elif course_payment_link !='' or course_payment_link != 'Null' or course_payment_link != 'None' %}
+                <a href="{{  course_payment_link | trim }}" target="_blank" class="card-link btn btn-primary btn-s">ENROLL NOW</a>
+                {% endif %}
+            </div>
+        
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{%endblock%}

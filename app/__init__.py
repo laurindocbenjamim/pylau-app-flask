@@ -6,7 +6,7 @@ import secrets
 from datetime import datetime, timedelta
 from flask_wtf import CSRFProtect
 from flask_caching import Cache
-from flask import Flask, current_app, request, session, jsonify, render_template
+from flask import Flask, request, session, jsonify, render_template
 from quart import Quart, render_template, websocket
 from flask import make_response
 from flask_cors import CORS, cross_origin
@@ -16,6 +16,10 @@ from flask_login import LoginManager
 from .configs_package import DevelopmentConfig, TestingConfig, ProductionConfig
 
 from .configs_package.modules.load_database import db
+
+#Importing the mongoDB library
+from flask_pymongo import PyMongo
+mongo_connection = None
 
 
 """
@@ -72,7 +76,10 @@ def create_app(JDBC="sqlite",test_config=None):
     #
     #Quart(app)
 
-
+    # Create the mongodb instance
+    global mongo_connection # Convert the 'mongo_connection' variable to GLOBAL
+    mongo_connection = PyMongo(app)
+   
     # Login Manager is needed for the the application 
     # to be able to log in and log out users
 
@@ -117,8 +124,26 @@ def create_app(JDBC="sqlite",test_config=None):
 
 
     # Simple page that say hello
-    @app.route("/hello")
-    def hello():
-        return 'Hello, World'
+    @app.route('/test-mongo')
+    def test():
+       
+        """ collection = mongo_connection.db.courses
+        data = collection.find()
     
+        return f' CONNECT {app.config['MONGO_URI']}'"""
+        from pymongo import MongoClient
+        from flask import current_app
+
+        #create the connection url
+        #connecturl = "mongodb://{}:{}@{}:27017/?authSource=course".format(os.getenv,password,host)
+        #connecturl = "mongodb+srv://{}:{}@{}/?retryWrites=true&w=majority&appName=Cluster0".format(user,password,host)#"mongodb+srv://rocketmc2009:<db_password>@cluster0.s2tvs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+        connecturl = current_app.config['MONGO_URI']
+        # connect to mongodb server
+        
+        connection = MongoClient(current_app.config['MONGO_URI'])
+        # get database list
+        
+        dbs = connection.list_database_names()
+        return jsonify(dbs)
     return app

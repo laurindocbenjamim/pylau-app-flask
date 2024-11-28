@@ -81,6 +81,7 @@
                
             </div>
             <div class="card-footer text-body-secondary text-end">
+                
                 {% if not course.course_is_certified %}
                 
                 <a href="#" class="card-link" title="Uncertified course"> 
@@ -91,7 +92,15 @@
                     <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-certified-48.png?raw=true" alt="warranty-card"/>
                 </a>
                 {% endif %}
-    <a href="{{  url_for('course.enroll', course=course.course_description, course_id=course.course_id)}}" class="card-link btn btn-primary btn-sm">Enroll Now</a>
+
+                <a href="{{  url_for('course.know_more', course_name=course.course_description, course_id=course.course_id,link=course.course_payment_link | trim )}}" class="card-link btn btn-secondary btn-sm">Know more... </a>
+    <!--<a href="{{  url_for('course.enroll', course=course.course_description, course_id=course.course_id)}}" class="card-link btn btn-primary btn-sm">Enroll Now</a>-->
+    {% if not course.course_payment_link %}
+    <span></span>
+    {% elif course.course_payment_link !='' or course.course_payment_link != 'Null' or course.course_payment_link != 'None' %}
+    <a href="{{  course.course_payment_link | trim }}" target="_blank" class="card-link btn btn-primary btn-sm">Enroll </a>
+    {% endif %}
+    
             </div>
         </div>
     </div>

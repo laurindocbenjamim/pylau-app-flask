@@ -11,6 +11,7 @@ from ...token_module import UserToken
 from ...configs_package.modules.load_database import init_db_server
 from flask_login import logout_user
 from markupsafe import escape
+#from ...utils import __get_cookies, set_header_params
 
 def load_routes(app, db, login_manager):
 
@@ -172,6 +173,36 @@ def load_routes(app, db, login_manager):
             'token_secret': t_key, 
             'otp_secret': otp_secret
             })
+    
+
+    from ...package_help_message.help_message_controller import HelpMessageController
+
+    @app.route('/published/course/python-fundaments', methods=['GET', 'POST'])
+    @cross_origin(methods=['GET', 'POST'])
+    def python_fundaments():   
+
+        # Instanciation             
+        help_controller = HelpMessageController()
+
+        if request.method == 'POST':
+            # Validate the form
+            if help_controller.validate(request.form):
+                status, data = help_controller.save(request.form)
+                if status:
+                    return jsonify({"status": 'OK', "data": data }), 200
+                else:
+                    abort(405,description=f"Failed to send your message! {data}")
+            else:
+                abort(400, description=f"Form validation failed! {data}")
+
+        response = make_response(
+        render_template(
+            "marketing/python_fundaments.html",
+            title="Python Fundamentals"
+            )
+        )
+        #set_header_params(response)
+        return response
     
        
 

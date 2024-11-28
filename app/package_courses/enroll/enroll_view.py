@@ -75,7 +75,12 @@ class EnrollView(View):
             
            
 
-        if request.method == 'GET':    
+        if request.method == 'GET':   
+
+            # Render the template and then set a cookie
+            response = make_response(render_template(self._template, title="Enroll to Python Basic", course=str(course).upper(), course_code=course_id))            
+            return response
+         
             # First check the user token
             check_token()    
 

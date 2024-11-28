@@ -27,6 +27,14 @@ CLASS  USED ON DEVELOPMENT MODE
 """
 class DevelopmentConfig(Config):
     DATABASE_URI = "sqlite:///dtuning.db"
+
+     # Configuration for MongoDB
+    user="root"
+    password ="root"
+    host ="localhost"
+    MONGO_URI = str(os.environ.get('MONGO_URI')).replace('"','')
+
+
     UPLOAD_FOLDER = 'app/static/uploads'
     FILES_FOLDER = 'app/static/files'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
@@ -51,6 +59,13 @@ class DevelopmentConfig(Config):
         self.database_type = database_type
         
         self.load_database_config()
+
+        self.MONGO_URI = "mongodb+srv://{}:{}@{}/{}?retryWrites=true&w=majority&appName=Cluster0".format(
+            os.getenv('MONGO_DB_USER'),
+            os.getenv('MONGO_DB_PASSWORD'),
+            os.getenv('MONGO_DB_HOST'),
+            os.getenv('MONGO_DB_NAME')
+            )
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):
@@ -111,6 +126,11 @@ CLASS USED ON TEST MODE
 class TestingConfig(Config):
     TESTING = True    
     DATABASE_URI = "sqlite:///dataframe.db"
+    # Configuration for MongoDB
+    user="root"
+    password ="root"
+    host ="localhost"
+    MONGO_URI = "mongodb://localhost:27017/course"
     UPLOAD_FOLDER = 'app/static/uploads'
     FILES_FOLDER = 'app/static/files'
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
@@ -132,6 +152,12 @@ class TestingConfig(Config):
     
     def __init__(self) -> None:
         super().__init__()
+        self.MONGO_URI = "mongodb+srv://{}:{}@{}/{}?retryWrites=true&w=majority&appName=Cluster0".format(
+            os.getenv('MONGO_DB_USER'),
+            os.getenv('MONGO_DB_PASSWORD'),
+            os.getenv('MONGO_DB_HOST'),
+            os.getenv('MONGO_DB_NAME')
+            )
         #DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
 
     @property

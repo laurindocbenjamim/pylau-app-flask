@@ -54,6 +54,13 @@ Flask-Limiter
 bleach
 #pip install Js2Py
 #Js2Py
+#python3 -m pip install pymongo
+#npm install mongodb
+#python -m pip install "pymongo[srv]"
+pymongo[srv]
+#pip install pymongo flask-pymongo
+flask-pymongo
+
 
 
 

@@ -49,6 +49,7 @@ class CourseModel(db.Model):
     course_total_quizzes: Mapped[int] = db.Column(db.Integer)
     course_total_labs: Mapped[int] = db.Column(db.Integer)
     course_total_modules: Mapped[int] = db.Column(db.Integer)
+    course_payment_link: Mapped[str] = db.Column(db.String(255))
 
     course_date_added = db.Column(db.String(11), default=datetime.now().date())
     course_year_added = db.Column(db.String(4), default=datetime.now().strftime("%Y"))
@@ -71,6 +72,7 @@ class CourseModel(db.Model):
             "course_image": self.course_image,
             "course_view_url": self.course_view_url,
             "course_total_lessons": self.course_total_lessons,
+            "course_payment_link": self.course_payment_link,
             "course_total_quizzes": self.course_total_quizzes,
             "course_total_labs": self.course_total_labs,
             "course_total_modules": self.course_total_modules,
@@ -104,6 +106,7 @@ class CourseModel(db.Model):
                 course_view_url = course['course_view_url'],
                 course_level = course['course_level'],
                 course_image = course['course_image'],
+                course_payment_link = course['course_payment_link'],
                 course_total_lessons = course['course_total_lessons'],
                 course_total_quizzes = course['course_total_quizzes'],
                 course_total_labs = course['course_total_labs'],
@@ -166,6 +169,7 @@ class CourseModel(db.Model):
             obj.course_is_certified = course['course_is_certified']
             obj.course_view_url = course['course_view_url']
             obj.course_image = course['course_image']
+            obj.course_payment_link = course['course_payment_link']
             obj.course_total_lessons = course['course_total_lessons']
             obj.course_total_quizzes = course['course_total_quizzes']
             obj.course_total_labs = course['course_total_labs']
