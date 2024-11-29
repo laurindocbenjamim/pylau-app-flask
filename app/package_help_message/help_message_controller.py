@@ -30,7 +30,8 @@ class HelpMessageController():
             datetime_added = datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         )
 
-        status,h_message_id = HelpMessage().create(obj)
+        status,h_message_id = obj.create(obj)
+        
         if status:
             return status, obj
         return status, None

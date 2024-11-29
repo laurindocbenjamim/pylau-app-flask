@@ -33,6 +33,9 @@ def load_routes(app, db, login_manager):
     
 
     
+    from .error_handlers_view import error_handlers_view
+    error_handlers_view(app)
+    
      # Main route
     @app.route('/')
     @app.route('/<string:user_token>')
@@ -179,7 +182,35 @@ def load_routes(app, db, login_manager):
 
     @app.route('/published/course/python-fundaments', methods=['GET', 'POST'])
     @cross_origin(methods=['GET', 'POST'])
-    def python_fundaments():   
+    def python_fundamentals():   
+
+        # Instanciation             
+        help_controller = HelpMessageController()
+
+        if request.method == 'POST':
+            # Validate the form
+            if help_controller.validate(request.form):
+                status, data = help_controller.save(request.form)
+                if status:
+                    return jsonify({"status": 'OK', "data": data }), 200
+                else:
+                    #abort(405,description=f"Failed to send your message! {data}")
+                    return jsonify({"status": 400, "response": data}), 400
+            else:
+                abort(400, description=f"Form validation failed! {data}")
+
+        response = make_response(
+        render_template(
+            "marketing/python_fundamentals.html",
+            title="Python Fundamentals"
+            )
+        )
+        #set_header_params(response)
+        return response
+    
+    @app.route('/published/course/python-fundamentals-tutorials', methods=['GET', 'POST'])
+    @cross_origin(methods=['GET', 'POST'])
+    def python_fundamentals_tutorials():   
 
         # Instanciation             
         help_controller = HelpMessageController()
@@ -197,7 +228,7 @@ def load_routes(app, db, login_manager):
 
         response = make_response(
         render_template(
-            "marketing/python_fundaments.html",
+            "marketing/python_fundamentals_tutorials.html",
             title="Python Fundamentals"
             )
         )
@@ -206,8 +237,6 @@ def load_routes(app, db, login_manager):
     
        
 
-    from .error_handlers_view import error_handlers_view
-    error_handlers_view(app)
 
     # Integrating the sitemap 
     from .bp_sitemap import bp_sitemap

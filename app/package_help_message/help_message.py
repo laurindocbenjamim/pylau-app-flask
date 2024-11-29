@@ -16,25 +16,25 @@ from sqlalchemy import and_, Sequence
 
 class HelpMessage(UserMixin, db.Model):
 
-    __tablename__ = 'HelpMessage'
+    __tablename__ = 'help_message'
 
     # CREATE SEQUENCE user_id_seq START WITH 1 INCREMENT BY 1;
     # ALTER TABLE users ALTER COLUMN user_id SET DEFAULT nextval('user_id_seq')
 
     h_message_id:Mapped[int] = db.Column(db.Integer, Sequence('h_message_id_seq'), primary_key=True, autoincrement=True)   
-    name:Mapped[str] = db.Column(db.String(100), nullable=False, unique=True)    
+    name:Mapped[str] = db.Column(db.String(100), nullable=False)    
     email:Mapped[str] = db.Column(db.String(100), nullable=False)
     subject:Mapped[str] = db.Column(db.String(100), nullable=False)
     message:Mapped[str] = db.Column(db.String(300), nullable=False)
     phone:Mapped[str] = db.Column(db.String(20))    
-    date_added:Mapped[str] = db.Column(db.String(20), default=db.func.current_date())
-    datetime_added:Mapped[str] = db.Column(db.String(30), default=db.func.current_timestamp())
-    date_updated = db.Column(db.DateTime, nullable=True)
+    date_added:Mapped[str] = db.Column(db.String(20))
+    datetime_added:Mapped[str] = db.Column(db.String(30))
+    date_updated = db.Column(db.String(30), nullable=True)
     
 
 
     def __repr__(self):
-        return '<HelpMessage %r>' % self.username
+        return '<HelpMessage %r>' % self.name
    
     
     def serialize(self):
@@ -49,20 +49,19 @@ class HelpMessage(UserMixin, db.Model):
             'date_updated': self.date_updated
         }
     
-    def create(self,object):  
+    def create(self,obj):  
         
         status = False
         h_message_id = None   
         try:
-            db.session.add(object)
+            db.session.add(obj)
             db.session.commit()
-            h_message_id = object.h_message_id
+            h_message_id = obj.h_message_id
             status = True
             return status,h_message_id
         
         except IntegrityError as e:
             db.session.rollback()
-            print("This user already exists")
             set_logger_message(f"Error occured on METHOD[create_h_message]: \n SQLAlchemyError: {str(e)}")
             return status, str(e)
         
@@ -79,7 +78,7 @@ class HelpMessage(UserMixin, db.Model):
     
 
     # This method delete user
-    def delete_user(self,h_message_id):
+    def delete(self,h_message_id):
         try:
             obj = HelpMessage.query.filter_by(h_message_id=h_message_id).first_or_404()
             db.session.delete(obj)
