@@ -191,13 +191,14 @@ def load_routes(app, db, login_manager):
             # Validate the form
             if help_controller.validate(request.form):
                 status, data = help_controller.save(request.form)
+                
                 if status:
-                    return jsonify({"status": 'OK', "data": data }), 200
+                    return jsonify({"status": status, "response": data}, 200) 
                 else:
-                    #abort(405,description=f"Failed to send your message! {data}")
-                    return jsonify({"status": 400, "response": data}), 400
+                    abort(404,description=f"Failed to send your message! {data}")
+                    #return jsonify({"status": 400, "response": data}, 400)
             else:
-                abort(400, description=f"Form validation failed! {data}")
+                abort(404, description=f"Form validation failed! {data}")
 
         response = make_response(
         render_template(

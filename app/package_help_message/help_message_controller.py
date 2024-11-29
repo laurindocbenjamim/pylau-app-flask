@@ -33,7 +33,7 @@ class HelpMessageController():
         status,h_message_id = obj.create(obj)
         
         if status:
-            return status, obj
+            return status, {"object": obj.serialize()}
         return status, None
 
 
