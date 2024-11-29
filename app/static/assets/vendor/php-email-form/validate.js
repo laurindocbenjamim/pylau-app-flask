@@ -74,7 +74,7 @@
       }
     })
     .then(data => {
-      console.log(data)
+      //console.log(data)
       thisForm.querySelector('.loading').classList.remove('d-block');
       if (data) {
         thisForm.querySelector('.sent-message').classList.add('d-block');
