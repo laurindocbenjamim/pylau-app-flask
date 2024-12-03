@@ -148,7 +148,7 @@
       padding: .75rem 1rem;
     }
 
-    .form-label{
+    .form-label {
       font-size: 1.2rem;
     }
   </style>
@@ -267,7 +267,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('course.create_course', course='Maximize your business')}}">
+                <a class="nav-link d-flex align-items-center gap-2"
+                  href="{{ url_for('course.create_course', course='Maximize your business')}}">
                   <svg class="bi">
                     <use xlink:href="#cart" />
                   </svg>
@@ -446,10 +447,11 @@
                   <!-- Course Name -->
                   <div class="mb-3">
                     <label for="courseName" class="form-label">Course Name</label>
+                    <input type="hidden" id="courseClonedName" name="courseClonedName"
+                      value="{{ course_data['course_name'] }}" class="form-control" placeholder="Enter course name">
                     {% if course_data %}
                     {% if course_data['course_name'] %}
-                    <input type="hidden" id="courseClonedName" name="courseClonedName" value="{{ course_data['course_name'] }}"
-                      class="form-control" placeholder="Enter course name" >
+                    
                     <input type="text" id="courseName" name="courseName" value="{{ course_data['course_name'] }}"
                       class="form-control" placeholder="Enter course name" required>
                     {% else %}
@@ -498,11 +500,13 @@
                         {% endfor %}
                         {% endif %}
                         {% else %}
-                        <input type="text" name="objectives[]" class="form-control mb-2"
+                        <div style="width:100%;display: flex;">
+                          <input type="text" name="objectives[]" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
                             <i class="fas fa-trash"></i>
                           </button>
+                        </div>
                         {% endif %}
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
@@ -516,7 +520,7 @@
                   <div class="mb-3">
                     <label class="form-label">Requirements</label>
                     <div id="requirementsContainer">
-                      <div class="dynamic-field" style="flex-direction: column;">                        
+                      <div class="dynamic-field" style="flex-direction: column;">
 
                         {% if course_data %}
                         {% if course_data['requirement'] %}
@@ -529,14 +533,17 @@
                             <i class="fas fa-trash"></i>
                           </button>
                         </div>
+
                         {% endfor %}
                         {% endif %}
                         {% else %}
-                        <input type="text" name="requirements[]" class="form-control mb-2"
-                          placeholder="No prior is required" required>
-                        <button type="button" disabled class="btn btn-danger btn-sm remove-btn">
-                          <i class="fas fa-trash"></i>
-                        </button>
+                        <div style="width:100%;display: flex;">
+                          <input type="text" name="requirements[]" class="form-control mb-2"
+                            placeholder="No prior is required" required>
+                          <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
                         {% endif %}
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
@@ -565,11 +572,13 @@
                         {% endfor %}
                         {% endif %}
                         {% else %}
-                        <input type="text" name="topics[]" class="form-control mb-2" placeholder="No prior is required"
-                          required>
-                        <button type="button" disabled class="btn btn-danger btn-sm remove-btn">
-                          <i class="fas fa-trash"></i>
-                        </button>
+                        <div style="width:100%;display: flex;">
+                          <input type="text" name="topics[]" class="form-control mb-2"
+                            placeholder="No prior is required" required>
+                          <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
                         {% endif %}
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
@@ -597,11 +606,11 @@
           </div>
         </div>
 
-<style>
-  div{
-    color: #0c9145;
-  }
-</style>
+        <style>
+          div {
+            color: #0c9145;
+          }
+        </style>
       </main>
     </div>
   </div>
@@ -749,6 +758,7 @@
             console.log(data)
             form.querySelector('.loading').classList.remove('d-block');
             if (data) {
+              window.open(`${endpoint}?course=${courseName}` , '_self')
               btnSave.style.backgroundColor = "#0ed160"
               btnSave.style.color = ""
               form.querySelector('.sent-message').classList.add('d-block');
