@@ -14,7 +14,7 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
-from .course.controller import get_courses_by_coursename
+from .course.controller import get_courses_by_coursename, save_course_to_mgdb, update_course_to_mgdb
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
 from ..package_learning.elearning.course_progress import CourseProgressModel
@@ -72,6 +72,11 @@ class JSONEncoder(json.JSONEncoder):
 @bp_courses.route("/create", methods=["GET", "POST"])
 @cross_origin(methods=["GET", "POST"])
 def create_course():
+    
+    course_title = escape(request.args.get('course'))
+  
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
 
     if request.method == "POST":
 
@@ -82,22 +87,7 @@ def create_course():
             topics = data.get("topics", [])
             description = data.get("courseDescription")
             course_title = data.get("courseName")
-
-
-            # Validate the received data
-            if not description or not course_title or not objectives:
-                return jsonify({"message": "description, courseName, and objectives are required"}), 400
-            
-
-            # connect to mongodb server
-            connection = MongoClient(current_app.config["MONGO_URI"])
-            # get database list
-
-            # Access the database
-            db = connection.data_tuning_school
-
-            # Access the collection and retrieve documents
-            collection = db.courses
+            courseClonedName = data.get("courseClonedName")
 
             document = {
                 "course_code": 4,
@@ -108,26 +98,44 @@ def create_course():
                 "course_curriculum": topics
             }
 
-            # Saving the course information to MongoDB
-            collection.insert_one(document)
+            # Validate the received data
+            if not description or not course_title or not objectives:
+                return jsonify({"message": "description, courseName, and objectives are required"}), 400
+
 
             # Getting the course data by name from MongoDB
-            data = get_courses_by_coursename(connection=connection, course_name=course_title)
+            data = get_courses_by_coursename(connection=connection, course_name=courseClonedName)
+            if data:
+                status = update_course_to_mgdb(connection=connection, course_name=courseClonedName, document=document)
+                respo = f"Your {courseClonedName} data was updated successfully {course_title}"
+            else:
+                status = save_course_to_mgdb(connection, document)
+                respo = f"Your data was saved successfully"
+           
             # close the server connecton
             connection.close()
-            return jsonify({"response": "Your data was saved successfully", "doc": data}), 200
+            return jsonify({"response": respo, "doc": ""}), 200
         except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
-    response = make_response(
-        render_template(
-            "courses/add-course.html",
-            title="Create Course",
-            USER_DATA=__get_cookies,
-            courses=courses,
+        
+    # If the request.method is GET
+     
+    try:
+        
+        # Getting the course data by name from MongoDB
+        data = get_courses_by_coursename(connection=connection, course_name=course_title)
+        response = make_response(
+            render_template(
+                "courses/add-course.html",
+                title="Create Course",
+                USER_DATA=__get_cookies,
+                course_data=data,
+            )
         )
-    )
-    set_header_params(response)
-    return response
+        set_header_params(response)
+        return response
+    except Exception as e:
+            return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
 
 @bp_courses.route("/list-all")

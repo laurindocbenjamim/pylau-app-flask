@@ -147,6 +147,10 @@
     .navbar .form-control {
       padding: .75rem 1rem;
     }
+
+    .form-label{
+      font-size: 1.2rem;
+    }
   </style>
 
 
@@ -242,7 +246,7 @@
         <div class="offcanvas-md offcanvas-end bg-body-tertiar" tabindex="-1" id="sidebarMenu"
           aria-labelledby="sidebarMenuLabel">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="sidebarMenuLabel">Data name</h5>
+            <h5 class="offcanvas-title" id="sidebarMenuLabel">Data Yuning</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
               aria-label="Close"></button>
           </div>
@@ -250,9 +254,7 @@
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
-                  <svg class="bi">
-                    <use xlink:href="#house-fill" />
-                  </svg>
+                  <i class="fas fa-home"></i>
                   Dashboard
                 </a>
               </li>
@@ -265,11 +267,11 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="#">
+                <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('course.create_course', course='Maximize your business')}}">
                   <svg class="bi">
                     <use xlink:href="#cart" />
                   </svg>
-                  Products
+                  Courses
                 </a>
               </li>
               <li class="nav-item">
@@ -444,27 +446,64 @@
                   <!-- Course Name -->
                   <div class="mb-3">
                     <label for="courseName" class="form-label">Course Name</label>
+                    {% if course_data %}
+                    {% if course_data['course_name'] %}
+                    <input type="hidden" id="courseClonedName" name="courseClonedName" value="{{ course_data['course_name'] }}"
+                      class="form-control" placeholder="Enter course name" >
+                    <input type="text" id="courseName" name="courseName" value="{{ course_data['course_name'] }}"
+                      class="form-control" placeholder="Enter course name" required>
+                    {% else %}
                     <input type="text" id="courseName" name="courseName" class="form-control"
                       placeholder="Enter course name" required>
+                    {% endif %}
+                    {% else %}
+                    <input type="text" id="courseName" name="courseName" class="form-control"
+                      placeholder="Enter course name" required>
+                    {% endif %}
                   </div>
 
                   <!-- Description -->
                   <div class="mb-3">
                     <label for="courseDescription" class="form-label">Description</label>
+                    {% if course_data %}
+                    {% if course_data['course_description'] %}
+                    <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
+                      placeholder="Enter course description" required>{{ course_data['course_description'] }}</textarea>
+                    {% else %}
                     <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
                       placeholder="Enter course description" required></textarea>
+                    {% endif %}
+                    {% else %}
+                    <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
+                      placeholder="Enter course description" required></textarea>
+                    {% endif %}
                   </div>
 
                   <!-- Objectives -->
                   <div class="mb-3">
                     <label class="form-label">Objectives</label>
                     <div id="objectivesContainer">
-                      <div class="dynamic-field">
+                      <div class="dynamic-field" style="flex-direction: column;">
+                        {% if course_data %}
+                        {% if course_data['course_objectives'] %}
+                        {% for item in course_data['course_objectives'] %}
+
+                        <div style="width:100%;display: flex;">
+                          <input type="text" name="objectives[]" value="{{ item }}" class="form-control mb-2"
+                            placeholder="Develope fix problems skills" required>
+                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% else %}
                         <input type="text" name="objectives[]" class="form-control mb-2"
-                          placeholder="Develope fix problems skills" required>
-                        <button type="button" class="btn btn-danger btn-sm remove-btn">
-                          <i class="fas fa-trash"></i>
-                        </button>
+                            placeholder="Develope fix problems skills" required>
+                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        {% endif %}
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
                     </div>
@@ -472,17 +511,33 @@
                       <i class="fas fa-plus"></i> Add Objectives
                     </button>
                   </div>
-                  
+
                   <!-- Requirements -->
                   <div class="mb-3">
                     <label class="form-label">Requirements</label>
                     <div id="requirementsContainer">
-                      <div class="dynamic-field">
+                      <div class="dynamic-field" style="flex-direction: column;">                        
+
+                        {% if course_data %}
+                        {% if course_data['requirement'] %}
+                        {% for item in course_data['requirement'] %}
+
+                        <div style="width:100%;display: flex;">
+                          <input type="text" name="requirements[]" value="{{ item }}" class="form-control mb-2"
+                            placeholder="Develope fix problems skills" required>
+                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% else %}
                         <input type="text" name="requirements[]" class="form-control mb-2"
                           placeholder="No prior is required" required>
                         <button type="button" disabled class="btn btn-danger btn-sm remove-btn">
                           <i class="fas fa-trash"></i>
                         </button>
+                        {% endif %}
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
                     </div>
@@ -495,12 +550,27 @@
                   <div class="mb-3">
                     <label class="form-label">Topics</label>
                     <div id="topicsContainer">
-                      <div class="dynamic-field">
+                      <div class="dynamic-field" style="flex-direction: column;">
+                        {% if course_data %}
+                        {% if course_data['course_curriculum'] %}
+                        {% for item in course_data['course_curriculum'] %}
+
+                        <div style="width:100%;display: flex;">
+                          <input type="text" name="topics[]" value="{{ item }}" class="form-control mb-2"
+                            placeholder="Develope fix problems skills" required>
+                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% else %}
                         <input type="text" name="topics[]" class="form-control mb-2" placeholder="No prior is required"
                           required>
                         <button type="button" disabled class="btn btn-danger btn-sm remove-btn">
                           <i class="fas fa-trash"></i>
                         </button>
+                        {% endif %}
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
                     </div>
@@ -517,7 +587,7 @@
 
                   <!-- Submit Button -->
                   <div class="text-center">
-                    <button type="submit" class="btn btn-light">
+                    <button type="submit" id="btn-save" class="btn btn-light btn-large">
                       <i class="fas fa-save"></i> Save Course
                     </button>
                   </div>
@@ -527,7 +597,11 @@
           </div>
         </div>
 
-
+<style>
+  div{
+    color: #0c9145;
+  }
+</style>
       </main>
     </div>
   </div>
@@ -540,7 +614,8 @@
   <script>
     // Add Dynamic Fields
     document.addEventListener("DOMContentLoaded", () => {
-     
+
+      const btnSave = document.getElementById("btn-save")
       const objectivesContainer = document.getElementById("objectivesContainer");
       const requirementsContainer = document.getElementById("requirementsContainer");
       const topicsContainer = document.getElementById("topicsContainer");
@@ -567,10 +642,10 @@
       });
 
       // Add New Field
-      
+
 
       // Add New Requirement
-      
+
       document.getElementById("addRequirementBtn").addEventListener("click", () => {
         const newRequirement = document.createElement("div");
         newRequirement.className = "dynamic-field";
@@ -591,7 +666,7 @@
       });
 
       // Add New Topic
-      
+
       document.getElementById("addTopicBtn").addEventListener("click", () => {
         const newTopic = document.createElement("div");
         newTopic.className = "dynamic-field";
@@ -644,6 +719,7 @@
 
         const courseDescription = document.getElementById('courseDescription').value
         const courseName = document.getElementById('courseName').value
+        const courseClonedName = document.getElementById('courseClonedName').value
         const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
         // Gather form data
         const requirements = Array.from(document.querySelectorAll('input[name="requirements[]"]')).map(input => input.value);
@@ -659,7 +735,7 @@
 
         fetch(endpoint, {
           method: 'POST',
-          body: JSON.stringify({ objectives, requirements, topics, courseName, courseDescription }),
+          body: JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
           headers: headers
         })
           .then(response => {
@@ -673,6 +749,8 @@
             console.log(data)
             form.querySelector('.loading').classList.remove('d-block');
             if (data) {
+              btnSave.style.backgroundColor = "#0ed160"
+              btnSave.style.color = ""
               form.querySelector('.sent-message').classList.add('d-block');
               form.reset();
             } else {

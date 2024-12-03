@@ -3,6 +3,7 @@ import re
 import random
 import json
 from bson import ObjectId
+from flask import Request
 from datetime import datetime, timedelta,timezone
 from flask import Request
 from app.utils import is_valid_email, validate_str_and_punct_char, validate_only_str, validate_str_punct_and_digits, validate_str_digits
@@ -50,6 +51,53 @@ def get_courses_by_coursename(connection, course_name):
     deserialized_data = json.loads(serialized_data)
 
     return deserialized_data
+
+
+def save_course_to_mgdb(connection, document):
+    
+    try:
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Saving the course information to MongoDB
+        collection.insert_one(document)
+        return True
+    except Exception as e:
+        return False
+
+def update_course_to_mgdb(connection, course_name, document):
+    
+    try:
+
+        query = {"course_name": course_name}
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        document = {"$set": document}
+        # Saving the course information to MongoDB
+        collection.update_one(query, document)
+        return True
+    except Exception as e:
+        return False
 
 def validate_words(key:str, value: str | int | float)-> bool:
     """
