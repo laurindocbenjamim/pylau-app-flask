@@ -1,9 +1,9 @@
-
 import json
 from bson import ObjectId
 from flask import Blueprint, render_template, make_response, request, jsonify
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
+
 # from ..configs_package import mongodb_connection
 from pymongo import MongoClient
 from flask import current_app
@@ -14,6 +14,7 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
+from .course.controller import get_courses_by_coursename
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
 from ..package_learning.elearning.course_progress import CourseProgressModel
@@ -23,7 +24,7 @@ from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
 from ..package_courses.course.course_post_update_view import CoursePostUpdateView
 from ..package_code_editor.code_editor_factory import CodeEditorFactory
-from ..utils import __get_cookies
+from ..utils import __get_cookies, set_header_params
 
 bp_courses.add_url_rule(
     "/post",
@@ -59,14 +60,74 @@ bp_courses.add_url_rule(
     ),
 )
 
+
 # Custom encoder for objectID
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, ObjectId):
             return str(obj)
         return super().default(obj)
-        
 
+
+@bp_courses.route("/create", methods=["GET", "POST"])
+@cross_origin(methods=["GET", "POST"])
+def create_course():
+
+    if request.method == "POST":
+
+        try:
+            data = request.get_json()
+            objectives = data.get("objectives", [])
+            requirements = data.get("requirements", [])
+            topics = data.get("topics", [])
+            description = data.get("courseDescription")
+            course_title = data.get("courseName")
+
+
+            # Validate the received data
+            if not description or not course_title or not objectives:
+                return jsonify({"message": "description, courseName, and objectives are required"}), 400
+            
+
+            # connect to mongodb server
+            connection = MongoClient(current_app.config["MONGO_URI"])
+            # get database list
+
+            # Access the database
+            db = connection.data_tuning_school
+
+            # Access the collection and retrieve documents
+            collection = db.courses
+
+            document = {
+                "course_code": 4,
+                "course_description": description,
+                "course_name": course_title,
+                "course_objectives": objectives,
+                "requirement": requirements,
+                "course_curriculum": topics
+            }
+
+            # Saving the course information to MongoDB
+            collection.insert_one(document)
+
+            # Getting the course data by name from MongoDB
+            data = get_courses_by_coursename(connection=connection, course_name=course_title)
+            # close the server connecton
+            connection.close()
+            return jsonify({"response": "Your data was saved successfully", "doc": data}), 200
+        except Exception as e:
+            return jsonify({"message": "An error occurred", "error": str(e)}), 500
+    response = make_response(
+        render_template(
+            "courses/add-course.html",
+            title="Create Course",
+            USER_DATA=__get_cookies,
+            courses=courses,
+        )
+    )
+    set_header_params(response)
+    return response
 
 
 @bp_courses.route("/list-all")
@@ -168,10 +229,7 @@ def know_more(course_name):
     link = escape(request.args.get("link"))
     course_name = escape(course_name)
 
-    from ..utils import __get_cookies, set_header_params
-
     # connect to mongodb server
-
     connection = MongoClient(current_app.config["MONGO_URI"])
     # get database list
 
@@ -179,14 +237,15 @@ def know_more(course_name):
     db = connection.data_tuning_school
 
     # Access the collection and retrieve documents
-    #docs = db.courses.find()
+    # docs = db.courses.find()
 
     course = db.courses.find_one({"course_name": course_name})
-    
+
     # Serialize data
     serialized_data = json.dumps(course, cls=JSONEncoder)
     deserialized_data = json.loads(serialized_data)
-
+    # close the server connecton
+    connection.close()
 
     response = make_response(
         render_template(
@@ -195,7 +254,7 @@ def know_more(course_name):
             title=course_name,
             USER_DATA=__get_cookies,
             welcome_title=course_name,
-            course_content=deserialized_data
+            course_content=deserialized_data,
         )
     )
 
@@ -251,8 +310,6 @@ def read_file_content(topic):
     )
 
 
-
-
 # Create the mongoDB  instance
 
 
@@ -268,16 +325,15 @@ def test_mongo():
 
     # Access the collection and retrieve documents
     courses = db.courses.find()
-    dd=[]
+    dd = []
 
     for cor in courses:
         dd.append(cor)
-    
 
     course = db.courses.find_one({"course_code": 1})
-    
+
     # Serialize data
     serialized_data = json.dumps(course, cls=JSONEncoder)
     deserialized_data = json.loads(serialized_data)
 
-    return f'DD: {deserialized_data['course_objectives']}'
+    return f"DD: {deserialized_data['course_objectives']}"

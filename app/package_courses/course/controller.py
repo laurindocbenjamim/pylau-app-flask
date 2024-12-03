@@ -1,6 +1,8 @@
 
 import re
 import random
+import json
+from bson import ObjectId
 from datetime import datetime, timedelta,timezone
 from flask import Request
 from app.utils import is_valid_email, validate_str_and_punct_char, validate_only_str, validate_str_punct_and_digits, validate_str_digits
@@ -15,7 +17,39 @@ numbers_pattern_card_date = r'^[0-9/]+$'
 authorized_country_code_chars = "0123456789-"
 #ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
+# Custom encoder for objectID
+class JSONEncoder(json.JSONEncoder):
+    """
+    This class is used to serilize json data
+    """
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return super().default(obj)
+ 
+def get_courses_by_coursename(connection, course_name):
+    """
+    This method has the function to get a course's data from MongoDB
 
+    params:
+        connection: receives the mongoDB connection
+        course_name: receives the courses's name used  to select the data from the database
+    return:
+        returns a list of the course's information from the database
+    """
+    # Access the database
+    db = connection.data_tuning_school
+
+    # Access the collection and retrieve documents
+    # docs = db.courses.find()
+
+    course = db.courses.find_one({"course_name": course_name})
+
+    # Serialize data
+    serialized_data = json.dumps(course, cls=JSONEncoder)
+    deserialized_data = json.loads(serialized_data)
+
+    return deserialized_data
 
 def validate_words(key:str, value: str | int | float)-> bool:
     """
