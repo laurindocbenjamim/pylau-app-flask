@@ -434,8 +434,8 @@
             }
 
             .dynamic-field button {
-              height: 40px;
-              margin-top: -1%;
+              height: 38px;
+              margin-top: 0.4%;
               border-radius: 0px;
             }
           </style>
@@ -490,7 +490,7 @@
                         {% if course_data['course_objectives'] %}
                         {% for item in course_data['course_objectives'] %}
 
-                        <div style="width:100%;display: flex;">
+                        <div class="input-group" style="width:100%;display: flex;">
                           <input type="text" name="objectives[]" value="{{ item }}" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
@@ -526,7 +526,7 @@
                         {% if course_data['requirement'] %}
                         {% for item in course_data['requirement'] %}
 
-                        <div style="width:100%;display: flex;">
+                        <div class="input-group" style="width:100%;display: flex;">
                           <input type="text" name="requirements[]" value="{{ item }}" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
@@ -562,7 +562,7 @@
                         {% if course_data['course_curriculum'] %}
                         {% for item in course_data['course_curriculum'] %}
 
-                        <div style="width:100%;display: flex;">
+                        <div class="input-group" style="width:100%;display: flex;">
                           <input type="text" name="topics[]" value="{{ item }}" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
@@ -650,8 +650,13 @@
         objectivesContainer.appendChild(newObjective);
       });
 
-      // Add New Field
-
+      // Remove requirementsContainer
+      objectivesContainer.addEventListener("click", (event) => {
+        if (event.target.closest(".remove-btn")) {
+          const field = event.target.closest(".input-group");
+          field.remove();
+        }
+      });
 
       // Add New Requirement
 
@@ -674,6 +679,14 @@
         requirementsContainer.appendChild(newRequirement);
       });
 
+      // Remove requirementsContainer
+      requirementsContainer.addEventListener("click", (event) => {
+        if (event.target.closest(".remove-btn")) {
+          const field = event.target.closest(".input-group");
+          field.remove();
+        }
+      });
+
       // Add New Topic
 
       document.getElementById("addTopicBtn").addEventListener("click", () => {
@@ -693,6 +706,14 @@
         });
 
         topicsContainer.appendChild(newTopic);
+      });
+
+      // Remove Field
+      topicsContainer.addEventListener("click", (event) => {
+        if (event.target.closest(".remove-btn")) {
+          const field = event.target.closest(".input-group");
+          field.remove();
+        }
       });
 
       // Handle Form Submission
@@ -760,10 +781,12 @@
             if (data) {
               window.open(`${endpoint}?course=${courseName}` , '_self')
               btnSave.style.backgroundColor = "#0ed160"
-              btnSave.style.color = ""
+              btnSave.style.color = "#FFF"
               form.querySelector('.sent-message').classList.add('d-block');
               form.reset();
             } else {
+              btnSave.style.backgroundColor = "red"
+              btnSave.style.color = "#FFF"
               throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
             }
           })
@@ -785,3 +808,6 @@
 </body>
 
 </html>
+
+
+
