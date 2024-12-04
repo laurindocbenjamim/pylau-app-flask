@@ -3,6 +3,7 @@ import re
 import random
 import json
 from bson import ObjectId
+from bson.json_util import dumps
 from flask import Request
 from datetime import datetime, timedelta,timezone
 from flask import Request
@@ -51,6 +52,36 @@ def get_courses_by_coursename(connection, course_name):
     deserialized_data = json.loads(serialized_data)
 
     return deserialized_data
+
+# Method to get the course's content 
+def get_courses_content_by_coursename(connection, course_name):
+    """
+    This method has the function to get a course's content from MongoDB
+
+    params:
+        connection: receives the mongoDB connection
+        course_name: receives the courses's name used  to select the data from the database
+    return:
+        returns a list of the course's information from the database
+    """
+    # Access the database
+    db = connection.data_tuning_school
+
+    # Access the collection and retrieve documents
+    # docs = db.courses.find()
+
+    course = db.courses_content.find({"course_name": course_name})
+
+    # Serialize data
+    #serialized_data = json.dumps(course, cls=JSONEncoder)
+    #deserialized_data = json.loads(serialized_data)
+    #data = list(course)
+
+    result = []
+    for doc in course:
+        doc['_id'] = str(doc['_id'])
+        result.append(doc)
+    return result
 
 
 def save_course_to_mgdb(connection, document):

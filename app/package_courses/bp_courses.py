@@ -14,7 +14,9 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
-from .course.controller import get_courses_by_coursename, save_course_to_mgdb, update_course_to_mgdb
+from .course.controller import get_courses_by_coursename, save_course_to_mgdb
+from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb
+
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
 from ..package_learning.elearning.course_progress import CourseProgressModel
@@ -130,6 +132,79 @@ def create_course():
                 title="Create Course",
                 USER_DATA=__get_cookies,
                 course_data=data,
+            )
+        )
+        set_header_params(response)
+        return response
+    except Exception as e:
+            return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+@bp_courses.route("/create-content", methods=["GET", "POST"])
+@cross_origin(methods=["GET", "POST"])
+def create_course_content():
+    
+    course_title = escape(request.args.get('course'))
+  
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    if request.method == "POST":
+
+        try:
+            data = request.get_json()
+            objectives = data.get("objectives", [])
+            requirements = data.get("requirements", [])
+            topics = data.get("topics", [])
+            description = data.get("courseDescription")
+            course_title = data.get("courseName")
+            courseClonedName = data.get("courseClonedName")
+
+            document = {
+                "course_code": 4,
+                "course_description": description,
+                "course_name": course_title,
+                "course_objectives": objectives,
+                "requirement": requirements,
+                "course_curriculum": topics
+            }
+
+            # Validate the received data
+            if not description or not course_title or not objectives:
+                return jsonify({"message": "description, courseName, and objectives are required"}), 400
+
+
+            # Getting the course data by name from MongoDB
+            data = get_courses_by_coursename(connection=connection, course_name=courseClonedName)
+            if data:
+                status = update_course_to_mgdb(connection=connection, course_name=courseClonedName, document=document)
+                respo = f"Your {courseClonedName} data was updated successfully {course_title}"
+            else:
+                status = save_course_to_mgdb(connection, document)
+                respo = f"Your data was saved successfully"
+           
+            # close the server connecton
+            connection.close()
+            return jsonify({"response": respo, "doc": ""}), 200
+        except Exception as e:
+            return jsonify({"message": "An error occurred", "error": str(e)}), 500
+        
+    # If the request.method is GET
+     
+    try:
+        
+        # Getting the course data by name from MongoDB
+        data = get_courses_by_coursename(connection=connection, course_name=course_title)
+        course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+
+        
+        response = make_response(
+            render_template(
+                "courses/add-course-content.html",
+                title="Create Course Content",
+                USER_DATA=__get_cookies,
+                course_data=data,
+                course_content=course_content,
             )
         )
         set_header_params(response)

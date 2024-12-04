@@ -276,11 +276,11 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('course.create_course_content', course='Maximize your business')}}">
+                <a class="nav-link d-flex align-items-center gap-2" href="#">
                   <svg class="bi">
                     <use xlink:href="#people" />
                   </svg>
-                  Content
+                  Customers
                 </a>
               </li>
               <li class="nav-item">
@@ -439,69 +439,135 @@
               border-radius: 0px;
             }
           </style>
+
+          <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+               <!-- Course Name -->
+               <div class="mb-3">
+
+                {% if course_data %}
+                {% if course_data['course_name'] %}
+
+                <h1 class="">{{ course_data['course_name'] }}</h1>
+                {% endif %}
+                {% endif %}
+              </div>
+
+              <!-- Description -->
+              <div class="mb-3">
+
+                {% if course_data %}
+                {% if course_data['course_description'] %}
+                <article class="blog-post">
+
+                  <p class="text-light">
+                    {{ course_data['course_description'] }}
+                  </p>
+                </article>
+                {% endif %}
+                {% endif %}
+              </div>
+
+              <!-- Objectives -->
+              <div class="mb-3">
+                <h2 class="" style="font-size: 1.2rem;">Why to Take this course</h2>
+
+                <article class="blog-post">
+
+                  <ul>
+                    {% if course_data %}
+                    {% if course_data['course_objectives'] %}
+                    {% for item in course_data['course_objectives'] %}
+
+                    <li class="text-light">{{ item }}</li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endif %}
+
+                  </ul>
+
+                </article>
+
+              </div>
+
+              <!-- Topics -->
+              <div class="mb-3">
+                <h2 class="" style="font-size: 1.2rem;">What you are going to learn</h2>
+                <article class="blog-post">
+
+                  <ol>
+                    {% if course_data %}
+                    {% if course_data['course_curriculum'] %}
+                    {% for item in course_data['course_curriculum'] %}
+
+                    <li class="text-light">{{ item }}</li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endif %}
+
+                  </ol>
+
+                </article>
+              </div>
+
+              <!-- Requirements -->
+              <div class="mb-3">
+                <h2 class="" style="font-size: 1.2rem;">Requirements</h2>
+                <article class="blog-post">
+
+                  <ol>
+                    {% if course_data %}
+                    {% if course_data['requirement'] %}
+                    {% for item in course_data['requirement'] %}
+
+                    <li class="text-light">{{ item }}</li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endif %}
+
+                  </ol>
+
+                </article>
+              </div>
+            </div>
+          </div>
+
+
           <div class="row justify-content-left">
             <div class="col-lg-8">
               <div class="card p-4">
                 <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
-                <form id="courseForm" novalidate>
-                  <!-- Course Name -->
-                  <div class="mb-3">
-                    <label for="courseName" class="form-label">Course Name</label>
-                    <input type="hidden" id="courseClonedName" name="courseClonedName"
-                      value="{{ course_data['course_name'] }}" class="form-control" placeholder="Enter course name">
-                    {% if course_data %}
-                    {% if course_data['course_name'] %}
-                    
-                    <input type="text" id="courseName" name="courseName" value="{{ course_data['course_name'] }}"
-                      class="form-control" placeholder="Enter course name" required>
-                    {% else %}
-                    <input type="text" id="courseName" name="courseName" class="form-control"
-                      placeholder="Enter course name" required>
-                    {% endif %}
-                    {% else %}
-                    <input type="text" id="courseName" name="courseName" class="form-control"
-                      placeholder="Enter course name" required>
-                    {% endif %}
-                  </div>
-
-                  <!-- Description -->
-                  <div class="mb-3">
-                    <label for="courseDescription" class="form-label">Description</label>
-                    {% if course_data %}
-                    {% if course_data['course_description'] %}
-                    <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
-                      placeholder="Enter course description" required>{{ course_data['course_description'] }}</textarea>
-                    {% else %}
-                    <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
-                      placeholder="Enter course description" required></textarea>
-                    {% endif %}
-                    {% else %}
-                    <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
-                      placeholder="Enter course description" required></textarea>
-                    {% endif %}
-                  </div>
-
+                <form id="courseForm" enctype="multipart/form-data" novalidate>
                   <!-- Objectives -->
                   <div class="mb-3">
-                    <label class="form-label">Objectives</label>
-                    <div id="objectivesContainer">
+                    <label class="form-label">Course contents</label>
+                    <div id="contentContainer">
                       <div class="dynamic-field" style="flex-direction: column;">
-                        {% if course_data %}
-                        {% if course_data['course_objectives'] %}
-                        {% for item in course_data['course_objectives'] %}
-
+                        {% if course_content %}
+                        
+                        {% if course_content | length > 0  %}
+                        {% for item in course_content %}
                         <div class="input-group" style="width:100%;display: flex;">
-                          <input type="text" name="objectives[]" value="{{ item }}" class="form-control mb-2"
+                          <input type="text" name="content[]" value="{{ item['course_top'] }}"  class="form-control mb-2"
+                            placeholder="Develope fix problems skills" required>
+                          <input type="text" name="file[]" value="{{ item['course_cont'] }}" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
                             <i class="fas fa-trash"></i>
                           </button>
+                          <a href="{{ course_content['course_cont'] }}" class="btn btn-secondary btn-sm" style="height:38px">
+                            <i class="fas fa-video"></i>
+                          </a>
                         </div>
                         {% endfor %}
+                        {% else %}
+                        <p>Nothing has been foud!</p>
                         {% endif %}
                         {% else %}
-                        <div style="width:100%;display: flex;">
-                          <input type="text" name="objectives[]" class="form-control mb-2"
+                        <div class="input-group" style="display: flex;">
+                          <input type="text" name="content[]" class="form-control mb-2" placeholder="Variables"
+                            required>
+                          <input type="file" name="file[]" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
                             <i class="fas fa-trash"></i>
@@ -516,77 +582,6 @@
                     </button>
                   </div>
 
-                  <!-- Requirements -->
-                  <div class="mb-3">
-                    <label class="form-label">Requirements</label>
-                    <div id="requirementsContainer">
-                      <div class="dynamic-field" style="flex-direction: column;">
-
-                        {% if course_data %}
-                        {% if course_data['requirement'] %}
-                        {% for item in course_data['requirement'] %}
-
-                        <div class="input-group" style="width:100%;display: flex;">
-                          <input type="text" name="requirements[]" value="{{ item }}" class="form-control mb-2"
-                            placeholder="Develope fix problems skills" required>
-                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </div>
-
-                        {% endfor %}
-                        {% endif %}
-                        {% else %}
-                        <div style="width:100%;display: flex;">
-                          <input type="text" name="requirements[]" class="form-control mb-2"
-                            placeholder="No prior is required" required>
-                          <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </div>
-                        {% endif %}
-                        <div class="invalid-feedback">Please provide a valid field name.</div>
-                      </div>
-                    </div>
-                    <button type="button" id="addRequirementBtn" class="btn btn-outline-light btn-sm">
-                      <i class="fas fa-plus"></i> Add Objectives
-                    </button>
-                  </div>
-
-                  <!-- Topics -->
-                  <div class="mb-3">
-                    <label class="form-label">Topics</label>
-                    <div id="topicsContainer">
-                      <div class="dynamic-field" style="flex-direction: column;">
-                        {% if course_data %}
-                        {% if course_data['course_curriculum'] %}
-                        {% for item in course_data['course_curriculum'] %}
-
-                        <div class="input-group" style="width:100%;display: flex;">
-                          <input type="text" name="topics[]" value="{{ item }}" class="form-control mb-2"
-                            placeholder="Develope fix problems skills" required>
-                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                        {% else %}
-                        <div style="width:100%;display: flex;">
-                          <input type="text" name="topics[]" class="form-control mb-2"
-                            placeholder="No prior is required" required>
-                          <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </div>
-                        {% endif %}
-                        <div class="invalid-feedback">Please provide a valid field name.</div>
-                      </div>
-                    </div>
-                    <button type="button" id="addTopicBtn" class="btn btn-outline-light btn-sm">
-                      <i class="fas fa-plus"></i> Add Objectives
-                    </button>
-                  </div>
 
                   <div class="my-3">
                     <div class="loading">Loading</div>
@@ -625,9 +620,8 @@
     document.addEventListener("DOMContentLoaded", () => {
 
       const btnSave = document.getElementById("btn-save")
-      const objectivesContainer = document.getElementById("objectivesContainer");
-      const requirementsContainer = document.getElementById("requirementsContainer");
-      const topicsContainer = document.getElementById("topicsContainer");
+      const contentContainer = document.getElementById("contentContainer");
+
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
       // Add New Objective  
@@ -635,10 +629,14 @@
         const newObjective = document.createElement("div");
         newObjective.className = "dynamic-field";
         newObjective.innerHTML = `
-          <input type="text" name="objectives[]" class="form-control mb-2" placeholder="Gaining skills for problems solving" required>
+          <input type="text" name="objectives[]" class="form-control mb-2" placeholder="Variables" required>
+          <input type="file" name="file[]" class="form-control mb-2" required>
           <button type="button" class="btn btn-danger btn-sm remove-btn">
             <i class="fas fa-trash"></i>
           </button>
+          <a href="#bbbb" class="btn btn-secondary btn-sm" style="height:38px">
+                            <i class="fas fa-video"></i>
+                          </a>
           <div class="invalid-feedback">Please provide a valid field name.</div>
         `;
 
@@ -647,74 +645,24 @@
           newObjective.remove();
         });
 
-        objectivesContainer.appendChild(newObjective);
+        contentContainer.appendChild(newObjective);
       });
 
       // Remove requirementsContainer
-      objectivesContainer.addEventListener("click", (event) => {
+      contentContainer.addEventListener("click", (event) => {
         if (event.target.closest(".remove-btn")) {
           const field = event.target.closest(".input-group");
           field.remove();
         }
       });
 
-      // Add New Requirement
 
-      document.getElementById("addRequirementBtn").addEventListener("click", () => {
-        const newRequirement = document.createElement("div");
-        newRequirement.className = "dynamic-field";
-        newRequirement.innerHTML = `
-          <input type="text" name="requirements[]" class="form-control mb-2" placeholder="No prior  is required" required>
-          <button type="button" class="btn btn-danger btn-sm remove-btn">
-            <i class="fas fa-trash"></i>
-          </button>
-          <div class="invalid-feedback">Please provide a valid field name.</div>
-        `;
 
-        // Add remove event to the button
-        newRequirement.querySelector(".remove-btn").addEventListener("click", () => {
-          newRequirement.remove();
-        });
-
-        requirementsContainer.appendChild(newRequirement);
-      });
-
-      // Remove requirementsContainer
-      requirementsContainer.addEventListener("click", (event) => {
-        if (event.target.closest(".remove-btn")) {
-          const field = event.target.closest(".input-group");
-          field.remove();
-        }
-      });
 
       // Add New Topic
 
-      document.getElementById("addTopicBtn").addEventListener("click", () => {
-        const newTopic = document.createElement("div");
-        newTopic.className = "dynamic-field";
-        newTopic.innerHTML = `
-          <input type="text" name="topics[]" class="form-control mb-2" placeholder="No prior  is required" required>
-          <button type="button" class="btn btn-danger btn-sm remove-btn">
-            <i class="fas fa-trash"></i>
-          </button>
-          <div class="invalid-feedback">Please provide a valid field name.</div>
-        `;
 
-        // Add remove event to the button
-        newTopic.querySelector(".remove-btn").addEventListener("click", () => {
-          newTopic.remove();
-        });
 
-        topicsContainer.appendChild(newTopic);
-      });
-
-      // Remove Field
-      topicsContainer.addEventListener("click", (event) => {
-        if (event.target.closest(".remove-btn")) {
-          const field = event.target.closest(".input-group");
-          field.remove();
-        }
-      });
 
       // Handle Form Submission
       // Handle Form Submission
@@ -779,7 +727,7 @@
             console.log(data)
             form.querySelector('.loading').classList.remove('d-block');
             if (data) {
-              window.open(`${endpoint}?course=${courseName}` , '_self')
+              window.open(`${endpoint}?course=${courseName}`, '_self')
               btnSave.style.backgroundColor = "#0ed160"
               btnSave.style.color = "#FFF"
               form.querySelector('.sent-message').classList.add('d-block');
@@ -808,6 +756,3 @@
 </body>
 
 </html>
-
-
-
