@@ -72,11 +72,6 @@ def get_courses_content_by_coursename(connection, course_name):
 
     course = db.courses_content.find({"course_name": course_name})
 
-    # Serialize data
-    #serialized_data = json.dumps(course, cls=JSONEncoder)
-    #deserialized_data = json.loads(serialized_data)
-    #data = list(course)
-
     result = []
     for doc in course:
         doc['_id'] = str(doc['_id'])
@@ -105,6 +100,7 @@ def save_course_to_mgdb(connection, document):
     except Exception as e:
         return False
 
+
 def update_course_to_mgdb(connection, course_name, document):
     
     try:
@@ -126,6 +122,28 @@ def update_course_to_mgdb(connection, course_name, document):
         document = {"$set": document}
         # Saving the course information to MongoDB
         collection.update_one(query, document)
+        return True
+    except Exception as e:
+        return False
+
+
+def save_courses_content_to_mgdb(connection, document):
+    
+    try:
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Saving the course information to MongoDB
+        collection.insert_one(document)
         return True
     except Exception as e:
         return False

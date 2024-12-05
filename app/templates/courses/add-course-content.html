@@ -533,11 +533,20 @@
           </div>
 
 
+           <!-- Loading Spinner -->
+        <div class="loading-spinner d-flex" >
+          <div style="display: none;">
+            <div class="spinner-border text-light" role="status"></div>
+            <p class="mt-3">Submitting...</p>
+          </div>
+        </div>
+
+
           <div class="row justify-content-left">
             <div class="col-lg-8">
               <div class="card p-4">
                 <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
-                <form id="courseForm" enctype="multipart/form-data" novalidate>
+                <form id="courseForm" novalidate enctype="multipart/form-data">
                   <!-- Objectives -->
                   <div class="mb-3">
                     <label class="form-label">Course contents</label>
@@ -548,14 +557,14 @@
                         {% if course_content | length > 0  %}
                         {% for item in course_content %}
                         <div class="input-group" style="width:100%;display: flex;">
-                          <input type="text" name="content[]" value="{{ item['course_top'] }}"  class="form-control mb-2"
+                          <input type="text" id="content" name="content" value="{{ item['course_top'] }}"  class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
-                          <input type="text" name="file[]" value="{{ item['course_cont'] }}" class="form-control mb-2"
+                          <input type="file" id="videoFile" name="video" accept="video/*"  value="{{ item['course_cont'] }}" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
                             <i class="fas fa-trash"></i>
                           </button>
-                          <a href="{{ course_content['course_cont'] }}" class="btn btn-secondary btn-sm" style="height:38px">
+                          <a href="{{ item['course_cont'] }}" class="btn btn-secondary btn-sm" style="height:38px">
                             <i class="fas fa-video"></i>
                           </a>
                         </div>
@@ -565,15 +574,16 @@
                         {% endif %}
                         {% else %}
                         <div class="input-group" style="display: flex;">
-                          <input type="text" name="content[]" class="form-control mb-2" placeholder="Variables"
+                          <input type="text" id="content" name="content" class="form-control mb-2" placeholder="Variables"
                             required>
-                          <input type="file" name="file[]" class="form-control mb-2"
+                          <input type="file" id="videoFile"  name="video" accept="video/*" class="form-control mb-2"
                             placeholder="Develope fix problems skills" required>
                           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
                             <i class="fas fa-trash"></i>
                           </button>
                         </div>
                         {% endif %}
+                        <div class="form-text">Allowed file types: MP4, WebM, MKV, AVI.</div>
                         <div class="invalid-feedback">Please provide a valid field name.</div>
                       </div>
                     </div>
@@ -583,8 +593,8 @@
                   </div>
 
 
-                  <div class="my-3">
-                    <div class="loading">Loading</div>
+                  <div class="my-3" id="error-block">
+                    <div class="loading" style="display: none;">Loading</div>
                     <div class="error-message"></div>
                     <div class="sent-message">Your message has been sent. Thank you!</div>
                   </div>
@@ -623,20 +633,22 @@
       const contentContainer = document.getElementById("contentContainer");
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+      const loadingSpinner = document.querySelector(".loading-spinner");
 
       // Add New Objective  
       document.getElementById("addObjectiveBtn").addEventListener("click", () => {
         const newObjective = document.createElement("div");
         newObjective.className = "dynamic-field";
         newObjective.innerHTML = `
-          <input type="text" name="objectives[]" class="form-control mb-2" placeholder="Variables" required>
-          <input type="file" name="file[]" class="form-control mb-2" required>
+          <input type="text" id="content" name="content" class="form-control mb-2" placeholder="Variables" required>
+          <input type="file" id="videoFile" name="video" accept="video/*"  class="form-control mb-2" required>
           <button type="button" class="btn btn-danger btn-sm remove-btn">
             <i class="fas fa-trash"></i>
           </button>
           <a href="#bbbb" class="btn btn-secondary btn-sm" style="height:38px">
                             <i class="fas fa-video"></i>
                           </a>
+                          <div class="form-text">Allowed file types: MP4, WebM, MKV, AVI.</div>
           <div class="invalid-feedback">Please provide a valid field name.</div>
         `;
 
@@ -657,13 +669,6 @@
       });
 
 
-
-
-      // Add New Topic
-
-
-
-
       // Handle Form Submission
       // Handle Form Submission
       const form = document.getElementById("courseForm");
@@ -671,7 +676,7 @@
         e.preventDefault();
 
         let thisForm = this;
-        const endpoint = `${window.location.origin}/course/create`
+        const endpoint = `${window.location.origin}/course/create-content`
 
         if (!form.checkValidity()) {
           e.preventDefault();
@@ -683,11 +688,18 @@
           return;
         }
 
+        // Validate Video File
+        const videoFile = document.getElementById("videoFile").files[0];
+        if (!videoFile) {
+          document.getElementById("videoFile").classList.add("is-invalid");
+          return;
+        }
+
         //const formData = new FormData( thisForm )         
         const headers = new Headers()
         headers.append('X-CSRF-Token', csrfToken)
         headers.append("Authorization", ` Bearer ${csrfToken}`);
-        headers.append("Content-Type", "application/json")
+        //headers.append("Content-Type", "application/json")
         //headers.append("X-Requested-With", "XMLHttpRequest")
 
 
@@ -695,25 +707,27 @@
 
         // Gather form data
 
-        const courseDescription = document.getElementById('courseDescription').value
-        const courseName = document.getElementById('courseName').value
-        const courseClonedName = document.getElementById('courseClonedName').value
-        const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-        // Gather form data
-        const requirements = Array.from(document.querySelectorAll('input[name="requirements[]"]')).map(input => input.value);
-        // Gather form data
-        const topics = Array.from(document.querySelectorAll('input[name="topics[]"]')).map(input => input.value);
+        const courseContent = document.getElementById('content').value
 
-        let formData = new FormData()
-        formData.append("description", courseDescription)
-        formData.append("course_title", courseName)
-        formData.append("objectives", objectives)
-        formData.append("requirements", requirements)
-        formData.append("topics", topics)
+        // Show Loading Spinner
+        loadingSpinner.style.display = "flex";
 
+        // Prepare Form Data
+        const formData = new FormData();
+        formData.append('content', courseContent)
+        formData.append("videoFile", videoFile)
+        //Array.from(videoFiles).forEach(file => {
+        //  formData.append("videos[]", file);
+        //});
+
+      
+
+        saveFormWithFile(endpoint, form, btnSave, formData, headers)
+      
+        /*
         fetch(endpoint, {
           method: 'POST',
-          body: JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+          body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
           headers: headers
         })
           .then(response => {
@@ -727,7 +741,7 @@
             console.log(data)
             form.querySelector('.loading').classList.remove('d-block');
             if (data) {
-              window.open(`${endpoint}?course=${courseName}`, '_self')
+              //window.open(`${endpoint}?course=${courseName}`, '_self')
               btnSave.style.backgroundColor = "#0ed160"
               btnSave.style.color = "#FFF"
               form.querySelector('.sent-message').classList.add('d-block');
@@ -741,17 +755,59 @@
           .catch((error) => {
             displayError(form, error);
           });
-
+      */
 
       });
     });
 
     function displayError(thisForm, error) {
+      thisForm.querySelector('.loading').style.color = 'white'
+      thisForm.querySelector('.error-message').style.color = 'red'
       thisForm.querySelector('.loading').classList.remove('d-block');
       thisForm.querySelector('.error-message').innerHTML = error;
       thisForm.querySelector('.error-message').classList.add('d-block');
     }
 
+
+    function saveFormWithFile(endpoint, form, btnSave, formData, headers){
+
+      fetch(endpoint, {
+        method: 'POST',
+        body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+        headers: headers
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          } else {
+            throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+          }
+        })
+        .then(data => {
+          console.log(data)
+          form.querySelector('.loading').classList.remove('d-block');
+          if (data) {
+            document.getElementById('error-block').style.display = 'none'
+            //window.open(`${endpoint}?course=${courseName}`, '_self')
+            btnSave.style.backgroundColor = "#0ed160"
+            btnSave.style.color = "#FFF"
+            form.querySelector('.sent-message').classList.add('d-block');
+            form.reset();
+            
+          } else {
+            btnSave.style.backgroundColor = "red"
+            btnSave.style.color = "#FFF"
+            throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
+          }
+        })
+        .catch((error) => {
+          document.getElementById('error-block').style.display = 'block'
+          displayError(form, error);
+        });
+
+
+
+    }
   </script>
 </body>
 

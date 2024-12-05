@@ -5,7 +5,7 @@ from flask import Request, current_app
 from werkzeug.utils import secure_filename
 
 
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'mp4', 'webm', 'mkv', 'avi'}
 
 
 def load_content(self, file_type='txt'):
@@ -80,23 +80,26 @@ def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
         return False, str(e)
 
 def validate_file(request: Request, file_field_name):
-    # check if the post request has the file part
-    if f'{file_field_name}' not in request.files:
-        return False, 'No ticket bank part'
-        
-    file = request.files[f'{file_field_name}']
-    # If the user does not select a file, the browser submits an
-    # empty file without a filename.
-    if file.filename == '':
-        return False, 'No file has been selected'
-        
-    if not file:
-        return False, "A ticket bank is required"
-    if not allowed_file(file.filename):
-        return False, "Type file not allowed"
-        
-    # Return True if everything is okay
-    return True, 'OK'
+    try:
+        # check if the post request has the file part
+        if f'{file_field_name}' not in request.files:
+            return False, f'No {file_field_name} part'
+            
+        file = request.files[f'{file_field_name}']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            return False, 'No file has been selected'
+            
+        if not file:
+            return False, f"A {file_field_name} is required"
+        if not allowed_file(file.filename):
+            return False, "Type file not allowed"
+            
+        # Return True if everything is okay
+        return True, 'OK'
+    except Exception as e:
+        return False, str(e)
         
         
 def allowed_file(filename):

@@ -1,4 +1,5 @@
 import json
+import os
 from bson import ObjectId
 from flask import Blueprint, render_template, make_response, request, jsonify
 from flask_cors import CORS, cross_origin
@@ -14,7 +15,7 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
-from .course.controller import get_courses_by_coursename, save_course_to_mgdb
+from .course.controller import get_courses_by_coursename, save_course_to_mgdb, save_courses_content_to_mgdb
 from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb
 
 from .content.courses_content import CourseContentModel
@@ -140,6 +141,16 @@ def create_course():
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
 
+from app.utils.my_file_factory import validate_file, upload_file
+from werkzeug.utils import secure_filename
+from flask import current_app
+
+ALLOWED_EXTENSIONS = {'mp4', 'webm', 'mkv', 'avi'}
+
+def allowed_file(filename):
+    """Check if a file is an allowed type."""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @bp_courses.route("/create-content", methods=["GET", "POST"])
 @cross_origin(methods=["GET", "POST"])
 def create_course_content():
@@ -151,36 +162,56 @@ def create_course_content():
 
     if request.method == "POST":
 
-        try:
-            data = request.get_json()
-            objectives = data.get("objectives", [])
-            requirements = data.get("requirements", [])
-            topics = data.get("topics", [])
-            description = data.get("courseDescription")
-            course_title = data.get("courseName")
-            courseClonedName = data.get("courseClonedName")
-
+        try:           
+            file_field_name = "videoFile"
+            if 'content' not in request.form or f'{file_field_name}' not in request.files:
+                return jsonify({"error": "Title and age are required"}), 400
+            
+            
+            video = request.files['videoFile']
+            #
+            folder='tutorials'
+           
+            if not video.filename:
+                return f"Ola {video.filename}"
+            
+             # Validate file
+            if not allowed_file(video.filename):
+                return jsonify({"error": "Invalid video file type"}), 400
+            
+            UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
+            
+            # Check if the folder to store the tickets exists, if not, create it
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+            
+            # Join the file with its path
+            save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
+            video.save(save_path)
+            
+            course_module = request.form.get('course_module', None)
+            course_title = request.form['course_title']
+            topic = request.form['content']
+            file_origin = request.form['file_origin']
+            
             document = {
-                "course_code": 4,
-                "course_description": description,
+                "course_module": course_module,
                 "course_name": course_title,
-                "course_objectives": objectives,
-                "requirement": requirements,
-                "course_curriculum": topics
+                "course_content": save_path,
+                "course_topic": topic,
+                "file_origin": file_origin
             }
-
-            # Validate the received data
-            if not description or not course_title or not objectives:
-                return jsonify({"message": "description, courseName, and objectives are required"}), 400
+           
+            return jsonify({"response": save_path}), 201
 
 
             # Getting the course data by name from MongoDB
-            data = get_courses_by_coursename(connection=connection, course_name=courseClonedName)
+            data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
             if data:
-                status = update_course_to_mgdb(connection=connection, course_name=courseClonedName, document=document)
-                respo = f"Your {courseClonedName} data was updated successfully {course_title}"
+                status = update_course_to_mgdb(connection=connection, course_name=course_title, document=document)
+                respo = f"Your {content} data was updated successfully {course_title}"
             else:
-                status = save_course_to_mgdb(connection, document)
+                #status = save_courses_content_to_mgdb(connection, document)
                 respo = f"Your data was saved successfully"
            
             # close the server connecton
@@ -197,7 +228,6 @@ def create_course_content():
         data = get_courses_by_coursename(connection=connection, course_name=course_title)
         course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
 
-        
         response = make_response(
             render_template(
                 "courses/add-course-content.html",

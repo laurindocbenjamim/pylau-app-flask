@@ -37,7 +37,7 @@ class DevelopmentConfig(Config):
 
     UPLOAD_FOLDER = 'app/static/uploads'
     FILES_FOLDER = 'app/static/files'
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'webm', 'mkv', 'avi'}
     DEBUG = False
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
@@ -133,7 +133,7 @@ class TestingConfig(Config):
     MONGO_URI = "mongodb://localhost:27017/course"
     UPLOAD_FOLDER = 'app/static/uploads'
     FILES_FOLDER = 'app/static/files'
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'webm', 'mkv', 'avi'}
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
 
@@ -171,4 +171,4 @@ class ProductionConfig(Config):
     DATABASE_URI = 'mysql://user@localhost/foo'
     UPLOAD_FOLDER = 'app/static/uploads'
     FILES_FOLDER = 'app/static/files'
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav'}
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'webm', 'mkv', 'avi'}
