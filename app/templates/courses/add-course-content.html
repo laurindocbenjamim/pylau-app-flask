@@ -893,6 +893,7 @@
 
           if (data) {
             document.querySelector('.error-message').style.display='block'
+            window.open(`${endpoint}?course-content=${formData.get('courseTitle')}` , '_self')
             //document.getElementById('error-block').style.display = 'none'
             //window.open(`${endpoint}?course=${courseName}`, '_self')
             btnSave.style.backgroundColor = "#0ed160"

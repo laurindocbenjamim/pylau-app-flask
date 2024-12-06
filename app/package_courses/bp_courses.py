@@ -203,8 +203,8 @@ def create_course_content():
             
             document = {                
                 "course_name": course_title,
-                "file_origin": topic,
-                "course_topic": file_origin,
+                "file_origin": file_origin,
+                "course_topic": topic,
                 "course_content_file": save_path
             }
 
@@ -214,12 +214,12 @@ def create_course_content():
             
             # Getting the course data by name from MongoDB
             course_content = get_courses_content_by_coursename_and_topic(connection=connection, course_name=course_title, course_topic=topic)
-           
+            #return jsonify({"course": course_title, "topic": topic, "response": course_content}), 201
             if course_content and len(course_content) > 0:
                 status = update_courses_content_to_mgdb(connection=connection, course_name=course_title, course_topic=topic, document=document)
                 #respo = f"Your {content} data was updated successfully {course_title}"
                 
-                return jsonify({"response": "Document updated successfully!", "data": course_content, "title": course_title}), 201
+                return jsonify({"response": "Document updated successfully!"}), 201
             else:
                 
                 status, sms = save_courses_content_to_mgdb(connection, document)
