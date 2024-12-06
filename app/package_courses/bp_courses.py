@@ -15,8 +15,8 @@ CORS(bp_courses)
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
-from .course.controller import get_courses_by_coursename, save_course_to_mgdb, save_courses_content_to_mgdb
-from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb
+from .course.controller import get_courses_by_coursename, save_course_to_mgdb, save_courses_content_to_mgdb, get_courses_content_by_coursename_and_topic
+from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb, update_courses_content_to_mgdb
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -162,11 +162,18 @@ def create_course_content():
 
     if request.method == "POST":
 
-        try:           
+        try:    
+
             file_field_name = "videoFile"
-            if 'content' not in request.form or f'{file_field_name}' not in request.files:
+            if  f'{file_field_name}' not in request.files:
                 return jsonify({"error": "Title and age are required"}), 400
-            
+            elif 'courseTopic' not in request.form:
+                return jsonify({"error": "The course's topic is required"}), 400        
+            elif 'courseContentOrigin' not in request.form:
+                return jsonify({"error": "The origin of the content is required"}), 400
+            elif 'courseTitle' not in request.form:
+                return jsonify({"error": "The course's title is required"}), 400
+                        
             
             video = request.files['videoFile']
             #
@@ -189,34 +196,41 @@ def create_course_content():
             save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
             video.save(save_path)
             
-            course_module = request.form.get('course_module', None)
-            course_title = request.form['course_title']
-            topic = request.form['content']
-            file_origin = request.form['file_origin']
+            course_module = request.form.get('courseModule', '')
+            course_title = request.form['courseTitle']
+            topic = request.form['courseTopic']
+            file_origin = request.form['courseContentOrigin']
             
-            document = {
-                "course_module": course_module,
+            document = {                
                 "course_name": course_title,
-                "course_content": save_path,
-                "course_topic": topic,
-                "file_origin": file_origin
+                "file_origin": topic,
+                "course_topic": file_origin,
+                "course_content_file": save_path
             }
+
+            if course_module and course_module !='':
+                document["course_module"] = course_module
            
-            return jsonify({"response": save_path}), 201
-
-
+            
             # Getting the course data by name from MongoDB
-            data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
-            if data:
-                status = update_course_to_mgdb(connection=connection, course_name=course_title, document=document)
-                respo = f"Your {content} data was updated successfully {course_title}"
-            else:
-                #status = save_courses_content_to_mgdb(connection, document)
-                respo = f"Your data was saved successfully"
+            course_content = get_courses_content_by_coursename_and_topic(connection=connection, course_name=course_title, course_topic=topic)
            
+            if course_content and len(course_content) > 0:
+                status = update_courses_content_to_mgdb(connection=connection, course_name=course_title, course_topic=topic, document=document)
+                #respo = f"Your {content} data was updated successfully {course_title}"
+                
+                return jsonify({"response": "Document updated successfully!", "data": course_content, "title": course_title}), 201
+            else:
+                
+                status, sms = save_courses_content_to_mgdb(connection, document)
+                
+                if not status:
+                    document = f"Failed to save the course's content! {sms}"
+                else: 
+                    document = f"Document saved successfully! {sms}"
             # close the server connecton
             connection.close()
-            return jsonify({"response": respo, "doc": ""}), 200
+            return jsonify({"response": document, "sms": sms}), 201
         except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
         

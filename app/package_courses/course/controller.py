@@ -78,6 +78,30 @@ def get_courses_content_by_coursename(connection, course_name):
         result.append(doc)
     return result
 
+#
+def get_courses_content_by_coursename_and_topic(connection, course_name, course_topic):
+    """
+    This method has the function to get a course's content from MongoDB
+
+    params:
+        connection: receives the mongoDB connection
+        course_name: receives the courses's name used  to select the data from the database
+    return:
+        returns a list of the course's information from the database
+    """
+    # Access the database
+    db = connection.data_tuning_school
+
+    # Access the collection and retrieve documents
+    # docs = db.courses.find()
+
+    course = db.courses_content.find({"course_name": course_name, "course_topic": course_topic})
+
+    result = []
+    for doc in course:
+        doc['_id'] = str(doc['_id'])
+        result.append(doc)
+    return result
 
 def save_course_to_mgdb(connection, document):
     
@@ -134,19 +158,46 @@ def save_courses_content_to_mgdb(connection, document):
         db = connection.data_tuning_school
 
         # Access the collection and retrieve documents
-        collection = db.courses
+        collection = db.courses_content
 
         # Access the database
         db = connection.data_tuning_school
 
         # Access the collection and retrieve documents
-        collection = db.courses
+        collection = db.courses_content
 
         # Saving the course information to MongoDB
         collection.insert_one(document)
+        return True, 'ok'
+    except Exception as e:
+        return False, str(e)
+
+# Update the course's content document
+def update_courses_content_to_mgdb(connection, course_name, course_topic, document):
+    
+    try:
+
+        query = {"course_name": course_name, "course_topic": course_topic}
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content
+
+        document = {"$set": document}
+        # Saving the course information to MongoDB
+        collection.update_one(query, document)
         return True
     except Exception as e:
         return False
+
 
 def validate_words(key:str, value: str | int | float)-> bool:
     """

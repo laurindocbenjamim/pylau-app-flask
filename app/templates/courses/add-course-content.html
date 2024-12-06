@@ -442,15 +442,16 @@
 
           <div class="bd-example-snippet bd-code-snippet">
             <div class="bd-example m-0 border-0">
-               <!-- Course Name -->
-               <div class="mb-3">
+              <!-- Course Name -->
+              <div class="mb-3">
 
                 {% if course_data %}
                 {% if course_data['course_name'] %}
 
-                <h1 class="">{{ course_data['course_name'] }}</h1>
+                <h1 class="" id="coursesTitle">{{ course_data['course_name'] }}</h1>
                 {% endif %}
                 {% endif %}
+                <h1 class="" id="coursesTitle">Python Course test</h1>
               </div>
 
               <!-- Description -->
@@ -533,79 +534,133 @@
           </div>
 
 
-           <!-- Loading Spinner -->
-        <div class="loading-spinner d-flex" >
-          <div style="display: none;">
-            <div class="spinner-border text-light" role="status"></div>
-            <p class="mt-3">Submitting...</p>
+          <!-- Loading Spinner -->
+          <div class="loading-spinner d-flex">
+            <div style="display: none;">
+              <div class="spinner-border text-light" role="status"></div>
+              <p class="mt-3">Submitting...</p>
+            </div>
           </div>
-        </div>
 
 
           <div class="row justify-content-left">
             <div class="col-lg-8">
               <div class="card p-4">
                 <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
-                <form id="courseForm" novalidate enctype="multipart/form-data">
-                  <!-- Objectives -->
-                  <div class="mb-3">
-                    <label class="form-label">Course contents</label>
-                    <div id="contentContainer">
-                      <div class="dynamic-field" style="flex-direction: column;">
-                        {% if course_content %}
-                        
-                        {% if course_content | length > 0  %}
-                        {% for item in course_content %}
-                        <div class="input-group" style="width:100%;display: flex;">
-                          <input type="text" id="content" name="content" value="{{ item['course_top'] }}"  class="form-control mb-2"
-                            placeholder="Develope fix problems skills" required>
-                          <input type="file" id="videoFile" name="video" accept="video/*"  value="{{ item['course_cont'] }}" class="form-control mb-2"
-                            placeholder="Develope fix problems skills" required>
-                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                          <a href="{{ item['course_cont'] }}" class="btn btn-secondary btn-sm" style="height:38px">
-                            <i class="fas fa-video"></i>
-                          </a>
-                        </div>
-                        {% endfor %}
-                        {% else %}
-                        <p>Nothing has been foud!</p>
-                        {% endif %}
-                        {% else %}
-                        <div class="input-group" style="display: flex;">
-                          <input type="text" id="content" name="content" class="form-control mb-2" placeholder="Variables"
-                            required>
-                          <input type="file" id="videoFile"  name="video" accept="video/*" class="form-control mb-2"
-                            placeholder="Develope fix problems skills" required>
-                          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </div>
-                        {% endif %}
-                        <div class="form-text">Allowed file types: MP4, WebM, MKV, AVI.</div>
-                        <div class="invalid-feedback">Please provide a valid field name.</div>
+
+                <!-- Objectives -->
+                <div class="mb-3">
+                  <label class="form-label">Course contents</label>
+
+                  <div id="contentContainer">
+                    <div class="dynamic-field" style="flex-direction: column;">
+                      {% if course_content %}
+
+                      {% if course_content | length > 0 %}
+                      {% for item in course_content %}
+                      <div class="input-group" style="width:100%;display: flex;">
+                        <input type="text" id="content" name="content" value="{{ item['course_top'] }}"
+                          class="form-control mb-2" placeholder="Develope fix problems skills" required>
+                        <input type="file" id="videoFile" name="video" accept="video/*"
+                          value="{{ item['course_cont'] }}" class="form-control mb-2"
+                          placeholder="Develope fix problems skills" required>
+                        <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        <a href="{{ item['course_cont'] }}" class="btn btn-secondary btn-sm" style="height:38px">
+                          <i class="fas fa-video"></i>
+                        </a>
                       </div>
+                      {% endfor %}
+                      {% else %}
+                      <p>Nothing has been foud!</p>
+                      {% endif %}
+                      {% else %}
+                      <form id="courseForm" novalidate enctype="multipart/form-data">
+                        <div class="row g-1" id="courseContentContainer01">
+
+                          <div class="col-7">
+                            <div class="input-group">
+                              <button type="button" id="addModuleBtn" class="btn btn-outline-light btn-sm">
+                                <i class="fas fa-plus"></i> Add module
+                              </button>
+                              <button type="button" id="removeContentBtn" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash"></i> Remove content
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-------->
+                          <div class="col-12" id="content-module"></div>
+                          <!-------->
+                          <div class="col-12">
+                            <div class="input-group has-validation">
+                              <input type="text" id="course_topic" name="course_topic" class="form-control mb-2"
+                                placeholder="Topic" required>
+                              <div class="invalid-feedback">
+                                Your course's topic is required.
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-12">
+                            <div class="input-group has-validation">
+                              <select id="course_content_origin" name="course_content_origin" class="form-control mb-2"
+                                required>
+                                <option value="localhost">Servidor local</option>
+                                <option value="youtube">Youtube</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Your content origin is required.
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-12">
+                            <div class="input-group has-validation">
+                              <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
+                                placeholder="Develope fix problems skills" required>
+                              <div class="invalid-feedback">
+                                Your video file is required.
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="my-3" id="error-block" >
+                          <div class="loading" style="display: none;">Loading</div>
+                          <div class="error-message" style="display: none;"></div>
+                          <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-left">
+                          <button type="submit" id="btn-save" class="btn btn-light btn-large">
+                            <i class="fas fa-save"></i> Save Course
+                          </button>
+                        </div>
+                      </form>
+                      {% endif %}
+                      <div class="form-text">Allowed file types: MP4, WebM, MKV, AVI.</div>
+                      <div class="invalid-feedback">Please provide a valid field name.</div>
                     </div>
-                    <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
-                      <i class="fas fa-plus"></i> Add Objectives
-                    </button>
                   </div>
+                  <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-plus"></i> Add Content
+                  </button>
+                </div>
 
 
-                  <div class="my-3" id="error-block">
-                    <div class="loading" style="display: none;">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-                  </div>
+                <!--
+                <div class="my-3" id="error-block" >
+                  <div class="loading" style="display: none;">Loading</div>
+                  <div class="error-message" style="display: none;"></div>
+                  <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+                </div>-->
 
-                  <!-- Submit Button -->
-                  <div class="text-center">
-                    <button type="submit" id="btn-save" class="btn btn-light btn-large">
-                      <i class="fas fa-save"></i> Save Course
-                    </button>
-                  </div>
-                </form>
+
+                <!-- </form>-->
               </div>
             </div>
           </div>
@@ -631,6 +686,8 @@
 
       const btnSave = document.getElementById("btn-save")
       const contentContainer = document.getElementById("contentContainer");
+      const courseContentContainer01 = document.getElementById("courseContentContainer01");
+      const contentModule = document.getElementById('content-module')
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
       const loadingSpinner = document.querySelector(".loading-spinner");
@@ -659,6 +716,40 @@
 
         contentContainer.appendChild(newObjective);
       });
+
+      document.getElementById('addModuleBtn').addEventListener('click', (e) => {
+        // Check if the module field already exists
+        if (document.getElementById("moduleField")) {
+          alert("Module field already exists!");
+          return;
+        }
+
+        // Create the module field
+        const moduleDiv = document.createElement("div");
+        moduleDiv.className = "input-group has-validation";
+        moduleDiv.id = "moduleField";
+
+        moduleDiv.innerHTML = `
+          
+          <input type="text" id="course_module" name="course_module" class="form-control mb-2"
+                placeholder="Course module" required>
+          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
+            <i class="fas fa-trash"></i>
+          </button>
+                              <div class="invalid-feedback">
+                                Your course's module is required.
+                              </div>
+                            
+        `;
+
+        // Add remove event to the button
+        moduleDiv.querySelector(".remove-btn").addEventListener("click", () => {
+          moduleDiv.remove();
+        });
+
+        contentModule.appendChild(moduleDiv);
+
+      })
 
       // Remove requirementsContainer
       contentContainer.addEventListener("click", (event) => {
@@ -706,24 +797,33 @@
         //console.log(formData)
 
         // Gather form data
+        let courseModule = String('')
 
-        const courseContent = document.getElementById('content').value
+        if (document.getElementById("course_module")) {
+          courseModule = document.getElementById("course_module").value
+        }
+
+        const courseTopic = document.getElementById('course_topic').value
+        const courseContentOrigin = document.getElementById('course_content_origin').value
+        const courseTitle = document.getElementById('coursesTitle').innerText
 
         // Show Loading Spinner
         loadingSpinner.style.display = "flex";
 
         // Prepare Form Data
         const formData = new FormData();
-        formData.append('content', courseContent)
+        formData.append('courseModule', courseModule)
+        formData.append('courseTopic', courseTopic)
+        formData.append('courseContentOrigin', courseContentOrigin)
+        formData.append('courseTitle', courseTitle)
         formData.append("videoFile", videoFile)
         //Array.from(videoFiles).forEach(file => {
         //  formData.append("videos[]", file);
         //});
 
-      
 
         saveFormWithFile(endpoint, form, btnSave, formData, headers)
-      
+
         /*
         fetch(endpoint, {
           method: 'POST',
@@ -761,15 +861,19 @@
     });
 
     function displayError(thisForm, error) {
-      thisForm.querySelector('.loading').style.color = 'white'
-      thisForm.querySelector('.error-message').style.color = 'red'
-      thisForm.querySelector('.loading').classList.remove('d-block');
-      thisForm.querySelector('.error-message').innerHTML = error;
-      thisForm.querySelector('.error-message').classList.add('d-block');
+      btnSave = document.getElementById('btn-save')
+      btnSave.style.backgroundColor = 'red'
+      btnSave.style.color = '#FFF'
+      document.querySelector('.loading').style.color = 'white'
+      document.querySelector('.error-message').style.display='block'
+      document.querySelector('.error-message').style.color = 'red'
+      document.querySelector('.loading').classList.remove('d-block');
+      document.querySelector('.error-message').innerHTML = error;
+      document.querySelector('.error-message').classList.add('d-block');
     }
 
 
-    function saveFormWithFile(endpoint, form, btnSave, formData, headers){
+    function saveFormWithFile(endpoint, form, btnSave, formData, headers) {
 
       fetch(endpoint, {
         method: 'POST',
@@ -785,15 +889,17 @@
         })
         .then(data => {
           console.log(data)
-          form.querySelector('.loading').classList.remove('d-block');
+          document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
+
           if (data) {
-            document.getElementById('error-block').style.display = 'none'
+            document.querySelector('.error-message').style.display='block'
+            //document.getElementById('error-block').style.display = 'none'
             //window.open(`${endpoint}?course=${courseName}`, '_self')
             btnSave.style.backgroundColor = "#0ed160"
             btnSave.style.color = "#FFF"
-            form.querySelector('.sent-message').classList.add('d-block');
+            //form.querySelector('.sent-message').classList.add('d-block');
             form.reset();
-            
+
           } else {
             btnSave.style.backgroundColor = "red"
             btnSave.style.color = "#FFF"
@@ -801,8 +907,9 @@
           }
         })
         .catch((error) => {
-          document.getElementById('error-block').style.display = 'block'
-          displayError(form, error);
+          const errorMessage = document.getElementById('error-message')
+          //document.getElementById('error-block').style.display = 'block'
+          displayError(errorMessage, error);
         });
 
 
