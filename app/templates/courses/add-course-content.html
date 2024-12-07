@@ -125,9 +125,6 @@
       font-weight: 500;
     }
 
-    .sidebar .nav-link.active {
-      color: #2470dc;
-    }
 
     .sidebar-heading {
       font-size: .75rem;
@@ -148,8 +145,30 @@
       padding: .75rem 1rem;
     }
 
+    .nav .submenu {
+      display: none;
+      list-style-type: none;
+      margin-left: 2%;
+      
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .nav .submenu.show {
+      display: block;
+      opacity: 1;
+    }
+    
     .form-label {
       font-size: 1.2rem;
+    }
+
+    .bd-mode-toggle {
+      z-index: 1500;
+    }
+
+    .bd-mode-toggle .dropdown-menu .active .bi {
+      display: block !important;
     }
   </style>
 
@@ -200,9 +219,10 @@
       <li class="nav-item text-nowrap">
         <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
           aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-          <svg class="bi">
+          <!--<svg class="bi">
             <use xlink:href="#list" />
-          </svg>
+          </svg>-->
+          <i class="fa-solid fa-bars"></i>
         </button>
       </li>
     </ul>
@@ -268,12 +288,26 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link d-flex align-items-center gap-2"
-                  href="{{ url_for('course.create_course', course='Maximize your business')}}">
-                  <svg class="bi">
-                    <use xlink:href="#cart" />
-                  </svg>
+                onclick="toggleSubmenu(event)"
+                  href="#">
+                  <i class="fas fa-book-reader"></i>
                   Courses
                 </a>
+                <ul class="flex-column submenu">
+                  <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                    href="#">                    
+                      List Courses
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                    href="{{ url_for('course.create_course', course='Maximize your business')}}">                    
+                      Create course
+                    </a>
+                  </li>
+                  
+                </ul>
               </li>
               <li class="nav-item">
                 <a class="nav-link d-flex align-items-center gap-2" href="#">
@@ -451,85 +485,63 @@
                 <h1 class="" id="coursesTitle">{{ course_data['course_name'] }}</h1>
                 {% endif %}
                 {% endif %}
-                <h1 class="" id="coursesTitle">Python Course test</h1>
+                <h1 class="" id="coursesTitle">{{ course_name }}</h1>
               </div>
 
-              <!-- Description -->
-              <div class="mb-3">
 
-                {% if course_data %}
-                {% if course_data['course_description'] %}
-                <article class="blog-post">
-
-                  <p class="text-light">
-                    {{ course_data['course_description'] }}
-                  </p>
-                </article>
-                {% endif %}
-                {% endif %}
-              </div>
-
-              <!-- Objectives -->
-              <div class="mb-3">
-                <h2 class="" style="font-size: 1.2rem;">Why to Take this course</h2>
-
-                <article class="blog-post">
-
-                  <ul>
-                    {% if course_data %}
-                    {% if course_data['course_objectives'] %}
-                    {% for item in course_data['course_objectives'] %}
-
-                    <li class="text-light">{{ item }}</li>
-                    {% endfor %}
-                    {% endif %}
-                    {% endif %}
-
-                  </ul>
-
-                </article>
-
-              </div>
+              
 
               <!-- Topics -->
               <div class="mb-3">
                 <h2 class="" style="font-size: 1.2rem;">What you are going to learn</h2>
-                <article class="blog-post">
+                
+                <div>
+                  <div class="bd-example-snippet bd-code-snippet"><div class="bd-example m-0 border-0">
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h4 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          Accordion Item #1
+                        </button>
+                      </h4>
+                      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <strong>This is the first item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h4 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Accordion Item #2
+                        </button>
+                      </h4>
+                      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h4 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Accordion Item #3
+                        </button>
+                      </h4>
+                      <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div></div>
+          
+                </div>
 
-                  <ol>
-                    {% if course_data %}
-                    {% if course_data['course_curriculum'] %}
-                    {% for item in course_data['course_curriculum'] %}
-
-                    <li class="text-light">{{ item }}</li>
-                    {% endfor %}
-                    {% endif %}
-                    {% endif %}
-
-                  </ol>
-
-                </article>
               </div>
 
-              <!-- Requirements -->
-              <div class="mb-3">
-                <h2 class="" style="font-size: 1.2rem;">Requirements</h2>
-                <article class="blog-post">
-
-                  <ol>
-                    {% if course_data %}
-                    {% if course_data['requirement'] %}
-                    {% for item in course_data['requirement'] %}
-
-                    <li class="text-light">{{ item }}</li>
-                    {% endfor %}
-                    {% endif %}
-                    {% endif %}
-
-                  </ol>
-
-                </article>
-              </div>
+            
             </div>
           </div>
 
@@ -671,6 +683,21 @@
             color: #0c9145;
           }
         </style>
+
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+          <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+              <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+            </a>
+            <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2023 Company, Inc</span>
+          </div>
+      
+          <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+          </ul>
+        </footer>
       </main>
     </div>
   </div>
@@ -681,6 +708,26 @@
 
 
   <script>
+
+    function toggleSubmenu(event) {
+      event.preventDefault();
+      const submenu = event.currentTarget.nextElementSibling;
+      if (submenu.classList.contains('show')) {
+        submenu.classList.remove('show');
+        //event.currentTarget.add
+        setTimeout(() => {
+          submenu.style.display = 'none';
+        }, 500); // Match the transition duration
+      } else {
+        submenu.style.display = 'block';
+        setTimeout(() => {
+          submenu.classList.add('show');
+        }, 10); // Small delay to trigger the transition
+      }
+    }
+
+    document.getElementById("createContentBTN").addEventListener('click', window.location.href="#courseForm")
+
     // Add Dynamic Fields
     document.addEventListener("DOMContentLoaded", () => {
 

@@ -28,7 +28,36 @@ class JSONEncoder(json.JSONEncoder):
         if isinstance(obj, ObjectId):
             return str(obj)
         return super().default(obj)
- 
+    
+def get_all_courses_mgdb(connection):
+    """
+    This method has the function to get a course's data from MongoDB
+
+    params:
+        connection: receives the mongoDB connection
+        course_name: receives the courses's name used  to select the data from the database
+    return:
+        returns a list of the course's information from the database
+    """
+    # Access the database
+    db = connection.data_tuning_school
+
+    # Access the collection and retrieve documents
+    # docs = db.courses.find()
+
+    courses = db.courses.find()
+
+    # Serialize data
+    #serialized_data = json.dumps(course, cls=JSONEncoder)
+    #deserialized_data = json.loads(serialized_data)
+    result = []
+    for doc in courses:
+        doc['_id'] = str(doc['_id'])
+        result.append(doc)
+    return result
+
+    return deserialized_data
+
 def get_courses_by_coursename(connection, course_name):
     """
     This method has the function to get a course's data from MongoDB

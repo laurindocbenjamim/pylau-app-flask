@@ -16,7 +16,7 @@ from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
 from .course.controller import get_courses_by_coursename, save_course_to_mgdb, save_courses_content_to_mgdb, get_courses_content_by_coursename_and_topic
-from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb, update_courses_content_to_mgdb
+from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb, update_courses_content_to_mgdb, get_all_courses_mgdb
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -71,6 +71,29 @@ class JSONEncoder(json.JSONEncoder):
             return str(obj)
         return super().default(obj)
 
+@bp_courses.route("/list-all", methods=["GET"])
+@cross_origin(methods=["GET"])
+def list_all_courses():
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    try:
+        
+        # Getting the course data by name from MongoDB
+        data = get_all_courses_mgdb(connection=connection)
+        
+        response = make_response(
+            render_template(
+                "courses/courses-list.html",
+                title="All Course",
+                USER_DATA=__get_cookies,
+                courses=data
+            )
+        )
+        set_header_params(response)
+        return response
+    except Exception as e:
+            return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
 @bp_courses.route("/create", methods=["GET", "POST"])
 @cross_origin(methods=["GET", "POST"])
@@ -133,6 +156,7 @@ def create_course():
                 title="Create Course",
                 USER_DATA=__get_cookies,
                 course_data=data,
+                course_name=course_title
             )
         )
         set_header_params(response)
@@ -249,6 +273,7 @@ def create_course_content():
                 USER_DATA=__get_cookies,
                 course_data=data,
                 course_content=course_content,
+                course_name=course_title
             )
         )
         set_header_params(response)
