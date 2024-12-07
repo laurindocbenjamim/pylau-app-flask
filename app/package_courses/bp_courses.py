@@ -99,7 +99,7 @@ def list_all_courses():
 @cross_origin(methods=["GET", "POST"])
 def create_course():
     
-    course_title = escape(request.args.get('course'))
+    course_title = escape(request.args.get('course', ''))
   
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
@@ -180,6 +180,7 @@ def allowed_file(filename):
 def create_course_content():
     
     course_title = escape(request.args.get('course'))
+    courses_module = set()
   
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
@@ -266,6 +267,13 @@ def create_course_content():
         data = get_courses_by_coursename(connection=connection, course_name=course_title)
         course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
 
+        if course_content:
+            for course in course_content:
+                if 'course_module' in course:
+                    courses_module.add(course['course_module'])
+        courses_module = list(courses_module) 
+
+     
         response = make_response(
             render_template(
                 "courses/add-course-content.html",
@@ -273,6 +281,7 @@ def create_course_content():
                 USER_DATA=__get_cookies,
                 course_data=data,
                 course_content=course_content,
+                modules = courses_module,
                 course_name=course_title
             )
         )
