@@ -116,16 +116,11 @@
                       <a href="{{ content_file }}" class="glightbox play-btn">Play</a>
                       {% else %}
 
-                      <button class="btn btn-outline-primary rounded-circle p-2 lh-1"
-                        onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                        type="button">
-                        <i class="fas fa-edit"></i>
-                        <span class="visually-hidden">Edit</span>
-                      </button>
-                      <button type="button" class="btn btn-outline-danger btn-sm" onclick="play('{{ content_file }}')"
-                        data-bs-toggle="modal" data-bs-target="#fullscreenModal">
-                        <i class="fas fa-video"></i>
-                      </button>
+                      <span onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i class="fas fa-edit"></i></span>
+                <span class="badge shadow-lg text-bg-dark rounded-pill" style="cursor: pointer;" 
+                onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i class="fas fa-video"></i></span>
+
                       {% endif %}
 
                     </li>
@@ -149,17 +144,13 @@
               {% set origin = content['file_origin'] %}
               {% set course_name = content['course_name'] %}
               {% set MODULE="" %}
-              <li>{{ content['course_topic']}}
-                <button class="btn btn-outline-primary rounded-circle p-2 lh-1 btn-sm"
-                  onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                  type="button">
-                  <i class="fas fa-edit"></i>
-                  <span class="visually-hidden">Edit</span>
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-sm" onclick="play('{{ content_file }}')"
-                  data-bs-toggle="modal" data-bs-target="#fullscreenModal">
-                  <i class="fas fa-video"></i>
-                </button>
+              <li>
+                <span class="text-light">{{ content['course_topic']}}</span>
+                
+                <span onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i class="fas fa-edit"></i></span>
+                <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;" 
+                onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i class="fas fa-video"></i></span>
               </li>
               {% endif %}
               {% endfor %}
@@ -372,7 +363,7 @@
   function play(video) {
     const videoTag = document.querySelector('video')
     videoTag.src = video
-    alert(video)
+    
   }
 
 
@@ -503,12 +494,12 @@
         while (contentContainer.firstChild) {
           contentContainer.removeChild(contentContainer.firstChild)
         }
+        contentContainer.appendChild(newObjective);
+      }else{
+        contentContainer.appendChild(newObjective);
       }
-      if (dynamicField) {
-        contentContainer.removeChild(dynamicField)
-      }
-
-      contentContainer.appendChild(newObjective);
+      
+      
     }
 
 
