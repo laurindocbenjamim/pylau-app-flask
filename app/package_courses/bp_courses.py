@@ -181,7 +181,7 @@ def create_course_content():
     
     course_title = escape(request.args.get('course'))
     courses_module = set()
-  
+    
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
 
