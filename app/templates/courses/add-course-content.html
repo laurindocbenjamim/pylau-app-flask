@@ -481,27 +481,14 @@
       newObjective.className = "dynamic-field";
 
       newObjective.innerHTML = `
-          <form id="courseForm" novalidate enctype="multipart/form-data">
+          <form id="courseForm" class="courseForm" novalidate enctype="multipart/form-data">
                 <div class="row g-1" id="courseContentContainer01">
-
-                  <div class="col-7">
-                    <div class="input-group">
-                      <button type="button" id="addModuleBtn" class="btn btn-outline-light btn-sm addModuleBtn">
-                        <i class="fas fa-plus"></i> Add module
-                      </button>
-                      <button type="button" id="removeContentBtn" class="btn btn-outline-danger btn-sm removeContentBtn">
-                        <i class="fas fa-trash"></i> Remove content
-                      </button>
-                    </div>
-                  </div>
 
                   <div class="col-12">
                     <div class="input-group">
                     <input type="text" id="course_module" name="course_module" class="form-control mb-2"
                 placeholder="Course module" required>
-          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
-            <i class="fas fa-trash"></i>
-          </button>
+          
                               <div class="invalid-feedback">
                                 Your course's module is required.
                               </div>
@@ -557,7 +544,7 @@
 
                 <!-- Submit Button -->
                 <div class="text-left">
-                  <button type="submit" id="btn-save" class="btn btn-light btn-large">
+                  <button type="submit" id="btn-save" class="btn btn-light btn-large btn-save">
                     <i class="fas fa-save"></i> Save Course
                   </button>
                 </div>
@@ -581,25 +568,15 @@
       });
 
       // Add remove event to the button
-      newObjective.querySelector(".removeContentBtn").addEventListener("click", () => {
-        newObjective.remove();
-      });
+        
 
-      newObjective.querySelector(".addModuleBtn").addEventListener("click", () => {
-        newObjective.remove();
-      });
-
-      // Add remove event to the button
-      newObjective.querySelector(".removeContentBtn").addEventListener("click", () => {
-        newObjective.remove();
-      });
-
-      newObjective.querySelector(".addModuleBtn").addEventListener("click", () => {
-        newObjective.remove();
-      });
-
-      newObjective.querySelector(".btn-save").addEventListener("click", () => {
-        newObjective.remove();
+      //newObjective.querySelector(".btn-save").addEventListener("click", () => {
+       //alert(22)
+      //});
+      const form = newObjective.querySelector(".courseForm");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault(); 
+        saveObject(form)
       });
 
       // Remove all child elements
@@ -628,9 +605,7 @@
                     <div class="input-group">
                     <input type="text" id="course_module" name="course_module" class="form-control mb-2"
                 placeholder="Course module" required>
-          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
-            <i class="fas fa-trash"></i>
-          </button>
+          
                               <div class="invalid-feedback">
                                 Your course's module is required.
                               </div>
@@ -659,118 +634,86 @@
 
     // Handle Form Submission
     // Handle Form Submission
-    const form = document.getElementById("courseForm");
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      alert("Submiting")
-      let thisForm = this;
-      const endpoint = `${window.location.origin}/course/create-content`
+   
+  });
 
-      if (!form.checkValidity()) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      // Validate the form
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
+  function saveObject(form) {
+    alert(document.getElementById('course_topic').value)
+    const endpoint = `${window.location.origin}/course/create-content`
+
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // Validate the form
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      return;
+    }
+
+    // Validate Video File
+    const inputElement = document.getElementById("videoFile");
+    let videoFile = ""
+
+    try { videoFile = inputElement.files[0]; } catch (err) { }
+    if (videoFile && typeof videoFile === 'object') {
+      if (!videoFile) {
+        document.getElementById("videoFile").classList.add("is-invalid");
         return;
       }
-
-      // Validate Video File
-      const inputElement = document.getElementById("videoFile");
-      let videoFile = ""
-
-      try { videoFile = inputElement.files[0]; } catch (err) { }
-      if (videoFile && typeof videoFile === 'object') {
-        if (!videoFile) {
-          document.getElementById("videoFile").classList.add("is-invalid");
-          return;
-        }
-      } else {
-        videoFile = inputElement.value;
-      }
+    } else {
+      videoFile = inputElement.value;
+    }
 
 
-      //const formData = new FormData( thisForm )         
-      const headers = new Headers()
-      headers.append('X-CSRF-Token', csrfToken)
-      headers.append("Authorization", ` Bearer ${csrfToken}`);
-      //headers.append("Content-Type", "application/json")
-      //headers.append("X-Requested-With", "XMLHttpRequest")
+    //const formData = new FormData( thisForm )         
+    const headers = new Headers()
+    headers.append('X-CSRF-Token', csrfToken)
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
+    //headers.append("Content-Type", "application/json")
+    //headers.append("X-Requested-With", "XMLHttpRequest")
 
 
-      //console.log(formData)
+    //console.log(formData)
 
-      // Gather form data
-      let courseModule = String('')
+    // Gather form data
+    let courseModule = String('')
 
-      if (document.getElementById("course_module")) {
-        courseModule = document.getElementById("course_module").value
-      }
+    if (document.getElementById("course_module")) {
+      courseModule = document.getElementById("course_module").value
+    }
 
-      // Function to get the value of the selected radio button 
-      function getSelectedRadioValue() {
-        const selectedRadio = document.querySelector('input[name="course_content_origin"]:checked'); return selectedRadio ? selectedRadio.value : null;
-      }
-      // Example usage const 
-      courseContentOrigin = getSelectedRadioValue();
-
-
-      const courseTopic = document.getElementById('course_topic').value
-      const courseTitle = document.getElementById('coursesTitle').innerText
-
-      // Show Loading Spinner
-      loadingSpinner.style.display = "flex";
-
-      // Prepare Form Data
-      const formData = new FormData();
-      formData.append('courseModule', courseModule)
-      formData.append('courseTopic', courseTopic)
-      formData.append('courseContentOrigin', courseContentOrigin)
-      formData.append('courseTitle', courseTitle)
-      formData.append("videoFile", videoFile)
-      //Array.from(videoFiles).forEach(file => {
-      //  formData.append("videos[]", file);
-      //});
+    // Function to get the value of the selected radio button 
+    function getSelectedRadioValue() {
+      const selectedRadio = document.querySelector('input[name="course_content_origin"]:checked'); return selectedRadio ? selectedRadio.value : null;
+    }
+    // Example usage const 
+    courseContentOrigin = getSelectedRadioValue();
 
 
-      saveFormWithFile(endpoint, form, btnSave, formData, headers)
+    const courseTopic = document.getElementById('course_topic').value
+    const courseTitle = document.getElementById('coursesTitle').innerText
 
-      /*
-      fetch(endpoint, {
-        method: 'POST',
-        body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
-        headers: headers
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.text();
-          } else {
-            throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-          }
-        })
-        .then(data => {
-          console.log(data)
-          form.querySelector('.loading').classList.remove('d-block');
-          if (data) {
-            //window.open(`${endpoint}?course=${courseName}`, '_self')
-            btnSave.style.backgroundColor = "#0ed160"
-            btnSave.style.color = "#FFF"
-            form.querySelector('.sent-message').classList.add('d-block');
-            form.reset();
-          } else {
-            btnSave.style.backgroundColor = "red"
-            btnSave.style.color = "#FFF"
-            throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
-          }
-        })
-        .catch((error) => {
-          displayError(form, error);
-        });
-    */
+    // Show Loading Spinner
+    loadingSpinner.style.display = "flex";
 
-    });
-  });
+    // Prepare Form Data
+    const formData = new FormData();
+    formData.append('courseModule', courseModule)
+    formData.append('courseTopic', courseTopic)
+    formData.append('courseContentOrigin', courseContentOrigin)
+    formData.append('courseTitle', courseTitle)
+    formData.append("videoFile", videoFile)
+    //Array.from(videoFiles).forEach(file => {
+    //  formData.append("videos[]", file);
+    //});
+
+
+    saveFormWithFile(endpoint, form, btnSave, formData, headers)
+
+   
+  }
+  
 
   function displayError(thisForm, error) {
     btnSave = document.getElementById('btn-save')
