@@ -57,6 +57,12 @@
       margin-left: 10px;
     }
 
+    .remove-btn {
+      margin-left: 10px;
+      height: 40px;
+    }
+
+
     .form-feedback {
       margin-top: 10px;
     }
@@ -89,10 +95,11 @@
             {% if modules and modules | length > 0 %}
             {% for module in modules %}
             {% set collapse = module %}
-            <div class="accordion-item" >
-              <h4 class="accordion-header" >
+            <div class="accordion-item">
+              <h4 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#{{ collapse.replace(' ','') }}" aria-expanded="false" aria-controls="collapseTwo" style="background-color: #00202D; color: #fff">
+                  data-bs-target="#{{ collapse.replace(' ','') }}" aria-expanded="false" aria-controls="collapseTwo"
+                  style="background-color: #00202D; color: #fff">
                   {{ module }}
                 </button>
               </h4>
@@ -116,10 +123,13 @@
                       <a href="{{ content_file }}" class="glightbox play-btn">Play</a>
                       {% else %}
 
-                      <span onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i class="fas fa-edit"></i></span>
-                <span class="badge shadow-lg text-bg-dark rounded-pill" style="cursor: pointer;" 
-                onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i class="fas fa-video"></i></span>
+                      <span
+                        onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                        class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
+                          class="fas fa-edit"></i></span>
+                      <span class="badge shadow-lg text-bg-dark rounded-pill" style="cursor: pointer;"
+                        onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
+                          class="fas fa-video"></i></span>
 
                       {% endif %}
 
@@ -136,26 +146,29 @@
 
             {% if course_content %}
             <div class="mb-3 mt-4">
-            <ul>
-              {% for content in course_content %}
-              {% if 'course_module' not in content or not content['course_module'] %}
-              {% set content_file = content['course_content_file'] %}
-              {% set topic = content['course_topic'] %}
-              {% set origin = content['file_origin'] %}
-              {% set course_name = content['course_name'] %}
-              {% set MODULE="" %}
-              <li>
-                <span class="text-light">{{ content['course_topic']}}</span>
-                
-                <span onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i class="fas fa-edit"></i></span>
-                <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;" 
-                onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i class="fas fa-video"></i></span>
-              </li>
-              {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
+              <ul>
+                {% for content in course_content %}
+                {% if 'course_module' not in content or not content['course_module'] %}
+                {% set content_file = content['course_content_file'] %}
+                {% set topic = content['course_topic'] %}
+                {% set origin = content['file_origin'] %}
+                {% set course_name = content['course_name'] %}
+                {% set MODULE="" %}
+                <li>
+                  <span class="text-light">{{ content['course_topic']}}</span>
+
+                  <span
+                    onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                    class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
+                      class="fas fa-edit"></i></span>
+                  <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;"
+                    onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
+                      class="fas fa-video"></i></span>
+                </li>
+                {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
             {% else %}
             <p>
               No content has been found!
@@ -185,7 +198,7 @@
 
   <div class="row justify-content-left">
     <div class="col-lg-8">
-      <div class="card p-4">
+     
         <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
 
         <!-- Objectives -->
@@ -193,102 +206,24 @@
           <label class="form-label">Course conten</label>
 
           <div id="contentContainer">
-            <div class="dynamic-field" id="dynamic-field" style="flex-direction: column;">
 
-              <form id="courseForm" novalidate enctype="multipart/form-data">
-                <div class="row g-1" id="courseContentContainer01">
-
-                  <div class="col-7">
-                    <div class="input-group">
-                      <button type="button" id="addModuleBtn" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-plus"></i> Add module
-                      </button>
-                      <button type="button" id="removeContentBtn" class="btn btn-outline-danger btn-sm">
-                        <i class="fas fa-trash"></i> Remove content
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-------->
-                  <div class="col-12" id="content-module"></div>
-                  <!-------->
-                  <div class="col-12">
-                    <div class="input-group has-validation">
-
-                      <input type="text" id="course_topic" name="course_topic" class="form-control mb-2"
-                        placeholder="Topic" required>
-                      <div class="invalid-feedback">
-                        Your course's topic is required.
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="input-group has-validation" id="">
-                      <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
-                        autocomplete="off" checked>
-                      <label class="btn btn-outline-success" for="option5">Local host</label>
-
-                      <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
-                        autocomplete="off">
-                      <label class="btn btn-outline-success" for="option6">Youtube</label>
-
-                      <div class="invalid-feedback">
-                        Your content origin is required.
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="input-group has-validation">
-                      <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
-                        placeholder="Develope fix problems skills" required>
-                      <div class="invalid-feedback">
-                        Your video file is required.
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="my-3" id="error-block">
-                  <div class="loading" style="display: none;">Loading</div>
-                  <div class="error-message" style="display: none;"></div>
-                  <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="text-left">
-                  <button type="submit" id="btn-save" class="btn btn-light btn-large">
-                    <i class="fas fa-save"></i> Save Course
-                  </button>
-                </div>
-              </form>
-
-              <div class="form-text">Allowed file types: MP4, WebM, MKV, AVI.</div>
-              <div class="invalid-feedback">Please provide a valid field name.</div>
-            </div>
-          </div>
-          <div class="col-5 mt-3">
-            <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
-              <i class="fas fa-plus"></i> Add Content
-            </button>
+                <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
+                  autocomplete="off" checked>
+                <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
+                  autocomplete="off">
+                  
           </div>
         </div>
+        <div class="col-5 mt-3">
+          <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-plus"></i> Add Content
+          </button>
+        </div>
+     
 
-
-        <!--
-                <div class="my-3" id="error-block" >
-                  <div class="loading" style="display: none;">Loading</div>
-                  <div class="error-message" style="display: none;"></div>
-                  <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
-                </div>-->
-
-
-        <!-- </form>-->
-      </div>
     </div>
   </div>
+</div>
 </div>
 
 <!-- Full screen modal -->
@@ -363,7 +298,7 @@
   function play(video) {
     const videoTag = document.querySelector('video')
     videoTag.src = video
-    
+
   }
 
 
@@ -383,23 +318,39 @@
 
 
   const dynamicForm = (content) => {
-    console.log(content)
-    return `
+
+    let form = `
   <form id="courseForm" novalidate enctype="multipart/form-data">
                 <div class="row g-1" id="courseContentContainer01">
 
                   <div class="col-7">
                     <div class="input-group">
-                      <button type="button" id="addModuleBtn" class="btn btn-outline-light btn-sm">
+                     <button type="button" id="addModuleBtn" class="btn btn-outline-light btn-sm">
                         <i class="fas fa-plus"></i> Add module
                       </button>
                       <button type="button" id="removeContentBtn" class="btn btn-outline-danger btn-sm">
                         <i class="fas fa-trash"></i> Remove content
                       </button>
                     </div>
+                  </div>`
+    let content_module = ''
+    if (content.hasOwnProperty('module')) {
+      content_module = content.module
+    }
+    form += `
+                    <div class="col-12">
+                    <div class="input-group">
+                    <input type="text" id="course_module" name="course_module" value="${content_module}" class="form-control mb-2"
+                placeholder="Course module" required>
+          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
+            <i class="fas fa-trash"></i>
+          </button>
+                              <div class="invalid-feedback">
+                                Your course's module is required.
+                              </div>
+                              </div>
                   </div>
-
-                  <!-------->
+                   <!-------->
                   <div class="col-12" id="content-module"></div>
                   <!-------->
                   <div class="col-12">
@@ -412,13 +363,16 @@
                     </div>
                   </div>
 
-                  <div class="col-12">
-                    <div class="input-group has-validation">
-                      <select id="course_content_origin" name="course_content_origin" class="form-control mb-2"
-                        required>
-                        <option value="localhost">Servidor local</option>
-                        <option value="youtube">Youtube</option>
-                      </select>
+                   <div class="col-12">
+                    <div class="input-group has-validation" id="">
+                      <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-success" for="option5">Local host</label>
+
+                      <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
+                        autocomplete="off">
+                      <label class="btn btn-outline-success" for="option6">Youtube</label>
+
                       <div class="invalid-feedback">
                         Your content origin is required.
                       </div>
@@ -429,8 +383,9 @@
                     <div class="input-group has-validation">
                       <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
                         placeholder="Develope fix problems skills" required>
-                      <div class="invalid-feedback">
+                      <div class="invalid-feedback">                       
                         Your video file is required.
+                         <p>Allowed file types: MP4, WebM, MKV, AVI.</p>
                       </div>
                     </div>
                   </div>
@@ -445,12 +400,14 @@
 
                 <!-- Submit Button -->
                 <div class="text-left">
-                  <button type="submit" id="btn-save" class="btn btn-light btn-large">
+                  <button type="submit" id="btn-save" class="btn btn-light btn-large btn-save">
                     <i class="fas fa-save"></i> Save Course
                   </button>
                 </div>
               </form>
   `;
+
+    return form
   }
 
 
@@ -495,11 +452,11 @@
           contentContainer.removeChild(contentContainer.firstChild)
         }
         contentContainer.appendChild(newObjective);
-      }else{
+      } else {
         contentContainer.appendChild(newObjective);
       }
-      
-      
+
+
     }
 
 
@@ -510,10 +467,10 @@
   // Add Dynamic Fields
   document.addEventListener("DOMContentLoaded", () => {
 
-    const btnSave = document.getElementById("btn-save")
+    //const btnSave = document.getElementById("btn-save")
     const contentContainer = document.getElementById("contentContainer");
-    const courseContentContainer01 = document.getElementById("courseContentContainer01");
-    const contentModule = document.getElementById('content-module')
+    //const courseContentContainer01 = document.getElementById("courseContentContainer01");
+    //const contentModule = document.getElementById('content-module')
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
     const loadingSpinner = document.querySelector(".loading-spinner");
@@ -522,6 +479,7 @@
     document.getElementById("addObjectiveBtn").addEventListener("click", () => {
       const newObjective = document.createElement("div");
       newObjective.className = "dynamic-field";
+
       newObjective.innerHTML = `
           <form id="courseForm" novalidate enctype="multipart/form-data">
                 <div class="row g-1" id="courseContentContainer01">
@@ -535,6 +493,19 @@
                         <i class="fas fa-trash"></i> Remove content
                       </button>
                     </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="input-group">
+                    <input type="text" id="course_module" name="course_module" class="form-control mb-2"
+                placeholder="Course module" required>
+          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
+            <i class="fas fa-trash"></i>
+          </button>
+                              <div class="invalid-feedback">
+                                Your course's module is required.
+                              </div>
+                              </div>
                   </div>
 
                   <!-------->
@@ -551,12 +522,15 @@
                   </div>
 
                   <div class="col-12">
-                    <div class="input-group has-validation">
-                      <select id="course_content_origin" name="course_content_origin" class="form-control mb-2"
-                        required>
-                        <option value="localhost">Servidor local</option>
-                        <option value="youtube">Youtube</option>
-                      </select>
+                    <div class="input-group has-validation" id="">
+                      <input type="radio" class="btn-check option5" value="localhost" name="course_content_origin" id="option5"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-success" for="option5">Local host</label>
+
+                      <input type="radio" class="btn-check option6" value="youtube" name="course_content_origin" id="option6"
+                        autocomplete="off">
+                      <label class="btn btn-outline-success" for="option6">Youtube</label>
+
                       <div class="invalid-feedback">
                         Your content origin is required.
                       </div>
@@ -591,6 +565,22 @@
         `;
 
       // Add remove event to the button
+      newObjective.querySelector(".option5").addEventListener("click", (e) => {
+        const videoFile = document.getElementById('videoFile')
+        videoFile.type = 'file';
+        // Add the accept attribute 
+        videoFile.attributes('accept', 'video/*');
+      });
+
+      // Add remove event to the button
+      newObjective.querySelector(".option6").addEventListener("click", () => {
+        const videoFile = document.getElementById('videoFile')
+        videoFile.type = 'text';
+        // Remove the accept attribute 
+        videoFile.removeAttribute('accept');
+      });
+
+      // Add remove event to the button
       newObjective.querySelector(".removeContentBtn").addEventListener("click", () => {
         newObjective.remove();
       });
@@ -599,6 +589,18 @@
         newObjective.remove();
       });
 
+      // Add remove event to the button
+      newObjective.querySelector(".removeContentBtn").addEventListener("click", () => {
+        newObjective.remove();
+      });
+
+      newObjective.querySelector(".addModuleBtn").addEventListener("click", () => {
+        newObjective.remove();
+      });
+
+      newObjective.querySelector(".btn-save").addEventListener("click", () => {
+        newObjective.remove();
+      });
 
       // Remove all child elements
       while (contentContainer.firstChild) {
@@ -622,7 +624,9 @@
 
       moduleDiv.innerHTML = `
           
-          <input type="text" id="course_module" name="course_module" class="form-control mb-2"
+          <div class="col-12">
+                    <div class="input-group">
+                    <input type="text" id="course_module" name="course_module" class="form-control mb-2"
                 placeholder="Course module" required>
           <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
             <i class="fas fa-trash"></i>
@@ -630,6 +634,8 @@
                               <div class="invalid-feedback">
                                 Your course's module is required.
                               </div>
+                              </div>
+                  </div>
                             
         `;
 
@@ -656,7 +662,7 @@
     const form = document.getElementById("courseForm");
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-
+      alert("Submiting")
       let thisForm = this;
       const endpoint = `${window.location.origin}/course/create-content`
 
@@ -703,14 +709,14 @@
       }
 
       // Function to get the value of the selected radio button 
-      function getSelectedRadioValue() { 
-        const selectedRadio = document.querySelector('input[name="course_content_origin"]:checked'); return selectedRadio ? selectedRadio.value : null; 
-      } 
+      function getSelectedRadioValue() {
+        const selectedRadio = document.querySelector('input[name="course_content_origin"]:checked'); return selectedRadio ? selectedRadio.value : null;
+      }
       // Example usage const 
       courseContentOrigin = getSelectedRadioValue();
 
 
-      const courseTopic = document.getElementById('course_topic').value   
+      const courseTopic = document.getElementById('course_topic').value
       const courseTitle = document.getElementById('coursesTitle').innerText
 
       // Show Loading Spinner
