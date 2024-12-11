@@ -72,6 +72,7 @@
       margin-top: 0.4%;
       border-radius: 0px;
     }
+  
   </style>
 
   <div class="bd-example-snippet bd-code-snippet">
@@ -144,39 +145,41 @@
             {% endfor %}
             {% endif %}
 
-            {% if course_content %}
-            <div class="mb-3 mt-4">
-              <ul>
-                {% for content in course_content %}
-                {% if 'course_module' not in content or not content['course_module'] %}
-                {% set content_file = content['course_content_file'] %}
-                {% set topic = content['course_topic'] %}
-                {% set origin = content['file_origin'] %}
-                {% set course_name = content['course_name'] %}
-                {% set MODULE="" %}
-                <li>
-                  <span class="text-light">{{ content['course_topic']}}</span>
-
-                  <span
-                    onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                    class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
-                      class="fas fa-edit"></i></span>
-                  <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;"
-                    onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
-                      class="fas fa-video"></i></span>
-                </li>
-                {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-            {% else %}
-            <p>
-              No content has been found!
-            </p>
-            {%endif%}
+           
 
           </div>
 
+          {% if course_content %}
+          <div class="mb-3 mt-4">
+            <h2 class="" style="font-size: 1.2rem;">Others</h2>
+            <ul>
+              {% for content in course_content %}
+              {% if 'course_module' not in content or not content['course_module'] %}
+              {% set content_file = content['course_content_file'] %}
+              {% set topic = content['course_topic'] %}
+              {% set origin = content['file_origin'] %}
+              {% set course_name = content['course_name'] %}
+              {% set MODULE="" %}
+              <li>
+                <span class="text-light">{{ content['course_topic']}}</span>
+
+                <span
+                  onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                  class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
+                    class="fas fa-edit"></i></span>
+                <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;"
+                  onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
+                    class="fas fa-video"></i></span>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% else %}
+          <p>
+            No content has been found!
+          </p>
+          {%endif%}
 
         </div>
 
@@ -365,14 +368,30 @@
 
                    <div class="col-12">
                     <div class="input-group has-validation" id="">
-                      <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
-                        autocomplete="off" checked>
-                      <label class="btn btn-outline-success" for="option5">Local host</label>
+                      `;
 
-                      <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
+                      if(content.file_origin ==='localhost'){
+                        form +=`
+                        <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
+                          autocomplete="off" checked>
+                        <label class="btn btn-outline-success" for="option5">Local host</label>
+                        <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
                         autocomplete="off">
                       <label class="btn btn-outline-success" for="option6">Youtube</label>
+                        `;
 
+                      }
+                      else if(content.file_origin ==='youtube'){
+                        form +=`
+                       <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
+                          autocomplete="off" >
+                        <label class="btn btn-outline-success" for="option5">Local host</label>
+                        <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-success" for="option6">Youtube</label>
+                        `;
+                      }
+                      form +=`
                       <div class="invalid-feedback">
                         Your content origin is required.
                       </div>
@@ -380,10 +399,21 @@
                   </div>
 
                   <div class="col-12">
-                    <div class="input-group has-validation">
-                      <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
+                    <div class="input-group has-validation">`;
+
+                      if(content.file_origin ==='localhost'){ 
+                        form +=`<input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
                         placeholder="Develope fix problems skills" required>
-                      <div class="invalid-feedback">                       
+                        
+                        <input type="text" id="video-file" readonly name="video-file" value="${content.course_content_file}" class="form-control mb-2" style="font-size:.8rem; color:#198754;">
+                        `;
+                      }else if(content.file_origin ==='youtube'){
+                        form +=`<input type="text" id="videoFile" name="video" value="${content.course_content_file}" class="form-control mb-2"
+                        placeholder="Develope fix problems skills" required>
+                        `;
+                      }
+                      
+                      form +=`<div class="invalid-feedback">                       
                         Your video file is required.
                          <p>Allowed file types: MP4, WebM, MKV, AVI.</p>
                       </div>
@@ -537,7 +567,10 @@
                 </div>
 
                 <div class="my-3" id="error-block">
-                  <div class="loading" style="display: none;">Loading</div>
+                  <div class="progress loading" role="progressbar" aria-label="Info striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+  <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+</div>
+                 
                   <div class="error-message" style="display: none;"></div>
                   <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
                 </div>
@@ -580,6 +613,8 @@
           
           e.stopPropagation();
         }
+        // Show Loading Spinner
+        loadingSpinner.style.display = "flex";
         saveObject(form, csrfToken, loadingSpinner)
       });
 
@@ -641,7 +676,7 @@
    
   });
 
-  function saveObject(form, csrfToken, loadingSpinner, btnSave) {
+  function saveObject(form, csrfToken, btnSave) {
   
     const endpoint = `${window.location.origin}/course/create-content`
 
@@ -696,9 +731,6 @@
     const courseTopic = document.getElementById('course_topic').value
     const courseTitle = document.getElementById('coursesTitle').innerText
 
-    // Show Loading Spinner
-    loadingSpinner.style.display = "flex";
-   
     // Prepare Form Data
     const formData = new FormData();
     formData.append('courseModule', courseModule)
@@ -711,32 +743,8 @@
     //});
 
  
-    //saveFormWithFile(endpoint, form, btnSave, formData, headers)
-    fetch(endpoint, {
-      method: 'POST',
-      body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
-      headers: headers
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.text();
-        } else {
-          throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-        }
-      })
-      .then(data => {
-        alert("Course: "+formData.get('courseTitle'))
-        console.log(data)
-        
-      })
-      .catch((error) => {
-        const errorMessage = document.getElementById('error-message')
-        //document.getElementById('error-block').style.display = 'block'
-        displayError(errorMessage, error);
-      });
-
-
-   
+    saveFormWithFile(endpoint, form, btnSave, formData, headers)
+     
   }
   
 

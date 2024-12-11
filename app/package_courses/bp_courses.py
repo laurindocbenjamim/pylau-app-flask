@@ -186,7 +186,7 @@ def create_course_content():
     connection = MongoClient(current_app.config["MONGO_URI"])
 
     if request.method == "POST":
-        return
+        
         try:    
 
             file_field_name = "videoFile"
