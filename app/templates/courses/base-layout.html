@@ -226,6 +226,7 @@
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <!-- Custom styles for this template -->
   <link href="{{ url_for('static', filename='assets/css/dashboard.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 
 <body style="background-color: #001E2B; color:#FFF">
@@ -431,8 +432,10 @@
 
   {% block script %}{% endblock %}
 
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script> 
   <script>
-
+    
+    const lightbox = GLightbox({ selector: '.glightbox' });
     // Reference the navigation container
     const nav = document.getElementById('mainNav');
 

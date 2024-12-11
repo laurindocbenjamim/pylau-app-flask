@@ -119,15 +119,16 @@
                       {% set course_name = content['course_name'] %}
                       {% set content_file = content['course_content_file'] %}
                       <!-- Button to Trigger Modal -->
-
-                      {% if content_file and content_file=='youtube' %}
-                      <a href="{{ content_file }}" class="glightbox play-btn">Play</a>
-                      {% else %}
-
                       <span
-                        onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                        class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
-                          class="fas fa-edit"></i></span>
+                      onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                      class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
+                        class="fas fa-edit"></i></span>
+
+                      {% if origin and origin=='youtube' %}
+                      <a href="{{ content_file }}" class="glightbox play-btn">
+                        <i class="fa fa-video"></i>
+                      </a>
+                      {% else %}
                       <span class="badge shadow-lg text-bg-dark rounded-pill" style="cursor: pointer;"
                         onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
                           class="fas fa-video"></i></span>
@@ -299,8 +300,29 @@
 
 
   function play(video) {
+  
     const videoTag = document.querySelector('video')
-    videoTag.src = video
+    //videoTag.src = video
+    //alert(window.location.origin + '/' + String(video).trim())
+    try{
+      const iframe = document.querySelector('.modal-body')
+      const div = document.createElement('div')
+     
+      var videoTa = `
+      <p> Watch the video carefully and then apractice your skills by making  the exercices</p>
+          
+              <video autoplay id="videoPlayer" class="w-100" controls>
+                  <source src="${window.location.origin + '/' + String(video).trim()}" type="video/mp4">
+                   Your browser does not support the video tag.
+                  </video>`;
+
+      div.innerHTML = videoTa
+      while(iframe.firstChild){
+        iframe.removeChild(iframe.firstChild)
+      }
+
+      iframe.appendChild(div)
+    }catch(err){ console.log(err)}
 
   }
 

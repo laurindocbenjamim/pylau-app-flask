@@ -211,7 +211,7 @@ def create_course_content():
             if not allowed_file(video.filename):
                 return jsonify({"error": "Invalid video file type"}), 400
             
-            UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
+            UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}/'
             
             # Check if the folder to store the tickets exists, if not, create it
             if not os.path.exists(UPLOAD_FOLDER):
