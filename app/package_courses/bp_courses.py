@@ -190,36 +190,51 @@ def create_course_content():
         try:    
 
             file_field_name = "videoFile"
-            if  f'{file_field_name}' not in request.files:
-                return jsonify({"error": "Title and age are required"}), 400
-            elif 'courseTopic' not in request.form:
-                return jsonify({"error": "The course's topic is required"}), 400        
-            elif 'courseContentOrigin' not in request.form:
-                return jsonify({"error": "The origin of the content is required"}), 400
-            elif 'courseTitle' not in request.form:
-                return jsonify({"error": "The course's title is required"}), 400
+            video = ""
+            
+            if 'courseTopic' not in request.form or not request.form['courseTopic']:
+                return jsonify({"error": "The course's topic is required"}), 201        
+            elif 'courseContentOrigin' not in request.form or not request.form['courseContentOrigin']:
+                return jsonify({"error": "The origin of the content is required"}), 201
+            elif 'courseTitle' not in request.form or not request.form['courseTitle']:
+                return jsonify({"error": "The course's title is required"}), 201
+
+            
+            if request.form['courseContentOrigin'] == 'youtube':
+                if  f'{file_field_name}' not in request.form or not request.form[f'{file_field_name}']:
+                    return jsonify({"error": "The file video is required"}), 201
+                else: 
+                    save_path = request.form[f'{file_field_name}']
+
+            elif request.form['courseContentOrigin'] == 'localhost':
+                if  f'{file_field_name}' not in request.files:
+                    return jsonify({"error": "The file video required"}), 201
+                else:     
+                                        
+                    video = request.files['videoFile']
+                    #
+                    folder='tutorials/'
+
+                    if 'oldVideoFile' in request.form and request.form['oldVideoFile'] and not video.filename:
+                        save_path = request.form['oldVideoFile']
+                    else:
+
+                        if not video.filename:
+                            return jsonify({"error": "The video file is required!"}), 201
                         
+                        # Validate file
+                        if not allowed_file(video.filename):
+                            return jsonify({"error": "Invalid video file type"}), 201
             
-            video = request.files['videoFile']
-            #
-            folder='tutorials'
-           
-            if not video.filename:
-                return f"Ola {video.filename}"
+                        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
+                
+                        # Check if the folder to store the tickets exists, if not, create it
+                        if not os.path.exists(UPLOAD_FOLDER):
+                            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             
-             # Validate file
-            if not allowed_file(video.filename):
-                return jsonify({"error": "Invalid video file type"}), 400
-            
-            UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}/'
-            
-            # Check if the folder to store the tickets exists, if not, create it
-            if not os.path.exists(UPLOAD_FOLDER):
-                os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-            
-            # Join the file with its path
-            save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
-            video.save(save_path)
+                        # Join the file with its path
+                        save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
+                        video.save(save_path.replace('\\', '/'))
             
             course_module = request.form.get('courseModule', '')
             course_title = request.form['courseTitle']
@@ -244,7 +259,7 @@ def create_course_content():
                 status = update_courses_content_to_mgdb(connection=connection, course_name=course_title, course_topic=topic, document=document)
                 #respo = f"Your {content} data was updated successfully {course_title}"
                 
-                return jsonify({"response": "Document updated successfully!"}), 201
+                return jsonify({"response": "Document updated successfully!"}), 200
             else:
                 
                 status, sms = save_courses_content_to_mgdb(connection, document)
@@ -255,7 +270,7 @@ def create_course_content():
                     document = f"Document saved successfully! {sms}"
             # close the server connecton
             connection.close()
-            return jsonify({"response": document, "sms": sms}), 201
+            return jsonify({"response": document, "sms": sms}), 200
         except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
         
