@@ -126,8 +126,8 @@
                         onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
                         class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
                           class="fas fa-edit"></i></span>
-                      
-                          <span
+
+                      <span
                         onclick="removeContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
                         class="badge shadow-lg text-bg-danger rounded-pill" style="cursor: pointer;"><i
                           class="fas fa-trash"></i></span>
@@ -177,10 +177,9 @@
                   class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
                     class="fas fa-edit"></i></span>
 
-                    <span
-                        onclick="removeContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                        class="badge shadow-lg text-bg-danger rounded-pill" style="cursor: pointer;"><i
-                          class="fas fa-trash"></i></span>
+                <span onclick="removeContent('{{ course_name  }}','{{ topic  }}','{{ module  }}')"
+                  class="badge shadow-lg text-bg-danger rounded-pill" style="cursor: pointer;"><i
+                    class="fas fa-trash"></i></span>
 
                 <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;"
                   onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
@@ -426,127 +425,6 @@
   })
 
 
-  const dynamicForm = (content) => {
-
-    let form = `
-  <form id="courseForm" novalidate enctype="multipart/form-data">
-                <div class="row g-1" id="courseContentContainer01">
-
-                  <div class="col-7">
-                    <div class="input-group">
-                     <button type="button" id="addModuleBtn" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-plus"></i> Add module
-                      </button>
-                      <button type="button" id="removeContentBtn" class="btn btn-outline-danger btn-sm">
-                        <i class="fas fa-trash"></i> Remove content
-                      </button>
-                    </div>
-                  </div>`
-    let content_module = ''
-    if (content.hasOwnProperty('module')) {
-      content_module = content.module
-    }
-    form += `
-                    <div class="col-12">
-                    <div class="input-group">
-                    <input type="text" id="course_module" name="course_module" value="${content_module}" class="form-control mb-2"
-                placeholder="Course module" >
-          <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top:0%">
-            <i class="fas fa-trash"></i>
-          </button>
-                              <div class="invalid-feedback">
-                                Your course's module is required.
-                              </div>
-                              </div>
-                  </div>
-                   <!-------->
-                  <div class="col-12" id="content-module"></div>
-                  <!-------->
-                  <div class="col-12">
-                    <div class="input-group has-validation">
-                      <input type="text" id="course_topic" name="course_topic" value="${content.course_topic}" class="form-control mb-2"
-                        placeholder="Topic" required>
-                      <div class="invalid-feedback">
-                        Your course's topic is required.
-                      </div>
-                    </div>
-                  </div>
-
-                   <div class="col-12">
-                    <div class="input-group has-validation" id="">
-                      `;
-
-    if (content.file_origin === 'localhost') {
-      form += `
-                        <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
-                          autocomplete="off" checked>
-                        <label class="btn btn-outline-success" for="option5">Local host</label>
-                        <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
-                        autocomplete="off">
-                      <label class="btn btn-outline-success" for="option6">Youtube</label>
-                        `;
-
-    }
-    else if (content.file_origin === 'youtube') {
-      form += `
-                       <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
-                          autocomplete="off" >
-                        <label class="btn btn-outline-success" for="option5">Local host</label>
-                        <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
-                        autocomplete="off" checked>
-                      <label class="btn btn-outline-success" for="option6">Youtube</label>
-                        `;
-    }
-    form += `
-                      <div class="invalid-feedback">
-                        Your content origin is required.
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="input-group has-validation">`;
-
-    if (content.file_origin === 'localhost') {
-      form += `<input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
-                        placeholder="Develope fix problems skills" required>
-                        
-                        <input type="text" id="video-file" readonly name="video-file" value="${content.course_content_file}" class="form-control mb-2" style="font-size:.8rem; color:#198754;">
-                        `;
-    } else if (content.file_origin === 'youtube') {
-      form += `<input type="text" id="videoFile" name="video" value="${content.course_content_file}" class="form-control mb-2"
-                        placeholder="Develope fix problems skills" required>
-                        `;
-    }
-
-    form += `<div class="invalid-feedback">                       
-                        Your video file is required.
-                         <p>Allowed file types: MP4, WebM, MKV, AVI.</p>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="my-3" id="error-block">
-                  <div class="loading" style="display: none;">Loading</div>
-                  <div class="error-message" style="display: none;"></div>
-                  <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="text-left">
-                  <button type="submit" id="btn-save" class="btn btn-light btn-large btn-save">
-                    <i class="fas fa-save"></i> Save Course
-                  </button>
-                </div>
-              </form>
-  `;
-
-    return form
-  }
-
-
   function editContent(course_name, topic, origin, content_file, module) {
     let content = {
       "course_name": course_name,
@@ -605,21 +483,15 @@
 
   }
 
-  function removeContent(course_name, topic, origin, content_file, module) {
-    let content = {
-      "course_name": course_name,
-      "file_origin": origin,
-      "course_topic": topic,
-      "course_content_file": content_file
-    }
+  ///
+  function removeContent(course_name, topic, module) {
+    //
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
-    if (module !== '') {
-      content['module'] = module
-    }
     const confirmOp = confirm("Remove this content?")
-
-    if(confirmOp){
-      alert("The Content has been removed successfull!")
+    ///
+    if (confirmOp) {
+      removeSelectedContent(csrfToken, course_name, module, topic)
     }
   }
 
@@ -668,7 +540,7 @@
       if (!form.checkValidity()) {
         e.stopPropagation();
       }
-      alert("Saving")
+
       // Show Loading Spinner
       loadingSpinner.style.display = "flex";
       saveObject(form, csrfToken, loadingSpinner)
@@ -849,6 +721,63 @@
         } else {
           btnSave.style.backgroundColor = "red"
           btnSave.style.color = "#FFF"
+          throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
+        }
+      })
+      .catch((error) => {
+        const errorMessage = document.getElementById('error-message')
+        //document.getElementById('error-block').style.display = 'block'
+        displayError(errorMessage, error);
+      });
+
+
+
+  }
+
+
+  //remove content
+  function removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic) {
+    const endpoint = `${window.location.origin}/course/remove-content`
+
+
+    //const formData = new FormData( thisForm )         
+    const headers = new Headers()
+    headers.append('X-CSRF-Token', csrfToken)
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
+    //headers.append("Content-Type", "application/json")
+    //headers.append("X-Requested-With", "XMLHttpRequest")
+    // Gather form data
+
+    // Prepare Form Data
+    const formData = new FormData();
+    formData.append('courseModule', courseModule)
+    formData.append('courseTopic', courseTopic)
+    formData.append('courseTitle', courseTitle)
+
+    fetch(endpoint, {
+      method: 'DELETE',
+      body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+      headers: headers
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+        }
+      })
+      .then(data => {
+        alert("The content has beeen removed successfully!")
+        console.log(data)
+        document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
+
+        if (data) {
+          document.querySelector('.error-message').style.display = 'block'
+          window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
+
+
+        } else {
+
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
       })

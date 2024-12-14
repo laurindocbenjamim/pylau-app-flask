@@ -305,6 +305,21 @@ def create_course_content():
     except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
+# remove course content from mongoDB
+@bp_courses.route("/remove-content", methods=["DELETE"])
+@cross_origin(methods=["DELETE"])
+def remove_course_content():
+
+    course_title = escape(request.args.get('course'))
+    courses_module = set()
+    
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    courseTopic = request.form.get('courseTopic', '')
+    return  jsonify({"response": f"Failed to remove content {courseTopic}"})
+
+
 
 @bp_courses.route("/list-all")
 @cross_origin(methods=["GET"])
