@@ -226,6 +226,29 @@ def update_courses_content_to_mgdb(connection, course_name, course_topic, docume
         return True
     except Exception as e:
         return False
+    
+# Remove the course's content document
+def remove_courses_content_from_mgdb(*,connection, query: dict = {}):
+    
+    try:
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content
+
+        # Removing the course information to MongoDB
+        collection.delete_one(query)
+        return True, query
+    except Exception as e:
+        return False, str(e)
 
 
 def validate_words(key:str, value: str | int | float)-> bool:

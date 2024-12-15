@@ -16,7 +16,10 @@ from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
 from .course.controller import get_courses_by_coursename, save_course_to_mgdb, save_courses_content_to_mgdb, get_courses_content_by_coursename_and_topic
-from .course.controller import get_courses_content_by_coursename, update_course_to_mgdb, update_courses_content_to_mgdb, get_all_courses_mgdb
+from .course.controller import get_courses_content_by_coursename
+from .course.controller import update_course_to_mgdb
+from .course.controller import update_courses_content_to_mgdb, get_all_courses_mgdb
+from .course.controller import remove_courses_content_from_mgdb
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -311,13 +314,30 @@ def create_course_content():
 def remove_course_content():
 
     course_title = escape(request.args.get('course'))
-    courses_module = set()
     
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
+    course_title = request.form.get('courseTitle', '')
+    course_topic = request.form.get('courseTopic', '')
+    course_module = request.form.get('courseModule', '')
+    
 
-    courseTopic = request.form.get('courseTopic', '')
-    return  jsonify({"response": f"Failed to remove content {courseTopic}"})
+    try:
+
+
+        query = {"course_name": course_title,
+                "course_topic": course_topic
+                }
+        if course_module and course_module !='':
+            query["course_module"] = course_module
+            
+        sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
+
+        if not sts:
+            return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
+        return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
+    except Exception as e:    
+        return  jsonify({"response": f"Failed to remove content {str(e)}"}), 400
 
 
 

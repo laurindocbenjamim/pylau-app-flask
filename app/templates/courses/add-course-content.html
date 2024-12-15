@@ -115,7 +115,7 @@
                     {% for content in course_content %}
                     {% if content['course_module'] == module %}
                     <li>
-                      {{ content['course_topic'] }}
+                      
                       {% set topic = content['course_topic'] %}
                       {% set topic = content['course_topic'] %}
                       {% set origin = content['file_origin'] %}
@@ -123,25 +123,10 @@
                       {% set content_file = content['course_content_file'] %}
                       <!-- Button to Trigger Modal -->
                       <span
-                        onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                        class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
-                          class="fas fa-edit"></i></span>
-
-                      <span
-                        onclick="removeContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                        class="badge shadow-lg text-bg-danger rounded-pill" style="cursor: pointer;"><i
-                          class="fas fa-trash"></i></span>
-
-                      {% if origin and origin=='youtube' %}
-                      <a href="{{ content_file }}" class="glightbox play-btn">
-                        <i class="fa fa-video"></i>
-                      </a>
-                      {% else %}
-                      <span class="badge shadow-lg text-bg-dark rounded-pill" style="cursor: pointer;"
-                        onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
-                          class="fas fa-video"></i></span>
-
-                      {% endif %}
+                      onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                      class="text-dark" style="cursor: pointer;">
+                      {{ content['course_topic']}}
+                    </span>
 
                     </li>
                     {% endif %}
@@ -160,7 +145,7 @@
 
           {% if course_content %}
           <div class="mb-3 mt-4">
-            <h2 class="" style="font-size: 1.2rem;">Others</h2>
+            <h2 class="" style="font-size: 1.2rem;">Others contents</h2>
             <ul>
               {% for content in course_content %}
               {% if 'course_module' not in content or not content['course_module'] %}
@@ -170,20 +155,11 @@
               {% set course_name = content['course_name'] %}
               {% set MODULE="" %}
               <li>
-                <span class="text-light">{{ content['course_topic']}}</span>
-
                 <span
                   onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                  class="badge shadow-lg text-bg-info rounded-pill" style="cursor: pointer;"><i
-                    class="fas fa-edit"></i></span>
-
-                <span onclick="removeContent('{{ course_name  }}','{{ topic  }}','{{ module  }}')"
-                  class="badge shadow-lg text-bg-danger rounded-pill" style="cursor: pointer;"><i
-                    class="fas fa-trash"></i></span>
-
-                <span class="badge shadow-lg text-bg-light rounded-pill" style="cursor: pointer;"
-                  onclick="play('{{ content_file }}')" data-bs-toggle="modal" data-bs-target="#fullscreenModal"><i
-                    class="fas fa-video"></i></span>
+                  class="text-light" style="cursor: pointer;">
+                  {{ content['course_topic']}}
+                </span>
               </li>
               {% endif %}
               {% endfor %}
@@ -300,18 +276,26 @@
 
             <!-- Submit Button -->
             <div class="text-left">
+              
+            </div>
+
+            <div class="col-7 mt-3">
               <button type="submit" id="btn-save" class="btn btn-light btn-large btn-save">
                 <i class="fas fa-save"></i> Save Course
+              </button>
+              <button type="button" id="removeContentBtn" disabled class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-trash"></i> Remove Content
               </button>
             </div>
           </form>
 
         </div>
       </div>
-      <div class="col-5 mt-3">
+      <div class="col-7 mt-3">
         <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
           <i class="fas fa-plus"></i> Add Content
         </button>
+        
       </div>
 
 
@@ -479,7 +463,8 @@
 
     document.getElementById('course_topic').value = topic
 
-
+    const btnRemove = document.getElementById('removeContentBtn')
+    btnRemove.disabled = false
 
   }
 
@@ -523,6 +508,7 @@
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
     const loadingSpinner = document.querySelector(".loading-spinner");
     const form = document.getElementById('courseForm')
+    const btnRemove = document.getElementById('removeContentBtn')
 
     // Add New Objective  
     document.getElementById("addObjectiveBtn").addEventListener("click", () => {
@@ -531,6 +517,8 @@
 
       const newObjective = document.createElement("div");
       newObjective.className = "dynamic-field";
+      
+      btnRemove.disabled = true
       form.reset();
     });
 
@@ -545,6 +533,20 @@
       loadingSpinner.style.display = "flex";
       saveObject(form, csrfToken, loadingSpinner)
     })
+
+    // Remove course content 
+    btnRemove.addEventListener('click', (e)=>{
+      e.preventDefault()
+      
+      const courseModule = document.getElementById("course_module").value
+      const courseTopic = document.getElementById('course_topic').value
+      const courseTitle = document.getElementById('coursesTitle').innerText
+      
+      if(confirm("Remove this courses's content?")){
+        removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic)
+      }
+
+    });
 
 
     document.getElementById('addModuleBtn').addEventListener('click', (e) => {
@@ -767,16 +769,16 @@
         }
       })
       .then(data => {
-        alert("The content has beeen removed successfully!")
-        console.log(data)
+        const dataResp = JSON.parse(data)
+        console.log(dataResp)
         document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
 
-        if (data) {
+        if (dataResp.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
           window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
 
 
-        } else {
+        } else if (dataResp.status_code === 201){
 
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
