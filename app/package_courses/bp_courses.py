@@ -339,8 +339,47 @@ def remove_course_content():
     except Exception as e:    
         return  jsonify({"response": f"Failed to remove content {str(e)}"}), 400
 
+# View the courses demo
+@bp_courses.route("/view-demo", methods=["GET"])
+@cross_origin(methods=["GET"])
+def view_courses_demo():
 
+    course_title = escape(request.args.get('course'))
+    courses_module = set()
 
+     # If the request.method is GET
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    try:
+        
+        # Getting the course data by name from MongoDB
+        data = get_courses_by_coursename(connection=connection, course_name=course_title)
+        course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+
+        if course_content:
+            for course in course_content:
+                if 'course_module' in course:
+                    courses_module.add(course['course_module'])
+        courses_module = list(courses_module) 
+
+     
+        response = make_response(
+            render_template(
+                "courses/course_demo.html",
+                title="Course Demo",
+                USER_DATA=__get_cookies,
+                course_data=data,
+                course_content=course_content,
+                modules = courses_module,
+                course_name=course_title
+            )
+        )
+        set_header_params(response)
+        return response
+    except Exception as e:
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
+    
 @bp_courses.route("/list-all")
 @cross_origin(methods=["GET"])
 def get_all():

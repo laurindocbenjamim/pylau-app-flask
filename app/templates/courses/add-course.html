@@ -64,6 +64,8 @@
               <a href="{{ url_for('course.create_course_content', course=course_name)}}"
                 class="btn btn-sm btn-outline-secondary">Content</a>
               {% endif %}
+              <a href="{{ url_for('course.view_courses_demo', course=course_name)}}"
+                class="btn btn-sm btn-outline-secondary" target="_blank">View Demo</a>
               <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
             </div>
             <button type="button"
