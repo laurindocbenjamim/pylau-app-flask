@@ -4,8 +4,11 @@
   <h1 class="h5">Course's content</h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-2">
-      <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+      {% if course_name %}
+              <a href="{{ url_for('course.create_course_content', course=course_name)}}"
+                class="btn btn-sm btn-outline-secondary">Content</a>
+              {% endif %}
+      <button type="button" class="btn btn-sm btn-outline-secondary">View Demo</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
       <svg class="bi">
@@ -124,7 +127,7 @@
                       <!-- Button to Trigger Modal -->
                       <span
                       onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                      class="text-dark" style="cursor: pointer;">
+                      class="text-dark" style="cursor: pointer;text-decoration:underline;">
                       {{ content['course_topic']}}
                     </span>
 
@@ -157,7 +160,7 @@
               <li>
                 <span
                   onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                  class="text-light" style="cursor: pointer;">
+                  class="text-light" style="cursor: pointer;text-decoration:underline;">
                   {{ content['course_topic']}}
                 </span>
               </li>
@@ -196,17 +199,11 @@
 
       <!-- Objectives -->
       <div class="mb-3">
-        <label class="form-label">Course conten</label>
+        
 
         <div id="contentContainer" style="display: none;">
-
-          <input type="radio" class="btn-check" value="localhost" name="course_content_origin" id="option5"
-            autocomplete="off" checked>
-          <input type="radio" class="btn-check" value="youtube" name="course_content_origin" id="option6"
-            autocomplete="off">
-
-
-
+          <label class="form-label">Course content</label>
+          
           <form id="courseForm" class="courseForm" novalidate enctype="multipart/form-data">
             <div class="row g-1" id="courseContentContainer01">
 
@@ -243,7 +240,6 @@
                   <input type="radio" class="btn-check option6" value="youtube" name="course_content_origin"
                     id="option6" autocomplete="off">
                   <label class="btn btn-outline-success" for="option6">Youtube</label>
-
                   <div class="invalid-feedback">
                     Your content origin is required.
                   </div>
@@ -254,8 +250,8 @@
                 <div class="input-group has-validation">
                   <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
                     placeholder="Develope fix problems skills" required>
-                  <input type="text" id="video-file" readonly name="video-file" value="" class="form-control mb-2"
-                    style="font-size:.8rem; color:#198754;">
+                  <input type="text" id="video-file" readonly name="video-file" class="form-control mb-2"
+                    style="font-size:.8rem; color:#198754;display:none">
                   <div class="invalid-feedback">
                     Your video file is required.
                   </div>
@@ -517,9 +513,13 @@
 
       const newObjective = document.createElement("div");
       newObjective.className = "dynamic-field";
-      
+
+      const oldFile = document.getElementById('video-file')
+      oldFile.style = 'display:none;'
+
       btnRemove.disabled = true
       form.reset();
+
     });
 
     // Submiting the form 
