@@ -234,7 +234,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 
-<body >
+<body>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path
@@ -258,7 +258,7 @@
 
 
     <header class="navbar sticky-top bg-light flex-md-nowrap p-0 shadow" data-bs-theme="light">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 bg-light"  href="{{ url_for('course.list_all_courses')}} "><b>Courses</b></a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 bg-light" href="#"><b>Data Tuning Academy</b></a>
 
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
@@ -271,7 +271,7 @@
                 </button>
             </li>
             <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas"
+                <button class="nav-link px-3 text-dark" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                     aria-label="Toggle navigation">
                     <!--<svg class="bi">
@@ -305,7 +305,7 @@
     </header>
 
 
- 
+
     <div class="container-fluid">
         <div class="row">
             <div class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -436,32 +436,31 @@
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
-                          <li class="breadcrumb-item">
-                            <a class="link-body-emphasis" href="#">
-                              <i class="fa fa-home"></i>
-                              <span class="visually-hidden">Home</span>
-                            </a>
-                          </li>
-                          <li class="breadcrumb-item">
-                            <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Library</a>
-                          </li>
-                          <li class="breadcrumb-item active" aria-current="page">
-                            Data
-                          </li>
+                            <li class="breadcrumb-item">
+                                <a class="link-body-emphasis" href="{{ url_for('course.list_all_courses')}}">
+                                    <i class="fa fa-home"></i>
+                                    <span class="visually-hidden">Home</span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Course</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <span id="course_name">{{ course_name}}</span>
+                            </li>
                         </ol>
-                      </nav>
+                    </nav>
                 </div>
 
                 <div class="container" id="container">
 
-                    <h2>Section title</h2>
 
                     <div class="video-container mb-3 ">
 
                         <div class="ratio ratio-16x9">
                             <iframe title="TechInnovate: Revolutionizing Business with Data Science"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video"
-                                allowfullscreen>
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                title="YouTube video" allowfullscreen>
                             </iframe>
 
                             <!--<iframe class="iframe-video" src=""
@@ -470,11 +469,13 @@
                             allowfullscreen>
                         </iframe>-->
 
-                            <video autoplay id="videoPlayer" class="w-100" controls>
-
-                                <source src="" type="video/mp4">
-
-                            </video>
+                            <div id="localvideo">
+                                <video autoplay id="videoPlayer" class="w-100" controls>
+                                    <source
+                                        src="{{ url_for('static', filename='uploads/tutorials/TDD_with_Python_Application_-_product_price_PART_02a.mp4')}}"
+                                        type="video/mp4">
+                                </video>
+                            </div>
                         </div>
                     </div>
 
@@ -500,10 +501,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <script>
-        // https://www.youtube.com/embed/${String(content_file).trim()}?autoplay=${localStorage.getItem(autoPlay)}
         const lightbox = GLightbox({ selector: '.glightbox' });
         // Reference the navigation container
         const nav = document.getElementById('mainNav');
+        const divLocalVideo = document.getElementById('localvideo')
         const iframe = document.querySelector('iframe')
         const videoTag = document.querySelector('video')
 
@@ -513,37 +514,47 @@
         })
 
         function viewContent(course_name, topic, origin, content_file, module) {
-            
-                alert(origin)
+
             if (String(origin).trim() === 'localhost') {
-                alert(content_file)
-                const source = document.querySelector('source')
-                //const source = document.createElement('source')
                 iframe.style = 'display:none;'
                 iframe.src = '';
-                videoTag.style = 'display:block;'
-                source.src = `${window.location.origin + '/static/' + String(content_file).trim()}`; 
-                
-                //while(videoTag.firstChild){
-                    //videoTag.remove(videoTag.firstChild)
-                //}
-                //videoTag.appendChild(source)
-                //videoTag = `<source src="${String(content_file).trim()}" type="video/mp4">`;
+                divLocalVideo.style = 'display:block;'
+
+                divLocalVideo.innerHTML = `
+                <video autoplay id="videoPlayer" class="w-100" controls>
+                    <source src="${window.location.origin}/static/${String(content_file)}" type="video/mp4">
+                </video> 
+                `;
 
             } else if (String(origin).trim() === 'youtube') {
-                videoTag.style = 'display:none;'               
-                iframe.style = 'display:block;'
-                const urlChunks = String(content_file).split('/')
                 
-                if (urlChunks.length === 4) {
-                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[3]).trim()}?autoplay=true`;
-                }else{
-                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[0]).trim()}?autoplay=true`;
+                divLocalVideo.style = 'display:none;'
+                divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" controls></video>`;
+                iframe.style = 'display:block;'
+
+                const characters = ['v=', 'watch?']
+                const characters2 = ['https:', '.be']
+
+                /**
+                previous code to test: /v=/.test(content_file)
+                I should use this code in an condiction chain like
+                    if(/v=/.test(content_file)){}
+                */
+                const containsCharacters = characters.some(char => String(content_file).includes(char))
+                const containsCharacters2 = characters2.some(char => String(content_file).includes(char))
+
+                if (containsCharacters) {
+                    const urlChunks = String(content_file).split('=')
+                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[1]).trim()}?autoplay=true`;
+                    return;
                 }
 
+                if (containsCharacters2) {
+                    const urlChunks = String(content_file).split('/')
+                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[3]).trim()}?autoplay=true`;
+                    return;
+                }
 
-                //videoTag += `
-                //<source src="${String(content_file).trim()}" type="video/mp4">`;
             }
 
         }

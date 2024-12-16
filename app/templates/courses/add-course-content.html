@@ -688,11 +688,11 @@
         }
       })
       .then(data => {
-
-        //console.log(data)
+        data = JSON.parse(data)
+        console.log(data)
         document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
 
-        if (data) {
+        if (data.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
           window.open(`${endpoint}?course=${formData.get('courseTitle').replace(' ', '+')}`, '_self')
           //document.getElementById('error-block').style.display = 'none'

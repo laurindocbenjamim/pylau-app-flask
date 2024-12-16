@@ -237,7 +237,7 @@ def create_course_content():
             
                         # Join the file with its path
                         save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
-                        video.save(save_path.replace('\\', '/'))
+                        video.save(save_path.replace('\\', '/'))            
             
             course_module = request.form.get('courseModule', '')
             course_title = request.form['courseTitle']
@@ -248,7 +248,7 @@ def create_course_content():
                 "course_name": course_title,
                 "file_origin": file_origin,
                 "course_topic": topic,
-                "course_content_file": save_path
+                "course_content_file": str(save_path).replace('app/static/', '')
             }
 
             if course_module and course_module !='':
@@ -262,7 +262,7 @@ def create_course_content():
                 status = update_courses_content_to_mgdb(connection=connection, course_name=course_title, course_topic=topic, document=document)
                 #respo = f"Your {content} data was updated successfully {course_title}"
                 
-                return jsonify({"response": "Document updated successfully!"}), 200
+                return jsonify({"status_code": 200, "response": "Document updated successfully!"}), 200
             else:
                 
                 status, sms = save_courses_content_to_mgdb(connection, document)
@@ -273,7 +273,7 @@ def create_course_content():
                     document = f"Document saved successfully! {sms}"
             # close the server connecton
             connection.close()
-            return jsonify({"response": document, "sms": sms}), 200
+            return jsonify({"status_code": 200, "response": document, "sms": sms}), 200
         except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
         
