@@ -5,7 +5,7 @@ from flask import Request, current_app
 from werkzeug.utils import secure_filename
 
 
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'mp4', 'webm', 'mkv', 'avi'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'mp4', 'webm', 'mkv', 'avi', 'wave'}
 
 
 def load_content(self, file_type='txt'):

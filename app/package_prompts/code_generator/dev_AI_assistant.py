@@ -42,3 +42,4 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
         set_logger_message(error_info)
            
         return False, str(e)
+    

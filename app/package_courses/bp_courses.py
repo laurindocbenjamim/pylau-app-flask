@@ -30,7 +30,8 @@ from ..package_payment.payment.payment_card import PaymentCardModel
 from ..package_payment.payment.payment import PaymentModel
 from ..package_courses.course.course_post_update_view import CoursePostUpdateView
 from ..package_code_editor.code_editor_factory import CodeEditorFactory
-from ..utils import __get_cookies, set_header_params
+from app.utils import __get_cookies, set_header_params
+from app.utils.my_file_factory import validate_file, upload_file
 
 bp_courses.add_url_rule(
     "/post",
@@ -307,6 +308,84 @@ def create_course_content():
         return response
     except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+# Create the courses quizes with Open AI
+@bp_courses.route("/create-content/quizzes/<string:course>/<string:topic>", methods=["GET", "POST"])
+@cross_origin(methods=["GET", "POST"])
+def create_courses_quizes(course,topic):
+    course_title = escape(course)
+    topic = escape(topic)
+    module = escape(request.args.get('module'))
+    courses_module = set()
+    
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    if request.method == 'POST':
+        prompt = """
+                    You are a software engineer. 
+                    Your task is to return only an object with two columns: script, recomendations.
+                    Remember to return the requested script.
+                    Add comments to the generated script.
+                    Follow the best practices of development patterns.
+                """
+        prompt = f"""
+                    {prompt} 
+                        \n{request.form.get('prompt')}
+                    """
+
+        message =""
+        from app.package_prompts.code_generator.dev_AI_assistant import validate_string_with_digits,get_completion, gpt_model
+
+        
+        try:
+            if prompt is None:
+                return jsonify({"status_code":201, "data": "No prompt has been received."})
+            #elif not validate_string_with_digits(prompt):   
+            #    return jsonify({"status_code":201, "data": "Invalid characters where found in your prompt"})
+            else:
+                
+                prompt = f"""
+                {prompt} 
+                            {request.form.get('prompt')}
+                            
+                            Do not return the steps to create it instead, you create the requested task.
+                        """
+                completion = get_completion(prompt, gpt_model[1])
+
+                return jsonify({"status_code":200, "prompt": prompt, "data": completion})
+        except Exception as e:
+            return jsonify({"status_code":400, "data": f"Failed to prompt {str(e)}"})
+
+    try:
+        
+        # Getting the course data by name from MongoDB
+        data = get_courses_by_coursename(connection=connection, course_name=course_title)
+        course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+
+        if course_content:
+            for course in course_content:
+                if 'course_module' in course:
+                    courses_module.add(course['course_module'])
+        courses_module = list(courses_module) 
+
+     
+        response = make_response(
+            render_template(
+                "courses/add-course-content-quizzes.html",
+                title="Create C.C.Quizzes",
+                USER_DATA=__get_cookies,
+                courses_topic = topic,
+                courses_module = module,
+                course_name=course_title
+            )
+        )
+        set_header_params(response)
+        return response
+    except Exception as e:
+            return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
 
 # remove course content from mongoDB
 @bp_courses.route("/remove-content", methods=["DELETE"])

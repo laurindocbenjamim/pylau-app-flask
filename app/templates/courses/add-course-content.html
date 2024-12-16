@@ -9,7 +9,7 @@
                 class="btn btn-sm btn-outline-secondary">Content</a>
 
                 <a href="{{ url_for('course.view_courses_demo', course=course_name)}}"
-                class="btn btn-sm btn-outline-secondary" target="_blank">View Demo</a>
+                class="btn btn-sm btn-outline-secondary" target="_blank">View Demo</a>                
                 
               {% endif %} 
     </div>
@@ -278,13 +278,23 @@
               
             </div>
 
-            <div class="col-7 mt-3">
-              <button type="submit" id="btn-save" class="btn btn-light btn-large btn-save">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+              <div class="col">
+                <button type="submit" id="btn-save" class="btn btn-outline-success btn-lg btn-save">
                 <i class="fas fa-save"></i> Save Course
               </button>
-              <button type="button" id="removeContentBtn" disabled class="btn btn-outline-danger btn-sm">
-                <i class="fas fa-trash"></i> Remove Content
-              </button>
+              </div>
+              
+              <div class="col">
+                <button type="button" id="removeContentBtn" disabled class="btn btn-outline-danger btn-lg">
+                  <i class="fas fa-trash"></i> Remove Content
+                </button>
+              </div>
+              <div class="col">
+                <a href="#" id="add-quizzes" class="btn btn-outline-primary btn-lg">
+                  <i class="fas fa-plus"></i> Create Quizzes
+                </a>
+              </div>              
             </div>
           </form>
 
@@ -310,6 +320,7 @@
 <script>
 
   var autoPlay = 'autoplay'
+  const addQuizzesBTN = document.getElementById('add-quizzes')
 
   if (localStorage.getItem(autoPlay) === null | localStorage.getItem(autoPlay) === 'null') {
     localStorage.setItem(autoPlay, 1)
@@ -348,7 +359,7 @@
 
     const videoTag = document.querySelector('video')
     //videoTag.src = video
-    alert(String(video).trim())
+    //alert(String(video).trim())
     try {
       const iframe = document.querySelector('.modal-body')
       const div = document.createElement('div')
@@ -386,7 +397,7 @@
     videoFile.removeAttribute('accept');
   })
 
-
+  
   function editContent(course_name, topic, origin, content_file, module) {
     let content = {
       "course_name": course_name,
@@ -398,10 +409,14 @@
     if (module !== '') {
       content['module'] = module
     }
-
-
+    alert(module)
+    addQuizzesBTN.style = 'display:block;'
+    addQuizzesBTN.href = `${window.location.origin}/course/create-content/quizzes/${course_name}/${topic}?module=${module}`;
+    //addQuizzesBTN.addEventListener('click', (e)=>{
+    //  alert(`${window.location.origin}/course/create-content/quizzes/${course_name}/${topic}/module=${module}`)
+    //})
     const contentContainer = document.getElementById("contentContainer");
-
+    
     contentContainer.style.display = 'block';
     setTimeout(() => {
       contentContainer.classList.add('show');
@@ -498,6 +513,7 @@
 
       const oldFile = document.getElementById('video-file')
       oldFile.style = 'display:none;'
+      addQuizzesBTN.style = 'display:none;'
 
       btnRemove.disabled = true
       form.reset();
