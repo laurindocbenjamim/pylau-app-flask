@@ -234,7 +234,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 
-<body style="background-color: #001E2B; color:#FFF">
+<body >
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path
@@ -257,9 +257,8 @@
 
 
 
-    <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-whit" style="color: #27FF82;" href="#">Data
-            Tuning</a>
+    <header class="navbar sticky-top bg-light flex-md-nowrap p-0 shadow" data-bs-theme="light">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 bg-light"  href="{{ url_for('course.list_all_courses')}} "><b>Courses</b></a>
 
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
@@ -306,19 +305,10 @@
     </header>
 
 
-    <style>
-        .sidebar {
-            background-color: #112733;
-            color: #828485;
-        }
-
-        .sidebar a {
-            color: #c0c4c5;
-        }
-    </style>
+ 
     <div class="container-fluid">
         <div class="row">
-            <div class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar">
+            <div class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiar" tabindex="-1" id="sidebarMenu"
                     aria-labelledby="sidebarMenuLabel">
                     <div class="offcanvas-header">
@@ -347,7 +337,7 @@
                             {% set collapse = module %}
                             <li class="mb-1">
                                 <button
-                                    class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                                    class="btn btn-toggle d-inline-flex align-items-center rounde border-0 collapsed"
                                     data-bs-toggle="collapse" data-bs-target="#{{ collapse.replace(' ','') }}"
                                     aria-expanded="false">
                                     {{ module }}
@@ -364,7 +354,7 @@
                                         {% set content_file = content['course_content_file'] %}
 
                                         <li><a href="#"
-                                                class="link-body-light d-inline-flex text-decoration-none rounded"
+                                                class="link-body-light d-inline-flex text-decoration-none rounde"
                                                 onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')">
                                                 {{ content['course_topic']}}
                                             </a></li>
@@ -444,20 +434,22 @@
 
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                        </div>
-                        <button type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                            <svg class="bi">
-                                <use xlink:href="#calendar3" />
-                            </svg>
-                            This week
-                        </button>
-                    </div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
+                          <li class="breadcrumb-item">
+                            <a class="link-body-emphasis" href="#">
+                              <i class="fa fa-home"></i>
+                              <span class="visually-hidden">Home</span>
+                            </a>
+                          </li>
+                          <li class="breadcrumb-item">
+                            <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Library</a>
+                          </li>
+                          <li class="breadcrumb-item active" aria-current="page">
+                            Data
+                          </li>
+                        </ol>
+                      </nav>
                 </div>
 
                 <div class="container" id="container">
@@ -522,8 +514,9 @@
 
         function viewContent(course_name, topic, origin, content_file, module) {
             
-
+                alert(origin)
             if (String(origin).trim() === 'localhost') {
+                alert(content_file)
                 const source = document.querySelector('source')
                 //const source = document.createElement('source')
                 iframe.style = 'display:none;'
@@ -538,21 +531,20 @@
                 //videoTag = `<source src="${String(content_file).trim()}" type="video/mp4">`;
 
             } else if (String(origin).trim() === 'youtube') {
-                videoTag.style = 'display:none;'
-               
+                videoTag.style = 'display:none;'               
                 iframe.style = 'display:block;'
                 const urlChunks = String(content_file).split('/')
                 
                 if (urlChunks.length === 4) {
                     iframe.src = `https://www.youtube.com/embed/${String(urlChunks[3]).trim()}?autoplay=true`;
+                }else{
+                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[0]).trim()}?autoplay=true`;
                 }
 
 
                 //videoTag += `
                 //<source src="${String(content_file).trim()}" type="video/mp4">`;
             }
-            // videoTag += ` Your browser does not support the video tag.
-            //</video>${formButtons}`;
 
         }
 
