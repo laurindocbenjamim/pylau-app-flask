@@ -304,11 +304,14 @@
 
         </div>
       </div>
-      <div class="col-7 mt-3">
-        <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <button type="button" id="addObjectiveBtn" class="btn btn-outline-warning btn-sm">
           <i class="fas fa-plus"></i> Add Content
         </button>
 
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Browse the Code
+        </button>
       </div>
 
 
@@ -317,33 +320,42 @@
 
   <!-- Modal full screem-->
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
+
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">SharkScript</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <!--<div class="" id="pagebrowser"></div>
-          style="width: 100%; height: 500px;"-->
-          <iframe id="codeFrame" class="w-100" ></iframe>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <nav class="navbar bg-body-tertiary">
+            <form class="container-fluid justify-content-end">
+              <button class="btn btn-outline-success me-2" id="try-again" type="button">Try Again</button>
+
+            </form>
+          </nav>
+          <!--<div class="" id="pagebrowser"></div><iframe  class="w-100" style="width: 100%; height: 500px;"></iframe>
+          -->
+          <div class="ratio ratio-16x9">
+            <iframe id="codeFrame" title="TechInnovate: Revolutionizing Business with Data Science"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              title="YouTube video" allowfullscreen>
+            </iframe>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
         </div>
       </div>
     </div>
+
+
   </div>
-
-
-</div>
 </div>
 
 
@@ -359,16 +371,25 @@
 
 <script>
 
-  
+
 
 
   document.addEventListener('DOMContentLoaded', function () {
+    let generatedCode = null
+    const tryAgainBtn = document.getElementById('try-again')
     const chatbox = document.getElementById('chatbox');
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
     const loadingSpinner = document.querySelector(".loading-spinner");
 
+
+    tryAgainBtn.addEventListener('click', (e) => {
+      const iframe = document.getElementById('codeFrame');
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write(generatedCode);
+      iframe.contentWindow.document.close();
+    })
     function addMessage(message, isUser = false) {
       const messageElement = document.createElement('div');
       messageElement.classList.add('message');
@@ -397,11 +418,11 @@
 
     function handleUserInput() {
       const message = userInput.value.trim();
-      let finalResponse =null
+
       if (message) {
         addMessage(message, true);
         userInput.value = '';
-        
+
         setTimeout(() => {
           const courseTitle = '{{ course_name }}'
           const topic = '{{ courses_topic }}'
@@ -415,29 +436,29 @@
               resolve(serverResponse)
             })
             promise.then(result => {
-              var data = String(result.data[1]).replace('```','')
+              var data = String(result.data[1]).replace('```', '')
               if (result.data !== "") {
-                data = String(data).replace('```','')
-                if(/json{/.test(data)){
-                  data = String(data).replace('json{','')
+                data = String(data).replace('```', '')
+                if (/json{/.test(data)) {
+                  data = String(data).replace('json{', '')
                 }
-                data = String(data).replace('json','')
+                data = String(data).replace('json', '')
                 console.log(result)
                 console.log(data)
-                data = JSON.parse(data.replace('`',' '))
+                data = JSON.parse(data.replace('`', ' '))
                 console.log("Data: " + data);
                 console.log("Data: " + data.script);
 
-                finalResponse = data.script
-                //document.getElementById('pagebrowser').innerHTML = finalResponse
-                const iframe = document.getElementById('codeFrame'); 
-                iframe.contentWindow.document.open(); 
-                iframe.contentWindow.document.write(generatedCode); 
+                generatedCode = data.script
+                //document.getElementById('pagebrowser').innerHTML = generatedCode
+                const iframe = document.getElementById('codeFrame');
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(generatedCode);
                 iframe.contentWindow.document.close();
 
-                addMessage(finalResponse);
+                addMessage(generatedCode);
                 ///
-                $(document).ready((e)=>{
+                $(document).ready((e) => {
                   $('#exampleModal').modal('show');
                 });
 
@@ -449,7 +470,7 @@
           }
 
 
-          //const response = botResponse(finalResponse);
+          //const response = botResponse(generatedCode);
           //addMessage(response);
         }, 500);
       }
@@ -463,7 +484,7 @@
     });
 
     // Initial bot message
-    addMessage("Hello! I'm John's portfolio chatbot. How can I help you today?");
+    addMessage("Hello! I'm DTuning's assistante. How can I help you today?");
 
 
     //
