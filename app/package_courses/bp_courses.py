@@ -328,7 +328,7 @@ def create_courses_quizes(course,topic):
                     Your task is to return only an object with two columns: script, recomendations.
                     Remember to return the requested script.
                     Add comments to the generated script.
-                    Follow the best practices of development patterns.
+                    Follow the best practices of the UX (User Experience) and UI (User Interface) development patterns.
                 """
         prompt = f"""
                     {prompt} 
