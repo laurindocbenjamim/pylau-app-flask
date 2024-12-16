@@ -13,7 +13,6 @@
 .btn-toggle:hover,
 .btn-toggle:focus {
   color: #000000;
-  border: none;
   background-color: #d1d1d1;
 }
 
@@ -38,14 +37,16 @@
 
 .btn-toggle-nav a {
   padding: .1875rem .5rem;
+  width: 89%;
   margin-top: .125rem;
   margin-left: 1.25rem;
   border-radius: 0px;
+  color: #333333;
 }
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
-  color: #0f0f0f;
-  background-color: var(--bs-tertiary-bg);
+  color: #000000;
+  background-color: #d1d1d1;
 }
 
 .scrollarea {
