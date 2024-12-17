@@ -4,6 +4,7 @@ from bson import ObjectId
 from flask import Blueprint, render_template, make_response, request, jsonify
 from flask_cors import CORS, cross_origin
 from markupsafe import escape
+from datetime import datetime
 
 # from ..configs_package import mongodb_connection
 from pymongo import MongoClient
@@ -19,7 +20,7 @@ from .course.controller import get_courses_by_coursename, save_course_to_mgdb, s
 from .course.controller import get_courses_content_by_coursename
 from .course.controller import update_course_to_mgdb
 from .course.controller import update_courses_content_to_mgdb, get_all_courses_mgdb
-from .course.controller import remove_courses_content_from_mgdb
+from .course.controller import remove_courses_content_from_mgdb, save_courses_content_quizzes
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -386,6 +387,54 @@ def create_courses_quizes(course,topic):
     except Exception as e:
             return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
+
+# Save script in mongodb
+@bp_courses.route("/save-script-quizzes/<string:course>/<string:topic>", methods=["GET", "POST"])
+@cross_origin(methods=["GET", "POST"])
+def save_courses_quizzes_to_mongodb(course,topic):
+    course_title = escape(course)
+    topic = escape(topic)
+    module = escape(request.args.get('module'))
+
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    try:
+        script = request.form.get('script', '')
+        course_title = request.form['course']
+        module = request.form['module']
+        topic = request.form['topic']
+            
+        document = {    
+            "script": script,            
+            "course_name": course_title,
+            "course_topic": topic,
+            "course_module": module,
+            "datetime": datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        }           
+            
+        # Getting the course data by name from MongoDB
+        #course_content = get_courses_content_by_coursename_and_topic(connection=connection, course_name=course_title, course_topic=topic)
+        #return jsonify({"course": course_title, "topic": topic, "response": course_content}), 201
+        #if course_content and len(course_content) > 0:
+        #    status = update_courses_content_to_mgdb(connection=connection, course_name=course_title, course_topic=topic, document=document)
+            #respo = f"Your {content} data was updated successfully {course_title}"
+                
+        #    return jsonify({"status_code": 200, "response": "Document updated successfully!"}), 200
+        #else:
+        #return jsonify({"data": document, "status_code": 200, "message": "script saved successfully!"})        
+        status, sms = save_courses_content_quizzes(connection, document)
+                
+        if not status:
+            document = f"Failed to save the course's quizz! {sms}"
+        else: 
+            document = f"Document saved successfully! {sms}"
+            # close the server connecton
+        connection.close()
+        return jsonify({"status_code": 200, "message": document, "error": sms}), 200
+    except Exception as e:
+        return jsonify({"message": "An error occurred", "status_code": 500, "error": str(e)}), 200
+    
 
 # remove course content from mongoDB
 @bp_courses.route("/remove-content", methods=["DELETE"])

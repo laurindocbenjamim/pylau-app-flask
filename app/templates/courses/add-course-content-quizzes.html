@@ -1,7 +1,10 @@
 {% extends 'courses/base-layout.html' %}
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h5">{{ course_name }}</h1>
+  <h1 class="h5" id="course-title">
+    <a class="text-decoration-none"
+    href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}" rel="noopener noreferrer">{{ course_name }}</a>
+  </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-2">
       {% if course_name %}
@@ -156,14 +159,79 @@
     #send-button:hover {
       background-color: #138496;
     }
+
+    /* ------ Console css */
+    .console {
+      height: 300px;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 10px;
+      font-family: monospace;
+      /*overflow-y: auto;*/
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .console-title {
+      font-weight: bold;
+    }
+
+    .console-clear {
+      background-color: transparent;
+      color: #ecf0f1;
+      border: none;
+      cursor: pointer;
+    }
+
+    .console-clear:hover {
+      border-radius: 4px;
+      padding: .2rem .3rem;
+      background-color: #445464;
+    }
+
+    .console-output {
+      height: 230px;
+      padding: 7px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      border-bottom: 1px solid #3b4e61;
+    }
+
+    #editor,
+    #editorFrame {
+      flex-grow: 1;
+    }
+
+    .status-bar {
+      background-color: #007acc;
+      color: #ffffff;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+    }
+
+    .progress-bar {
+      margin: 0;
+      height: 30px;
+      color: #ffffff;
+
+      padding: 5px 3px;
+      font-size: 0.7rem;
+    }
   </style>
 
   <div class="bd-example-snippet bd-code-snippet">
     <div class="bd-example m-0 border-0">
       <!-- Course Name -->
       <div class="mb-3">
-
-        <h1 class="" id="coursesTitle">{{ courses_topic }}</h1>
+        {% if courses_module and courses_module !='None' %}
+        <h1 class="h2" id="coursesModule">{{ courses_module}}</h1>
+        {% endif %}
+        <h1 class="h3" id="coursesTopic">{{ courses_topic }}</h1>
       </div>
 
 
@@ -205,7 +273,7 @@
   </div>
 
 
-  <div class="row justify-content-left">
+  <div class="row justify-content-center">
     <div class="col-lg-8">
 
       <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
@@ -310,6 +378,16 @@
 
         </div>
       </div>
+
+      <div class="col-9">
+        <div class="progress-bar">
+          <div class="progress mt-3">
+            <div class="progress-bar my-progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+              aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        <span class="success-message"></span>
+      </div>
       <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3">
         <button type="button" id="addObjectiveBtn" class="btn btn-outline-warning btn-sm">
           <i class="fas fa-plus"></i> Add Content
@@ -356,9 +434,33 @@
             <div class="editorFrame" id="editorFrame" style="display:none"></div>
 
           </div>
+
+          <div class="container w-100" id="container-console" style="display: none;">
+            <!--- Browser windows -->
+            <div class="progress-bar">
+              <div class="progress mt-3">
+                <div id="myBar" class="progress-bar my-progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+
+            <!--- Console windows -->
+            <div class="status-bar w-100">
+              Line: <span id="line-number">1</span>, Column: <span id="column-number">1</span>
+            </div>
+            <!-- Console -->
+            <div class="console w-100" id="console">
+              <div class="console-header">
+                <div class="console-title">Console</div>
+                <button class="console-clear" id="clearConsole">Clear</button>
+              </div>
+              <div class="console-output" id="consoleOutput"></div>
+            </div>
+            <!-- end console -->
+          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-primary" id="btn-save-code">Save changes</button>
           </div>
         </div>
       </div>
@@ -402,6 +504,7 @@ If the 'next' button is clicked show other exercice to the user.
 
 Do not return to me the steps to create it instead, you create the requested task.
     `;
+
     let generatedCode = null
     const tryAgainBtn = document.getElementById('try-again')
     const editCode = document.getElementById('edit-code')
@@ -411,6 +514,18 @@ Do not return to me the steps to create it instead, you create the requested tas
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
     const loadingSpinner = document.querySelector(".loading-spinner");
     const spinner = document.getElementById('spinner')
+    const consoleOutput = document.getElementById('consoleOutput');
+    const courseTitle = document.getElementById('course-title')
+    const coursesModule = document.getElementById('coursesModule')
+    const coursesTopic = document.getElementById('coursesTopic')
+    const containerConsole = document.getElementById('container-console')
+    const clearConsole = document.getElementById('clearConsole')
+
+    const editor = ace.edit("editorFrame");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+
+    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
 
 
     tryAgainBtn.addEventListener('click', (e) => {
@@ -419,6 +534,7 @@ Do not return to me the steps to create it instead, you create the requested tas
       iframe.style.display = 'block';
 
       frameEditor.style.display = 'none';
+      containerConsole.style.display = 'none';
 
       iframe.contentWindow.document.open();
       iframe.contentWindow.document.write(generatedCode);
@@ -426,16 +542,15 @@ Do not return to me the steps to create it instead, you create the requested tas
     })
 
     editCode.addEventListener('click', (e) => {
-      const iframe = document.getElementById('codeFrame');      
+      const iframe = document.getElementById('codeFrame');
       iframe.style.display = 'none';
       const frameEditor = document.getElementById('editorFrame')
       frameEditor.style.display = 'block';
+      containerConsole.style.display = 'block';
 
       if (document.getElementById('editorFrame')) {
-        
-        const editor = ace.edit("editorFrame");
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/javascript");
+
+
         editor.setHighlightActiveLine(true); // or false to disable
 
         // Show print margin
@@ -448,6 +563,30 @@ Do not return to me the steps to create it instead, you create the requested tas
 
     document.getElementById('defualt-quizz').addEventListener('click', (e) => {
       handleUserInput(defaultPrompt)
+    })
+
+    document.getElementById('btn-save-code', (e) => {
+      e.preventDefault()
+
+      const courseTitle = '{{ course_name }}'
+      const coursesTopic = '{{ courses_topic }}'
+      const courseModule = '{{ courses_module }}'
+
+      if (!message || !courseTitle || !courseModule || !coursesTopic) {
+        //alert(`${courseTitle} || !${courseModule} || !${coursesTopic}`)
+        return;
+      } else {
+        const endpoint = `${window.location.origin}/course/save-script-quizzes/${courseTitle}/${coursesTopic}?module=${courseModule}`;
+        const script = editor.getValue();
+
+        const formData = new FormData()
+        formData.append('script', script)
+        formData.append('course', courseTitle)
+        formData.append('module', coursesModule)
+        formData.append('topic', coursesTopic)
+
+        saveScript(endpoint, csrfToken, formData)
+      }
     })
 
     function toggleSubmenu(event) {
@@ -466,7 +605,7 @@ Do not return to me the steps to create it instead, you create the requested tas
         }, 10); // Small delay to trigger the transition
       }
     }
-    
+
     function addMessage(message, isUser = false, isScript = false) {
       //<div id="editor" style="height: 500px; width: 100%;"></div>
       const messageElement = document.createElement('div');
@@ -474,31 +613,51 @@ Do not return to me the steps to create it instead, you create the requested tas
       if (isScript) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('user-message');
-        messageElement.style ='border-radius:0px';        
+        messageElement.style = 'border-radius:0px';
 
         const messageObj = document.querySelector('.message')
-        messageObj.style ='height: 500px;'
+        messageObj.style = 'height: 500px;'
         messageObj.setAttribute('id', 'editor')
 
         const navContainer = document.createElement('div');
         const iconEdit = document.createElement('i');
-        iconEdit.classList.add('fa','fa-edit')
+        iconEdit.classList.add('fa', 'fa-edit')
         const iconSave = document.createElement('i');
-        iconSave.classList.add('fa','fa-play')
+        iconSave.classList.add('fa', 'fa-play')
 
         navContainer.classList.add('container-fluid', 'justify-content-end')
 
         const codeSaveBtn = document.createElement('button');
         codeSaveBtn.classList.add('btn', 'btn-outline-success', 'me-2')
+        codeSaveBtn.title = 'Save this script'
         codeSaveBtn.appendChild(iconSave)
-        codeSaveBtn.addEventListener('click',(e)=>{
-          alert(message)
+        codeSaveBtn.addEventListener('click', (e) => {
+
+          const courseTitle = '{{ course_name }}'
+          const coursesTopic = '{{ courses_topic }}'
+          const courseModule = '{{ courses_module }}'
+
+          if (!message || !courseTitle || !courseModule || !coursesTopic) {
+            //alert(`${courseTitle} || !${courseModule} || !${coursesTopic}`)
+            return;
+          } else {
+            const endpoint = `${window.location.origin}/course/save-script-quizzes/${courseTitle}/${coursesTopic}?module=${courseModule}`;
+
+            const formData = new FormData()
+            formData.append('script', message)
+            formData.append('course', courseTitle)
+            formData.append('module', coursesModule)
+            formData.append('topic', coursesTopic)
+
+            saveScript(endpoint, csrfToken, formData)
+          }
         });
         //codeSaveBtn.textContent = "Save"
         const codeEditBtn = document.createElement('button');
         codeEditBtn.classList.add('btn', 'btn-outline-primary', 'me-2')
+        codeEditBtn.title = 'Open the code editor'
         codeEditBtn.appendChild(iconEdit)
-        codeEditBtn.addEventListener('click',(e)=>{
+        codeEditBtn.addEventListener('click', (e) => {
           const frameEditor = document.getElementById('editorFrame')
           const iframe = document.getElementById('codeFrame');
           iframe.style.display = 'none';
@@ -508,9 +667,38 @@ Do not return to me the steps to create it instead, you create the requested tas
             $('#exampleModal').modal('show');
           });
           frameEditor.style.display = 'block';
+          containerConsole.style.display = 'block';
 
         });
-        //codeEditBtn.textContent = "Edit"
+
+        const codeRunBtn = document.createElement('button');
+        codeRunBtn.classList.add('btn', 'btn-outline-info', 'me-2')
+        codeRunBtn.title = 'Run this script'
+        const iconRun = document.createElement('i');
+        iconRun.classList.add('fa-solid', 'fa-code')
+        codeRunBtn.appendChild(iconRun)
+        
+        codeRunBtn.addEventListener('click', (e)=>{
+          const frameEditor = document.getElementById('editorFrame')
+          const iframe = document.getElementById('codeFrame');
+          iframe.style.display = 'block';
+
+          iframe.contentWindow.document.open();
+          iframe.contentWindow.document.write(message);
+          iframe.contentWindow.document.close();
+
+          // First show the modal
+          $(document).ready((e) => {
+            $('#exampleModal').modal('show');
+          });
+          frameEditor.style.display = 'none';
+          containerConsole.style.display = 'none';
+          
+        })
+
+        
+
+        navContainer.appendChild(codeRunBtn)
         navContainer.appendChild(codeSaveBtn)
         navContainer.appendChild(codeEditBtn)
 
@@ -538,8 +726,8 @@ Do not return to me the steps to create it instead, you create the requested tas
         chatbox.appendChild(messageElement);
         chatbox.scrollTop = chatbox.scrollHeight;
       }
-      
-      
+
+
     }
 
     function botResponse(message) {
@@ -589,11 +777,11 @@ Do not return to me the steps to create it instead, you create the requested tas
                   data = String(data).replace('json{', '')
                 }
                 data = String(data).replace('json', '')
-                console.log(result)
-                console.log(data)
+                //console.log(result)
+                //console.log(data)
                 data = JSON.parse(data.replace('`', ' '))
                 //console.log("Data: " + data);
-                console.log("Data: " + data.script);
+                //console.log("Data: " + data.script);
 
                 generatedCode = data.script
                 //document.getElementById('pagebrowser').innerHTML = generatedCode
@@ -686,50 +874,7 @@ Do not return to me the steps to create it instead, you create the requested tas
     }
 
 
-    function sendPrompt(endpoint, formData, headers) {
-
-      fetch(endpoint, {
-        method: 'POST',
-        body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
-        headers: headers
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.text();
-          } else {
-            throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-          }
-        })
-        .then(data => {
-          data = JSON.parse(data)
-          console.log(data)
-          document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
-
-          if (data.status_code === 200) {
-            //document.querySelector('.error-message').style.display = 'block'
-            //window.open(`${endpoint}?course=${formData.get('courseTitle').replace(' ', '+')}`, '_self')
-            //document.getElementById('error-block').style.display = 'none'
-            //window.open(`${endpoint}?course=${courseName}`, '_self')
-
-
-
-          } else {
-            btnSave.style.backgroundColor = "red"
-            btnSave.style.color = "#FFF"
-            throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
-          }
-        })
-        .catch((error) => {
-          const errorMessage = document.getElementById('error-message')
-          //document.getElementById('error-block').style.display = 'block'
-          displayError(errorMessage, error);
-        });
-
-
-
-    }
-
-
+    
     async function fetch01(endpoint, fetchHeaders, formData, fetchMethod) {
       /**
       * return: a json object
@@ -760,7 +905,97 @@ Do not return to me the steps to create it instead, you create the requested tas
         console.error('Error fetching suggestion:', error);
         return false
       }
-    }
+    };
+
+
+    /// Save the script from code editor
+    async function saveScript(endpoint, csrfToken, formData) {
+      //const progressBar = document.getElementById('myBar');
+      const progressBar = document.querySelector('.my-progressBar');
+      progressBar.style.width = '0%';
+      progressBar.setAttribute('aria-valuenow', 0);
+
+      const filename = document.getElementById('filename')
+      //const chunk = String(filename.textContent).trim().split('.')
+
+      //const endpoint = `${window.location.origin}/course/learn/laubcode/save-code/${chunk[0]}/${chunk[1]}`;
+
+      const headers = new Headers()
+      headers.append('X-CSRF-Token', csrfToken)
+      headers.append("Authorization", ` Bearer ${csrfToken}`);
+      //const formData = new FormData()
+      //formData.append("code", code)
+      //formData.append('filename', String(filename))
+
+      consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+      fetch(endpoint,
+        {
+          method: "POST",
+          headers: headers, // Add the CSRF token to the headers
+          body: formData,  //JSON.stringify({"comment": comment}),            
+        }
+      ).then(response => {
+        const reader = response.body.getReader();
+        const contentLength = +response.headers.get('Content-Length');
+        let receivedLength = 0;
+
+        return new ReadableStream({
+          start(controller) {
+            function push() {
+              reader.read().then(({ done, value }) => {
+                if (done) {
+                  controller.close();
+                  progressBar.style.width = '100%';
+                  progressBar.setAttribute('aria-valuenow', 100);
+                  return;
+                }
+                receivedLength += value.length;
+                const progress = (receivedLength / contentLength) * 100;
+                progressBar.style.backgroundColor = '#3cd644'
+                progressBar.style.width = progress + '%';
+                progressBar.style.color = '#fff'
+                progressBar.textContent = progress + '%';
+                progressBar.setAttribute('aria-valuenow', progress);
+                controller.enqueue(value);
+                push();
+              });
+            }
+            push();
+          }
+        });
+      })
+        .then(stream => new Response(stream))
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          //console.log(data)
+
+          if (data.status_code === 400) {
+            console.log(String(data[0].message))
+            document.querySelector('.success-message').innerHTML = `<pre class="text-danger">Failed to save the project: ${String(data.message)}</pre>`;
+            consoleOutput.innerHTML += `<pre class="text-danger">${String(data.message)}</pre>`;
+          } else if (data.status_code === 200) {
+            //console.log(data)
+            document.querySelector('.success-message').innerHTML = `<pre class="text-success">${String(data.message)}</pre>`;
+            consoleOutput.innerHTML += `<pre class="text-success">${String(data.message)}</pre>`;
+          } else {
+            consoleOutput.innerHTML += `<pre class="text-danger">${String(data.message)}</pre>`;
+          }
+
+        }).catch((err) => {
+          console.log("Error: " + err)
+          document.querySelector('.success-message').innerHTML = `<pre class="text-danger">Failed to save the project: ${String(err)}</pre>`;
+          consoleOutput.innerHTML += `<pre class="text-danger">Failed to save the project: ${String(err)}</pre>`;
+
+          progressBar.style.backgroundColor = 'red'
+        })
+    };
+
+
   });
 
 </script>

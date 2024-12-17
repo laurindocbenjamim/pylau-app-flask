@@ -155,7 +155,7 @@
             background-color: red;
         }
 
-        #my-projects-menunu{
+        #my-projects-menunu {
             height: 100px;
         }
 
@@ -407,14 +407,14 @@
 
         #resizer {
             width: 2px;
-            
+
             cursor: ew-resize;
             background-color: #858585;
             position: absolute;
             margin-left: 247px;
             top: 0;
             height: 100%;
-          }
+        }
 
 
         @media (max-width: 768px) {
@@ -498,14 +498,16 @@
                     </ul>-->
                     <ul class="submenu" id="submenu">
                         <li style="margin-bottom: 2%;cursor:pointer; margin-left:3%;">
-                            <span class="badge borde border-light-subtle text-light-emphasis rounded-pill" title="Create file" id="create-new-file" 
-                            style="cursor:pointer;text-align:center; border:none">
-                                <i class="fa-solid fa-file-circle-plus" style="color: #3bec24;margin-bottom: 5%; margin-top:5%"></i>
+                            <span class="badge borde border-light-subtle text-light-emphasis rounded-pill"
+                                title="Create file" id="create-new-file"
+                                style="cursor:pointer;text-align:center; border:none">
+                                <i class="fa-solid fa-file-circle-plus"
+                                    style="color: #3bec24;margin-bottom: 5%; margin-top:5%"></i>
                             </span>
                             <!--<button class="btn btn-primary rounded-circle p-3 lh-1" type="button" id="create-new-file" title="create file">
                                 <i class="fa-solid fa-file-circle-plus" style="color: #3bec24;margin-bottom: 5%; margin-top:5%"></i>
                             </button>-->
-                            </li>
+                        </li>
                         <li id="new-filename-inputfield" style="margin-bottom: 2%; margin-left:3%;"></li>
                         {% if filelist %}
                         {% if '404' not in filelist %}
@@ -558,15 +560,16 @@
                 </li>
                 <!--<li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
                 <li><a href="#"><i class="fas fa-question-circle"></i><span>Help</span></a></li>-->
-                
+
             </ul>
             <ul>
-                <li><a href="#" id="chat-ai" onclick="chatWithAI(event)" style="border-top: 1px solid #3f3e3e;"><i class="fa-regular fa-comments"></i><span>AI
-                    chat</span></a></li>
+                <li><a href="#" id="chat-ai" onclick="chatWithAI(event)" style="border-top: 1px solid #3f3e3e;"><i
+                            class="fa-regular fa-comments"></i><span>AI
+                            chat</span></a></li>
             </ul>
             <!--<div id="resizer"></div>-->
         </div>
-        
+
 
         <div class="editor-container">
 
@@ -627,26 +630,28 @@
                                 <img src="{{ session.get('image_profile')}}" alt="mdo" width="32" height="32"
                                     class="rounded-circle">
                                 {% else %}
-                                <img src="https://img.icons8.com/?size=100&id=7rcs0z3sdioE&format=png&color=000000" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                                <img src="https://img.icons8.com/?size=100&id=7rcs0z3sdioE&format=png&color=000000"
+                                    alt="mdo" width="32" height="32" class="rounded-circle">
                                 {% endif %}
                             </a>
                             <ul class="dropdown-menu text-small">
-                                <li><a class="dropdown-item" >{{ session.get('firstname')}} {{ session.get('lastname')}}</a></li>
-                                <li><a class="dropdown-item" style="text-decoration: underline;" >{{ session.get('email')}}</a></li>
-                                <li><a class="dropdown-item" >New project...</a></li>
-                                <li><a class="dropdown-item" >Settings</a></li>
-                                <li><a class="dropdown-item" >Profile</a></li>
+                                <li><a class="dropdown-item">{{ session.get('firstname')}} {{
+                                        session.get('lastname')}}</a></li>
+                                <li><a class="dropdown-item" style="text-decoration: underline;">{{
+                                        session.get('email')}}</a></li>
+                                <li><a class="dropdown-item">New project...</a></li>
+                                <li><a class="dropdown-item">Settings</a></li>
+                                <li><a class="dropdown-item">Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" >Sign out</a></li>
+                                <li><a class="dropdown-item">Sign out</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </header>
-            
+
 
             <!--<div class="toolbar">
                 <div style="margin-left: 2%; ">
@@ -758,7 +763,7 @@
             </div>
 
             <!-- Footer -->
-             
+
             <!--<footer class="d-flex flex-wrap justify-content-between align-items-center bg-ligh py-3 my-4 border-top">
                 <div class="col-md-4 d-flex align-items-center">
                   <a href="#" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
@@ -784,13 +789,13 @@
     {% include './footer.html' %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    
+
     <script src="{{ url_for('static', filename='app/app_editor.js')}}"></script>
     <script src="{{ url_for('static', filename='assets/js/editor_controller.js')}}"></script>
     <script src="{{ url_for('static', filename='app/debug_python_script.js')}}"></script>
     <script src="{{ url_for('static', filename='app/debug_javascript_code.js')}}"></script>
     <script src="{{ url_for('static', filename='app/chat_box.js')}}"></script>
-    
+
     <script>
 
         document.addEventListener('keydown', function (e) {
@@ -802,21 +807,21 @@
         function update_the_page() {
             // Get the query string from the current URL
             const queryString = window.location.search;
-        
+
             // Create a URLSearchParams object
             const urlParams = new URLSearchParams(queryString);
-        
+
             // Get the value of a specific parameter
             const fileName = urlParams.get("fileName"); // "shirt"
             const courseID = urlParams.get("courseID"); // "shirt"
             const description = urlParams.get("description"); // "shirt"
             const user_token = urlParams.get("user_token"); // "shirt"
-        
-            try{
+
+            try {
                 window.location.href = `${window.location.origin}/course/learn/laubcode/root/load-scripts?
             fileName=${fileName}&&courseID=${courseID}&&description=${description}&&user_token=${user_token}`;
-            }catch(err){ console.log(err)}
-          }
+            } catch (err) { console.log(err) }
+        }
 
 
 
@@ -996,8 +1001,8 @@
 
             const language = checkLanguage(languageSelect)
 
-            if(script && language){                
-                
+            if (script && language) {
+
                 const formattedContent = prettier.format(script, {
                     parser: `${language}`,
                     plugins: prettierPlugins
@@ -1008,10 +1013,10 @@
         }
 
         // Load the file content when the entire page is loaded
-        if(serverFilename !== null && serverFilename !== 'None' && serverFilename !==''){
-            localStorage.setItem('filename',  serverFilename)
+        if (serverFilename !== null && serverFilename !== 'None' && serverFilename !== '') {
+            localStorage.setItem('filename', serverFilename)
         }
-        
+
         if (localStorage.getItem('filename')) {
             fileName.textContent = localStorage.getItem('filename')
             // Assign the onLoadHandler function to the window's load event
@@ -1116,7 +1121,7 @@
         runBtn.addEventListener('click', () => {
             const code = editor.getValue();
             consoleOutput.innerHTML = ''; // Clear previous output
-            
+
             if (checkLanguage(languageSelect) === 'html') {
 
                 browser.classList.add('expand-browser')
@@ -1149,32 +1154,32 @@
                         browser.style.display = 'block'
                     }, 100)
                 }
-            }else if (checkLanguage(languageSelect) === 'python') {
-                
-                if(code !==''){
-                    
-                    if(!laubCodeConsole.classList.contains('minimize-browser')){
+            } else if (checkLanguage(languageSelect) === 'python') {
+
+                if (code !== '') {
+
+                    if (!laubCodeConsole.classList.contains('minimize-browser')) {
                         laubCodeConsole.classList.add('minimize-browser')
                         browser.classList.remove('minimize-browser')
 
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             browser.style.display = 'none'
                             laubCodeConsole.style.display = 'block'
-                        },300)
-                    }else{
+                        }, 300)
+                    } else {
                         browser.classList.remove('minimize-browser')
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             browser.style.display = 'none'
                             laubCodeConsole.style.display = 'block'
-                        },300)
+                        }, 300)
                     }
-                   
+
                     consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
                     debug_python_script(code, consoleOutput, checkLanguage(languageSelect))
                     //runPythonScript(code)
                 }
-                
-            }else{
+
+            } else {
                 consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
                 consoleOutput.innerHTML += 'Unsupported language!!!'
             }
@@ -1206,11 +1211,11 @@
                     browser.style.display = 'none'
                 }, 400)
             }
-            
-            if(!laubCodeConsole.classList.contains('minimize-browser')){
-                laubCodeConsole.classList.add('minimize-browser')                
+
+            if (!laubCodeConsole.classList.contains('minimize-browser')) {
+                laubCodeConsole.classList.add('minimize-browser')
             }
-            laubCodeConsole.style.display='block'
+            laubCodeConsole.style.display = 'block'
         }
 
 
@@ -1234,7 +1239,7 @@
             formData.append('filename', String(filename.textContent))
             //formData.append("course_id", courseID)
             //formData.append("lesson", lesson)
-            
+
             consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
             fetch(endpoint,
                 {
@@ -1281,20 +1286,20 @@
                 })
                 .then((data) => {
                     console.log(data)
-                    
-                    if(data[1] === 400){
+
+                    if (data[1] === 400) {
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
-                    }else{                        
-                        if(data[0].status){
-                            
+                    } else {
+                        if (data[0].status) {
+
                         }
-                        
-                    } 
-                   
+
+                    }
+
                 }).catch((err) => {
-                    console.log("Error: " + err)                                        
+                    console.log("Error: " + err)
                     consoleOutput.innerHTML += `<pre class="text-danger">Failed to save the project: ${String(err)}</pre>`;
-                    
+
                     progressBar.style.backgroundColor = 'red'
                 })
         }
@@ -1312,7 +1317,7 @@
             const formData = new FormData()
             formData.append("old_filename", String(oldFileName))
             formData.append('new_filename', String(newFileName).trim())
-            
+
             consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
 
             fetch(endpoint,
@@ -1360,28 +1365,28 @@
                 })
                 .then((data) => {
                     console.log(data)
-                                       
-                    if(data[1] === 400){
+
+                    if (data[1] === 400) {
                         consoleOutput.innerHTML += `<pre class="text-danger">${String(data[0].message)}</pre>`;
-                    }else{                        
-                        if(data[0].status){
+                    } else {
+                        if (data[0].status) {
                             localStorage.setItem('filename', String(inputField.value))
                             update_the_page()
                         }
-                        
-                    } 
+
+                    }
 
                     fileName.textContent = String(inputField.value);
                     fileTitle.style.display = 'none';
                     fileTitle.remove()
                     fileName.style.display = 'block';
-                  
+
 
                 }).catch((err) => {
                     console.log("Error: " + err)
-                                       
+
                     consoleOutput.innerHTML += `<pre class="text-danger">Failed to save the file: \n${String(err)}</pre>`;
-                    
+
                     progressBar.style.backgroundColor = 'red'
                 })
         }
@@ -1415,7 +1420,7 @@
         async function openFile(event, filename) {
             event.preventDefault()
 
-            
+
             // close the preview container
             if (!browser.classList.contains('minimize-browser')) {
 
@@ -1456,19 +1461,19 @@
                 .then((data) => {
                     console.log(data)
                     languageSelect = String(formatFile).replace('.', '')
-                    
-                    if(data[1]===400){                        
-                        consoleOutput.innerHTML +=`<pre class="text-danger">${data[0].content}<pre>`;
-                    }else{
-                        
+
+                    if (data[1] === 400) {
+                        consoleOutput.innerHTML += `<pre class="text-danger">${data[0].content}<pre>`;
+                    } else {
+
                         editor.session.setMode(`ace/mode/${language}`);
                         editor.setValue(`${data[0].content}`)
-                        
+
                     }
 
                 }).catch((err) => {
                     console.log(err)
-                    consoleOutput.innerHTML +=`<pre class="text-danger">Failed to open file: \n${err}<pre>`;
+                    consoleOutput.innerHTML += `<pre class="text-danger">Failed to open file: \n${err}<pre>`;
                 })
 
         }
@@ -1517,14 +1522,14 @@
                     console.error('Failed to read clipboard contents: ', err);
                 });*/
             } else if (option === 'format-doc') {
-                
+
                 const script = editor.getValue();
                 const formattedContent = formatCode(script)
                 editor.setValue(`${formattedContent}`)
             }
         }
 
-        
+
 
         async function getSuggestion(prompt, session, pos, prefix) {
             endpoint = `${window.location.origin}/data-science/code-suggestion`;
@@ -1545,7 +1550,7 @@
                     body: JSON.stringify({ prompt: prompt })
                 });
                 const data = await response.json();
-                
+
                 //return data.choices[0].text;
                 return data.choices.map(choice => ({
                     caption: choice.text.trim(),
@@ -1555,7 +1560,7 @@
             } catch (err) {
                 console.error('Error fetching suggestion:', err);
                 consoleOutput.innerHTML = "#laubcode\\editor\\main$: \n";
-                consoleOutput.innerHTML +=`<pre class="text-danger">\n${err}<pre>`;
+                consoleOutput.innerHTML += `<pre class="text-danger">\n${err}<pre>`;
             }
         }
 
@@ -1609,8 +1614,8 @@
                 const data = await response.json();
                 return data
             } catch (err) {
-                console.error('Error fetching suggestion:', err);                
-                consoleOutput.innerHTML +=`<pre class="text-danger">Failed to prompt: \n${err}<pre>`;
+                console.error('Error fetching suggestion:', err);
+                consoleOutput.innerHTML += `<pre class="text-danger">Failed to prompt: \n${err}<pre>`;
                 return false
             }
         }

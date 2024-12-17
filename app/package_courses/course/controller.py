@@ -250,7 +250,27 @@ def remove_courses_content_from_mgdb(*,connection, query: dict = {}):
     except Exception as e:
         return False, str(e)
 
+# Save the course's conten quizzes
+def save_courses_content_quizzes(connection, document):
+    try:
+        # Access the database
+        db = connection.data_tuning_school
 
+        # Access the collection and retrieve documents
+        collection = db.courses_content_quizzes
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content_quizzes
+
+        # Saving the course information to MongoDB
+        collection.insert_one(document)
+        return True, 'ok'
+    except Exception as e:
+        return False, str(e)
+    
 def validate_words(key:str, value: str | int | float)-> bool:
     """
     This method is  used to validate the form fields
