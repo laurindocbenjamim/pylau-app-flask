@@ -1,0 +1,149 @@
+       
+        {% extends 'courses/base-layout.html' %}
+        {% block content %}
+
+        
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h4">My Courses</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+            <button type="button"
+              class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+              <svg class="bi">
+                <use xlink:href="#calendar3" />
+              </svg>
+              This week
+            </button>
+          </div>
+        </div>
+
+        <div class="container">
+          <style>
+            .card {
+              background-color: rgba(2, 51, 59, 0.1);
+              border: none;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              color: #969494;
+            }
+
+            .form-control {
+              background-color: #cfd5db;
+              color: rgb(8, 8, 8);
+              border: 1px solid #444;
+              border-radius: 0px;
+            }
+
+            .form-control:focus {
+              background-color: #3b3f45;
+              color: #FFF;
+              border-color: #5a5e65;
+            }
+
+            .btn-outline-light:hover {
+              background-color: #5a5e65;
+            }
+
+
+
+            .btn-outline-light:hover {
+              background-color: #5a5e65;
+            }
+
+            .dynamic-field {
+              display: flex;
+              align-items: center;
+            }
+
+            .dynamic-field .remove-btn {
+              margin-left: 10px;
+            }
+
+            .form-feedback {
+              margin-top: 10px;
+            }
+
+            .dynamic-field button {
+              height: 38px;
+              margin-top: 0.4%;
+              border-radius: 0px;
+            }
+          </style>
+         
+        </div>
+
+        <section class="py-2 text-left container">
+          <div class="row py-lg-3">
+            <div class="col-lg-12 col-md-8 mx-auto">
+              <h1 class="fw-light">All the courses I've created</h1>
+              <p class="lead text-light">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+              <!--<p>
+                <a href="#" class="btn btn-primary my-2">Main call to action</a>
+                <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+              </p>-->
+            </div>
+          </div>
+        </section>
+
+        <div class="album py-5 bg-body-tertiar">
+          <div class="container">
+      
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+              <div class="col">
+                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('unsplash-photo-1.jpg');">
+                  <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
+                    <ul class="d-flex list-unstyled mt-auto">
+                      <li class="me-auto">
+                        <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+                      </li>
+                      <li class="d-flex align-items-center me-3">
+                        <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                        <small>Earth</small>
+                      </li>
+                      <li class="d-flex align-items-center">
+                        <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+                        <small>3d</small>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {% if courses %}
+              {% for course in courses %}
+              <div class="col">
+                <div class="card shadow-lg">
+                 
+                  <img src="https://www.learnerzhub.com/wp-content/uploads/2021/07/best-online-python-course.png" class="bd-placeholder-img card-img-top" width="100%" height="200" alt="">
+                  <div class="card-body">
+                    <h2 class="h4" style="color: #0c9145;">{{ course['course_name']}}</h2>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <a href="{{ url_for('course.create_course', course=course['course_name'])}}" class="btn btn-sm btn-outline-secondary">View</a>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                      </div>
+                      <small class="text-body-secondary">9 mins</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% endif %}
+              
+              
+
+              
+              
+           
+              
+            </div>
+          </div>
+        </div>
+
+      
+
+{% endblock %}

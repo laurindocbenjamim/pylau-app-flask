@@ -178,7 +178,7 @@
 
         <div class="content-section">
           <div id="chatbox"></div>
-          <div class="spinner-border text-primary " id="spinner" style="display: none;"  role="status">
+          <div class="spinner-border text-primary " id="spinner" style="display: none;" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
           <div class="input-group">
@@ -319,7 +319,7 @@
           Browse the Code
         </button>
 
-        <button class="btn btn-outline-primary me-2" id="defualt-quizz" type="button">Default Quizzes</button>
+        <button class="btn btn-outline-success me-2" id="defualt-quizz" type="button">Default Quizzes</button>
       </div>
 
 
@@ -341,7 +341,7 @@
         <div class="modal-body">
           <nav class="navbar bg-body-tertiary">
             <form class="container-fluid justify-content-end">
-              
+
               <button class="btn btn-outline-success me-2" id="try-again" type="button">Try Again</button>
             </form>
           </nav>
@@ -416,17 +416,45 @@ Do not return to me the steps to create it instead, you create the requested tas
       iframe.contentWindow.document.close();
     })
 
-    document.getElementById('defualt-quizz').addEventListener('click', (e)=>{
+    document.getElementById('defualt-quizz').addEventListener('click', (e) => {
       handleUserInput(defaultPrompt)
     })
 
-    function addMessage(message, isUser = false) {
+    function addMessage(message, isUser = false, isScript = false) {
+      //<div id="editor" style="height: 500px; width: 100%;"></div>
       const messageElement = document.createElement('div');
       messageElement.classList.add('message');
-      messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
-      messageElement.textContent = message;
-      chatbox.appendChild(messageElement);
-      chatbox.scrollTop = chatbox.scrollHeight;
+      if (isScript) {
+        const messageElement = document.createElement('div');
+        
+        const messageObj = document.querySelector('.message')
+        messageObj.style ='height: 500px;'
+        messageObj.setAttribute('id', 'editor')
+        messageObj.textContent = "Testin the editor";
+        chatbox.appendChild(messageObj);
+        chatbox.scrollTop = chatbox.scrollHeight;
+        //
+        // Initialize the Ace editor 
+        if (document.getElementById('editor')) {
+
+          const editor = ace.edit("editor");
+          editor.setTheme("ace/theme/monokai");
+          editor.session.setMode("ace/mode/javascript");
+          editor.setHighlightActiveLine(true); // or false to disable
+
+          // Show print margin
+          editor.setShowPrintMargin(false); // or true to show
+          editor.session.setValue(message);
+        }
+
+      } else {
+        messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+        messageElement.textContent = message;
+        chatbox.appendChild(messageElement);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }
+      
+      
     }
 
     function botResponse(message) {
@@ -446,14 +474,14 @@ Do not return to me the steps to create it instead, you create the requested tas
       }
     }
 
-    function handleUserInput(message ='') {
+    function handleUserInput(message = '') {
       spinner.style.display = 'block'
-      if(message ===''){
+      if (message === '') {
         message = userInput.value.trim();
       }
 
       if (message) {
-        addMessage(message, true);
+        addMessage(message, false, false);
         userInput.value = '';
 
         setTimeout(() => {
@@ -489,7 +517,7 @@ Do not return to me the steps to create it instead, you create the requested tas
                 iframe.contentWindow.document.write(generatedCode);
                 iframe.contentWindow.document.close();
 
-                addMessage(generatedCode);
+                addMessage(generatedCode, false, true);
                 spinner.style.display = 'none'
                 ///
                 $(document).ready((e) => {
@@ -501,9 +529,9 @@ Do not return to me the steps to create it instead, you create the requested tas
                 console.log("Data does not match");
               }
             })
-              .catch(error => { 
+              .catch(error => {
                 spinner.style.display = 'none'
-                console.error("Error:", error); 
+                console.error("Error:", error);
               });
           }
 
