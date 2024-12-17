@@ -341,7 +341,7 @@
         <div class="modal-body">
           <nav class="navbar bg-body-tertiary">
             <form class="container-fluid justify-content-end">
-
+              <button class="btn btn-outline-primary me-2" id="edit-code" type="button">Edit code</button>
               <button class="btn btn-outline-success me-2" id="try-again" type="button">Try Again</button>
             </form>
           </nav>
@@ -352,6 +352,8 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               title="YouTube video" allowfullscreen>
             </iframe>
+
+            <div class="editorFrame" id="editorFrame" style="display:none"></div>
 
           </div>
           <div class="modal-footer">
@@ -388,7 +390,8 @@
 python contents: variables and functions.
 
 The quiz must have TRUE or FALSE questions.
-Add questions that can be solved or completed by drag and drop blocks of random answers.
+Add questions that can be completed by using drag and drop block events.
+Create blocks with the best design as possible.
 
 Create at least 6 questions.
 When the user submit the form there must have a validation if the provided answers are correct
@@ -401,6 +404,7 @@ Do not return to me the steps to create it instead, you create the requested tas
     `;
     let generatedCode = null
     const tryAgainBtn = document.getElementById('try-again')
+    const editCode = document.getElementById('edit-code')
     const chatbox = document.getElementById('chatbox');
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
@@ -411,32 +415,113 @@ Do not return to me the steps to create it instead, you create the requested tas
 
     tryAgainBtn.addEventListener('click', (e) => {
       const iframe = document.getElementById('codeFrame');
+      const frameEditor = document.getElementById('editorFrame')
+      iframe.style.display = 'block';
+
+      frameEditor.style.display = 'none';
+
       iframe.contentWindow.document.open();
       iframe.contentWindow.document.write(generatedCode);
       iframe.contentWindow.document.close();
+    })
+
+    editCode.addEventListener('click', (e) => {
+      const iframe = document.getElementById('codeFrame');      
+      iframe.style.display = 'none';
+      const frameEditor = document.getElementById('editorFrame')
+      frameEditor.style.display = 'block';
+
+      if (document.getElementById('editorFrame')) {
+        
+        const editor = ace.edit("editorFrame");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        editor.setHighlightActiveLine(true); // or false to disable
+
+        // Show print margin
+        editor.setShowPrintMargin(false); // or true to show
+        editor.session.setValue(generatedCode);
+      }
+
+
     })
 
     document.getElementById('defualt-quizz').addEventListener('click', (e) => {
       handleUserInput(defaultPrompt)
     })
 
+    function toggleSubmenu(event) {
+      event.preventDefault();
+      const submenu = event.currentTarget.nextElementSibling;
+      if (submenu.classList.contains('show')) {
+        submenu.classList.remove('show');
+        //event.currentTarget.add
+        setTimeout(() => {
+          submenu.style.display = 'none';
+        }, 500); // Match the transition duration
+      } else {
+        submenu.style.display = 'block';
+        setTimeout(() => {
+          submenu.classList.add('show');
+        }, 10); // Small delay to trigger the transition
+      }
+    }
+    
     function addMessage(message, isUser = false, isScript = false) {
       //<div id="editor" style="height: 500px; width: 100%;"></div>
       const messageElement = document.createElement('div');
       messageElement.classList.add('message');
       if (isScript) {
         const messageElement = document.createElement('div');
-        
+        messageElement.classList.add('user-message');
+        messageElement.style ='border-radius:0px';        
+
         const messageObj = document.querySelector('.message')
         messageObj.style ='height: 500px;'
         messageObj.setAttribute('id', 'editor')
-        messageObj.textContent = "Testin the editor";
+
+        const navContainer = document.createElement('div');
+        const iconEdit = document.createElement('i');
+        iconEdit.classList.add('fa','fa-edit')
+        const iconSave = document.createElement('i');
+        iconSave.classList.add('fa','fa-play')
+
+        navContainer.classList.add('container-fluid', 'justify-content-end')
+
+        const codeSaveBtn = document.createElement('button');
+        codeSaveBtn.classList.add('btn', 'btn-outline-success', 'me-2')
+        codeSaveBtn.appendChild(iconSave)
+        codeSaveBtn.addEventListener('click',(e)=>{
+          alert(message)
+        });
+        //codeSaveBtn.textContent = "Save"
+        const codeEditBtn = document.createElement('button');
+        codeEditBtn.classList.add('btn', 'btn-outline-primary', 'me-2')
+        codeEditBtn.appendChild(iconEdit)
+        codeEditBtn.addEventListener('click',(e)=>{
+          const frameEditor = document.getElementById('editorFrame')
+          const iframe = document.getElementById('codeFrame');
+          iframe.style.display = 'none';
+
+          // First show the modal
+          $(document).ready((e) => {
+            $('#exampleModal').modal('show');
+          });
+          frameEditor.style.display = 'block';
+
+        });
+        //codeEditBtn.textContent = "Edit"
+        navContainer.appendChild(codeSaveBtn)
+        navContainer.appendChild(codeEditBtn)
+
+        //messageObj.textContent = "Testin the editor";
         chatbox.appendChild(messageObj);
+        chatbox.appendChild(navContainer)
         chatbox.scrollTop = chatbox.scrollHeight;
         //
         // Initialize the Ace editor 
         if (document.getElementById('editor')) {
-
+          generatedCode = message
           const editor = ace.edit("editor");
           editor.setTheme("ace/theme/monokai");
           editor.session.setMode("ace/mode/javascript");
