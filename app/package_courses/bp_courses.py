@@ -230,8 +230,10 @@ def create_course_content():
                         # Validate file
                         if not allowed_file(video.filename):
                             return jsonify({"error": "Invalid video file type"}), 201
-            
+                        
                         UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
+                        # Add write permission to the directory
+                        os.chmod(UPLOAD_FOLDER, 0o777)
                 
                         # Check if the folder to store the tickets exists, if not, create it
                         if not os.path.exists(UPLOAD_FOLDER):
@@ -239,7 +241,10 @@ def create_course_content():
             
                         # Join the file with its path
                         save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
-                        video.save(save_path.replace('\\', '/'))            
+                        video.save(save_path.replace('\\', '/'))   
+
+                        # Revoke write privileges
+                        os.chmod(UPLOAD_FOLDER, 0o555)         
             
             course_module = request.form.get('courseModule', '')
             course_title = request.form['courseTitle']
@@ -408,7 +413,7 @@ def save_courses_quizzes_to_mongodb(course,topic):
         document = {    
             "script": script,            
             "course_name": course_title,
-            "course_topic": topic,
+            "course_topic": f'{topic}-{datetime.now().strftime('%Y%m%d_%H%M%S')}',
             "course_module": module,
             "datetime": datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         }           
