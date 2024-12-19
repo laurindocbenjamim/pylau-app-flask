@@ -380,13 +380,14 @@
       </div>
 
       <div class="col-9">
-        <div class="progress-bar">
+        <div class="progress-bar" style="display: none;">
           <div class="progress mt-3">
             <div class="progress-bar my-progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
               aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <span class="success-message"></span>
+        <span class="text-danger error-message"></span>
       </div>
       <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3">
         <button type="button" id="addObjectiveBtn" class="btn btn-outline-warning btn-sm">
@@ -520,6 +521,7 @@ Do not return to me the steps to create it instead, you create the requested tas
     const coursesTopic = document.getElementById('coursesTopic')
     const containerConsole = document.getElementById('container-console')
     const clearConsole = document.getElementById('clearConsole')
+    const progressBar = document.querySelector('.progress-bar')
 
     const editor = ace.edit("editorFrame");
     editor.setTheme("ace/theme/monokai");
@@ -567,7 +569,7 @@ Do not return to me the steps to create it instead, you create the requested tas
 
     document.getElementById('btn-save-code', (e) => {
       e.preventDefault()
-
+      progressBar.style.display = "block"
       const courseTitle = '{{ course_name }}'
       const coursesTopic = '{{ courses_topic }}'
       const courseModule = '{{ courses_module }}'
@@ -584,7 +586,8 @@ Do not return to me the steps to create it instead, you create the requested tas
         formData.append('course', courseTitle)
         formData.append('module', coursesModule)
         formData.append('topic', coursesTopic)
-
+               
+        
         saveScript(endpoint, csrfToken, formData)
       }
     })
@@ -856,11 +859,28 @@ Do not return to me the steps to create it instead, you create the requested tas
 
       //sendPrompt(endpoint, formData, headers)
       const data = fetch01(endpoint, headers, formData, "POST")
-      console.log(data)
+      handleFetchPromiseResponse(data)
       return data
     }
 
+    function  handleFetchPromiseResponse(response){
 
+      const promise = new Promise((resolve, reject)=>{
+        resolve(response)
+      })
+      promise.then((data)=>{
+        if(data.data && Array.isArray(data.data)){
+          if(!data.data[0] && String(data.data[1]).includes('429')){
+            document.querySelector('.error-message').innerText = 'You exceeded your current quota, please check your plan and billing details.'
+          }else{
+            document.querySelector('.error-message').innerText = String(data.data[1])
+          }
+          console.log(data.data)
+          //console.log(String(data.data[1]))
+        }
+        
+      }).catch(err => console.log(`Server error: ${err}`))
+    }
     function displayError(thisForm, error) {
       btnSave = document.getElementById('btn-save')
       btnSave.style.backgroundColor = 'red'
