@@ -192,90 +192,92 @@ def create_course_content():
 
     if request.method == "POST":
         
-        try:    
-
-            file_field_name = "videoFile"
-            video = ""
             
-            if 'courseTopic' not in request.form or not request.form['courseTopic']:
-                return jsonify({"error": "The course's topic is required"}), 201        
-            elif 'courseContentOrigin' not in request.form or not request.form['courseContentOrigin']:
-                return jsonify({"error": "The origin of the content is required"}), 201
-            elif 'courseTitle' not in request.form or not request.form['courseTitle']:
-                return jsonify({"error": "The course's title is required"}), 201
+
+        file_field_name = "videoFile"
+        video = ""
+            
+        if 'courseTopic' not in request.form or not request.form['courseTopic']:
+            return jsonify({"error": "The course's topic is required"}), 201        
+        elif 'courseContentOrigin' not in request.form or not request.form['courseContentOrigin']:
+            return jsonify({"error": "The origin of the content is required"}), 201
+        elif 'courseTitle' not in request.form or not request.form['courseTitle']:
+            return jsonify({"error": "The course's title is required"}), 201
 
             
-            if request.form['courseContentOrigin'] == 'youtube':
-                if  f'{file_field_name}' not in request.form or not request.form[f'{file_field_name}']:
-                    return jsonify({"error": "The file video is required"}), 201
-                else: 
-                    save_path = request.form[f'{file_field_name}']
+        if request.form['courseContentOrigin'] == 'youtube':
+            if  f'{file_field_name}' not in request.form or not request.form[f'{file_field_name}']:
+                return jsonify({"error": "The file video is required"}), 201
+            else: 
+                save_path = request.form[f'{file_field_name}']
 
-            elif request.form['courseContentOrigin'] == 'localhost':
-                if  f'{file_field_name}' not in request.files:
-                    return jsonify({"error": "The file video required"}), 201
-                else:     
+        elif request.form['courseContentOrigin'] == 'localhost':
+            if  f'{file_field_name}' not in request.files:
+                return jsonify({"error": "The file video required"}), 201
+            else:     
                                         
-                    video = request.files['videoFile']
+                video = request.files['videoFile']
                     #
-                    folder='tutorials/'
+                folder='tutorials/'
 
-                    if 'oldVideoFile' in request.form and request.form['oldVideoFile'] and not video.filename:
-                        save_path = request.form['oldVideoFile']
-                    else:
+                if 'oldVideoFile' in request.form and request.form['oldVideoFile'] and not video.filename:
+                    save_path = request.form['oldVideoFile']
+                else:
 
-                        if not video.filename:
-                            return jsonify({"status_code":400, "error": "The video file is required!"}), 201
+                    if not video.filename:
+                        return jsonify({"status_code":400, "error": "The video file is required!"}), 201
                         
-                        # Validate file
-                        if not allowed_file(video.filename):
-                            return jsonify({"status_code":400, "error": "Invalid video file type"}), 201
+                    # Validate file
+                    if not allowed_file(video.filename):
+                        return jsonify({"status_code":400, "error": "Invalid video file type"}), 201
                         
-                        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
+                    UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
+                    
+                    # Check if the folder to store the tickets exists, if not, create it
+                    try:
+                        if not os.path.exists(UPLOAD_FOLDER):
+                            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+                    except Exception as e:
+                        return jsonify({"status_code":400, "response": f"Failed to create the file path. {e}"}), 200 
+
+                    try:
                         # Add write permission to the directory
                         os.chmod(UPLOAD_FOLDER, 0o777)
                 
-                        # Check if the folder to store the tickets exists, if not, create it
-                        try:
-                            if not os.path.exists(UPLOAD_FOLDER):
-                                os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-                        except Exception as e:
-                            # Revoke write privileges
-                            os.chmod(UPLOAD_FOLDER, 0o555)
-                            return jsonify({"status_code":400, "response": f"Failed to create the file path. {e}"}), 200 
-            
                         # Join the file with its path
                         save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename.replace('\\', '/')))
                         video.save(save_path)   
 
-                        try:
-                            if not os.path.isfile(save_path): 
-                                # Revoke write privileges
-                                os.chmod(UPLOAD_FOLDER, 0o555)   
-                                return jsonify({"status_code":400, "response": "File was not uploaded."}), 200 
-                        except Exception as e:
-                            return jsonify({"status_code":400, "response": f"File was not uploaded. {e}"}), 200 
+                    
+                        if not os.path.isfile(save_path): 
+                            # Revoke write privileges
+                            os.chmod(UPLOAD_FOLDER, 0o555)   
+                            return jsonify({"status_code":400, "response": "File was not uploaded."}), 200 
+                    except Exception as e:                        
+                        # Revoke write privileges
+                        os.chmod(UPLOAD_FOLDER, 0o555)
+                        return jsonify({"status_code":400, "response": f"File was not uploaded. {e}"}), 200 
                             
 
-                        # Revoke write privileges
-                        os.chmod(UPLOAD_FOLDER, 0o555)         
+                    # Revoke write privileges
+                    os.chmod(UPLOAD_FOLDER, 0o555)         
             
-            course_module = request.form.get('courseModule', '')
-            course_title = request.form['courseTitle']
-            topic = request.form['courseTopic']
-            file_origin = request.form['courseContentOrigin']
+        course_module = request.form.get('courseModule', '')
+        course_title = request.form['courseTitle']
+        topic = request.form['courseTopic']
+        file_origin = request.form['courseContentOrigin']
             
-            document = {                
-                "course_name": course_title,
-                "file_origin": file_origin,
-                "course_topic": topic,
-                "course_content_file": str(save_path).replace('app/static/', '')
-            }
+        document = {                
+            "course_name": course_title,
+            "file_origin": file_origin,
+            "course_topic": topic,
+            "course_content_file": str(save_path).replace('app/static/', '')
+        }
 
-            if course_module and course_module !='':
-                document["course_module"] = course_module
+        if course_module and course_module !='':
+            document["course_module"] = course_module
            
-            
+        try:
             # Getting the course data by name from MongoDB
             course_content = get_courses_content_by_coursename_and_topic(connection=connection, course_name=course_title, course_topic=topic)
             #return jsonify({"course": course_title, "topic": topic, "response": course_content}), 201
