@@ -359,10 +359,27 @@
                                                 {{ content['course_topic']}}
                                             </a></li>
 
+                                            <!-- Filtering quizzes -->
+                                     {% if course_content_quizzes and course_content_quizzes | length > 0 %}
+                                            
+                                         {% for quizz in course_content_quizzes %}                                        
+                                         {% if quizz['course_module'] == module and quizz['course_topic'] == content['course_topic'] %}
+                                         
+                                         <li><a href="#" 
+                                            class="link-body-light text-primary d-inline-flex text-decoration rounde"
+                                            onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')">
+                                            Quizz: {{ content['course_topic']}}
+                                        </a></li>
+                                         {% endif %}
+                                         {% endfor %}
+                                     
+                                      {% endif %}
+                                      <!-- Edn filtering quizz-->
                                         {% endif %}
                                         {% endfor %}
                                     </ul>
                                     {% endif %}
+                                    
                                 </div>
                             </li>
                             {% endfor %}
@@ -396,6 +413,19 @@
                                 </button>
 
                             </li>
+
+                            <!-- Filtering quizzes -->
+                            {% if course_content_quizzes and course_content_quizzes | length > 0 %}
+                           
+                                {% for quizz in course_content_quizzes %}                                        
+                                {% if not quizz['course_module'] or quizz['course_module'] == 'null' %}                                
+                                {% if quizz['course_topic'] == content['course_topic'] %}
+                                <li>{{ quizz['course_topic'] }}</li>
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                            
+                            {% endif %}
 
                             {% endif %}
                             {% endfor %}
