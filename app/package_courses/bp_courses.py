@@ -12,6 +12,8 @@ from flask import current_app
 
 bp_courses = Blueprint("course", __name__, url_prefix="/course")
 CORS(bp_courses)
+from werkzeug.utils import secure_filename
+from flask import current_app
 
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
@@ -68,6 +70,12 @@ bp_courses.add_url_rule(
     ),
 )
 
+
+def save_file_with_new_name(file, original_name, file_path): 
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S') 
+    new_name = f"{str(os.path.splitext(original_name)[0]).replace(' ','_')}_{timestamp}{os.path.splitext(original_name)[1]}" 
+    file.save(os.path.join(file_path, secure_filename(new_name))) 
+    return new_name
 
 # Custom encoder for objectID
 class JSONEncoder(json.JSONEncoder):
@@ -171,8 +179,7 @@ def create_course():
 
 
 from app.utils.my_file_factory import validate_file, upload_file
-from werkzeug.utils import secure_filename
-from flask import current_app
+
 
 ALLOWED_EXTENSIONS = {'mp4', 'webm', 'mkv', 'avi'}
 
@@ -245,14 +252,19 @@ def create_course_content():
                         os.chmod(UPLOAD_FOLDER, 0o777)
                 
                         # Join the file with its path
-                        save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename.replace('\\', '/')))
-                        video.save(save_path)   
-
+                        #save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename.replace('\\', '/')))
+                        #video.save(save_path)   
+                        save_path = save_file_with_new_name(video, video.filename, UPLOAD_FOLDER)
+                        save_path = f'{UPLOAD_FOLDER}{save_path}'
+                        # Using close() method 
+                        # file = open('path/to/file.txt', 'r') 
+                        # Perform file operations 
+                        # file.close()
                     
-                        if not os.path.isfile(save_path): 
+                        if not os.path.exists(save_path): 
                             # Revoke write privileges
                             os.chmod(UPLOAD_FOLDER, 0o555)   
-                            return jsonify({"status_code":400, "response": "File was not uploaded."}), 200 
+                            return jsonify({"status_code":400, "response": f"File was not uploaded. {save_path} "}), 200 
                     except Exception as e:                        
                         # Revoke write privileges
                         os.chmod(UPLOAD_FOLDER, 0o555)
@@ -469,9 +481,12 @@ def remove_course_content():
     connection = MongoClient(current_app.config["MONGO_URI"])
     course_title = request.form.get('courseTitle', '')
     course_topic = request.form.get('courseTopic', '')
+    course_file_origin = request.form.get('courseFileOrigin', '')
+    course_file_path = request.form.get('courseFilePath', '')
     course_module = request.form.get('courseModule', '')
     
-
+    file_removed = True
+    
     try:
 
 
@@ -480,14 +495,25 @@ def remove_course_content():
                 }
         if course_module and course_module !='':
             query["course_module"] = course_module
-            
+
+        if course_file_origin == 'localhost':
+            obj_file = str(course_file_path).split('/')
+
+            UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/tutorials/'
+            file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
+
+            os.chmod(UPLOAD_FOLDER, 0o777)
+            if os.path.exists(file_path): 
+                os.remove(file_path)
+            os.chmod(UPLOAD_FOLDER, 0o555)    
+
         sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
 
         if not sts:
             return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
         return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
     except Exception as e:    
-        return  jsonify({"response": f"Failed to remove content {str(e)}"}), 400
+        return  jsonify({"response": f"Failed to remove content {str(e)}"}), 201
 
 # View the courses demo
 @bp_courses.route("/view-demo", methods=["GET"])
