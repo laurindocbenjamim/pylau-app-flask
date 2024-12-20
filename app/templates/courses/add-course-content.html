@@ -690,7 +690,7 @@
 
   function saveFormWithFile(endpoint, form, btnSave, formData, headers) {
 
-    console.log(formData.get('courseContentOrigin'))
+    //console.log(formData.get('courseContentOrigin'))
     fetch(endpoint, {
       method: 'POST',
       body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
@@ -705,8 +705,8 @@
       })
       .then(data => {
         data = JSON.parse(data)
-        console.log(data)
-        document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
+        
+        //document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
 
         if (data.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
@@ -719,6 +719,7 @@
           form.reset();
 
         } else {
+          console.log(data)
           btnSave.style.backgroundColor = "red"
           btnSave.style.color = "#FFF"
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');

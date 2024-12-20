@@ -236,16 +236,25 @@ def create_course_content():
                         os.chmod(UPLOAD_FOLDER, 0o777)
                 
                         # Check if the folder to store the tickets exists, if not, create it
-                        if not os.path.exists(UPLOAD_FOLDER):
-                            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+                        try:
+                            if not os.path.exists(UPLOAD_FOLDER):
+                                os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+                        except Exception as e:
+                            # Revoke write privileges
+                            os.chmod(UPLOAD_FOLDER, 0o555)
+                            return jsonify({"status_code":400, "response": f"Failed to create the file path. {e}"}), 200 
             
                         # Join the file with its path
                         save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename.replace('\\', '/')))
                         video.save(save_path)   
-                        if not os.path.isfile(save_path): 
-                            # Revoke write privileges
-                            os.chmod(UPLOAD_FOLDER, 0o555)   
-                            return jsonify({"status_code":400, "response": "File was not uploaded."}), 200 
+
+                        try:
+                            if not os.path.isfile(save_path): 
+                                # Revoke write privileges
+                                os.chmod(UPLOAD_FOLDER, 0o555)   
+                                return jsonify({"status_code":400, "response": "File was not uploaded."}), 200 
+                        except Exception as e:
+                            return jsonify({"status_code":400, "response": f"File was not uploaded. {e}"}), 200 
                             
 
                         # Revoke write privileges
@@ -287,7 +296,7 @@ def create_course_content():
             connection.close()
             return jsonify({"status_code": 200, "response": document, "sms": sms}), 200
         except Exception as e:
-            return jsonify({"message": "An error occurred", "error": str(e)}), 200
+            return jsonify({"status_code": 200, "message": "An error occurred", "error": str(e)}), 200
         
     # If the request.method is GET
      
