@@ -347,7 +347,7 @@
                 <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
               </div>
 
-              <div class="error-message text-danger" style="display: none;"></div>
+              <!--<div class="error-message text-danger" style="display: none;"></div>-->
               <div class="sent-message text-success" style="display: none;">Your message has been sent. Thank you!</div>
             </div>
 
@@ -379,7 +379,7 @@
         </div>
       </div>
 
-      <div class="col-9">
+      <div class="col-9" style="text-align:center">
         <div class="progress-bar" style="display: none;">
           <div class="progress mt-3">
             <div class="progress-bar my-progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
@@ -388,7 +388,7 @@
         </div>
         <span class="success-message text-success"></span>
         <span class="text-danger error-message"></span>
-        
+        <br>
       </div>
       <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3">
         <button type="button" id="addObjectiveBtn" class="btn btn-outline-warning btn-sm">
@@ -524,10 +524,13 @@ Do not return to me the steps to create it instead, you create the requested tas
     const clearConsole = document.getElementById('clearConsole')
     const progressBar = document.querySelector('.progress-bar')
     const errorMessage = document.querySelector('.error-message')
+    //errorMessage.innerHTML = 'error message...'
 
-    const editor = ace.edit("editorFrame");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/javascript");
+    try{
+      const editor = ace.edit("editorFrame");
+      editor.setTheme("ace/theme/monokai");
+      editor.session.setMode("ace/mode/javascript");
+    }catch(err){console.log(err)}
 
     consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
 
