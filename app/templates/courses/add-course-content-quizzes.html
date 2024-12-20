@@ -347,8 +347,8 @@
                 <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
               </div>
 
-              <div class="error-message" style="display: none;"></div>
-              <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+              <div class="error-message text-danger" style="display: none;"></div>
+              <div class="sent-message text-success" style="display: none;">Your message has been sent. Thank you!</div>
             </div>
 
             <!-- Submit Button -->
@@ -386,8 +386,9 @@
               aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
-        <span class="success-message"></span>
+        <span class="success-message text-success"></span>
         <span class="text-danger error-message"></span>
+        
       </div>
       <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3">
         <button type="button" id="addObjectiveBtn" class="btn btn-outline-warning btn-sm">
@@ -522,6 +523,7 @@ Do not return to me the steps to create it instead, you create the requested tas
     const containerConsole = document.getElementById('container-console')
     const clearConsole = document.getElementById('clearConsole')
     const progressBar = document.querySelector('.progress-bar')
+    const errorMessage = document.querySelector('.error-message')
 
     const editor = ace.edit("editorFrame");
     editor.setTheme("ace/theme/monokai");
@@ -767,6 +769,8 @@ Do not return to me the steps to create it instead, you create the requested tas
 
           const serverResponse = submitPrompt(csrfToken, message, courseTitle, topic, courseModule)
           if (Array.isArray(serverResponse)) {
+            console.log('========= Prompt Response ============')
+            console.log(serverResponse)
             console.log(serverResponse[0].data)
           } else {
             const promise = new Promise((resolve, reject) => {
@@ -838,7 +842,8 @@ Do not return to me the steps to create it instead, you create the requested tas
 
 
       if (prompt === '') {
-        document.querySelector('.error-message').innerText = ' No value';
+        errorMessage.style.display = 'block'
+        errorMessage.textContent = ' No value';
         return;
       }
 
@@ -870,12 +875,18 @@ Do not return to me the steps to create it instead, you create the requested tas
       })
       promise.then((data)=>{
         if(data.data && Array.isArray(data.data)){
+          console.log("=============Handle Fetch promise ==========")
           if(!data.data[0] && String(data.data[1]).includes('429')){
-            document.querySelector('.error-message').innerText = 'You exceeded your current quota, please check your plan and billing details.'
+            alert("You exceeded your current quota, please check your plan and billing details.")
+            console.log("=============Handle Fetch promise: ERROR FOUND ==========")
+            errorMessage.style.display ='block'
+            errorMessage.textContent = 'You exceeded your current quota, please check your plan and billing details.'
           }else{
-            document.querySelector('.error-message').innerText = String(data.data[1])
+            errorMessage.style.display ='none'
+            console.log("=============No passed ==========")
+            //document.querySelector('.error-message').innerText = String(data.data[1])
           }
-          console.log(data.data)
+          //console.log(data.data)
           //console.log(String(data.data[1]))
         }
         
@@ -886,11 +897,11 @@ Do not return to me the steps to create it instead, you create the requested tas
       btnSave.style.backgroundColor = 'red'
       btnSave.style.color = '#FFF'
       document.querySelector('.loading').style.color = 'white'
-      document.querySelector('.error-message').style.display = 'block'
-      document.querySelector('.error-message').style.color = 'red'
+      errorMessage.style.display = 'block'
+      errorMessage.style.color = 'red'
       document.querySelector('.loading').classList.remove('d-block');
-      document.querySelector('.error-message').innerHTML = error;
-      document.querySelector('.error-message').classList.add('d-block');
+      errorMessage.textContent = error;
+      errorMessage.classList.add('d-block');
     }
 
 
