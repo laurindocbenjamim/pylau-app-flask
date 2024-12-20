@@ -880,7 +880,7 @@ Do not return to me the steps to create it instead, you create the requested tas
         if(data.data && Array.isArray(data.data)){
           console.log("=============Handle Fetch promise ==========")
           if(!data.data[0] && String(data.data[1]).includes('429')){
-            alert("You exceeded your current quota, please check your plan and billing details.")
+            
             console.log("=============Handle Fetch promise: ERROR FOUND ==========")
             errorMessage.style.display ='block'
             errorMessage.textContent = 'You exceeded your current quota, please check your plan and billing details.'

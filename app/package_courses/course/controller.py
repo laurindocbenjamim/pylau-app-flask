@@ -132,6 +132,57 @@ def get_courses_content_by_coursename_and_topic(connection, course_name, course_
         result.append(doc)
     return result
 
+# get content's quizz by course, topic a nd module
+def get_courses_content_quizzes_by_coursename_topic_module(*,connection, course_name, course_topic,module):
+    """ Get get content's quizz by course, topic a nd module 
+
+        Params: 
+            connection - the mongodb connection, 
+            course_name - the course's name or title, 
+            course_topic - the topic of the topic's quizz
+            module - the module where the topic belogs to.
+        Return: return a list of object with the topic's quizz 
+    """
+
+    # Access the database
+    db = connection.data_tuning_school
+
+    # Access the collection and retrieve documents
+    # docs = db.courses.find()
+
+    course = db.courses_content.find({"course_name": course_name, "course_topic": course_topic})
+
+    result = []
+    for doc in course:
+        doc['_id'] = str(doc['_id'])
+        result.append(doc)
+    return result
+
+# get content's quizz by course, topic a nd module
+def get_courses_content_quizzes_by_coursename(*,connection, course_name):
+    """ Get get content's quizz by course name
+
+        Params: 
+            connection - the mongodb connection, 
+            course_name - the course's name or title
+        Return: return a list of object with the course's quizz 
+    """
+
+    # Access the database
+    db = connection.data_tuning_school
+
+    # Access the collection and retrieve documents
+    # docs = db.courses.find()
+
+    course = db.courses_content_quizzes.find({"course_name": course_name})
+
+    result = []
+    for doc in course:
+        doc['_id'] = str(doc['_id'])
+        result.append(doc)
+    return result
+
+
 def save_course_to_mgdb(connection, document):
     
     try:

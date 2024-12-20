@@ -333,7 +333,7 @@
 
                         <ul class="list-unstyled ps-0">
                             {% if modules and modules | length > 0 %}
-                            {% for module in modules %}
+                            {% for module in modules | sort %}
                             {% set collapse = module %}
                             <li class="mb-1">
                                 <button

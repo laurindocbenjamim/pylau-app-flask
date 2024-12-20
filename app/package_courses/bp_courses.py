@@ -18,11 +18,13 @@ from flask import current_app
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
 from .course.course import CourseModel
-from .course.controller import get_courses_by_coursename, save_course_to_mgdb, save_courses_content_to_mgdb, get_courses_content_by_coursename_and_topic
+from .course.controller import get_courses_by_coursename, save_course_to_mgdb
+from .course.controller import save_courses_content_to_mgdb, get_courses_content_by_coursename_and_topic
 from .course.controller import get_courses_content_by_coursename
 from .course.controller import update_course_to_mgdb
 from .course.controller import update_courses_content_to_mgdb, get_all_courses_mgdb
 from .course.controller import remove_courses_content_from_mgdb, save_courses_content_quizzes
+from .course.controller import get_courses_content_quizzes_by_coursename
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -532,6 +534,7 @@ def view_courses_demo():
         # Getting the course data by name from MongoDB
         data = get_courses_by_coursename(connection=connection, course_name=course_title)
         course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+        course_content_quizzes = get_courses_content_quizzes_by_coursename(connection=connection,course_name=course_title)
 
         if course_content:
             for course in course_content:
@@ -548,7 +551,8 @@ def view_courses_demo():
                 course_data=data,
                 course_content=course_content,
                 modules = courses_module,
-                course_name=course_title
+                course_name=course_title,
+                course_content_quizzes=course_content_quizzes
             )
         )
         set_header_params(response)
