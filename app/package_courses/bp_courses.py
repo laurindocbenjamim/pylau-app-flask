@@ -225,11 +225,11 @@ def create_course_content():
                     else:
 
                         if not video.filename:
-                            return jsonify({"error": "The video file is required!"}), 201
+                            return jsonify({"status_code":400, "error": "The video file is required!"}), 201
                         
                         # Validate file
                         if not allowed_file(video.filename):
-                            return jsonify({"error": "Invalid video file type"}), 201
+                            return jsonify({"status_code":400, "error": "Invalid video file type"}), 201
                         
                         UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{folder}'
                         # Add write permission to the directory
@@ -296,7 +296,8 @@ def create_course_content():
             connection.close()
             return jsonify({"status_code": 200, "response": document, "sms": sms}), 200
         except Exception as e:
-            return jsonify({"status_code": 200, "message": "An error occurred", "error": str(e)}), 200
+            connection.close()
+            return jsonify({"status_code": 400, "message": "An error occurred", "error": str(e)}), 200
         
     # If the request.method is GET
      
