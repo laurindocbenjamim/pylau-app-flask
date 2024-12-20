@@ -240,8 +240,13 @@ def create_course_content():
                             os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             
                         # Join the file with its path
-                        save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename))
-                        video.save(save_path.replace('\\', '/'))   
+                        save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename.replace('\\', '/')))
+                        video.save(save_path)   
+                        if not os.path.isfile(save_path): 
+                            # Revoke write privileges
+                            os.chmod(UPLOAD_FOLDER, 0o555)   
+                            return jsonify({"status_code":400, "response": "File was not uploaded."}), 200 
+                            
 
                         # Revoke write privileges
                         os.chmod(UPLOAD_FOLDER, 0o555)         
