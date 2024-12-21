@@ -549,8 +549,7 @@
                         ...
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -633,6 +632,12 @@
                         $('#modalAlertMessage').modal('show');
                     });
                 }
+            }).catch(err=>{
+                $(document).ready((e) => {
+                    $('#modal-body').html(`<p>${err}</p>`);
+                    $('#modal-content').addClass('bg-danger-subtle');
+                    $('#modalAlertMessage').modal('show');
+                });
             })
 
 
