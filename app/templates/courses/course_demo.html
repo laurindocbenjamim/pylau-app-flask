@@ -355,31 +355,35 @@
 
                                         <li><a href="#"
                                                 class="link-body-light d-inline-flex text-decoration-none rounde"
-                                                onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')">
+                                                onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}','content')">
                                                 {{ content['course_topic']}}
                                             </a></li>
 
-                                            <!-- Filtering quizzes -->
-                                     {% if course_content_quizzes and course_content_quizzes | length > 0 %}
-                                            
-                                         {% for quizz in course_content_quizzes %}                                        
-                                         {% if quizz['course_module'] == module and quizz['course_topic'] == content['course_topic'] %}
-                                         
-                                         <li><a href="#" 
-                                            class="link-body-light text-primary d-inline-flex text-decoration rounde"
-                                            onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')">
-                                            Quizz: {{ content['course_topic']}}
-                                        </a></li>
-                                         {% endif %}
-                                         {% endfor %}
-                                     
-                                      {% endif %}
-                                      <!-- Edn filtering quizz-->
+                                        <!-- Filtering quizzes -->
+                                        {% if course_content_quizzes and course_content_quizzes | length > 0 %}
+
+                                        {% for quizz in course_content_quizzes %}
+                                        {% if quizz['course_module'] == module and quizz['course_topic'] ==
+                                        content['course_topic'] %}
+
+                                        <li>
+                                            <a href="#"
+                                                class="link-body-light text-primary d-inline-flex text-decoration rounde"
+                                                onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}','quizz')">
+                                                Quizz: {{ quizz['course_topic'] }}
+                                            </a>
+                                        </li>
+
+                                        {% endif %}
+                                        {% endfor %}
+
+                                        {% endif %}
+                                        <!-- Edn filtering quizz-->
                                         {% endif %}
                                         {% endfor %}
                                     </ul>
                                     {% endif %}
-                                    
+
                                 </div>
                             </li>
                             {% endfor %}
@@ -407,7 +411,7 @@
                             <li class="mb-1">
                                 <button
                                     class="btn btn-toggle d-inline-flex align-items-center rounde border-0 collapsed"
-                                    onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                                    onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}','content')"
                                     data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
                                     {{ content['course_topic']}}
                                 </button>
@@ -416,15 +420,24 @@
 
                             <!-- Filtering quizzes -->
                             {% if course_content_quizzes and course_content_quizzes | length > 0 %}
-                           
-                                {% for quizz in course_content_quizzes %}                                        
-                                {% if not quizz['course_module'] or quizz['course_module'] == 'null' %}                                
-                                {% if quizz['course_topic'] == content['course_topic'] %}
-                                <li>{{ quizz['course_topic'] }}</li>
-                                {% endif %}
-                                {% endif %}
-                                {% endfor %}
-                            
+
+                            {% for quizz in course_content_quizzes %}
+                            {% if not quizz['course_module'] or quizz['course_module'] == 'null' %}
+                            {% if quizz['course_topic'] == content['course_topic'] %}
+                            <li>
+
+                                <button
+                                    class="btn btn-toggle d-inline-flex align-items-center rounde border-0 collapsed"
+                                    onclick="viewContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}','quizz')"
+                                    data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                                    <span>Quizz: {{ quizz['course_topic'] }}</span>
+                                </button>
+                            </li>
+
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+
                             {% endif %}
 
                             {% endif %}
@@ -489,6 +502,7 @@
 
                         <div class="ratio ratio-16x9">
                             <iframe title="TechInnovate: Revolutionizing Business with Data Science"
+                            id="myContentIframe"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 title="YouTube video" allowfullscreen>
                             </iframe>
@@ -521,73 +535,167 @@
             </main>
         </div>
 
+        <!---- Modal alert message -->
+        <!-- Modal -->
+        <div class="modal fade" id="modalAlertMessage" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!------ End modal of alert message -->
+
     </div>
 
     <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="{{ url_for('static', filename='assets/js/sidebars.js')}}"></script>
 
     {% block script %}{% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+
     <script>
+
+
+        //document.addEventListener('DOMContentLoader', (e) => {
         const lightbox = GLightbox({ selector: '.glightbox' });
         // Reference the navigation container
         const nav = document.getElementById('mainNav');
         const divLocalVideo = document.getElementById('localvideo')
         const iframe = document.querySelector('iframe')
         const videoTag = document.querySelector('video')
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
-        document.addEventListener('DOMContentLoader', (e) => {
+
+        function showQuizzesIframe(course, topic, topicModule) {
+            const endpoint = `${window.location.origin}/course/get-courses-quizz-content/${course}/${topic}?module=${topicModule}`;
+            const headers = new Headers()
+            headers.append('X-CSRF-Token', csrfToken)
+            headers.append("Authorization", ` Bearer ${csrfToken}`);
+
+            const modalAlertMessage = document.getElementById('modalAlertMessage')
+
+            fetch(endpoint,
+                {
+                    method: 'GET',
+                    headers: headers
+                }
+            ).then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+                }
+            }).then(response => {
+                //console.log(response)
+                const data = JSON.parse(response)
+                if (data.status_code === 200) {
+                    //modalAlertMessage.classList.add = 'bg-danger'
+                    
+                    $(document).ready((e) => {
+                        
+                        //$('#modal-body').text(data.message[0].script);
+                        //$('#modal-content').addClass('bg-info-subtle');
+                        //$('#modalAlertMessage').modal('show');
+                    });
 
 
-        })
+                    try {
+                        const myContentIframe = document.getElementById('myContentIframe')
+                        iframe.style.display = 'block';
+                        videoTag.style.display = 'none'
 
-        function viewContent(course_name, topic, origin, content_file, module) {
+                        iframe.contentWindow.document.open();
+                        iframe.contentWindow.document.write(String(data.message[0].script));
+                        iframe.contentWindow.document.close();
+                        //$('#myContentIframe').contents().find('html').html(data.message[0].script);
+                    } catch (err) { console.log(err) }
+                } else {
+                    $(document).ready((e) => {
+                        $('#modal-body').html(`<p>${data.message}</p>`);
+                        $('#modal-content').addClass('bg-danger-subtle');
+                        $('#modalAlertMessage').modal('show');
+                    });
+                }
+            })
 
-            if (String(origin).trim() === 'localhost') {
-                iframe.style = 'display:none;'
-                iframe.src = '';
-                divLocalVideo.style = 'display:block;'
 
-                divLocalVideo.innerHTML = `
+
+        }
+
+        ///
+        function viewContent(course_name, topic, origin, content_file, topicModule, content_model) {
+
+            if (content_model === 'content') {
+
+                if (String(origin).trim() === 'localhost') {
+                    iframe.style = 'display:none;'
+                    iframe.src = '';
+                    divLocalVideo.style = 'display:block;'
+
+                    divLocalVideo.innerHTML = `
                 <video autoplay id="videoPlayer" class="w-100" controls>
                     <source src="${window.location.origin}/static/${String(content_file)}" type="video/mp4">
                 </video> 
                 `;
 
-            } else if (String(origin).trim() === 'youtube') {
-                
-                divLocalVideo.style = 'display:none;'
-                divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" controls></video>`;
-                iframe.style = 'display:block;'
+                } else if (String(origin).trim() === 'youtube') {
 
-                const characters = ['v=', 'watch?']
-                const characters2 = ['https:', '.be']
+                    divLocalVideo.style = 'display:none;'
+                    divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" controls></video>`;
+                    iframe.style = 'display:block;'
 
-                /**
-                previous code to test: /v=/.test(content_file)
-                I should use this code in an condiction chain like
-                    if(/v=/.test(content_file)){}
-                */
-                const containsCharacters = characters.some(char => String(content_file).includes(char))
-                const containsCharacters2 = characters2.some(char => String(content_file).includes(char))
+                    const characters = ['v=', 'watch?']
+                    const characters2 = ['https:', '.be']
 
-                if (containsCharacters) {
-                    const urlChunks = String(content_file).split('=')
-                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[1]).trim()}?autoplay=true`;
-                    return;
+                    /**
+                    previous code to test: /v=/.test(content_file)
+                    I should use this code in an condiction chain like
+                        if(/v=/.test(content_file)){}
+                    */
+                    const containsCharacters = characters.some(char => String(content_file).includes(char))
+                    const containsCharacters2 = characters2.some(char => String(content_file).includes(char))
+
+                    if (containsCharacters) {
+                        const urlChunks = String(content_file).split('=')
+                        iframe.src = `https://www.youtube.com/embed/${String(urlChunks[1]).trim()}?autoplay=true`;
+                        return;
+                    }
+
+                    if (containsCharacters2) {
+                        const urlChunks = String(content_file).split('/')
+                        iframe.src = `https://www.youtube.com/embed/${String(urlChunks[3]).trim()}?autoplay=true`;
+                        return;
+                    }
+
                 }
+            } else if (content_model === 'quizz') {
 
-                if (containsCharacters2) {
-                    const urlChunks = String(content_file).split('/')
-                    iframe.src = `https://www.youtube.com/embed/${String(urlChunks[3]).trim()}?autoplay=true`;
-                    return;
-                }
-
+                // Get the quizzes 
+                showQuizzesIframe(course_name, topic, topicModule)
             }
 
         }
+
+
+        //})
+
 
     </script>
 </body>

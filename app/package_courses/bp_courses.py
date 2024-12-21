@@ -25,6 +25,7 @@ from .course.controller import update_course_to_mgdb
 from .course.controller import update_courses_content_to_mgdb, get_all_courses_mgdb
 from .course.controller import remove_courses_content_from_mgdb, save_courses_content_quizzes
 from .course.controller import get_courses_content_quizzes_by_coursename
+from .course.controller import get_courses_content_quizzes_by_coursename_topic
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -559,7 +560,28 @@ def view_courses_demo():
         return response
     except Exception as e:
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
-    
+
+
+# Get the quizze's content
+@bp_courses.route("/get-courses-quizz-content/<string:course>/<string:topic>", methods=["GET"])
+@cross_origin(methods=["GET"])
+def get_courses_quizz_content(course, topic):
+    course = escape(course)
+    topic = escape(topic)
+    module = escape(request.args.get('module'))
+
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    if not course and not topic:
+        return jsonify({"status_code": 400, "message": "Provide a course's name and topic."}),200
+
+
+    course_content_quizzes = get_courses_content_quizzes_by_coursename_topic(connection=connection,course_name=course, topic=topic, module=module)
+
+    return jsonify({"status_code": 200, "message": course_content_quizzes }),200
+
+
+
 @bp_courses.route("/list-all")
 @cross_origin(methods=["GET"])
 def get_all():
