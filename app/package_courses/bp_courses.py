@@ -8,12 +8,14 @@ from datetime import datetime
 
 # from ..configs_package import mongodb_connection
 from pymongo import MongoClient
-from flask import current_app
+
 
 bp_courses = Blueprint("course", __name__, url_prefix="/course")
 CORS(bp_courses)
 from werkzeug.utils import secure_filename
 from flask import current_app
+from flask_caching import Cache
+from unidecode import unidecode
 
 from ..token_module.userTokenModel import UserToken
 from .enroll.enroll_view import EnrollView
@@ -525,6 +527,7 @@ def view_courses_demo():
 
     course_title = escape(request.args.get('course'))
     courses_module = set()
+    
 
      # If the request.method is GET
     # connect to mongodb server
@@ -536,14 +539,25 @@ def view_courses_demo():
         data = get_courses_by_coursename(connection=connection, course_name=course_title)
         course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
         course_content_quizzes = get_courses_content_quizzes_by_coursename(connection=connection,course_name=course_title)
-
+        
+        
         if course_content:
             for course in course_content:
                 if 'course_module' in course:
                     courses_module.add(course['course_module'])
         courses_module = list(courses_module) 
 
-     
+        # Store the quizz's content to the Cache Memory
+        # Remove spaces and accentuations from string
+        cache_course_key_object = f'{str(unidecode(course_title)).replace(' ','_')}_content_quizz'
+        cacheQuizz = Cache(current_app)
+        # check if the key value already exists if not create it
+        cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+        if cache_object is None:
+            cacheQuizz.set(str(cache_course_key_object).lower(), course_content_quizzes)
+
+        cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+    
         response = make_response(
             render_template(
                 "courses/course_demo.html",
@@ -575,10 +589,27 @@ def get_courses_quizz_content(course, topic):
     if not course and not topic:
         return jsonify({"status_code": 400, "message": "Provide a course's name and topic."}),200
 
+    # Store the quizz's content to the Cache Memory
+    # Remove spaces and accentuations from string
+    cache_course_key_object = f'{str(unidecode(course)).replace(' ','_')}_content_quizz'
+    cacheQuizz = Cache(current_app)
+    # check if the key value already exists if not create it
+    cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+    if cache_object is None:
+        course_content_quizzes = get_courses_content_quizzes_by_coursename_topic(connection=connection,course_name=course, topic=topic, module=module)
+        cacheQuizz.set(str(cache_course_key_object).lower(), course_content_quizzes)
 
-    course_content_quizzes = get_courses_content_quizzes_by_coursename_topic(connection=connection,course_name=course, topic=topic, module=module)
+    cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+    #
+    quizz_content = None
 
-    return jsonify({"status_code": 200, "message": course_content_quizzes }),200
+    for item in cache_object:
+        if item['course_topic'] == topic:
+            quizz_content = item['script']
+            break
+        
+    
+    return jsonify({"status_code": 200, "message": quizz_content }),200
 
 
 

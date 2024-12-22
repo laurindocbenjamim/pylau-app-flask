@@ -73,6 +73,8 @@ def create_app(JDBC="sqlite",test_config=None):
 
     #
     cache = Cache(app)
+    #cacheQuizz = Cache(config={'CACHE_TYPE': 'CourseContentQuizz'})
+    #cacheQuizz.init_app(app)
     #
     #Quart(app)
 

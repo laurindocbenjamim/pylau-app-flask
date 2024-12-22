@@ -34,6 +34,7 @@ class DevelopmentConfig(Config):
     host ="localhost"
     MONGO_URI = str(os.environ.get('MONGO_URI')).replace('"','')
 
+    CACHE_TYPE = 'simple' 
 
     UPLOAD_FOLDER = 'app/static/uploads'
     FILES_FOLDER = 'app/static/files'

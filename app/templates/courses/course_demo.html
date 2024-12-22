@@ -215,6 +215,8 @@
         }
 
         iframe {
+            height: 100%;
+            width: 100%;
             position: absolute;
             top: 0;
             left: 0;
@@ -502,11 +504,11 @@
 
                         <div class="ratio ratio-16x9">
                             <iframe title="TechInnovate: Revolutionizing Business with Data Science"
-                            id="myContentIframe"
+                            
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 title="YouTube video" allowfullscreen>
                             </iframe>
-
+                            <iframe id="myContentIframe" allowfullscreen></iframe>
                             <!--<iframe class="iframe-video" src=""
                             title="TechInnovate: Revolutionizing Business with Data Science"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -604,6 +606,7 @@
             }).then(response => {
                 //console.log(response)
                 const data = JSON.parse(response)
+                console.log(data)
                 if (data.status_code === 200) {
                     //modalAlertMessage.classList.add = 'bg-danger'
                     
@@ -616,12 +619,14 @@
 
 
                     try {
-                        const myContentIframe = document.getElementById('myContentIframe')
+                        const iframe = document.getElementById('myContentIframe')
                         iframe.style.display = 'block';
                         videoTag.style.display = 'none'
+                        
+                        iframe.onload = function() { var iframeDocument = iframe.contentDocument || iframe.contentWindow.document; iframeDocument.body.contentEditable = true; };
 
                         iframe.contentWindow.document.open();
-                        iframe.contentWindow.document.write(String(data.message[0].script));
+                        iframe.contentWindow.document.write(String(data.message));
                         iframe.contentWindow.document.close();
                         //$('#myContentIframe').contents().find('html').html(data.message[0].script);
                     } catch (err) { console.log(err) }

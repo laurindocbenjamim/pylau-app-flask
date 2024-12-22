@@ -60,7 +60,8 @@ bleach
 pymongo[srv]
 #pip install pymongo flask-pymongo
 flask-pymongo
-
+# pip install unidecode
+unidecode
 
 
 
