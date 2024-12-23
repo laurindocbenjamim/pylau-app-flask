@@ -609,9 +609,28 @@ def get_courses_quizz_content(course, topic):
             break
         
     
-    return jsonify({"status_code": 200, "message": quizz_content }),200
+    return jsonify({"status_code": 200, "script": quizz_content }),200
 
+@bp_courses.route("/get-courses-quizz-content/view-quizz/<string:course>/<string:topic>", methods=["GET"])
+@cross_origin(methods=["GET"])
+def view_quizz(course,topic):
 
+    course_title = escape(course)
+    topic = escape(topic)
+    courses_module = escape(request.args.get('courses_module'))
+
+    response = make_response(
+        render_template(
+            "courses/view_quizz.html",
+            title=unidecode(course_title),
+            USER_DATA=__get_cookies,
+            course_module = courses_module,
+            course_name=course_title,
+            course_topic=topic,
+        )
+    )
+    set_header_params(response)
+    return response
 
 @bp_courses.route("/list-all")
 @cross_origin(methods=["GET"])
