@@ -317,8 +317,9 @@
                     href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}"
                     rel="noopener noreferrer">
                     <span class=" text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span
-                            style="color: #088806;">{{ course_topic }}</span> <i
-                            class="fa-solid fa-circle-chevron-right"></i>.</span>
+                            style="color: #088806;">{{ course_topic }}</span> 
+                            (<span id="total-exercices" >1</span>)
+                            <i class="fa-solid fa-circle-chevron-right"></i></span>
                 </a>
             </h1>
 
@@ -370,6 +371,7 @@
             const topicModule = '{{ course_module }}';
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             var iframe = document.getElementById('myIframe');
+            var totalExercices = document.getElementById('total-exercices')
             var count = 0
             if (!course || !topic) {
                 alert("No course and topic has been provided!")
@@ -396,7 +398,8 @@
 
                         progress.style.width = `${totalDone}%`;
                         progress.innerText = `${totalDone}/${data.script.length}`;
-
+                        totalExercices.innerText = data.script.length;
+                        
                         if (divProgress.classList.contains('bg-light')) {
                             if (totalDone === 0) {
                                 divProgress.classList.remove('bg-light')
