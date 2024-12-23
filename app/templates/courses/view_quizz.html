@@ -273,21 +273,22 @@
             </li>
         </ul>
 
-        
+
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
             <li class="nav-item text-nowrap">
                 <a class="nav-link text-light" href="">{{ course_name }}</a>
             </li>
             <li class="nav-item text-nowrap">
-                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
-                aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" id="progress-bar" style="width: 0%">0%
+                <div class="progress mb-3" id="container-progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" id="progress-bar"
+                        style="width: 0%">0%
+                    </div>
                 </div>
-            </div>
             </li>
         </ul>
 
-        
+
         <div class="dropdown border-top dropstart">
             <a href="#"
                 class="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle"
@@ -316,8 +317,8 @@
                     href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}"
                     rel="noopener noreferrer">
                     <span class=" text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span
-                        style="color: #088806;">{{ course_topic }}</span> <i
-                        class="fa-solid fa-circle-chevron-right"></i>.</span>
+                            style="color: #088806;">{{ course_topic }}</span> <i
+                            class="fa-solid fa-circle-chevron-right"></i>.</span>
                 </a>
             </h1>
 
@@ -369,18 +370,19 @@
             const topicModule = '{{ course_module }}';
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             var iframe = document.getElementById('myIframe');
-
+            var count = 0
             if (!course || !topic) {
                 alert("No course and topic has been provided!")
                 return;
             }
 
-            viewQuizz(csrfToken, course, topic, topicModule);
+            viewQuizz(csrfToken, course, topic, topicModule, count);
 
             const progress = document.getElementById('progress-bar')
+            const divProgress = document.getElementById('container-progress')
             var totalDone = 0;
 
-            function viewQuizz(csrfToken, course, topic, topicModule) {
+            function viewQuizz(csrfToken, course, topic, topicModule, count) {
 
                 const endpoint = `${window.location.origin}/course/get-courses-quizz-content/${course}/${topic}?module=${topicModule}`;
                 const headers = new Headers()
@@ -391,16 +393,43 @@
                 fetch(endpoint, { headers: headers })
                     .then(response => response.json())
                     .then(data => {
-                        
+
                         progress.style.width = `${totalDone}%`;
                         progress.innerText = `${totalDone}/${data.script.length}`;
-                        
+
+                        if (divProgress.classList.contains('bg-light')) {
+                            if (totalDone === 0) {
+                                divProgress.classList.remove('bg-light')
+                                divProgress.classList.add('bg-danger')
+                            } else {
+                                if (divProgress.classList.contains('bg-danger')) {
+                                    divProgress.classList.remove('bg-danger')
+                                    divProgress.classList.add('bg-light')
+                                }
+
+                            }
+
+                        }else{
+                            if (totalDone === 0) {
+                                divProgress.classList.remove('bg-light')
+                                divProgress.classList.add('bg-danger')
+                            } else {
+                                if (divProgress.classList.contains('bg-danger')) {
+                                    divProgress.classList.remove('bg-danger')
+                                    divProgress.classList.add('bg-light')
+                                    
+                                }
+
+                            }
+                        }
                         console.log(data.script.length)
-                        if (data.script) {
+                        if (data.script.length > 0) {
+                            //alert(data.script[count])
                             var iframe = document.getElementById('myIframe');
-                            var htmlContent = data.script;
+                            var htmlContent = data.script[count];
                             var blob = new Blob([htmlContent], { type: 'text/html' });
                             var url = URL.createObjectURL(blob);
+                            iframe.src = '';
                             iframe.src = url;
                             //
                             iframe.onload = function () {
@@ -408,23 +437,28 @@
                                 //8---100
                                 var isCorrectVariable = iframeDocument.isCorrect;
 
-                                if(isCorrectVariable){
+                                if (isCorrectVariable) {
                                     alert("Is correct")
                                 }
                                 iframeDocument.getElementById('nextButton').addEventListener('click', function () {
-                                    if(totalDone < data.script.length){
-                                        totalDone +=1;
-                                    }
-                                    
-                                    progress.style.width = `${(totalDone * 100)/data.script.length}%`;
+                                    if (totalDone < data.script.length) {
+                                        totalDone += 1;
+                                        count +=1;
+                                    }                                    
+
+                                    progress.style.width = `${(totalDone * 100) / data.script.length}%`;
                                     progress.innerText = `${totalDone}/${data.script.length}`;
-                                    
+
+                                    if(totalDone < data.script.length){
+                                        
+                                        viewQuizz(csrfToken, course, topic, topicModule, count);
+                                    }
                                     console.log('Heading inside iframe clicked!');
                                 });
                                 //
                                 iframeDocument.getElementById('retryButton').addEventListener('click', function () {
 
-                                    viewQuizz(csrfToken, course, topic, topicModule);
+                                    viewQuizz(csrfToken, course, topic, topicModule, count);
                                 });
                             };
                         }

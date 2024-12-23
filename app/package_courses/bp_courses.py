@@ -608,6 +608,7 @@ def get_courses_quizz_content(course, topic):
     for item in course_content_quizzes:
         if item['course_topic'] == topic:
             quizz_content.append(item['script'])
+        else:
             break
         
     
