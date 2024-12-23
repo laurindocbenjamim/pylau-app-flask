@@ -2,10 +2,6 @@
 
 async function fetch01(endpoint,fetchHeaders, formData, fetchMethod){
 
-    const headers = new Headers()
-    headers.append('X-CSRF-Token', csrfToken)
-    headers.append("Authorization", ` Bearer ${csrfToken}`);
-
     try {
         var response = null
         if(fetchMethod ==="POST"){

@@ -279,8 +279,8 @@
                 <a class="nav-link text-light" href="">{{ course_name }}</a>
             </li>
             <li class="nav-item text-nowrap">
-                <div class="progress mb-3" id="container-progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0"
-                    aria-valuemin="0" aria-valuemax="100">
+                <div class="progress mb-3" id="container-progress" role="progressbar"
+                    aria-label="Animated striped example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" id="progress-bar"
                         style="width: 0%">0%
                     </div>
@@ -317,9 +317,9 @@
                     href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}"
                     rel="noopener noreferrer">
                     <span class=" text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span
-                            style="color: #088806;">{{ course_topic }}</span> 
-                            (<span id="total-exercices" >1</span>)
-                            <i class="fa-solid fa-circle-chevron-right"></i></span>
+                            style="color: #088806;">{{ course_topic }}</span>
+                        (<span id="total-exercices">1</span>)
+                        <i class="fa-solid fa-circle-chevron-right"></i></span>
                 </a>
             </h1>
 
@@ -362,7 +362,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-
+    <script src="{{ url_for('static', filename='app/fetch_form.js')}}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -371,27 +371,36 @@
             const topicModule = '{{ course_module }}';
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             var iframe = document.getElementById('myIframe');
-            var totalExercices = document.getElementById('total-exercices')
-            var count = 0
+            var totalExercices = document.getElementById('total-exercices');
+            var count = 0;
+            var totalElements = 0;
+            let scriptObject = [];
+
             if (!course || !topic) {
                 alert("No course and topic has been provided!")
                 return;
             }
 
-            viewQuizz(csrfToken, course, topic, topicModule, count);
+            scriptObject = viewQuizz(csrfToken, course, topic, topicModule, count);
 
-            const progress = document.getElementById('progress-bar')
-            const divProgress = document.getElementById('container-progress')
+            const progress = document.getElementById('progress-bar');
+            const divProgress = document.getElementById('container-progress');
+            
             var totalDone = 0;
 
-            function viewQuizz(csrfToken, course, topic, topicModule, count) {
+            async function viewQuizz(csrfToken, course, topic, topicModule, count) {
 
                 const endpoint = `${window.location.origin}/course/get-courses-quizz-content/${course}/${topic}?module=${topicModule}`;
                 const headers = new Headers()
                 headers.append('X-CSRF-Token', csrfToken)
                 headers.append("Authorization", ` Bearer ${csrfToken}`);
 
+                const response = await fetch01(endpoint, headers, null, 'GET')
+                if (response.script && Array.isArray(response.script)) {
+                    return response.script
+                }
 
+                /*
                 fetch(endpoint, { headers: headers })
                     .then(response => response.json())
                     .then(data => {
@@ -468,13 +477,141 @@
 
                     })
                     .catch(error => console.error('Error fetching HTML:', error));
+                */
+                return []
+            };
+
+
+            //
+            function runTheQuizzScript(data){
+                if (data.length > 0) {
+                    
+                    var htmlContent = data[count];
+                    var blob = new Blob([htmlContent], { type: 'text/html' });
+                    var url = URL.createObjectURL(blob);
+                    iframe.src = '';
+                    iframe.src = url;
+                    //
+                    
+                }
+            };
+
+            //
+            function displayProgressBar(totalElements){
+                progress.style.width = `${totalDone}%`;
+                progress.innerText = `${totalDone}/${totalElements}`;
+                
+                if (divProgress.classList.contains('bg-light')) {
+                    if (totalDone === 0) {
+                        divProgress.classList.remove('bg-light')
+                        divProgress.classList.add('bg-danger')
+                    } else {
+                        if (divProgress.classList.contains('bg-danger')) {
+                            divProgress.classList.remove('bg-danger')
+                            divProgress.classList.add('bg-light')
+                        }
+
+                    }
+
+                }else{
+                    if (totalDone === 0) {
+                        divProgress.classList.remove('bg-light')
+                        divProgress.classList.add('bg-danger')
+                    } else {
+                        if (divProgress.classList.contains('bg-danger')) {
+                            divProgress.classList.remove('bg-danger')
+                            divProgress.classList.add('bg-light')
+                            
+                        }
+
+                    }
+                }
             }
 
+            var isCorrectVariable = false;
+
+            //
+            
+            //
+            iframe.onload = function () {
+                totalElements = totalExercices.innerText;
+                
+                var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                //8---100
+                // get the value of a TAG element within the iframe by its ID
+               
+                iframeDocument.getElementById('submitButton').addEventListener('click', ()=>{
+
+                    const checkAnswer = iframeDocument.getElementById('feedback').innerText;
+                    if(String(checkAnswer).includes('are correct')){
+                       
+                        if (totalDone < totalElements) {
+                            totalDone += 1;
+                            count +=1;
+                            //
+                            progress.style.width = `${(totalDone * 100) / totalElements}%`;
+                            progress.innerText = `${totalDone}/${totalElements}`;
+                            //
+                            displayProgressBar(totalElements)
+                        }   
+                        
+                    }
+                    
+                })
+
+                
+                
+                iframeDocument.getElementById('nextButton').addEventListener('click', function () {
+                    if (totalDone < totalElements) {
+                        totalDone += 1;
+                        count +=1;
+                    }                                    
+                    
+                    progress.style.width = `${(totalDone * 100) / totalElements}%`;
+                    progress.innerText = `${totalDone}/${totalElements}`;
+
+                    if(totalDone < totalElements){
+                        alert(isCorrectVariable)
+                        handlePromise(scriptObject)
+                        //displayProgressBar(totalElements)
+                        //viewQuizz(csrfToken, course, topic, topicModule, count);
+                    }
+                    console.log('Heading inside iframe clicked!');
+                });
+                //
+                iframeDocument.getElementById('retryButton').addEventListener('click', function () {
+                    alert("Go retry")
+                    handlePromise(scriptObject)
+                    //viewQuizz(csrfToken, course, topic, topicModule, count);
+                });
+            };
+
+            //
+            handlePromise(scriptObject)
+            displayProgressBar(totalExercices.innerText)
+            //
+            function handlePromise(scriptObject){
+                const promise = new Promise((resolve, reject) => {
+                    resolve(scriptObject)
+                });
+                promise.then(data => {
+                    console.log(data)                
+                    totalExercices.innerText = data.length;
+
+                    //displayProgressBar(data)
+    
+                    runTheQuizzScript(data)
+                });
+                promise.catch(err => console.log(err))
+            };
+            
             ///
 
             document.getElementById('tryAgain').addEventListener('click', (e) => {
                 viewQuizz(csrfToken, course, topic, topicModule, count);
             });
+
+            
         });
 
     </script>
