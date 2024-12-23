@@ -20,9 +20,7 @@
 
 
     <style>
-        body {
-            
-        }
+        body {}
 
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -246,12 +244,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 
-<body style="background-color: #001E2B;">
+<body style="background-color: #022230;">
 
 
-    <!--
-    <header class="navbar sticky-top bg-ligh flex-md-nowrap p-0 shadow" data-bs-theme="light" style="background-color:#001E2B">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 bg-ligh" style="background-color:#001E2B; color: #11c720;" href="#"><b>Data Tuning Academy</b></a>
+
+    <header class="navbar sticky-top bg-ligh flex-md-nowrap p-0 shadow" data-bs-theme="light"
+        style="background-color:#001E2B">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 bg-ligh"
+            style="background-color:#001E2B; color: #11c720;" href="#"><b>Data Tuning Academy</b></a>
 
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
@@ -267,22 +267,27 @@
                 <button class="nav-link px-3 text-dark" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                     aria-label="Toggle navigation">
-                    
+
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </li>
         </ul>
 
-        <ul class="navbar-nav me-auto ">
+        
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="">Home</a>
+                <a class="nav-link text-light" href="">{{ course_name }}</a>
+            </li>
+            <li class="nav-item text-nowrap">
+                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" id="progress-bar" style="width: 0%">0%
+                </div>
+            </div>
             </li>
         </ul>
 
-        <div id="navbarSearch" class="navbar-search w-100 collapse">
-            <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
-        </div>
-
+        
         <div class="dropdown border-top dropstart">
             <a href="#"
                 class="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle"
@@ -299,44 +304,52 @@
                 <li><a class="dropdown-item" href="#">Sign out</a></li>
             </ul>
         </div>
-    </header>-->
+    </header>
 
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-        style="background-color: #001E2B;">
-        <h1 class="h5" id="course-title">
-            <a class="text-decoration-none" style="color: #fff;"
-                href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}"
-                rel="noopener noreferrer">
-                {{ course_name }}
-            </a>
-        </h1>
-        
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <button class="btn btn-sm btn-outline-info" id="tryAgain" type="button">Try Again</button>
-            </div>
-            <button type="button"
-                class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                USERNAME
-            </button>
 
-        </div>
-    </div>
 
     <div class="container">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+            style="background-color: #001E2B;">
+            <h1 class="h5" id="course-title">
+                <a class="text-decoration-none" style="color: #fff;"
+                    href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}"
+                    rel="noopener noreferrer">
+                    <span class=" text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span
+                        style="color: #088806;">{{ course_topic }}</span> <i
+                        class="fa-solid fa-circle-chevron-right"></i>.</span>
+                </a>
+            </h1>
+
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button class="btn btn-sm btn-outline-info" id="tryAgain" type="button">Try Again</button>
+                </div>
+                <button type="button"
+                    class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+                    USERNAME
+                </button>
+
+            </div>
+        </div>
         <main>
-            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" style="width: 75%">75%</div>
-              </div>
+            <!--<div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" id="progress-bar" style="width: 0%">0%
+                </div>
+            </div>-->
             <div class="py-5 text-center">
-                <h2 class="h3 text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span style="color: #088806;">{{ course_topic }}</span> <i class="fa-solid fa-circle-chevron-right"></i>.</h2>
+                <!--<h2 class="h3 text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span
+                        style="color: #088806;">{{ course_topic }}</span> <i
+                        class="fa-solid fa-circle-chevron-right"></i>.</h2>-->
                 <p class="lead">
                 </p>
             </div>
 
 
             <div class="ratio ratio-16x9">
-                <iframe id="myIframe" style="min-height: 1000px;" title="TechInnovate: Revolutionizing Business with Data Science"
+                <iframe id="myIframe" style="min-height: 1000px;"
+                    title="TechInnovate: Revolutionizing Business with Data Science"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     title="YouTube video" allowfullscreen>
                 </iframe>
@@ -364,6 +377,9 @@
 
             viewQuizz(csrfToken, course, topic, topicModule);
 
+            const progress = document.getElementById('progress-bar')
+            var totalDone = 0;
+
             function viewQuizz(csrfToken, course, topic, topicModule) {
 
                 const endpoint = `${window.location.origin}/course/get-courses-quizz-content/${course}/${topic}?module=${topicModule}`;
@@ -375,7 +391,11 @@
                 fetch(endpoint, { headers: headers })
                     .then(response => response.json())
                     .then(data => {
-
+                        
+                        progress.style.width = `${totalDone}%`;
+                        progress.innerText = `${totalDone}/${data.script.length}`;
+                        
+                        console.log(data.script.length)
                         if (data.script) {
                             var iframe = document.getElementById('myIframe');
                             var htmlContent = data.script;
@@ -385,14 +405,25 @@
                             //
                             iframe.onload = function () {
                                 var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                                //
+                                //8---100
+                                var isCorrectVariable = iframeDocument.isCorrect;
+
+                                if(isCorrectVariable){
+                                    alert("Is correct")
+                                }
                                 iframeDocument.getElementById('nextButton').addEventListener('click', function () {
-                                    alert("Hello! Next")
+                                    if(totalDone < data.script.length){
+                                        totalDone +=1;
+                                    }
+                                    
+                                    progress.style.width = `${(totalDone * 100)/data.script.length}%`;
+                                    progress.innerText = `${totalDone}/${data.script.length}`;
+                                    
                                     console.log('Heading inside iframe clicked!');
                                 });
                                 //
                                 iframeDocument.getElementById('retryButton').addEventListener('click', function () {
-                                    
+
                                     viewQuizz(csrfToken, course, topic, topicModule);
                                 });
                             };
@@ -402,7 +433,7 @@
                     .catch(error => console.error('Error fetching HTML:', error));
             }
 
-           ///
+            ///
 
             document.getElementById('tryAgain').addEventListener('click', (e) => {
                 viewQuizz(csrfToken, course, topic, topicModule);
