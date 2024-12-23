@@ -577,42 +577,52 @@ def view_courses_demo():
 
 
 # Get the quizze's content
-@bp_courses.route("/get-courses-quizz-content/<string:course>/<string:topic>", methods=["GET"])
-@cross_origin(methods=["GET"])
+@bp_courses.route("/get-courses-quizz-content/<string:course>/<string:topic>", methods=["GET", "POST"])
+@cross_origin(methods=["GET", "POST"])
 def get_courses_quizz_content(course, topic):
     course = escape(course)
     topic = escape(topic)
     module = escape(request.args.get('module'))
 
     connection = MongoClient(current_app.config["MONGO_URI"])
-
-    if not course and not topic:
-        return jsonify({"status_code": 400, "message": "Provide a course's name and topic."}),200
-
-    # Store the quizz's content to the Cache Memory
-    # Remove spaces and accentuations from string
-    cache_course_key_object = f'{str(unidecode(course)).replace(' ','_')}_content_quizz'
-    cacheQuizz = Cache(current_app)
-    # check if the key value already exists if not create it
-    cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
-    course_content_quizzes = []
-
-    if cache_object is None:
-        course_content_quizzes = get_courses_content_quizzes_by_coursename_topic(connection=connection,course_name=course, topic=topic, module=module)
-        cacheQuizz.set(str(cache_course_key_object).lower(), course_content_quizzes)
-
-    cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
-    #
-    quizz_content = []
-
-    for item in course_content_quizzes:
-        if item['course_topic'] == topic:
-            quizz_content.append(item['script'])
-        else:
-            break
-        
+    if request.method == 'POST':
+       """
+       
+        data = request.get_json()
+        exercices_done = data.get("exerc_done", [])
+        COURSE = data.get('course')
+        return jsonify({"status_code": 200, "EXERCICES_DONE": exercices_done, "COURSE": COURSE}), 200
+       """
+       return jsonify({"status_code":200}), 200
     
-    return jsonify({"status_code": 200, "script": quizz_content }),200
+    else:
+        if not course and not topic:
+            return jsonify({"status_code": 400, "message": "Provide a course's name and topic."}),200
+
+        # Store the quizz's content to the Cache Memory
+        # Remove spaces and accentuations from string
+        cache_course_key_object = f'{str(unidecode(course)).replace(' ','_')}_content_quizz'
+        cacheQuizz = Cache(current_app)
+        # check if the key value already exists if not create it
+        cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+        course_content_quizzes = []
+
+        if cache_object is None:
+            course_content_quizzes = get_courses_content_quizzes_by_coursename_topic(connection=connection,course_name=course, topic=topic, module=module)
+            cacheQuizz.set(str(cache_course_key_object).lower(), course_content_quizzes)
+
+        cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+        #
+        quizz_content = []
+
+        for item in course_content_quizzes:
+            if item['course_topic'] == topic:
+                quizz_content.append(item['script'])
+            else:
+                break
+            
+        
+        return jsonify({"status_code": 200, "script": quizz_content }),200
 
 @bp_courses.route("/get-courses-quizz-content/view-quizz/<string:course>/<string:topic>", methods=["GET"])
 @cross_origin(methods=["GET"])

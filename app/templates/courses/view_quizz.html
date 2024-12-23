@@ -325,8 +325,12 @@
 
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
-                    <button class="btn btn-sm btn-outline-info" id="tryAgain" type="button">Try Again</button>
+                    <button class="btn btn-sm btn-outline-info shadow-lg" id="tryAgain" type="button">Try Again</button>
                 </div>
+                <div class="btn-group me-2">
+                    <button class="btn btn-sm btn-outline-success shadow-lg" id="save-button" type="button">Save Result</button>
+                </div>
+               
                 <button type="button"
                     class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
                     USERNAME
@@ -375,6 +379,7 @@
             var count = 0;
             var totalElements = 0;
             let scriptObject = [];
+            let results = [];
 
             if (!course || !topic) {
                 alert("No course and topic has been provided!")
@@ -385,7 +390,7 @@
 
             const progress = document.getElementById('progress-bar');
             const divProgress = document.getElementById('container-progress');
-            
+
             var totalDone = 0;
 
             async function viewQuizz(csrfToken, course, topic, topicModule, count) {
@@ -400,107 +405,34 @@
                     return response.script
                 }
 
-                /*
-                fetch(endpoint, { headers: headers })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        progress.style.width = `${totalDone}%`;
-                        progress.innerText = `${totalDone}/${data.script.length}`;
-                        totalExercices.innerText = data.script.length;
-                        
-                        if (divProgress.classList.contains('bg-light')) {
-                            if (totalDone === 0) {
-                                divProgress.classList.remove('bg-light')
-                                divProgress.classList.add('bg-danger')
-                            } else {
-                                if (divProgress.classList.contains('bg-danger')) {
-                                    divProgress.classList.remove('bg-danger')
-                                    divProgress.classList.add('bg-light')
-                                }
-
-                            }
-
-                        }else{
-                            if (totalDone === 0) {
-                                divProgress.classList.remove('bg-light')
-                                divProgress.classList.add('bg-danger')
-                            } else {
-                                if (divProgress.classList.contains('bg-danger')) {
-                                    divProgress.classList.remove('bg-danger')
-                                    divProgress.classList.add('bg-light')
-                                    
-                                }
-
-                            }
-                        }
-                        console.log(data.script.length)
-                        if (data.script.length > 0) {
-                            //alert(data.script[count])
-                            var iframe = document.getElementById('myIframe');
-                            var htmlContent = data.script[count];
-                            var blob = new Blob([htmlContent], { type: 'text/html' });
-                            var url = URL.createObjectURL(blob);
-                            iframe.src = '';
-                            iframe.src = url;
-                            //
-                            iframe.onload = function () {
-                                var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                                //8---100
-                                var isCorrectVariable = iframeDocument.isCorrect;
-
-                                if (isCorrectVariable) {
-                                    alert("Is correct")
-                                }
-                                iframeDocument.getElementById('nextButton').addEventListener('click', function () {
-                                    if (totalDone < data.script.length) {
-                                        totalDone += 1;
-                                        count +=1;
-                                    }                                    
-
-                                    progress.style.width = `${(totalDone * 100) / data.script.length}%`;
-                                    progress.innerText = `${totalDone}/${data.script.length}`;
-
-                                    if(totalDone < data.script.length){
-                                        
-                                        viewQuizz(csrfToken, course, topic, topicModule, count);
-                                    }
-                                    console.log('Heading inside iframe clicked!');
-                                });
-                                //
-                                iframeDocument.getElementById('retryButton').addEventListener('click', function () {
-
-                                    viewQuizz(csrfToken, course, topic, topicModule, count);
-                                });
-                            };
-                        }
-
-                    })
-                    .catch(error => console.error('Error fetching HTML:', error));
-                */
                 return []
             };
 
 
             //
-            function runTheQuizzScript(data){
+            function runTheQuizzScript(data) {
                 if (data.length > 0) {
                     
+                    localStorage.setItem('currentScript',data[count])
+                    localStorage.setItem('currentCount', count)
+                    localStorage.setItem('currentTotalDone', totalDone)
+
                     var htmlContent = data[count];
                     var blob = new Blob([htmlContent], { type: 'text/html' });
                     var url = URL.createObjectURL(blob);
                     iframe.src = '';
                     iframe.src = url;
                     //
-                    
+
                 }
             };
 
             //
-            function displayProgressBar(totalElements){
-                progress.style.width = `${totalDone}%`;
+            function displayProgressBar(totalElements) {
+
+                progress.style.width = `${(totalDone * 100) / totalElements}%`;
                 progress.innerText = `${totalDone}/${totalElements}`;
-                
+
                 if (divProgress.classList.contains('bg-light')) {
                     if (totalDone === 0) {
                         divProgress.classList.remove('bg-light')
@@ -513,7 +445,7 @@
 
                     }
 
-                }else{
+                } else {
                     if (totalDone === 0) {
                         divProgress.classList.remove('bg-light')
                         divProgress.classList.add('bg-danger')
@@ -521,7 +453,7 @@
                         if (divProgress.classList.contains('bg-danger')) {
                             divProgress.classList.remove('bg-danger')
                             divProgress.classList.add('bg-light')
-                            
+
                         }
 
                     }
@@ -531,47 +463,54 @@
             var isCorrectVariable = false;
 
             //
-            
+
             //
             iframe.onload = function () {
                 totalElements = totalExercices.innerText;
-                
+
                 var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
                 //8---100
                 // get the value of a TAG element within the iframe by its ID
-               
-                iframeDocument.getElementById('submitButton').addEventListener('click', ()=>{
+
+                iframeDocument.getElementById('submitButton').addEventListener('click', () => {
 
                     const checkAnswer = iframeDocument.getElementById('feedback').innerText;
-                    if(String(checkAnswer).includes('are correct')){
-                       
+                    if (String(checkAnswer).includes('are correct')) {
+
                         if (totalDone < totalElements) {
                             totalDone += 1;
-                            count +=1;
+                            count += 1;
                             //
+                           
                             progress.style.width = `${(totalDone * 100) / totalElements}%`;
                             progress.innerText = `${totalDone}/${totalElements}`;
                             //
+                            iframeDocument.getElementById('submitButton').style = "display:none"
                             displayProgressBar(totalElements)
-                        }   
-                        
+                            results[count] = `Exerc.${totalDone}`;
+                           
+                            localStorage.setItem('results', results)
+                        }
+
                     }
-                    
+
                 })
 
-                
-                
-                iframeDocument.getElementById('nextButton').addEventListener('click', function () {
-                    if (totalDone < totalElements) {
-                        totalDone += 1;
-                        count +=1;
-                    }                                    
-                    
-                    progress.style.width = `${(totalDone * 100) / totalElements}%`;
-                    progress.innerText = `${totalDone}/${totalElements}`;
 
-                    if(totalDone < totalElements){
-                        alert(isCorrectVariable)
+
+                iframeDocument.getElementById('nextButton').addEventListener('click', function () {
+                    /* if (totalDone < totalElements) {
+                         totalDone += 1;
+                         count +=1;
+                     }                                    
+                     
+                     progress.style.width = `${(totalDone * 100) / totalElements}%`;
+                     progress.innerText = `${totalDone}/${totalElements}`;
+ 
+                     */
+                     
+                    if (totalDone < totalElements) {
+
                         handlePromise(scriptObject)
                         //displayProgressBar(totalElements)
                         //viewQuizz(csrfToken, course, topic, topicModule, count);
@@ -580,9 +519,8 @@
                 });
                 //
                 iframeDocument.getElementById('retryButton').addEventListener('click', function () {
-                    alert("Go retry")
+                    
                     handlePromise(scriptObject)
-                    //viewQuizz(csrfToken, course, topic, topicModule, count);
                 });
             };
 
@@ -590,28 +528,66 @@
             handlePromise(scriptObject)
             displayProgressBar(totalExercices.innerText)
             //
-            function handlePromise(scriptObject){
+            function handlePromise(scriptObject) {
                 const promise = new Promise((resolve, reject) => {
                     resolve(scriptObject)
                 });
                 promise.then(data => {
-                    console.log(data)                
+                    
                     totalExercices.innerText = data.length;
 
-                    //displayProgressBar(data)
-    
                     runTheQuizzScript(data)
                 });
                 promise.catch(err => console.log(err))
             };
-            
+
+            document.getElementById('save-button').addEventListener('click', (e)=>{
+                e.preventDefault()
+                const done = localStorage.getItem('results')
+                if(done.length > 0){
+
+                    exerc_done = done;
+
+                    const endpoint = `${window.location.origin}/course/get-courses-quizz-content/${course}/${topic}?module=${topicModule}`;
+                    const headers = new Headers()
+                    headers.append('X-CSRF-Token', csrfToken)
+                    headers.append("Authorization", ` Bearer ${csrfToken}`);
+
+                    //const formData = new FormData();
+                    //formData.append("exerc_done", results);
+                    //formData.append("course", course);
+                    //formData.append("topic", topic);
+                    //formData.append("module", topicModule);
+
+                    fetch(endpoint,{
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify({ exerc_done, course, topic, topicModule}),
+                    }).then(response =>{
+                        if (response.ok) {
+                            return response.text();
+                          } else {
+                            throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+                          }
+                    }).then(res=>{
+                        res = JSON.parse(res);
+                        console.log(res);
+                        if(res.status_code === 200){
+                            alert("The Quizz has been saved!")
+                        }
+                    }).catch(err=> console.log(err))
+
+                }
+                
+            })
             ///
 
             document.getElementById('tryAgain').addEventListener('click', (e) => {
-                viewQuizz(csrfToken, course, topic, topicModule, count);
+                e.preventDefault()
+                //viewQuizz(csrfToken, course, topic, topicModule, count);
             });
 
-            
+
         });
 
     </script>
