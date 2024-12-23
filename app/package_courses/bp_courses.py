@@ -603,11 +603,11 @@ def get_courses_quizz_content(course, topic):
 
     cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
     #
-    quizz_content = None
+    quizz_content = []
 
     for item in course_content_quizzes:
         if item['course_topic'] == topic:
-            quizz_content = item['script']
+            quizz_content.append(item['script'])
             break
         
     

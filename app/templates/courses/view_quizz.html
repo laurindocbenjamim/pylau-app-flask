@@ -20,7 +20,9 @@
 
 
     <style>
-        body {}
+        body {
+            
+        }
 
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -221,7 +223,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            border: none;
+            border: 1px solid #13132e;
             border-radius: 8px;
         }
 
@@ -244,7 +246,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 
-<body>
+<body style="background-color: #001E2B;">
 
 
     <!--
@@ -311,7 +313,7 @@
         
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <button class="btn btn-sm btn-outline-secondary" id="tryAgain" type="button">Try Again</button>
+                <button class="btn btn-sm btn-outline-info" id="tryAgain" type="button">Try Again</button>
             </div>
             <button type="button"
                 class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
@@ -327,14 +329,14 @@
                 <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" style="width: 75%">75%</div>
               </div>
             <div class="py-5 text-center">
-                <h2 class="h3"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span style="color: #012b00;">{{ course_topic }}</span> <i class="fa-solid fa-circle-chevron-right"></i>.</h2>
+                <h2 class="h3 text-light"> Quizz about <i class="fa-solid fa-circle-chevron-left"></i> <span style="color: #088806;">{{ course_topic }}</span> <i class="fa-solid fa-circle-chevron-right"></i>.</h2>
                 <p class="lead">
                 </p>
             </div>
 
 
             <div class="ratio ratio-16x9">
-                <iframe id="myIframe" title="TechInnovate: Revolutionizing Business with Data Science"
+                <iframe id="myIframe" style="min-height: 1000px;" title="TechInnovate: Revolutionizing Business with Data Science"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     title="YouTube video" allowfullscreen>
                 </iframe>
