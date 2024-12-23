@@ -595,6 +595,8 @@ def get_courses_quizz_content(course, topic):
     cacheQuizz = Cache(current_app)
     # check if the key value already exists if not create it
     cache_object = cacheQuizz.get(str(cache_course_key_object).lower())
+    course_content_quizzes = []
+
     if cache_object is None:
         course_content_quizzes = get_courses_content_quizzes_by_coursename_topic(connection=connection,course_name=course, topic=topic, module=module)
         cacheQuizz.set(str(cache_course_key_object).lower(), course_content_quizzes)
@@ -603,7 +605,7 @@ def get_courses_quizz_content(course, topic):
     #
     quizz_content = None
 
-    for item in cache_object:
+    for item in course_content_quizzes:
         if item['course_topic'] == topic:
             quizz_content = item['script']
             break
