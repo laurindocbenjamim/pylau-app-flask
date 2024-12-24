@@ -516,6 +516,7 @@ def remove_course_content():
             try:
                 sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
 
+                resp =f'{resp} && file removed? {file_removed}'
                 if not sts:
                     return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
                 return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
