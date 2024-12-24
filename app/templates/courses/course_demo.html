@@ -130,92 +130,8 @@
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
 
-    function showQuizzesIframe(course, topic, topicModule) {
-        const endpoint = `${window.location.origin}/course/get-courses-quizz-content/${course}/${topic}?module=${topicModule}`;
-       
-        const headers = new Headers()
-        headers.append('X-CSRF-Token', csrfToken)
-        headers.append("Authorization", ` Bearer ${csrfToken}`);
-
-        const modalAlertMessage = document.getElementById('modalAlertMessage')
-
-        fetch(endpoint,
-            {
-                method: 'GET',
-                headers: headers
-            }
-        ).then(response => {
-            if (response.ok) {
-                return response.text();
-            } else {
-                throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-            }
-        }).then(response => {
-            //console.log(response)
-            const data = JSON.parse(response)
-            console.log(data)
-            if (data.status_code === 200) {
-                //modalAlertMessage.classList.add = 'bg-danger'
-
-                $(document).ready((e) => {
-
-                    //$('#modal-body').text(data.script);
-                    //$('#modal-content').addClass('bg-info-subtle');
-                    //$('#modalAlertMessage').modal('show');
-                });
-
-
-                try {
-                    const iframe = document.getElementById('codeFrame')
-                    //iframe.style.display = 'block';
-                    //videoTag.style.display = 'none'
-
-                    //iframe.onload = function () {
-                    //    var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                    //    iframeDocument.body.contentEditable = true;
-                    //};
-                    
-                    //var blob = new Blob([String(data.script)], { 'type': 'text/html' });
-                    //var url = URL.createObjectURL(blob)
-
-                   
-
-                    iframe.contentWindow.document.open();
-                    iframe.contentWindow.document.write(data.script);
-                    iframe.contentWindow.document.close();
-          
-                    // First show the modal
-                    $(document).ready((e) => {
-                      $('#exampleModal').modal('show');
-                    });
-                    //console.log(data.script)
-
-                    //iframe.src = url;
-                    //iframe.contentWindow.document.open();
-                    //iframe.contentWindow.document.write(String(data.script));
-                    //iframe.contentWindow.document.close();
-                    //$('#myContentIframe').contents().find('html').html(data.script);
-                } catch (err) { console.log(err) }
-            } else {
-                $(document).ready((e) => {
-                    $('#modal-body').html(`<p>${data.script}</p>`);
-                    $('#modal-content').addClass('bg-danger-subtle');
-                    $('#modalAlertMessage').modal('show');
-                });
-            }
-        }).catch(err => {
-            $(document).ready((e) => {
-                $('#modal-body').html(`<p>${err}</p>`);
-                $('#modal-content').addClass('bg-danger-subtle');
-                $('#modalAlertMessage').modal('show');
-            });
-        })
-
-
-
-    }
-
-    ///
+   //
+   
     function viewContent(course_name, topic, origin, content_file, topicModule, content_model) {
         localStorage.setItem('course_name', course_name)
         localStorage.setItem('course_topic', topic)
@@ -268,8 +184,7 @@
             }
         } else if (content_model === 'quizz') {
             window.open(`${window.location.origin}/course/get-courses-quizz-content/view-quizz/${course_name}/${topic}?courses_module=${topicModule}`,'_blank')
-            // Get the quizzes 
-            //showQuizzesIframe(course_name, topic, topicModule)
+         
         }
 
     }
