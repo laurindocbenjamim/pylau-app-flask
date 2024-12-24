@@ -781,7 +781,7 @@
 
         if (dataResp.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
-          //window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
+          window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
 
 
         } else if (dataResp.status_code === 201){
