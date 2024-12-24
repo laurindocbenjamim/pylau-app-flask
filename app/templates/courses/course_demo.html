@@ -144,10 +144,16 @@
                 iframe.style = 'display:none;'
                 iframe.src = '';
                 divLocalVideo.style = 'display:block;'
+                let format = 'video/mp4';
 
+                if(String(content_file).includes('.mkv')){
+                  format = 'video/x-matroska';
+                }else if(String(content_file).includes('.wav')){
+                  format = 'video/wav';
+                }
                 divLocalVideo.innerHTML = `
             <video autoplay id="videoPlayer" class="w-100" controls>
-                <source src="${window.location.origin}/static/${String(content_file)}" type="video/mp4">
+                <source src="${window.location.origin}/static/${String(content_file)}" type="${format}">
             </video> 
             `;
 

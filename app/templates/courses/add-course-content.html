@@ -5,13 +5,13 @@
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-2">
       {% if course_name %}
-              <a href="{{ url_for('course.create_course_content', course=course_name)}}"
-                class="btn btn-sm btn-outline-secondary">Content</a>
+      <a href="{{ url_for('course.create_course_content', course=course_name)}}"
+        class="btn btn-sm btn-outline-secondary">Content</a>
 
-                <a href="{{ url_for('course.view_courses_demo', course=course_name)}}"
-                class="btn btn-sm btn-outline-secondary" target="_blank">View Demo</a>                
-                
-              {% endif %} 
+      <a href="{{ url_for('course.view_courses_demo', course=course_name)}}" class="btn btn-sm btn-outline-secondary"
+        target="_blank">View Demo</a>
+
+      {% endif %}
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
       <svg class="bi">
@@ -121,7 +121,7 @@
                     {% for content in course_content %}
                     {% if content['course_module'] == module %}
                     <li>
-                      
+
                       {% set topic = content['course_topic'] %}
                       {% set topic = content['course_topic'] %}
                       {% set origin = content['file_origin'] %}
@@ -129,10 +129,10 @@
                       {% set content_file = content['course_content_file'] %}
                       <!-- Button to Trigger Modal -->
                       <span
-                      onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
-                      class="text-dark" style="cursor: pointer;text-decoration:underline;">
-                      {{ content['course_topic']}}
-                    </span>
+                        onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                        class="text-dark" style="cursor: pointer;text-decoration:underline;">
+                        {{ content['course_topic']}}
+                      </span>
 
                     </li>
                     {% endif %}
@@ -186,15 +186,6 @@
   </div>
 
 
-  <!-- Loading Spinner -->
-  <div class="loading-spinner d-flex">
-    <div style="display: none;">
-      <div class="spinner-border text-light" role="status"></div>
-      <p class="mt-3">Submitting...</p>
-    </div>
-  </div>
-
-
   <div class="row justify-content-left">
     <div class="col-lg-8">
 
@@ -202,11 +193,18 @@
 
       <!-- Objectives -->
       <div class="mb-3">
-        
+
 
         <div id="contentContainer" style="display: none;">
           <label class="form-label">Course content</label>
-          
+          <!-- Loading Spinner -->
+          <div class="loading-spinner d-flex col-10 justify-content-center" style="" >
+            <div style="text-align:center;display: none;" id="loading-spinner">
+              <div class="spinner-border text-light" role="status"></div>
+              <p class="mt-3">Submitting...</p>
+            </div>
+          </div>
+
           <form id="courseForm" class="courseForm" novalidate enctype="multipart/form-data">
             <div class="row g-1" id="courseContentContainer01">
 
@@ -275,16 +273,16 @@
 
             <!-- Submit Button -->
             <div class="text-left">
-              
+
             </div>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
               <div class="col">
                 <button type="submit" id="btn-save" class="btn btn-outline-success btn-lg btn-save">
-                <i class="fas fa-save"></i> Save Course
-              </button>
+                  <i class="fas fa-save"></i> Save Course
+                </button>
               </div>
-              
+
               <div class="col">
                 <button type="button" id="removeContentBtn" disabled class="btn btn-outline-danger btn-lg">
                   <i class="fas fa-trash"></i> Remove Content
@@ -294,7 +292,7 @@
                 <a href="#" id="add-quizzes" class="btn btn-outline-primary btn-lg">
                   <i class="fas fa-plus"></i> Create Quizzes
                 </a>
-              </div>              
+              </div>
             </div>
           </form>
 
@@ -304,7 +302,7 @@
         <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
           <i class="fas fa-plus"></i> Add Content
         </button>
-        
+
       </div>
 
 
@@ -397,7 +395,7 @@
     videoFile.removeAttribute('accept');
   })
 
-  
+
   function editContent(course_name, topic, origin, content_file, module) {
     let content = {
       "course_name": course_name,
@@ -409,14 +407,14 @@
     if (module !== '') {
       content['module'] = module
     }
-    
+
     addQuizzesBTN.style = 'display:block;'
     addQuizzesBTN.href = `${window.location.origin}/course/create-content/quizzes/${course_name}/${topic}?module=${module}`;
     //addQuizzesBTN.addEventListener('click', (e)=>{
     //  alert(`${window.location.origin}/course/create-content/quizzes/${course_name}/${topic}/module=${module}`)
     //})
     const contentContainer = document.getElementById("contentContainer");
-    
+
     contentContainer.style.display = 'block';
     setTimeout(() => {
       contentContainer.classList.add('show');
@@ -499,7 +497,7 @@
     //const contentModule = document.getElementById('content-module')
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-    const loadingSpinner = document.querySelector(".loading-spinner");
+    const loadingSpinner = document.getElementById("loading-spinner");
     const form = document.getElementById('courseForm')
     const btnRemove = document.getElementById('removeContentBtn')
 
@@ -533,17 +531,17 @@
     })
 
     // Remove course content 
-    btnRemove.addEventListener('click', (e)=>{
+    btnRemove.addEventListener('click', (e) => {
       e.preventDefault()
-      
+
       const courseModule = document.getElementById("course_module").value
       const courseTopic = document.getElementById('course_topic').value
       const courseTitle = document.getElementById('coursesTitle').innerText
       const courseFileOrigin = getSelectedRadioValue();
       const courseFilePath = document.getElementById('video-file').value
-      
-      if(confirm("Remove this courses's content?")){
-        removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic,courseFileOrigin,courseFilePath)
+
+      if (confirm("Remove this courses's content?")) {
+        removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin, courseFilePath)
       }
 
     });
@@ -647,7 +645,7 @@
       courseModule = document.getElementById("course_module").value
     }
 
-    
+
 
     // Example usage const 
     courseContentOrigin = getSelectedRadioValue();
@@ -709,11 +707,12 @@
       })
       .then(data => {
         data = JSON.parse(data)
-        
+
         //document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
 
         if (data.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
+          
           window.open(`${endpoint}?course=${formData.get('courseTitle').replace(' ', '+')}`, '_self')
           //document.getElementById('error-block').style.display = 'none'
           //window.open(`${endpoint}?course=${courseName}`, '_self')
@@ -741,7 +740,7 @@
 
 
   //remove content
-  function removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin,courseFilePath) {
+  function removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin, courseFilePath) {
     const endpoint = `${window.location.origin}/course/remove-content`
 
 
@@ -784,7 +783,7 @@
           window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
 
 
-        } else if (dataResp.status_code === 201){
+        } else if (dataResp.status_code === 201) {
 
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
