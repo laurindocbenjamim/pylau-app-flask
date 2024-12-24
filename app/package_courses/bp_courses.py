@@ -492,37 +492,35 @@ def remove_course_content():
     
     file_removed = True
     
-    try:
+    
+    query = {"course_name": course_title,
+            "course_topic": course_topic
+            }
+    if course_module and course_module !='':
+        query["course_module"] = course_module
 
+    if course_file_origin == 'localhost':
+        obj_file = str(course_file_path).split('/')
 
-        query = {"course_name": course_title,
-                "course_topic": course_topic
-                }
-        if course_module and course_module !='':
-            query["course_module"] = course_module
+        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/tutorials/'
+        file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
 
-        if course_file_origin == 'localhost':
-            obj_file = str(course_file_path).split('/')
-
-            UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/tutorials/'
-            file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
-
-            os.chmod(UPLOAD_FOLDER, 0o777)
+        os.chmod(UPLOAD_FOLDER, 0o777)
+        try:
+            if os.path.exists(file_path): 
+                os.remove(file_path)
+        except FileNotFoundError as e:
+            file_removed = False
+        finally:
+            os.chmod(UPLOAD_FOLDER, 0o555)    
             try:
-                if os.path.exists(file_path): 
-                    os.remove(file_path)
-            except FileNotFoundError as e:
-                file_removed = False
-            finally:
-                os.chmod(UPLOAD_FOLDER, 0o555)    
-
                 sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
 
-        if not sts:
-            return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
-        return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
-    except Exception as e:    
-        return  jsonify({"response": f"Failed to remove content {str(e)}"}), 201
+                if not sts:
+                    return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
+                return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
+            except Exception as e:    
+                return  jsonify({"response": f"Failed to remove content {str(e)}"}), 201
 
 # View the courses demo
 @bp_courses.route("/view-demo", methods=["GET"])
