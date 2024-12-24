@@ -31,7 +31,7 @@
                         <div class="ratio ratio-16x9">
                          
 
-                            <iframe id="myContentIframe" sandbox="allow-scripts"
+                            <iframe id="myContentIframe"
                                 title="TechInnovate: Revolutionizing Business with Data Science"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 title="YouTube video" allowfullscreen>
@@ -236,7 +236,7 @@
             `;
 
             } else if (String(origin).trim() === 'youtube') {
-
+                //alert(origin)
                 divLocalVideo.style = 'display:none;'
                 divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" controls></video>`;
                 iframe.style = 'display:block;'
@@ -253,6 +253,7 @@
                 const containsCharacters2 = characters2.some(char => String(content_file).includes(char))
 
                 if (containsCharacters) {
+                    
                     const urlChunks = String(content_file).split('=')
                     iframe.src = `https://www.youtube.com/embed/${String(urlChunks[1]).trim()}?autoplay=true`;
                     return;

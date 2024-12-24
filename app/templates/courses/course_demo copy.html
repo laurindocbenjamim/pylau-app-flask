@@ -708,7 +708,7 @@
         function viewContent(course_name, topic, origin, content_file, topicModule, content_model) {
 
             if (content_model === 'content') {
-
+                
                 if (String(origin).trim() === 'localhost') {
                     iframe.style = 'display:none;'
                     iframe.src = '';
@@ -721,7 +721,7 @@
                 `;
 
                 } else if (String(origin).trim() === 'youtube') {
-
+                    
                     divLocalVideo.style = 'display:none;'
                     divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" controls></video>`;
                     iframe.style = 'display:block;'
@@ -736,8 +736,8 @@
                     */
                     const containsCharacters = characters.some(char => String(content_file).includes(char))
                     const containsCharacters2 = characters2.some(char => String(content_file).includes(char))
-
-                    if (containsCharacters) {
+                    alert(content_file)
+                    if (containsCharacters) { 
                         const urlChunks = String(content_file).split('=')
                         iframe.src = `https://www.youtube.com/embed/${String(urlChunks[1]).trim()}?autoplay=true`;
                         return;
