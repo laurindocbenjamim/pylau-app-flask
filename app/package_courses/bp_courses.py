@@ -41,6 +41,9 @@ from ..package_code_editor.code_editor_factory import CodeEditorFactory
 from app.utils import __get_cookies, set_header_params
 from app.utils.my_file_factory import validate_file, upload_file
 
+#
+main_folder = 'tutorials' #
+
 bp_courses.add_url_rule(
     "/post",
     view_func=CoursePostUpdateView.as_view(
@@ -216,7 +219,14 @@ def create_course_content():
         elif 'courseTitle' not in request.form or not request.form['courseTitle']:
             return jsonify({"error": "The course's title is required"}), 201
 
-            
+        #
+        # 
+        course_module = request.form.get('courseModule', '')
+        course_title = request.form['courseTitle']
+        topic = request.form['courseTopic']
+        file_origin = request.form['courseContentOrigin']
+        
+         
         if request.form['courseContentOrigin'] == 'youtube' or request.form['courseContentOrigin'] == 'remote-server':
             if  f'{file_field_name}' not in request.form or not request.form[f'{file_field_name}']:
                 return jsonify({"error": "The file video is required"}), 201
@@ -230,7 +240,7 @@ def create_course_content():
                                         
                 video = request.files['videoFile']
                     #
-                folder='tutorials/'
+                folder=f'{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}/'
 
                 if 'oldVideoFile' in request.form and request.form['oldVideoFile'] and not video.filename:
                     save_path = request.form['oldVideoFile']
@@ -282,10 +292,7 @@ def create_course_content():
                     # Revoke write privileges
                     os.chmod(UPLOAD_FOLDER, 0o555)         
             
-        course_module = request.form.get('courseModule', '')
-        course_title = request.form['courseTitle']
-        topic = request.form['courseTopic']
-        file_origin = request.form['courseContentOrigin']
+        
             
         document = {                
             "course_name": course_title,
@@ -524,7 +531,7 @@ def remove_course_content():
     if course_file_origin == 'localhost':
         obj_file = str(course_file_path).split('/')
 
-        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/tutorials/'
+        UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{main_folder}/'
         file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
         
         file_removed, f_sms = save_file(UPLOAD_FOLDER, file_path)
