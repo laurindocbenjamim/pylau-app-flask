@@ -135,10 +135,10 @@
     localStorage.setItem('course_topic', topic)
     localStorage.setItem('content_model', content_model)
     localStorage.setItem('topic_module', topicModule)
-
+    
     if (content_model === 'content') {
 
-      if (String(origin).trim() === 'localhost') {
+      if (String(origin).trim() === 'localhost' || String(origin).trim() === 'remote-server') {
         iframe.style = 'display:none;'
         iframe.src = '';
         divLocalVideo.style = 'display:block;'
@@ -154,9 +154,9 @@
                 <source src="${window.location.origin}/static/${String(content_file)}" type="${format}">
             </video> 
             `;
-
+  
       } else if (String(origin).trim() === 'youtube') {
-        //alert(origin)
+        
         divLocalVideo.style = 'display:none;'
         divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" style="border: 3px solid #a5c1fd;border-radius:3px" controls></video>`;
         iframe.style = 'display:block;'

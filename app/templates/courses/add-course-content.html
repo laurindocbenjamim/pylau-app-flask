@@ -565,6 +565,7 @@
       const courseFilePath = document.getElementById('video-file').value
 
       if (confirm("Remove this courses's content?")) {
+        loadingSpinner.style.display = "flex";
         removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin, courseFilePath)
       }
 
@@ -740,8 +741,8 @@
           window.open(`${endpoint}?course=${formData.get('courseTitle').replace(' ', '+')}`, '_self')
           //document.getElementById('error-block').style.display = 'none'
           //window.open(`${endpoint}?course=${courseName}`, '_self')
-          btnSave.style.backgroundColor = "#0ed160"
-          btnSave.style.color = "#FFF"
+          //btnSave.style.backgroundColor = "#0ed160"
+          //btnSave.style.color = "#FFF"
           //form.querySelector('.sent-message').classList.add('d-block');
           form.reset();
 
@@ -751,8 +752,10 @@
           btnSave.style.color = "#FFF"
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
+        loadingSpinner.style.display = "flex";
       })
       .catch((error) => {
+        loadingSpinner.style.display = "flex";
         const errorMessage = document.getElementById('error-message')
         //document.getElementById('error-block').style.display = 'block'
         displayError(errorMessage, error);
@@ -799,8 +802,8 @@
       })
       .then(data => {
         const dataResp = JSON.parse(data)
-        console.log(dataResp)
-        document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
+        //console.log(dataResp)
+        //document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
 
         if (dataResp.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
@@ -811,8 +814,10 @@
 
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
+        loadingSpinner.style.display = "flex";
       })
       .catch((error) => {
+        loadingSpinner.style.display = "flex";
         const errorMessage = document.getElementById('error-message')
         //document.getElementById('error-block').style.display = 'block'
         displayError(errorMessage, error);
