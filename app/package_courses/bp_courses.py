@@ -487,9 +487,11 @@ def remove_course_content():
 
     #
     def save_file(UPLOAD_FOLDER, file_path):
-        # os.chmod(UPLOAD_FOLDER, 0o777) # Grant all permitions
-        os.chmod(UPLOAD_FOLDER, 0o755) # Grants permition to Read and Execute only
+        
         try:
+            # os.chmod(UPLOAD_FOLDER, 0o777) # Grant all permitions
+            os.chmod(UPLOAD_FOLDER, 0o755) # Grants permition to Read and Execute only
+            
             if os.path.exists(file_path): 
                 os.chmod(file_path, 0o644)
                 os.remove(file_path)

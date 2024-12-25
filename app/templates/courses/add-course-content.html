@@ -717,6 +717,7 @@
 
   function saveFormWithFile(endpoint, form, btnSave, formData, headers) {
 
+    const loadingSpinner = document.getElementById("loading-spinner");
     //console.log(formData.get('courseContentOrigin'))
     fetch(endpoint, {
       method: 'POST',
@@ -745,7 +746,7 @@
           //btnSave.style.color = "#FFF"
           //form.querySelector('.sent-message').classList.add('d-block');
           form.reset();
-
+          loadingSpinner.style.display = "flex";
         } else {
           console.log(data)
           btnSave.style.backgroundColor = "red"
@@ -770,6 +771,7 @@
   function removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin, courseFilePath) {
     const endpoint = `${window.location.origin}/course/remove-content`
 
+    const loadingSpinner = document.getElementById("loading-spinner");
 
     //const formData = new FormData( thisForm )         
     const headers = new Headers()
@@ -802,14 +804,14 @@
       })
       .then(data => {
         const dataResp = JSON.parse(data)
-        //console.log(dataResp)
+        console.log(dataResp)
         //document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
 
         if (dataResp.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
           window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
 
-
+          loadingSpinner.style.display = "flex";
         } else if (dataResp.status_code === 201) {
 
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
