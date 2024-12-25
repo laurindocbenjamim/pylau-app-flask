@@ -485,6 +485,7 @@
       const requirementsContainer = document.getElementById("requirementsContainer");
       const topicsContainer = document.getElementById("topicsContainer");
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+      const loadingSpinner = document.getElementById('loading-spinner')
 
       // Add New Objective  
       document.getElementById("addObjectiveBtn").addEventListener("click", () => {
@@ -578,6 +579,8 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
+        loadingSpinner.style.display = 'block';
+
         let thisForm = this;
         const endpoint = `${window.location.origin}/course/create`
 
@@ -635,6 +638,7 @@
             }
           })
           .then(data => {
+            loadingSpinner.style.display = 'none';
             console.log(data)
             form.querySelector('.loading').classList.remove('d-block');
             if (data) {
@@ -650,6 +654,7 @@
             }
           })
           .catch((error) => {
+            loadingSpinner.style.display = 'none';
             displayError(form, error);
           });
 

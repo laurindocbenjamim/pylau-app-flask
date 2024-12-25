@@ -1,313 +1,321 @@
-       
-        {% extends 'courses/base-layout.html' %}
-        {% block content %}
-        <style>
-          .card {
-            background-color: rgba(2, 51, 59, 0.1);
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            color: #969494;
-          }
+{% extends 'courses/base-layout.html' %}
+{% block content %}
+<style>
+  .card {
+    background-color: rgba(2, 51, 59, 0.1);
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #969494;
+  }
 
-          .form-control {
-            background-color: #cfd5db;
-            color: rgb(8, 8, 8);
-            border: 1px solid #444;
-            border-radius: 0px;
-          }
+  .form-control {
+    background-color: #cfd5db;
+    color: rgb(8, 8, 8);
+    border: 1px solid #444;
+    border-radius: 0px;
+  }
 
-          .form-control:focus {
-            background-color: #3b3f45;
-            color: #FFF;
-            border-color: #5a5e65;
-          }
+  .form-control:focus {
+    background-color: #3b3f45;
+    color: #FFF;
+    border-color: #5a5e65;
+  }
 
-          .btn-outline-light:hover {
-            background-color: #5a5e65;
-          }
-
+  .btn-outline-light:hover {
+    background-color: #5a5e65;
+  }
 
 
-          .btn-outline-light:hover {
-            background-color: #5a5e65;
-          }
 
-          .dynamic-field {
-            display: flex;
-            align-items: center;
-          }
+  .btn-outline-light:hover {
+    background-color: #5a5e65;
+  }
 
-          .dynamic-field .remove-btn {
-            margin-left: 10px;
-          }
+  .dynamic-field {
+    display: flex;
+    align-items: center;
+  }
 
-          .form-feedback {
-            margin-top: 10px;
-          }
+  .dynamic-field .remove-btn {
+    margin-left: 10px;
+  }
 
-          .dynamic-field button {
-            height: 38px;
-            margin-top: 0.4%;
-            border-radius: 0px;
-          }
-        </style>
-        
-        <div
-          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-secondary">
-          <h1 class="h5">
-            Add Course 
-          </h1>
-          
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-              {% if course_name %}
-              <a href="{{ url_for('course.create_course_content', course=course_name)}}"
-                class="btn btn-sm btn-outline-secondary">Content</a>
-              {% endif %}
-              <a href="{{ url_for('course.view_courses_demo', course=course_name)}}"
-                class="btn btn-sm btn-outline-secondary" target="_blank">View Demo</a>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-            </div>
-            <button type="button"
-              class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-              <svg class="bi">
-                <use xlink:href="#calendar3" />
-              </svg>
-              This week
-            </button>
-          </div>
+  .form-feedback {
+    margin-top: 10px;
+  }
+
+  .dynamic-field button {
+    height: 38px;
+    margin-top: 0.4%;
+    border-radius: 0px;
+  }
+</style>
+
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-secondary">
+  <h1 class="h5">
+    Add Course
+  </h1>
+
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      {% if course_name %}
+      <a href="{{ url_for('course.create_course_content', course=course_name)}}"
+        class="btn btn-sm btn-outline-secondary">Content</a>
+      {% endif %}
+      <a href="{{ url_for('course.view_courses_demo', course=course_name)}}" class="btn btn-sm btn-outline-secondary"
+        target="_blank">View Demo</a>
+      <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+      <svg class="bi">
+        <use xlink:href="#calendar3" />
+      </svg>
+      This week
+    </button>
+  </div>
+</div>
+
+<div class="py-3 text-center">
+  {% if course_name %}
+  <h2 class="text-light">{{ course_name }}</h2>
+  {% else %}
+  <h2 class="text-light">Make money Starting creating Courses</h2>
+  {% endif %}
+  <p class="lead text-secondary">Below is a form to create your course. Add a good description to captivate your
+    clients, add te objectives to be
+    rised at the end of the course, specify the curricullum of the course that valuate the course and requirements to do
+    the course.
+
+  </p>
+</div>
+
+<div class="row g-5">
+
+  <div class="col-md-5 col-lg-4 order-md-last">
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-primary">Most viwed</span>
+      <span class="badge bg-primary rounded-pill">3</span>
+    </h4>
+    <ul class="list-group mb-3">
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <div>
+          <h6 class="my-0">Product name</h6>
+          <small class="text-body-secondary">Brief description</small>
         </div>
-
-        <div class="py-3 text-center">
-          {% if course_name %}
-          <h2 class="text-light">{{ course_name }}</h2>
-          {% else %}
-          <h2 class="text-light">Make money Starting creating Courses</h2>
-          {% endif %}
-          <p class="lead text-secondary">Below is a form to create your course. Add a good description to captivate your clients, add te objectives to be
-            rised at the end of the course, specify the curricullum of the course that valuate the course and requirements to do the course.
-            
-          </p>
+        <span class="text-body-secondary">$12</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <div>
+          <h6 class="my-0">Second product</h6>
+          <small class="text-body-secondary">Brief description</small>
         </div>
+        <span class="text-body-secondary">$8</span>
+      </li>
 
-        <div class="row g-5">
+    </ul>
 
-          <div class="col-md-5 col-lg-4 order-md-last">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-primary">Most viwed</span>
-              <span class="badge bg-primary rounded-pill">3</span>
-            </h4>
-            <ul class="list-group mb-3">
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6 class="my-0">Product name</h6>
-                  <small class="text-body-secondary">Brief description</small>
-                </div>
-                <span class="text-body-secondary">$12</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6 class="my-0">Second product</h6>
-                  <small class="text-body-secondary">Brief description</small>
-                </div>
-                <span class="text-body-secondary">$8</span>
-              </li>
-             
-            </ul>
-
-            <!--<form class="card p-2">
+    <!--<form class="card p-2">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Promo code">
                 <button type="submit" class="btn btn-secondary">Redeem</button>
               </div>
             </form>-->
+  </div>
+
+  <!-- form -->
+  <div class="col-md-7 col-lg-8">
+    <h4 class="mb-3">Billing address</h4>
+    <form id="courseForm" novalidate>
+      <div class="row g-3">
+
+        <!-- Course Name -->
+        <div class="mb-3">
+
+
+
+
+          {% if course_data %}
+          {% if course_data['course_name'] %}
+
+          <input type="text" id="courseName" name="courseName" value="{{ course_data['course_name'] }}"
+            class="form-control" placeholder="Enter course name" required>
+          {% else %}
+          <input type="text" id="courseName" name="courseName" class="form-control" placeholder="Enter course name"
+            required>
+          {% endif %}
+          {% else %}
+          <div class="col-12">
+            <label for="courseName" class="form-label">Course name</label>
+            <input type="text" class="form-control" id="courseName" name="courseName"
+              placeholder="Enter the course name" value="" required>
+            <div class="invalid-feedback">
+              Valid course name is required.
+            </div>
           </div>
 
-          <!-- form -->
-          <div class="col-md-7 col-lg-8">
-            <h4 class="mb-3">Billing address</h4>
-            <form id="courseForm" novalidate>
-              <div class="row g-3">
+          {% endif %}
+        </div>
 
-                <!-- Course Name -->
-                <div class="mb-3">
-                 
-                  
-                    
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="courseDescription" class="form-label">Description</label>
+          {% if course_data %}
+          {% if course_data['course_description'] %}
+          <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
+            placeholder="Enter course description" required>{{ course_data['course_description'] }}</textarea>
+          {% else %}
+          <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
+            placeholder="Enter course description" required></textarea>
+          {% endif %}
+          {% else %}
+          <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
+            placeholder="Enter course description" required></textarea>
+          {% endif %}
+        </div>
 
-                  {% if course_data %}
-                  {% if course_data['course_name'] %}
+        <!-- Objectives -->
+        <div class="mb-3">
+          <label class="form-label">Objectives</label>
+          <div id="objectivesContainer">
+            <div class="dynamic-field" style="flex-direction: column;">
+              {% if course_data %}
+              {% if course_data['course_objectives'] %}
+              {% for item in course_data['course_objectives'] %}
 
-                  <input type="text" id="courseName" name="courseName" value="{{ course_data['course_name'] }}"
-                    class="form-control" placeholder="Enter course name" required>
-                  {% else %}
-                  <input type="text" id="courseName" name="courseName" class="form-control"
-                    placeholder="Enter course name" required>
-                  {% endif %}
-                  {% else %}
-                  <div class="col-12">
-                    <label for="courseName" class="form-label">Course name</label>
-                    <input type="text" class="form-control" id="courseName" name="courseName" placeholder="Enter the course name" value="" required>
-                    <div class="invalid-feedback">
-                      Valid course name is required.
-                    </div>
-                  </div>
+              <div class="input-group" style="width:100%;display: flex;">
+                <input type="text" name="objectives[]" value="{{ item }}" class="form-control mb-2"
+                  placeholder="Develope fix problems skills" required>
+                <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% else %}
+              <div style="width:100%;display: flex;">
+                <input type="text" name="objectives[]" class="form-control mb-2"
+                  placeholder="Develope fix problems skills" required>
+                <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              {% endif %}
+              <div class="invalid-feedback">Please provide a valid field name.</div>
+            </div>
+          </div>
+          <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-plus"></i> Add Objectives
+          </button>
+        </div>
 
-                  {% endif %}
-                </div>
+        <!-- Requirements -->
+        <div class="mb-3">
+          <label class="form-label">Requirements</label>
+          <div id="requirementsContainer">
+            <div class="dynamic-field" style="flex-direction: column;">
 
-                <!-- Description -->
-                <div class="mb-3">
-                  <label for="courseDescription" class="form-label">Description</label>
-                  {% if course_data %}
-                  {% if course_data['course_description'] %}
-                  <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
-                    placeholder="Enter course description" required>{{ course_data['course_description'] }}</textarea>
-                  {% else %}
-                  <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
-                    placeholder="Enter course description" required></textarea>
-                  {% endif %}
-                  {% else %}
-                  <textarea id="courseDescription" name="courseDescription" class="form-control" rows="3"
-                    placeholder="Enter course description" required></textarea>
-                  {% endif %}
-                </div>
+              {% if course_data %}
+              {% if course_data['requirement'] %}
+              {% for item in course_data['requirement'] %}
 
-                <!-- Objectives -->
-                <div class="mb-3">
-                  <label class="form-label">Objectives</label>
-                  <div id="objectivesContainer">
-                    <div class="dynamic-field" style="flex-direction: column;">
-                      {% if course_data %}
-                      {% if course_data['course_objectives'] %}
-                      {% for item in course_data['course_objectives'] %}
-
-                      <div class="input-group" style="width:100%;display: flex;">
-                        <input type="text" name="objectives[]" value="{{ item }}" class="form-control mb-2"
-                          placeholder="Develope fix problems skills" required>
-                        <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                      {% endfor %}
-                      {% endif %}
-                      {% else %}
-                      <div style="width:100%;display: flex;">
-                        <input type="text" name="objectives[]" class="form-control mb-2"
-                          placeholder="Develope fix problems skills" required>
-                        <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                      {% endif %}
-                      <div class="invalid-feedback">Please provide a valid field name.</div>
-                    </div>
-                  </div>
-                  <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-plus"></i> Add Objectives
-                  </button>
-                </div>
-
-                <!-- Requirements -->
-                <div class="mb-3">
-                  <label class="form-label">Requirements</label>
-                  <div id="requirementsContainer">
-                    <div class="dynamic-field" style="flex-direction: column;">
-
-                      {% if course_data %}
-                      {% if course_data['requirement'] %}
-                      {% for item in course_data['requirement'] %}
-
-                      <div class="input-group" style="width:100%;display: flex;">
-                        <input type="text" name="requirements[]" value="{{ item }}" class="form-control mb-2"
-                          placeholder="Develope fix problems skills" required>
-                        <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-
-                      {% endfor %}
-                      {% endif %}
-                      {% else %}
-                      <div style="width:100%;display: flex;">
-                        <input type="text" name="requirements[]" class="form-control mb-2"
-                          placeholder="No prior is required" required>
-                        <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                      {% endif %}
-                      <div class="invalid-feedback">Please provide a valid field name.</div>
-                    </div>
-                  </div>
-                  <button type="button" id="addRequirementBtn" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-plus"></i> Add Objectives
-                  </button>
-                </div>
-
-                <!-- Topics -->
-                <div class="mb-3">
-                  <label class="form-label">Topics</label>
-                  <div id="topicsContainer">
-                    <div class="dynamic-field" style="flex-direction: column;">
-                      {% if course_data %}
-                      {% if course_data['course_curriculum'] %}
-                      {% for item in course_data['course_curriculum'] %}
-
-                      <div class="input-group" style="width:100%;display: flex;">
-                        <input type="text" name="topics[]" value="{{ item }}" class="form-control mb-2"
-                          placeholder="Develope fix problems skills" required>
-                        <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                      {% endfor %}
-                      {% endif %}
-                      {% else %}
-                      <div style="width:100%;display: flex;">
-                        <input type="text" name="topics[]" class="form-control mb-2" placeholder="No prior is required"
-                          required>
-                        <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                      {% endif %}
-                      <div class="invalid-feedback">Please provide a valid field name.</div>
-                    </div>
-                  </div>
-                  <button type="button" id="addTopicBtn" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-plus"></i> Add Objectives
-                  </button>
-                </div>
-
-                <div class="my-3">
-                  <div class="loading" style="display: none;">Loading</div>
-                  <div class="error-message" style="display: none;"></div>
-                  <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="text-cente mt-3">
-                  <button type="submit" id="btn-save" class="w-40 btn btn-light btn-lg">
-                    <i class="fas fa-save"></i> Save Course
-                  </button>
-
-                  <button type="button" id="btn-save" class="w-40 btn btn-danger btn-lg">
-                    <i class="fas fa-save"></i> Delete Course
-                  </button>
-                </div>
-
+              <div class="input-group" style="width:100%;display: flex;">
+                <input type="text" name="requirements[]" value="{{ item }}" class="form-control mb-2"
+                  placeholder="Develope fix problems skills" required>
+                <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
 
-            </form>
+              {% endfor %}
+              {% endif %}
+              {% else %}
+              <div style="width:100%;display: flex;">
+                <input type="text" name="requirements[]" class="form-control mb-2" placeholder="No prior is required"
+                  required>
+                <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              {% endif %}
+              <div class="invalid-feedback">Please provide a valid field name.</div>
+            </div>
+          </div>
+          <button type="button" id="addRequirementBtn" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-plus"></i> Add Objectives
+          </button>
+        </div>
+
+        <!-- Topics -->
+        <div class="mb-3">
+          <label class="form-label">Topics</label>
+          <div id="topicsContainer">
+            <div class="dynamic-field" style="flex-direction: column;">
+              {% if course_data %}
+              {% if course_data['course_curriculum'] %}
+              {% for item in course_data['course_curriculum'] %}
+
+              <div class="input-group" style="width:100%;display: flex;">
+                <input type="text" name="topics[]" value="{{ item }}" class="form-control mb-2"
+                  placeholder="Develope fix problems skills" required>
+                <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% else %}
+              <div style="width:100%;display: flex;">
+                <input type="text" name="topics[]" class="form-control mb-2" placeholder="No prior is required"
+                  required>
+                <button type="button" disabled class="btn btn-danger btn-sm remove-btn" style="margin-top: 0%;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              {% endif %}
+              <div class="invalid-feedback">Please provide a valid field name.</div>
+            </div>
+          </div>
+          <button type="button" id="addTopicBtn" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-plus"></i> Add Objectives
+          </button>
+        </div>
+
+        <div class="my-3">
+          <div class="loading" style="display: none;">Loading</div>
+          <div class="error-message" style="display: none;"></div>
+          <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+        </div>
+
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner d-flex col-10 justify-content-center" style="">
+          <div style="text-align:center;display: none;" id="loading-spinner">
+            <div class="spinner-border text-light" role="status"></div>
+            <p class="mt-3">Submitting...</p>
           </div>
         </div>
 
-        {% endblock content %}
- 
-        {% block script %}
+        <!-- Submit Button -->
+        <div class="text-cente mt-3">
+          <button type="submit" id="btn-save" class="w-40 btn btn-light btn-lg">
+            <i class="fas fa-save"></i> Save Course
+          </button>
 
-       
-        {% endblock %}
+          <button type="button" id="btn-save" class="w-40 btn btn-danger btn-lg">
+            <i class="fas fa-save"></i> Delete Course
+          </button>
+        </div>
 
- 
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+
+
+{% endblock %}
