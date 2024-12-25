@@ -495,7 +495,8 @@ def remove_course_content():
             if os.path.exists(file_path): 
                 os.chmod(file_path, 0o644)
                 os.remove(file_path)
-            return True, 'OK'
+                return True, 'OK'
+            return False, 'File not found!'
         except FileNotFoundError as e:
             return False,str(e)
         except Exception as e:
@@ -527,14 +528,14 @@ def remove_course_content():
         file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
         
         file_removed, f_sms = save_file(UPLOAD_FOLDER, file_path)
-        
+    #return jsonify({"status_code":201,"response": f"Failed to remove the course's content {file_path}", "data": f_sms}), 201    
     #            
     try:
         sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
 
         resp =f'{resp} && file removed? {file_removed} - {f_sms}'
         if not sts:
-            return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
+            return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}"}), 201
         return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
     except Exception as e:    
         return  jsonify({"response": f"Failed to remove content {str(e)}"}), 201

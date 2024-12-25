@@ -809,11 +809,11 @@
 
         if (dataResp.status_code === 200) {
           document.querySelector('.error-message').style.display = 'block'
-          window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
+          //window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
 
           loadingSpinner.style.display = "flex";
         } else if (dataResp.status_code === 201) {
-
+          loadingSpinner.style.display = "flex";
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
         loadingSpinner.style.display = "flex";
