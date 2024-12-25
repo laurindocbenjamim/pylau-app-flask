@@ -746,17 +746,17 @@
           //btnSave.style.color = "#FFF"
           //form.querySelector('.sent-message').classList.add('d-block');
           form.reset();
-          loadingSpinner.style.display = "flex";
+          loadingSpinner.style.display = "none";
         } else {
           console.log(data)
           btnSave.style.backgroundColor = "red"
           btnSave.style.color = "#FFF"
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
-        loadingSpinner.style.display = "flex";
+        loadingSpinner.style.display = "none";
       })
       .catch((error) => {
-        loadingSpinner.style.display = "flex";
+        loadingSpinner.style.display = "none";
         const errorMessage = document.getElementById('error-message')
         //document.getElementById('error-block').style.display = 'block'
         displayError(errorMessage, error);
@@ -811,15 +811,15 @@
           document.querySelector('.error-message').style.display = 'block'
           window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
 
-          loadingSpinner.style.display = "flex";
+          loadingSpinner.style.display = "none";
         } else if (dataResp.status_code === 201) {
-          loadingSpinner.style.display = "flex";
+          loadingSpinner.style.display = "none";
           throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
         }
-        loadingSpinner.style.display = "flex";
+        loadingSpinner.style.display = "none";
       })
       .catch((error) => {
-        loadingSpinner.style.display = "flex";
+        loadingSpinner.style.display = "none";
         const errorMessage = document.getElementById('error-message')
         //document.getElementById('error-block').style.display = 'block'
         displayError(errorMessage, error);
