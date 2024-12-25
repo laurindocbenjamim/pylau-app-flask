@@ -217,7 +217,7 @@ def create_course_content():
             return jsonify({"error": "The course's title is required"}), 201
 
             
-        if request.form['courseContentOrigin'] == 'youtube':
+        if request.form['courseContentOrigin'] == 'youtube' or request.form['courseContentOrigin'] == 'remote-server':
             if  f'{file_field_name}' not in request.form or not request.form[f'{file_field_name}']:
                 return jsonify({"error": "The file video is required"}), 201
             else: 
@@ -254,7 +254,8 @@ def create_course_content():
 
                     try:
                         # Add write permission to the directory
-                        os.chmod(UPLOAD_FOLDER, 0o777)
+                        os.chmod(UPLOAD_FOLDER, 0o777) # Grants all permissions
+                        #os.chmod(UPLOAD_FOLDER, 0o755) # Grants Read and Execute only
                 
                         # Join the file with its path
                         #save_path = os.path.join(UPLOAD_FOLDER, secure_filename(video.filename.replace('\\', '/')))
@@ -268,11 +269,13 @@ def create_course_content():
                     
                         if not os.path.exists(save_path): 
                             # Revoke write privileges
-                            os.chmod(UPLOAD_FOLDER, 0o555)   
+                            #os.chmod(UPLOAD_FOLDER, 0o555)   
                             return jsonify({"status_code":400, "response": f"File was not uploaded. {save_path} "}), 200 
+                        else:
+                            os.chmod(save_path, 0o644) # Grant Read and Execute file
                     except Exception as e:                        
                         # Revoke write privileges
-                        os.chmod(UPLOAD_FOLDER, 0o555)
+                        #os.chmod(UPLOAD_FOLDER, 0o555)
                         return jsonify({"status_code":400, "response": f"File was not uploaded. {e}"}), 200 
                             
 
@@ -475,10 +478,26 @@ def save_courses_quizzes_to_mongodb(course,topic):
         return jsonify({"message": "An error occurred", "status_code": 500, "error": str(e)}), 200
     
 
+
+
 # remove course content from mongoDB
 @bp_courses.route("/remove-content", methods=["DELETE"])
 @cross_origin(methods=["DELETE"])
 def remove_course_content():
+
+    #
+    def save_file(UPLOAD_FOLDER, file_path):
+        # os.chmod(UPLOAD_FOLDER, 0o777) # Grant all permitions
+        os.chmod(UPLOAD_FOLDER, 0o755) # Grants permition to Read and Execute only
+        try:
+            if os.path.exists(file_path): 
+                os.chmod(file_path, 0o644)
+                os.remove(file_path)
+            return True, 'OK'
+        except FileNotFoundError as e:
+            return False,str(e)
+        except Exception as e:
+            return False,str(e)
 
     course_title = escape(request.args.get('course'))
     
@@ -491,7 +510,7 @@ def remove_course_content():
     course_module = request.form.get('courseModule', '')
     
     file_removed = True
-    
+    f_sms = ''
     
     query = {"course_name": course_title,
             "course_topic": course_topic
@@ -504,24 +523,19 @@ def remove_course_content():
 
         UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/tutorials/'
         file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
+        
+        file_removed, f_sms = save_file(UPLOAD_FOLDER, file_path)
+        
+    #            
+    try:
+        sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
 
-        os.chmod(UPLOAD_FOLDER, 0o777)
-        try:
-            if os.path.exists(file_path): 
-                os.remove(file_path)
-        except FileNotFoundError as e:
-            file_removed = False
-        finally:
-            os.chmod(UPLOAD_FOLDER, 0o555)    
-            try:
-                sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
-
-                resp =f'{resp} && file removed? {file_removed}'
-                if not sts:
-                    return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
-                return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
-            except Exception as e:    
-                return  jsonify({"response": f"Failed to remove content {str(e)}"}), 201
+        resp =f'{resp} && file removed? {file_removed} - {f_sms}'
+        if not sts:
+            return jsonify({"status_code":201,"response": f"Failed to remove the course's content{resp}", "data": query}), 201
+        return  jsonify({"status_code":200,"response": f"Content removed successfully!", "data": resp}), 200
+    except Exception as e:    
+        return  jsonify({"response": f"Failed to remove content {str(e)}"}), 201
 
 # View the courses demo
 @bp_courses.route("/view-demo", methods=["GET"])

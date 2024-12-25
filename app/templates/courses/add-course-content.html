@@ -239,8 +239,13 @@
                   <label class="btn btn-outline-success" for="option5">Local host</label>
 
                   <input type="radio" class="btn-check option6" value="youtube" name="course_content_origin"
-                    id="option6" autocomplete="off">
-                  <label class="btn btn-outline-success" for="option6">Youtube</label>
+                    id="option6" autocomplete="off">                  
+                    <label class="btn btn-outline-success" for="option6">Youtube</label>
+
+                    <input type="radio" class="btn-check option7" value="remote-server" name="course_content_origin"
+                    id="option7" autocomplete="off">
+                  <label class="btn btn-outline-success" for="option7">Remote Server</label>
+
                   <div class="invalid-feedback">
                     Your content origin is required.
                   </div>
@@ -395,6 +400,13 @@
     videoFile.removeAttribute('accept');
   })
 
+  document.getElementById('option7').addEventListener('click', (e) => {
+    const videoFile = document.getElementById('videoFile')
+    videoFile.type = 'text';
+    // Remove the accept attribute 
+    videoFile.removeAttribute('accept');
+  })
+
 
   function editContent(course_name, topic, origin, content_file, module) {
     let content = {
@@ -425,11 +437,13 @@
 
     // Select the radio button by its name and value 
     const radioLocalOption = document.querySelector('input[name="course_content_origin"][value="localhost"]');
+    const radioRemoteServer = document.querySelector('input[name="course_content_origin"][value="remote-server"]');
     const radioYoutubeOption = document.querySelector('input[name="course_content_origin"][value="youtube"]');
     //let radioLocalOption = document.getElementById('option5')
     //let radioYoutubeOption = document.getElementById('option6')
     if (origin === 'localhost') {
       radioYoutubeOption.checked = false
+      radioRemoteServer.checked = false
       radioLocalOption.checked = true
       videoFile.type = 'file'
 
@@ -442,7 +456,17 @@
       oldVideoFile = content_file
     } else if (origin === 'youtube') {
       radioLocalOption.checked = false
+      radioRemoteServer.checked = false
       radioYoutubeOption.checked = true
+      videoFile.type = 'text'
+      videoFile.value = content_file
+
+      const oldFile = document.getElementById('video-file')
+      oldFile.style = 'display:none;'
+    }else if (origin === 'remote-server') {
+      radioLocalOption.checked = false
+      radioYoutubeOption.checked = false
+      radioRemoteServer.checked = true
       videoFile.type = 'text'
       videoFile.value = content_file
 
