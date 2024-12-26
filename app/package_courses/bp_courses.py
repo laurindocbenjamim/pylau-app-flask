@@ -137,7 +137,7 @@ def create_course():
                 else:
                     status, filename = upload_file(request_file=request.files, file_field_name=file_field_name, folder=file_field_name)
         return status, filename
-
+    
     course_title = escape(request.args.get('course', ''))
     thumbnail = ""
 

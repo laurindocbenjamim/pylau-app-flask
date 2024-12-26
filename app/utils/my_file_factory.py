@@ -1,5 +1,6 @@
 import os
 import json
+from PIL import Image
 from flask import Request, current_app
 from werkzeug.utils import secure_filename
 
@@ -88,6 +89,17 @@ def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
     except Exception as e:
         return False, str(e)
 
+
+def validate_image_size(file_path): 
+    try: 
+        with Image.open(file_path) as img: 
+            if img.format not in ['JPEG', 'PNG']: 
+                return False 
+            if os.path.getsize(file_path) > 2 * 1024 * 1024: # 2MB return False return True except Exception as e: print(e) 
+                return False
+        return True 
+    except Exception as e:  
+        return False
 
 def validate_file(request: Request, file_field_name):
     try:
