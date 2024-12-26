@@ -281,8 +281,30 @@
           </button>
         </div>
 
+        <!-- Thumbnails -->
+        <div class="mb-3">
+          <label class="form-label">Thumbnails</label>
+          <div id="thumbnail">
+            <div class="dynamic-field" style="flex-direction: column;">
+              <div class="input-group" style="width:100%;display: flex;">
+                <input type="file" name="thumbnail" class="form-control mb-2">
+                {% if course_data %}
+                {% if course_data['thumbnail'] %}
+                <input type="text" name="thumbnail_file" value="{{ course_data['thumbnail'] }}"
+                  class="form-control mb-2">
+
+                {% endif %}
+                {% endif %}
+              </div>
+              <div class="invalid-feedback">Please provide a valid field name.</div>
+            </div>
+          </div>
+          <button type="button" id="addTopicBtn" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-plus"></i> Add Objectives
+          </button>
+        </div>
+
         <div class="my-3">
-          <div class="loading" style="display: none;">Loading</div>
           <div class="error-message" style="display: none;"></div>
           <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
         </div>

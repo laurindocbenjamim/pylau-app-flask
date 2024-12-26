@@ -119,9 +119,28 @@ def list_all_courses():
 @bp_courses.route("/create", methods=["GET", "POST"])
 @cross_origin(methods=["GET", "POST"])
 def create_course():
-    
+    filename = ''
+    status = True
+
+    def upload_thumbnail(file_field_name='thumbnail'):
+        
+
+        if f'{file_field_name}' in request.files:
+                
+            file = request.files[f'{file_field_name}']
+
+            if file.filename != '':
+            # Validate the thumbnail file                  
+                status, message = validate_file(request=request, file_field_name=file_field_name)
+                if not status:
+                    return status, message
+                else:
+                    status, filename = upload_file(request_file=request.files, file_field_name=file_field_name, folder=file_field_name)
+        return status, filename
+
     course_title = escape(request.args.get('course', ''))
-  
+    thumbnail = ""
+
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
 
@@ -135,6 +154,12 @@ def create_course():
             description = data.get("courseDescription")
             course_title = data.get("courseName")
             courseClonedName = data.get("courseClonedName")
+            
+            #
+            #status, filename = upload_thumbnail(str(unidecode(course_title)).replace(' ','_').lower())
+            
+            #if status:
+            #    thumbnail = filename
 
             document = {
                 "course_code": 4,
@@ -142,7 +167,8 @@ def create_course():
                 "course_name": course_title,
                 "course_objectives": objectives,
                 "requirement": requirements,
-                "course_curriculum": topics
+                "course_curriculum": topics,
+                "thumbnail": thumbnail
             }
 
             # Validate the received data
