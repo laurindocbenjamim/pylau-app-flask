@@ -167,62 +167,65 @@
       font-size: 1.2rem;
     }
 
-    video { 
-      border: 5px solid #000; /* Black border with 5px width */ 
-      border-radius: 10px; /* Rounded corners with 10px radius */ 
+    video {
+      border: 5px solid #000;
+      /* Black border with 5px width */
+      border-radius: 10px;
+      /* Rounded corners with 10px radius */
     }
 
-     .card {
-              background-color: rgba(2, 51, 59, 0.1);
-              border: none;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-              color: #969494;
-            }
+    .card {
+      background-color: rgba(2, 51, 59, 0.1);
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: #969494;
+    }
 
-            .form-control {
-              background-color: #cfd5db;
-              color: rgb(8, 8, 8);
-              border: 1px solid #444;
-              border-radius: 0px;
-            }
+    .form-control {
+      background-color: #cfd5db;
+      color: rgb(8, 8, 8);
+      border: 1px solid #444;
+      border-radius: 0px;
+    }
 
-            .form-control:focus {
-              background-color: #3b3f45;
-              color: #FFF;
-              border-color: #5a5e65;
-            }
+    .form-control:focus {
+      background-color: #3b3f45;
+      color: #FFF;
+      border-color: #5a5e65;
+    }
 
-            .btn-outline-light:hover {
-              background-color: #5a5e65;
-            }
+    .btn-outline-light:hover {
+      background-color: #5a5e65;
+    }
 
 
 
-            .btn-outline-light:hover {
-              background-color: #5a5e65;
-            }
+    .btn-outline-light:hover {
+      background-color: #5a5e65;
+    }
 
-            .dynamic-field {
-              display: flex;
-              align-items: center;
-            }
+    .dynamic-field {
+      display: flex;
+      align-items: center;
+    }
 
-            .dynamic-field .remove-btn {
-              margin-left: 10px;
-            }
+    .dynamic-field .remove-btn {
+      margin-left: 10px;
+    }
 
-            .form-feedback {
-              margin-top: 10px;
-            }
+    .form-feedback {
+      margin-top: 10px;
+    }
 
-            .dynamic-field button {
-              height: 38px;
-              margin-top: 0.4%;
-              border-radius: 0px;
-            }
-            .loading{
-              display: none
-            }
+    .dynamic-field button {
+      height: 38px;
+      margin-top: 0.4%;
+      border-radius: 0px;
+    }
+
+    .loading {
+      display: none
+    }
   </style>
 
 
@@ -316,9 +319,9 @@
   </style>
   <div class="container-fluid">
     <div class="row">
-      <div class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar" >
+      <div class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar">
         <div class="offcanvas-md offcanvas-end bg-body-tertiar" tabindex="-1" id="sidebarMenu"
-          aria-labelledby="sidebarMenuLabel" >
+          aria-labelledby="sidebarMenuLabel">
           <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="sidebarMenuLabel">Data Tuning</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
@@ -339,8 +342,8 @@
                 </a>
                 <ul class="flex-column submenu">
                   <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" aria-current="page" 
-                    href="{{ url_for('course.list_all_courses')}}">
+                    <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                      href="{{ url_for('course.list_all_courses')}}">
                       List Courses
                     </a>
                   </li>
@@ -362,7 +365,7 @@
                   Content
                 </a>
               </li>-->
-              
+
             </ul>
 
             <h6
@@ -373,8 +376,8 @@
               </a>
             </h6>
             <ul class="nav flex-column mb-auto">
-             
-             
+
+
             </ul>
 
             <hr class="my-3">
@@ -402,7 +405,7 @@
       </div>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-       
+
 
         {% block content %}{% endblock content %}
 
@@ -416,18 +419,26 @@
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
           <div class="col-md-4 d-flex align-items-center">
             <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-              <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+              <svg class="bi" width="30" height="24">
+                <use xlink:href="#bootstrap" />
+              </svg>
             </a>
-            <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2023 Data Tuning, IO</span>
+            <span class="mb-3 mb-md-0 " style="color: #f0f0f0;">&copy; 2023 Data Tuning, IO</span>
           </div>
-      
+
           <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                  <use xlink:href="#twitter" />
+                </svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                  <use xlink:href="#instagram" />
+                </svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                  <use xlink:href="#facebook" />
+                </svg></a></li>
           </ul>
         </footer>
-        
+
       </main>
     </div>
 
@@ -437,14 +448,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='assets/js/editor_controller.js')}}"></script>
 
-  
 
-  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script> 
-  
+
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
   {% block script %}{% endblock %}
-  
+
   <script>
-    
+
     const lightbox = GLightbox({ selector: '.glightbox' });
     // Reference the navigation container
     const nav = document.getElementById('mainNav');
@@ -544,6 +555,22 @@
         }
       });
 
+      // Convert objectives to a JSON string
+    function convertFieldListToJson(form,formData, fieldList){
+      
+      const fields = [];
+      if(fieldList.length > 0){
+        fieldList.forEach(field =>{ 
+          form.querySelectorAll(`input[name="${field}"]`).forEach(input => { alert(input.value); fields.push(input.value); console.log(input.value); });
+          formData.set(`${field}`, JSON.stringify(fields));
+        })
+      }
+      //form.querySelectorAll(`input[name="${fieldName}"]`).forEach(input => { fields.push(input.value); });
+      //return formData.set(`${fieldName}`, JSON.stringify(fields));
+      return formData;
+    };
+
+
       // Add New Topic
 
       document.getElementById("addTopicBtn").addEventListener("click", () => {
@@ -579,8 +606,6 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        loadingSpinner.style.display = 'block';
-
         let thisForm = this;
         const endpoint = `${window.location.origin}/course/create`
 
@@ -594,40 +619,58 @@
           return;
         }
 
+        // Validate Video File
+        const thumbnail = document.getElementById("thumbnail");
+        let thumbnailFile = ""
+
+        try { thumbnailFile = thumbnail.files[0]; } catch (err) { }
+
+        loadingSpinner.style.display = 'block';
+
         //const formData = new FormData( thisForm )         
         const headers = new Headers()
         headers.append('X-CSRF-Token', csrfToken)
         headers.append("Authorization", ` Bearer ${csrfToken}`);
-        headers.append("Content-Type", "application/json")
+        //headers.append("Content-Type", "application/json") // Omiting this line because the form is being send as FormData not as JSON
         //headers.append("X-Requested-With", "XMLHttpRequest")
 
 
         //console.log(formData)
 
+        const form3 = event.target;
+        // Validate file size (example: max 2MB) 
+        const formData3 = new FormData(form3)
+        const file = formData3.get('thumbnail');
+
+        if (file.size > 2 * 1024 * 1024) {
+          alert('File size must be less than 2MB'); return;
+        }
+
         // Gather form data
 
         const courseDescription = document.getElementById('courseDescription').value
         const courseName = document.getElementById('courseName').value
-        let courseClonedName =''
-        try{
+        let courseClonedName = ''
+        try {
           courseClonedName = document.getElementById('courseClonedName').value
-        }catch(err){}
+        } catch (err) { }
         const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
         // Gather form data
         const requirements = Array.from(document.querySelectorAll('input[name="requirements[]"]')).map(input => input.value);
         // Gather form data
         const topics = Array.from(document.querySelectorAll('input[name="topics[]"]')).map(input => input.value);
 
-        let formData = new FormData()
-        formData.append("description", courseDescription)
-        formData.append("course_title", courseName)
-        formData.append("objectives", objectives)
-        formData.append("requirements", requirements)
-        formData.append("topics", topics)
+        
+        let formData2 = new FormData(form)
+        // Convert objectives to a JSON string
+        formData2.set("objectives", JSON.stringify(objectives))
+        formData2.set("requirements", JSON.stringify(requirements))
+        formData2.set("topics", JSON.stringify(topics))
+        
 
         fetch(endpoint, {
           method: 'POST',
-          body: JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+          body: formData2,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
           headers: headers
         })
           .then(response => {
@@ -638,10 +681,11 @@
             }
           })
           .then(data => {
+            const resp = JSON.parse(data)
             loadingSpinner.style.display = 'none';
-            console.log(data)
-            form.querySelector('.loading').classList.remove('d-block');
-            if (data) {
+            
+            //form.querySelector('.loading').classList.remove('d-block');
+            if (resp.status_code === 200) {
               window.open(`${endpoint}?course=${courseName}`, '_self')
               btnSave.style.backgroundColor = "#0ed160"
               btnSave.style.color = "#FFF"
@@ -661,6 +705,8 @@
 
       });
     });
+
+    
 
     function displayError(thisForm, error) {
       thisForm.querySelector('.loading').classList.remove('d-block');

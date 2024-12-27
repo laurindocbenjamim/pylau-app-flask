@@ -1,5 +1,6 @@
 import os
 import json
+from datetime import datetime
 from PIL import Image
 from flask import Request, current_app
 from werkzeug.utils import secure_filename
@@ -78,16 +79,34 @@ def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
             os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
         # file.save(os.path.join(UPLOAD_FOLDER, filename))
+        save_with = kwargs.get('save_with', '')
 
-        # Join the file with its path
-        filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
-        file.save(filename)
+        if save_with == 'new':
+            filename = save_file_with_new_name(file, file.filename, UPLOAD_FOLDER)
+        else:
+            # Join the file with its path
+            filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
+            file.save(filename)
         # Perform file operations
         file.close()
 
         return True, filename
     except Exception as e:
         return False, str(e)
+
+
+#
+def save_file_with_new_name(file, original_name, file_path): 
+    """
+        Save the file with a new name
+
+        return:
+               save and return the new name.
+    """
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S') 
+    new_name = f"{str(os.path.splitext(original_name)[0]).replace(' ','_')}_{timestamp}{os.path.splitext(original_name)[1]}" 
+    file.save(os.path.join(file_path, secure_filename(new_name))) 
+    return new_name
 
 
 def validate_image_size(file_path): 

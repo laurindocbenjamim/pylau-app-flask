@@ -39,7 +39,7 @@ from ..package_payment.payment.payment import PaymentModel
 from ..package_courses.course.course_post_update_view import CoursePostUpdateView
 from ..package_code_editor.code_editor_factory import CodeEditorFactory
 from app.utils import __get_cookies, set_header_params
-from app.utils.my_file_factory import validate_file, upload_file
+from app.utils.my_file_factory import validate_file, upload_file, validate_image_size
 
 #
 main_folder = 'tutorials' #
@@ -121,22 +121,32 @@ def list_all_courses():
 def create_course():
     filename = ''
     status = True
+    message = ""
 
-    def upload_thumbnail(file_field_name='thumbnail'):
-        
-
-        if f'{file_field_name}' in request.files:
+    def upload_thumbnail(folder,file_field_name='thumbnail'):
+       
+        try:
+            if f'{file_field_name}' in request.files:
                 
-            file = request.files[f'{file_field_name}']
+                file = request.files[f'{file_field_name}']
+               
+                if file.filename != '':
+                # Validate the thumbnail file                  
+                    status, message = validate_file(request=request, file_field_name=file_field_name)
+                   
+                    if not status:
+                        return status, message
+                    else:
+                        status, filename = upload_file(request_file=request.files, file_field_name=file_field_name, folder=folder, save_with='new')
 
-            if file.filename != '':
-            # Validate the thumbnail file                  
-                status, message = validate_file(request=request, file_field_name=file_field_name)
-                if not status:
-                    return status, message
-                else:
-                    status, filename = upload_file(request_file=request.files, file_field_name=file_field_name, folder=file_field_name)
-        return status, filename
+                        if validate_image_size(filename): 
+                            return True, 'Thumbnail uploaded successfully'
+                        else: os.remove(filename) 
+                        return False, 'Invalid image size or dimensions'
+                return status, filename
+        except Exception as e:
+            return False, str(e)
+        
     
     course_title = escape(request.args.get('course', ''))
     thumbnail = ""
@@ -147,19 +157,31 @@ def create_course():
     if request.method == "POST":
 
         try:
-            data = request.get_json()
+            # Changing the way to get data from client form request because with request.get_json() 
+            # is not possible to get uploaded file data
+            """data = request.get_json()
             objectives = data.get("objectives", [])
             requirements = data.get("requirements", [])
             topics = data.get("topics", [])
             description = data.get("courseDescription")
             course_title = data.get("courseName")
-            courseClonedName = data.get("courseClonedName")
+            courseClonedName = data.get("courseClonedName")"""
+
+            objectives = json.loads(request.form.get('objectives'))
+            requirements = json.loads(request.form.get('requirements'))
+            topics = json.loads(request.form.get('topics'))
+            description = request.form.get("courseDescription")
+            course_title = request.form.get("courseName")
+            courseClonedName = request.form.get("courseClonedName")
             
             #
-            #status, filename = upload_thumbnail(str(unidecode(course_title)).replace(' ','_').lower())
+            folder = f'{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}/'
+            status, filename = upload_thumbnail(folder=folder)
             
-            #if status:
-            #    thumbnail = filename
+            
+            if not status:
+                message = filename
+                filename = ''
 
             document = {
                 "course_code": 4,
@@ -168,12 +190,12 @@ def create_course():
                 "course_objectives": objectives,
                 "requirement": requirements,
                 "course_curriculum": topics,
-                "thumbnail": thumbnail
+                "thumbnail": filename
             }
 
             # Validate the received data
             if not description or not course_title or not objectives:
-                return jsonify({"message": "description, courseName, and objectives are required"}), 400
+                return jsonify({"status_code": 400, "message": "description, courseName, and objectives are required"}), 400
 
 
             # Getting the course data by name from MongoDB
@@ -187,9 +209,10 @@ def create_course():
            
             # close the server connecton
             connection.close()
-            return jsonify({"response": respo, "doc": ""}), 200
+            message = f'{message}. {respo}'
+            return jsonify({"status_code": 200, "response": message, "doc": ""}), 200
         except Exception as e:
-            return jsonify({"message": "An error occurred", "error": str(e)}), 500
+            return jsonify({"status_code": 500, "message": "An error occurred", "error": str(e)}), 201
         
     # If the request.method is GET
      
