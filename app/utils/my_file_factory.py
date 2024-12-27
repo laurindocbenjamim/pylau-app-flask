@@ -67,6 +67,7 @@ def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
     => field_name: is the name of the file field
     """
     file = request_file[f"{file_field_name}"]
+    filename = ""
     try:
         # filename = secure_filename(file.filename)
 
@@ -87,12 +88,12 @@ def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
             # Join the file with its path
             filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
             file.save(filename)
-        # Perform file operations
-        file.close()
+            # Perform file operations
+            file.close()
 
         return True, filename
     except Exception as e:
-        return False, str(e)
+        return False, f"Error: {str(e)}"
 
 
 #
@@ -103,18 +104,26 @@ def save_file_with_new_name(file, original_name, file_path):
         return:
                save and return the new name.
     """
-    timestamp = datetime.now().strftime('%Y%m%d%H%M%S') 
-    new_name = f"{str(os.path.splitext(original_name)[0]).replace(' ','_')}_{timestamp}{os.path.splitext(original_name)[1]}" 
-    file.save(os.path.join(file_path, secure_filename(new_name))) 
-    return new_name
+    try:
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S') 
+        new_name = f"{str(os.path.splitext(original_name)[0]).replace(' ','_')}_{timestamp}{os.path.splitext(original_name)[1]}" 
+        file.save(os.path.join(file_path, secure_filename(new_name))) 
+        # Perform file operations
+        file.close()
+        return new_name
+    except Exception as e:
+        return "Failed to upload file with a new name."
 
 
-def validate_image_size(file_path): 
+def validate_image_size(file_path, max_size=2): 
     try: 
-        with Image.open(file_path) as img: 
+        # 
+        with Image.open(f'{current_app.config['UPLOAD_FOLDER']}/{file_path}') as img: 
             if img.format not in ['JPEG', 'PNG']: 
                 return False 
-            if os.path.getsize(file_path) > 2 * 1024 * 1024: # 2MB return False return True except Exception as e: print(e) 
+            #This condition checks if the size of the file is greater than 2 MB.
+            if os.path.getsize(f'{current_app.config['UPLOAD_FOLDER']}/{file_path}') > max_size * 1024 * 1024: 
+                # If the file size exceeds 2 MB, the function returns False
                 return False
         return True 
     except Exception as e:  

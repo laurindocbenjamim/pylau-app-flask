@@ -144,8 +144,9 @@ def create_course():
                         return status, message
                     else:
                         status, filename = upload_file(request_file=request.files, file_field_name=file_field_name, folder=folder, save_with='new')
-
-                        if status and validate_image_size(filename): 
+                        
+                        # validate the size of the image
+                        if status and validate_image_size(f'{folder}{filename}'): 
                             return True, filename
                         else: os.remove(filename) 
                         return False, 'Invalid image size or dimensions'
@@ -185,10 +186,11 @@ def create_course():
             status, filename = upload_thumbnail(folder=folder)
             
             
-            if not status:
-                message = filename
-                filename = ''
+            if status:                
+                filename = f'{folder}{filename}'
+            else: message = filename
 
+            
             document = {
                 "course_code": 4,
                 "course_description": description,
