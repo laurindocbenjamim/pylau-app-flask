@@ -498,6 +498,10 @@
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
       const loadingSpinner = document.getElementById('loading-spinner')
 
+      const headers = new Headers()
+      headers.append('X-CSRF-Token', csrfToken)
+      headers.append("Authorization", ` Bearer ${csrfToken}`);
+
       // Add New Objective  
       document.getElementById("addObjectiveBtn").addEventListener("click", () => {
         const newObjective = document.createElement("div");
@@ -556,19 +560,19 @@
       });
 
       // Convert objectives to a JSON string
-    function convertFieldListToJson(form,formData, fieldList){
-      
-      const fields = [];
-      if(fieldList.length > 0){
-        fieldList.forEach(field =>{ 
-          form.querySelectorAll(`input[name="${field}"]`).forEach(input => { alert(input.value); fields.push(input.value); console.log(input.value); });
-          formData.set(`${field}`, JSON.stringify(fields));
-        })
-      }
-      //form.querySelectorAll(`input[name="${fieldName}"]`).forEach(input => { fields.push(input.value); });
-      //return formData.set(`${fieldName}`, JSON.stringify(fields));
-      return formData;
-    };
+      function convertFieldListToJson(form, formData, fieldList) {
+
+        const fields = [];
+        if (fieldList.length > 0) {
+          fieldList.forEach(field => {
+            form.querySelectorAll(`input[name="${field}"]`).forEach(input => { alert(input.value); fields.push(input.value); console.log(input.value); });
+            formData.set(`${field}`, JSON.stringify(fields));
+          })
+        }
+        //form.querySelectorAll(`input[name="${fieldName}"]`).forEach(input => { fields.push(input.value); });
+        //return formData.set(`${fieldName}`, JSON.stringify(fields));
+        return formData;
+      };
 
 
       // Add New Topic
@@ -591,6 +595,36 @@
 
         topicsContainer.appendChild(newTopic);
       });
+
+      // Delete course
+      document.getElementById('btn-delete-course').addEventListener('click', (e) => {
+        e.preventDefault();
+        const headers = new Headers()
+        headers.append('X-CSRF-Token', csrfToken)
+        headers.append("Authorization", ` Bearer ${csrfToken}`);
+        const courseName = document.getElementById('courseName').value
+
+        const endpoint = `${window.location.origin}/course/delete-course/${courseName}`;        
+
+        loadingSpinner.style.display = 'block';
+        if (confirm("Are you shure you want to delete this course?")) {
+          fetch(endpoint, { method: "DELETE", headers: headers, body: JSON.stringify({ courseName }) })
+            .then(response => {
+              if (response.ok) {
+                return response.text();
+              } else {
+                throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+              }
+            }).then(resp => {
+              loadingSpinner.style.display = 'none';
+              console.log(JSON.parse(resp));
+            })
+            .catch((error) => {
+              loadingSpinner.style.display = 'none';
+              displayError(form, error);
+            });
+        }
+      })
 
       // Remove Field
       topicsContainer.addEventListener("click", (event) => {
@@ -660,13 +694,13 @@
         // Gather form data
         const topics = Array.from(document.querySelectorAll('input[name="topics[]"]')).map(input => input.value);
 
-        
+
         let formData2 = new FormData(form)
         // Convert objectives to a JSON string
         formData2.set("objectives", JSON.stringify(objectives))
         formData2.set("requirements", JSON.stringify(requirements))
         formData2.set("topics", JSON.stringify(topics))
-        
+
 
         fetch(endpoint, {
           method: 'POST',
@@ -683,7 +717,7 @@
           .then(data => {
             const resp = JSON.parse(data)
             loadingSpinner.style.display = 'none';
-            
+            console.log(resp)
             //form.querySelector('.loading').classList.remove('d-block');
             if (resp.status_code === 200) {
               window.open(`${endpoint}?course=${courseName}`, '_self')
@@ -706,7 +740,7 @@
       });
     });
 
-    
+
 
     function displayError(thisForm, error) {
       thisForm.querySelector('.loading').classList.remove('d-block');

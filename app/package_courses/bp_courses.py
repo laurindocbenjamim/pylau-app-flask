@@ -78,7 +78,13 @@ bp_courses.add_url_rule(
     ),
 )
 
+ALLOWED_EXTENSIONS = {'mp4', 'webm', 'mkv', 'avi'}
 
+def allowed_file(filename):
+    """Check if a file is an allowed type."""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+#
 def save_file_with_new_name(file, original_name, file_path): 
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S') 
     new_name = f"{str(os.path.splitext(original_name)[0]).replace(' ','_')}_{timestamp}{os.path.splitext(original_name)[1]}" 
@@ -139,8 +145,8 @@ def create_course():
                     else:
                         status, filename = upload_file(request_file=request.files, file_field_name=file_field_name, folder=folder, save_with='new')
 
-                        if validate_image_size(filename): 
-                            return True, 'Thumbnail uploaded successfully'
+                        if status and validate_image_size(filename): 
+                            return True, filename
                         else: os.remove(filename) 
                         return False, 'Invalid image size or dimensions'
                 return status, filename
@@ -210,7 +216,7 @@ def create_course():
             # close the server connecton
             connection.close()
             message = f'{message}. {respo}'
-            return jsonify({"status_code": 200, "response": message, "doc": ""}), 200
+            return jsonify({"status_code": 200, "response": message, "doc": filename}), 200
         except Exception as e:
             return jsonify({"status_code": 500, "message": "An error occurred", "error": str(e)}), 201
         
@@ -238,11 +244,18 @@ def create_course():
 from app.utils.my_file_factory import validate_file, upload_file
 
 
-ALLOWED_EXTENSIONS = {'mp4', 'webm', 'mkv', 'avi'}
+#
+@bp_courses.route("/delete-course/<string:course>", methods=["DELETE"])
+@cross_origin(methods=["DELETE"])
+def delete_course(course):
 
-def allowed_file(filename):
-    """Check if a file is an allowed type."""
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    course_title = escape(course)
+    courses_module = set()
+    
+    # connect to mongodb server
+    connection = MongoClient(current_app.config["MONGO_URI"])
+
+    return jsonify({"status_code":200, "response": f"Ready to remove {course_title}"}), 200  
 
 @bp_courses.route("/create-content", methods=["GET", "POST"])
 @cross_origin(methods=["GET", "POST"])
