@@ -608,7 +608,7 @@
 
         loadingSpinner.style.display = 'block';
         if (confirm("Are you shure you want to delete this course?")) {
-          fetch(endpoint, { method: "DELETE", headers: headers, body: JSON.stringify({ courseName }) })
+          fetch(endpoint, { method: "DELETE", headers: headers })
             .then(response => {
               if (response.ok) {
                 return response.text();
@@ -618,6 +618,24 @@
             }).then(resp => {
               loadingSpinner.style.display = 'none';
               console.log(JSON.parse(resp));
+              const data = JSON.parse(resp)
+              if (data.status_code === 200) {
+                //window.open(`${endpoint}?course=${courseName}`, '_self')
+                btnSave.style.backgroundColor = "#0ed160"
+                btnSave.style.color = "#FFF"
+                form.querySelector('.error-message').style.display = 'none'
+                form.querySelector('.sent-message').classList.add('d-block');
+                form.querySelector('.sent-message').textContent = data.response
+                form.reset();
+              } else {
+                form.querySelector('.sent-message').style.display = 'none'
+                form.querySelector('.error-message').classList.add('d-block');
+                form.querySelector('.error-message').textContent = data.response
+                
+                btnSave.style.backgroundColor = "red"
+                btnSave.style.color = "#FFF"
+                throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
+              }
             })
             .catch((error) => {
               loadingSpinner.style.display = 'none';

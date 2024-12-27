@@ -264,6 +264,12 @@ def delete_course(course):
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
 
+     # Getting the course data by name from MongoDB
+    data = get_courses_by_coursename(connection=connection, course_name=course_title)
+    if data:
+        data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+        if data:
+            return jsonify({"status_code":201, "response": f"Remove first all the contents related to the course <<{course_title}>>"}), 200
     return jsonify({"status_code":200, "response": f"Ready to remove {course_title}"}), 200  
 
 @bp_courses.route("/create-content", methods=["GET", "POST"])
