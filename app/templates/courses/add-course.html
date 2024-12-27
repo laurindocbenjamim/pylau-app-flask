@@ -140,6 +140,8 @@
 
           <input type="text" id="courseName" name="courseName" value="{{ course_data['course_name'] }}"
             class="form-control" placeholder="Enter course name" required>
+            <input type="hidden" id="courseClonedName" name="courseClonedName" value="{{ course_data['course_name'] }}"
+            class="form-control" placeholder="Enter course name">
           {% else %}
           <input type="text" id="courseName" name="courseName" class="form-control" placeholder="Enter course name"
             required>
@@ -290,7 +292,7 @@
                 <input type="file" name="thumbnail" id="thumbnail" class="form-control mb-2" accept="image/jpeg, png">
                 {% if course_data %}
                 {% if course_data['thumbnail'] %}
-                <input type="text" name="thumbnail_file" value="{{ course_data['thumbnail'] }}"
+                <input type="text" name="thumbnail_file" id="thumbnail_file" value="{{ course_data['thumbnail'] }}"
                   class="form-control mb-2">
 
                 {% endif %}

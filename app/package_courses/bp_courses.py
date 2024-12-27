@@ -128,6 +128,7 @@ def create_course():
     filename = ''
     status = True
     message = ""
+    file_field_name='thumbnail'
 
     def upload_thumbnail(folder,file_field_name='thumbnail'):
        
@@ -180,6 +181,7 @@ def create_course():
             description = request.form.get("courseDescription")
             course_title = request.form.get("courseName")
             courseClonedName = request.form.get("courseClonedName")
+            old_thumbnail_file = request.form.get("thumbnail_file", '')
             
             #
             folder = f'{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}/'
@@ -208,7 +210,12 @@ def create_course():
 
             # Getting the course data by name from MongoDB
             data = get_courses_by_coursename(connection=connection, course_name=courseClonedName)
+            
             if data:
+                file = request.files[f'{file_field_name}']
+                if old_thumbnail_file and file.filename == '':
+                    document['thumbnail'] = old_thumbnail_file
+
                 status = update_course_to_mgdb(connection=connection, course_name=courseClonedName, document=document)
                 respo = f"Your {courseClonedName} data was updated successfully {course_title}"
             else:
