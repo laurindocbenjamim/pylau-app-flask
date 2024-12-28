@@ -206,7 +206,7 @@ def get_courses_content_quizzes_by_coursename_topic(*,connection, course_name, t
     return result
 
 
-def save_course_to_mgdb(connection, document):
+def save_course_to_mgdb(connection, document: dict = {}):
     
     try:
         # Access the database
@@ -228,7 +228,7 @@ def save_course_to_mgdb(connection, document):
         return False
 
 
-def update_course_to_mgdb(connection, course_name, document):
+def update_course_to_mgdb(connection, course_name, document: dict = {}):
     
     try:
 
@@ -254,7 +254,7 @@ def update_course_to_mgdb(connection, course_name, document):
         return False
 
 
-def save_courses_content_to_mgdb(connection, document):
+def save_courses_content_to_mgdb(connection, document: dict = {}):
     
     try:
         # Access the database
@@ -276,7 +276,7 @@ def save_courses_content_to_mgdb(connection, document):
         return False, str(e)
 
 # Update the course's content document
-def update_courses_content_to_mgdb(connection, course_name, course_topic, document):
+def update_courses_content_to_mgdb(connection, course_name, course_topic, document: dict = {}):
     
     try:
 
@@ -356,7 +356,7 @@ def remove_courses_content_from_mgdb(*,connection, query: dict = {}):
         return False, str(e)
 
 # Save the course's conten quizzes
-def save_courses_content_quizzes(connection, document):
+def save_courses_content_quizzes(connection, document: dict = {}):
     try:
         # Access the database
         db = connection.data_tuning_school
@@ -375,7 +375,33 @@ def save_courses_content_quizzes(connection, document):
         return True, 'ok'
     except Exception as e:
         return False, str(e)
+
+# Remove the course's content quizzes document
+def remove_courses_content_quizz_from_mgdb(*,connection, query: dict = {}):
+    """
     
+    """
+    try:
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content_quizzes
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses_content_quizzes
+
+        # Removing the course information to MongoDB
+        collection.delete_one(query)
+        return True, query
+    except Exception as e:
+        return False, str(e)
+
+
 def validate_words(key:str, value: str | int | float)-> bool:
     """
     This method is  used to validate the form fields

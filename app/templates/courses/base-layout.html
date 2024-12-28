@@ -596,56 +596,7 @@
         topicsContainer.appendChild(newTopic);
       });
 
-      // Delete course
-      document.getElementById('btn-delete-course').addEventListener('click', (e) => {
-        e.preventDefault();
-        const headers = new Headers()
-        headers.append('X-CSRF-Token', csrfToken)
-        headers.append("Authorization", ` Bearer ${csrfToken}`);
-        const courseName = document.getElementById('courseName').value
-
-        const endpoint = `${window.location.origin}/course/delete-course/${courseName}`;        
-
-        loadingSpinner.style.display = 'block';
-        if (confirm("Are you shure you want to delete this course?")) {
-          fetch(endpoint, { method: "DELETE", headers: headers })
-            .then(response => {
-              if (response.ok) {
-                return response.text();
-              } else {
-                throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-              }
-            }).then(resp => {
-              loadingSpinner.style.display = 'none';
-              console.log(JSON.parse(resp));
-              const data = JSON.parse(resp)
-              if (data.status_code === 200) {               
-                btnSave.style.backgroundColor = "#0ed160"
-                btnSave.style.color = "#FFF"
-                form.querySelector('.error-message').style.display = 'none'
-                form.querySelector('.sent-message').classList.add('d-block');
-                form.querySelector('.sent-message').textContent = data.response
-                form.reset();
-                setTimeout((e)=>{
-                  window.open(`${window.location.origin}/course/list-all`, '_self')
-                 },500)
-              } else {
-                form.querySelector('.sent-message').style.display = 'none'
-                form.querySelector('.error-message').classList.add('d-block');
-                form.querySelector('.error-message').textContent = data.response
-                
-                btnSave.style.backgroundColor = "red"
-                btnSave.style.color = "#FFF"
-                throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
-              }
-            })
-            .catch((error) => {
-              loadingSpinner.style.display = 'none';
-              displayError(form, error);
-            });
-        }
-      })
-
+     
       // Remove Field
       topicsContainer.addEventListener("click", (event) => {
         if (event.target.closest(".remove-btn")) {
@@ -765,9 +716,9 @@
 
 
     function displayError(thisForm, error) {
-      thisForm.querySelector('.loading').classList.remove('d-block');
-      thisForm.querySelector('.error-message').innerHTML = error;
-      thisForm.querySelector('.error-message').classList.add('d-block');
+      document.querySelector('.loading').classList.remove('d-block');
+      document.querySelector('.error-message').innerHTML = error;
+      document.querySelector('.error-message').classList.add('d-block');
     }
 
   </script>

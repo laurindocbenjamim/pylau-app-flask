@@ -25,10 +25,11 @@ from .course.controller import save_courses_content_to_mgdb, get_courses_content
 from .course.controller import get_courses_content_by_coursename
 from .course.controller import update_course_to_mgdb
 from .course.controller import update_courses_content_to_mgdb, get_all_courses_mgdb
-from .course.controller import remove_courses_content_from_mgdb, save_courses_content_quizzes
-from .course.controller import get_courses_content_quizzes_by_coursename
-from .course.controller import get_courses_content_quizzes_by_coursename_topic
-from .course.controller import remove_course_from_mgdb
+from .course.controller_mongo_db import remove_courses_content_from_mgdb, save_courses_content_quizzes
+from .course.controller_mongo_db import get_courses_content_quizzes_by_coursename_mongo_db
+from .course.controller_mongo_db import get_courses_content_quizzes_by_coursename_topic
+from .course.controller_mongo_db import remove_course_from_mgdb
+from .course.controller_mongo_db import remove_courses_content_quizz_from_mgdb
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -200,7 +201,7 @@ def create_course():
             document = {
                 "course_code": 4,
                 "course_description": description,
-                "course_name": course_title,
+                "course_name": str(course_title.rstrip()).lstrip(),
                 "course_objectives": objectives,
                 "requirement": requirements,
                 "course_curriculum": topics,
@@ -209,7 +210,7 @@ def create_course():
 
             # Validate the received data
             if not description or not course_title or not objectives:
-                return jsonify({"status_code": 400, "message": "description, courseName, and objectives are required"}), 400
+                return jsonify({"status_code": 400, "response": "description, courseName, and objectives are required"}), 400
 
 
             # Getting the course data by name from MongoDB
@@ -231,7 +232,7 @@ def create_course():
             message = f'{message}. {respo}'
             return jsonify({"status_code": 200, "response": message, "doc": filename}), 200
         except Exception as e:
-            return jsonify({"status_code": 500, "message": "An error occurred", "error": str(e)}), 201
+            return jsonify({"status_code": 500, "response": f"An error occurred. {str(e)}", "error": str(e)}), 201
         
     # If the request.method is GET
      
@@ -263,7 +264,7 @@ from app.utils.my_file_factory import validate_file, upload_file
 def delete_course(course):
 
     course_title = escape(course)
-    courses_module = set()
+   
     message = f"Failed to delete the {course_title} course."
     
     # connect to mongodb server
@@ -275,18 +276,30 @@ def delete_course(course):
         if not data:
             message = f"The course <<{course_title}>> does not exist."
         else:
+            # Check if the course has content if so, remove it
             data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
             if data:
-                return jsonify({"status_code":201, "response": f"First remove all content related to the <<{course_title}>> course"}), 200
-            else:
-                directory = f'{current_app.config['UPLOAD_FOLDER']}/{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}'
-                status, message = delete_directory_with_contents(directory=directory)
+                sts, resp = remove_courses_content_from_mgdb(connection=connection, query = {"course_name": course_title})
+                if not sts:
+                    return jsonify({"status_code":201, "response": f"Failed to remove the course's content. {resp}"}), 200
+
+            # Check if the course has quizz content if so, remove it
+            course_content_quizzes = get_courses_content_quizzes_by_coursename_mongo_db(connection=connection,course_name=course_title)
+            if course_content_quizzes:
+                sts, resp = remove_courses_content_quizz_from_mgdb(connection=connection, query = {"course_name": course_title})
+                if not sts:
+                    return jsonify({"status_code":201, "response": f"Failed to remove the course's quizz content. {resp}"}), 200
+
+            # Delete the course's thumbnail
+            directory = f'{current_app.config['UPLOAD_FOLDER']}/{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}'
+            status, message = delete_directory_with_contents(directory=directory)
+            # Remove the course from the database
+            if status:
+                status, message = remove_course_from_mgdb(connection=connection, query={"course_name": str(course_title)})
                 if status:
-                    status, message = remove_course_from_mgdb(connection=connection, query={"course_name": str(course_title)})
-                    if status:
-                        return jsonify({"status_code":200, "response": f"The course <<{str(course_title)}>> has been successfully deleted. {message}"}), 200                        
-                else:
-                    message = f"Failed to delete the course. {message}"
+                    return jsonify({"status_code":200, "response": f"The course <<{str(course_title)}>> has been successfully deleted. {message}"}), 200                        
+            else:
+                message = f"Failed to delete the course. {message}"
         return jsonify({"status_code":400, "response": f"{message}. ({course_title})"}), 200  
     except Exception as e:
         return jsonify({"status_code":500, "response": f"{str(e)}. ({course_title})"}), 200
@@ -590,7 +603,7 @@ def save_courses_quizzes_to_mongodb(course,topic):
 def remove_course_content():
 
     #
-    def save_file(UPLOAD_FOLDER, file_path):
+    def remove_file(UPLOAD_FOLDER, file_path):
         
         try:
             # os.chmod(UPLOAD_FOLDER, 0o777) # Grant all permitions
@@ -631,10 +644,14 @@ def remove_course_content():
         UPLOAD_FOLDER = f'{current_app.config['UPLOAD_FOLDER']}/{main_folder}/'
         file_path = os.path.join(UPLOAD_FOLDER, obj_file[-1])
         
-        file_removed, f_sms = save_file(UPLOAD_FOLDER, file_path)
+        file_removed, f_sms = remove_file(UPLOAD_FOLDER, file_path)
     #return jsonify({"status_code":201,"response": f"Failed to remove the course's content {file_path}", "data": f_sms}), 201    
     #            
     try:
+        sts, resp = remove_courses_content_quizz_from_mgdb(connection=connection, query=query)
+        if not sts:
+            return jsonify({"status_code":201,"response": f"Failed to remove the quizzes content."}), 201
+        
         sts, resp = remove_courses_content_from_mgdb(connection=connection, query=query)
 
         resp =f'{resp} && file removed? {file_removed} - {f_sms}'
@@ -662,7 +679,7 @@ def view_courses_demo():
         # Getting the course data by name from MongoDB
         data = get_courses_by_coursename(connection=connection, course_name=course_title)
         course_content = get_courses_content_by_coursename(connection=connection, course_name=course_title)
-        course_content_quizzes = get_courses_content_quizzes_by_coursename(connection=connection,course_name=course_title)
+        course_content_quizzes = get_courses_content_quizzes_by_coursename_mongo_db(connection=connection,course_name=course_title)
         
         
         if course_content:
