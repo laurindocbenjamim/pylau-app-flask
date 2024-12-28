@@ -328,7 +328,7 @@ def remove_course_from_mgdb(*,connection, query: dict = {}):
 
         # Removing the course information to MongoDB
         collection.delete_one(query)
-        return True, query
+        return True, "Ok"
     except Exception as e:
         return False, str(e)
     
