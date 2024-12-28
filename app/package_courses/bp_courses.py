@@ -275,14 +275,14 @@ def delete_course(course):
         if data:
             data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
             if data:
-                return jsonify({"status_code":201, "response": f"Remove first all the contents related to the course <<{course_title}>>"}), 200
+                return jsonify({"status_code":201, "response": f"First remove all content related to the <<{course_title}>> course"}), 200
             else:
                 directory = f'{current_app.config['UPLOAD_FOLDER']}/{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}'
                 status, message = delete_directory_with_contents(directory=directory)
                 if status:
                     status, message = remove_course_from_mgdb(connection=connection, query={"course_name": str(course_title)})
                     if status:
-                        return jsonify({"status_code":200, "response": f"The course <<{str(course_title)}>> has been deleted successfully. {message}"}), 200                        
+                        return jsonify({"status_code":200, "response": f"The course <<{str(course_title)}>> has been successfully deleted. {message}"}), 200                        
                 else:
                     message = f"Failed to delete the course. {message}"
         return jsonify({"status_code":400, "response": f"{message}. ({course_title})"}), 200  
