@@ -16,3 +16,10 @@ i=''
 for k,l in enumerate(name):
     i+= str(l[0])
     print(i)
+
+
+test = "ola mundo.png"
+if ['.jpg','.png'] in test:
+    print("It's in")
+else:
+    print("It's not")
