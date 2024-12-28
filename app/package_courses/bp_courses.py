@@ -264,7 +264,7 @@ def delete_course(course):
 
     course_title = escape(course)
     courses_module = set()
-    message = ""
+    message = f"Failed to delete the {course_title} course."
     
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
@@ -272,7 +272,9 @@ def delete_course(course):
      # Getting the course data by name from MongoDB
     try:
         data = get_courses_by_coursename(connection=connection, course_name=course_title)
-        if data:
+        if not data:
+            message = f"The course <<{course_title}>> does not exist."
+        else:
             data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
             if data:
                 return jsonify({"status_code":201, "response": f"First remove all content related to the <<{course_title}>> course"}), 200
