@@ -28,6 +28,7 @@ from .course.controller import update_courses_content_to_mgdb, get_all_courses_m
 from .course.controller import remove_courses_content_from_mgdb, save_courses_content_quizzes
 from .course.controller import get_courses_content_quizzes_by_coursename
 from .course.controller import get_courses_content_quizzes_by_coursename_topic
+from .course.controller import remove_course_from_mgdb
 
 from .content.courses_content import CourseContentModel
 from .content.course_content_post_view import CourseContentPostUpdateView
@@ -39,7 +40,10 @@ from ..package_payment.payment.payment import PaymentModel
 from ..package_courses.course.course_post_update_view import CoursePostUpdateView
 from ..package_code_editor.code_editor_factory import CodeEditorFactory
 from app.utils import __get_cookies, set_header_params
-from app.utils.my_file_factory import validate_file, upload_file, validate_image_size
+from app.utils.my_file_factory import validate_file
+from app.utils.my_file_factory import upload_file
+from app.utils.my_file_factory import validate_image_size
+from app.utils.my_file_factory import delete_directory_with_contents
 
 #
 main_folder = 'tutorials' #
@@ -260,17 +264,31 @@ def delete_course(course):
 
     course_title = escape(course)
     courses_module = set()
+    message = ""
     
     # connect to mongodb server
     connection = MongoClient(current_app.config["MONGO_URI"])
 
      # Getting the course data by name from MongoDB
-    data = get_courses_by_coursename(connection=connection, course_name=course_title)
-    if data:
-        data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+    try:
+        data = get_courses_by_coursename(connection=connection, course_name=course_title)
         if data:
-            return jsonify({"status_code":201, "response": f"Remove first all the contents related to the course <<{course_title}>>"}), 200
-    return jsonify({"status_code":200, "response": f"Ready to remove {course_title}"}), 200  
+            data = get_courses_content_by_coursename(connection=connection, course_name=course_title)
+            if data:
+                return jsonify({"status_code":201, "response": f"Remove first all the contents related to the course <<{course_title}>>"}), 200
+            else:
+                directory = f'{current_app.config['UPLOAD_FOLDER']}/{main_folder}/{str(unidecode(course_title).replace(' ','_').lower())}'
+                status, message = delete_directory_with_contents(directory=directory)
+                if status:
+                    status, message = remove_course_from_mgdb(connection=connection, query={"course_name": str(course_title)})
+                    if status:
+                        return jsonify({"status_code":200, "response": f"The course <<{str(course_title)}>> has been deleted successfully. {message}"}), 200                        
+                else:
+                    message = f"Failed to delete the course. {message}"
+        return jsonify({"status_code":400, "response": f"{message}. ({course_title})"}), 200  
+    except Exception as e:
+        return jsonify({"status_code":500, "response": f"{str(e)}. ({course_title})"}), 200
+
 
 @bp_courses.route("/create-content", methods=["GET", "POST"])
 @cross_origin(methods=["GET", "POST"])

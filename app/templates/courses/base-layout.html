@@ -619,14 +619,16 @@
               loadingSpinner.style.display = 'none';
               console.log(JSON.parse(resp));
               const data = JSON.parse(resp)
-              if (data.status_code === 200) {
-                //window.open(`${endpoint}?course=${courseName}`, '_self')
+              if (data.status_code === 200) {               
                 btnSave.style.backgroundColor = "#0ed160"
                 btnSave.style.color = "#FFF"
                 form.querySelector('.error-message').style.display = 'none'
                 form.querySelector('.sent-message').classList.add('d-block');
                 form.querySelector('.sent-message').textContent = data.response
                 form.reset();
+                setTimeout((e)=>{
+                  window.open(`${window.location.origin}/course/list-all`, '_self')
+                 },500)
               } else {
                 form.querySelector('.sent-message').style.display = 'none'
                 form.querySelector('.error-message').classList.add('d-block');
@@ -737,12 +739,14 @@
             loadingSpinner.style.display = 'none';
             console.log(resp)
             //form.querySelector('.loading').classList.remove('d-block');
-            if (resp.status_code === 200) {
-              window.open(`${endpoint}?course=${courseName}`, '_self')
+            if (resp.status_code === 200) {              
               btnSave.style.backgroundColor = "#0ed160"
               btnSave.style.color = "#FFF"
               form.querySelector('.sent-message').classList.add('d-block');
               form.reset();
+              setTimeout((e)=>{
+                window.open(`${endpoint}?course=${courseName}`, '_self')
+              },400)
             } else {
               btnSave.style.backgroundColor = "red"
               btnSave.style.color = "#FFF"

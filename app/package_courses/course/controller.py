@@ -300,6 +300,37 @@ def update_courses_content_to_mgdb(connection, course_name, course_topic, docume
         return True
     except Exception as e:
         return False
+
+# Remove the course from MongoDB
+def remove_course_from_mgdb(*,connection, query: dict = {}):
+    """
+    This method removes a course from MongoDB based on the provided query.
+
+    Params:
+        connection: The MongoDB connection.
+        query: A dictionary containing the query to identify the course to be removed.
+    Return:
+        A tuple containing a boolean indicating success or failure, and the query or error message.
+    """
+    try:
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Access the database
+        db = connection.data_tuning_school
+
+        # Access the collection and retrieve documents
+        collection = db.courses
+
+        # Removing the course information to MongoDB
+        collection.delete_one(query)
+        return True, query
+    except Exception as e:
+        return False, str(e)
     
 # Remove the course's content document
 def remove_courses_content_from_mgdb(*,connection, query: dict = {}):

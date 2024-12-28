@@ -4,6 +4,7 @@ from datetime import datetime
 from PIL import Image
 from flask import Request, current_app
 from werkzeug.utils import secure_filename
+import shutil
 
 
 ALLOWED_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "mp4", "webm", "mkv", "avi", "wave"}
@@ -95,7 +96,35 @@ def upload_file(request_file: Request.files, file_field_name: str, **kwargs):
     except Exception as e:
         return False, f"Error: {str(e)}"
 
-
+# Method to remove a directory with content or files
+def delete_directory_with_contents(directory):
+    
+    """
+        Deletes the specified directory and all its contents.
+        This function attempts to delete the directory specified by the `directory` parameter.
+        It first sets the directory permissions to 755 to ensure it can be deleted. If the 
+        directory exists, it will be removed along with all its contents. If the directory 
+        does not exist, it returns a message indicating so. If an error occurs during the 
+        deletion process, it catches the exception and returns an error message.
+    Args:
+        directory (str): The path to the directory to be deleted.
+    Returns:
+        tuple: A tuple containing a boolean and a string. The boolean indicates success 
+               (True) or failure (False), and the string provides a message with details 
+               about the operation.
+    """
+    try:
+        # Set permissions first
+        os.chmod(directory, 0o755)
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
+            return True, f"Directory {directory} and its contents have been deleted."
+        else:
+            return True, f"Directory {directory} does not exist."
+    except FileNotFoundError as e:
+        return True, f'Error: {str(e)}'
+    except Exception as e:
+        return False, f"Error: {str(e)}"
 #
 def save_file_with_new_name(file, original_name, file_path): 
     """
