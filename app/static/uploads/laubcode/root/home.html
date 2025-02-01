@@ -1,0 +1,198 @@
+
+
+ 
+  
+   Testt
+  
+  
+   form{
+
+
+
+           padding: 1rem 2rem;
+
+
+
+           margin: 2;
+
+
+
+           width: 30%;
+
+
+
+           display: flex;
+
+
+
+           flex-direction: column;
+
+
+
+
+
+
+
+
+
+
+
+           justify-content: space-between;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       }
+  
+ 
+ 
+  &lt;h1&gt;
+   Welcome to my first page
+  &lt;/h1&gt;
+  &lt;div class=&quot;container&quot;&gt;
+   &lt;section&gt;
+    &lt;form action=&quot;&quot; method=&quot;get&quot;&gt;
+     &lt;input name=&quot;&quot; type=&quot;text&quot; value=&quot;Name&quot;&gt;
+     &lt;input name=&quot;&quot; type=&quot;email&quot; value=&quot;Username&quot;&gt;
+     &lt;input name=&quot;&quot; type=&quot;password&quot; value=&quot;Password&quot;&gt;
+     &lt;input type=&quot;button&quot; value=&quot;submit&quot;&gt;
+    &lt;/form&gt;
+   &lt;/section&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+   &lt;textarea&gt;&lt;/textarea&gt;
+   &lt;button&gt;
+    Copy
+   &lt;/button&gt;
+   &lt;button&gt;
+    Paste
+   &lt;/button&gt;
+  &lt;/div&gt;
+  
+   function copyText() {
+
+
+
+
+
+
+
+          var copyText = document.getElementById(&quot;myTextarea&quot;);
+
+
+
+
+
+
+
+          copyText.select();
+
+
+
+
+
+
+
+          document.execCommand(&quot;copy&quot;);
+
+
+
+
+
+
+
+          alert(&quot;Copied the text: &quot; + copyText.value);
+
+
+
+
+
+
+
+          }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          function pasteText() {
+
+
+
+
+
+
+
+              var pasteText = document.getElementById(&quot;myTextarea&quot;);
+
+
+
+
+
+
+
+              pasteText.focus(); document.execCommand(&quot;paste&quot;);
+
+
+
+
+
+
+
+              alert(&quot;Pasted the text: &quot; + pasteText.value);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          }
+  
+ 
+

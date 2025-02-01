@@ -1,0 +1,81 @@
+{% extends 'site.html' %}
+{% block title %}
+{% if title %}{{ title }} {%else %} AI {% endif %}
+{% endblock %}
+
+
+{% block style %}
+
+
+{% endblock %}
+
+{% block content %}
+
+
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .info {
+            color: #0986fa;
+        }
+
+        .success {
+            color: #25d45a;
+        }
+
+        .error {
+            color: #c8233e;
+        }
+
+        .danger {
+            color: #ee5d24;
+        }
+    </style>
+
+
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left static menu -->
+            <div class="col-md-3">
+                <h3>Menu</h3>
+                <hr>
+                {% if current_user.is_authenticated %}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a>{{ current_user.email }}</a>
+                    </li>
+                </ul>
+
+                <hr class="featurette-divider">
+
+                {% endif %}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {% if 'user_token' in session %}
+                        <a href="{{ url_for('ws.etl', user_token=session['user_token']) }}">ETL Webscrap</a>
+                        {% else %}
+                        <a href="{{ url_for('ws.etl', user_token=user_token) }}">ETL Webscrap</a>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ url_for('auth.register') }}">New User</a>
+                    </li>
+                    <li class="list-group-item">Menu Item 3</li>
+                </ul>
+            </div>
+
+            <!-- Main container -->
+            <div class="col-md-9">
+
+                {% block data_science_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

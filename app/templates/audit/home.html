@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{% if title %}{{ title }} {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>Log Details</h1>
+    <p>Welcome, {{ user }}!</p>
+    <div class="container">
+        <div class="content">
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    <!--
+                    
+                    {% if log_data %}
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" style="height: 800px;">
+                        {{log_data}}
+                    </textarea>
+                    {% endif%}
+                    
+                    -->
+
+                    <textarea class="form-control" id="log" rows="10" style="height: 800px;">
+                        
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    async function fetchLog() {
+        const root = window.location.origin
+        const response = await fetch(`${root}/audit/logs`);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let log = '';
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            log += decoder.decode(value);
+            document.getElementById('log').value = log;
+        }
+    }
+    fetchLog();
+
+</script>
+{% endblock %}

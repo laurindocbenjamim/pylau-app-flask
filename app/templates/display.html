@@ -1,0 +1,30 @@
+
+  <h2>Registration Form</h2>
+  <form action="" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required oninput="this.value = this.value.replace(/[^\w\s]/gi, '')">
+    <br>
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <!--
+      This input field is used for entering a password.
+      It has the following pattern applied:
+      - At least one digit: (?=.*\d)
+      - At least one lowercase letter: (?=.*[a-z])
+      - At least one uppercase letter: (?=.*[A-Z])
+      - At least one letter (uppercase or lowercase): (?=.*[a-zA-Z])
+      - Minimum length of 8 characters: .{8,}
+      - The password is required: required
+    -->
+    <input type="password" id="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" required>
+    <br>
+    <input type="submit" value="Submit">
+  </form>

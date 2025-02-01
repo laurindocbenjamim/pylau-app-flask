@@ -1,0 +1,202 @@
+{% extends 'courses/course_demo_base.html' %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis" href="{{ url_for('course.list_all_courses')}}">
+          <i class="fa fa-home"></i>
+          <span class="visually-hidden">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Course</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <span id="course_name">{{ course_name}}</span>
+      </li>
+    </ol>
+  </nav>
+</div>
+
+<div class="container" id="container">
+
+
+  <div class="video-container mb-3 ">
+
+    <div class="ratio ratio-16x9">
+
+
+      <iframe id="myContentIframe" title="TechInnovate: Revolutionizing Business with Data Science" 
+      style="border: 3px solid #a5c1fd;border-radius:3px"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        title="YouTube video" allowfullscreen>
+      </iframe>
+
+      <div id="localvideo" >
+        <video autoplay id="videoPlayer" class="w-100" style="border: 3px solid #a5c1fd;border-radius:3px" controls>
+          <source src="" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">SharkScript</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <nav class="navbar bg-body-tertiary">
+          <form class="container-fluid justify-content-end">
+            <button class="btn btn-outline-success me-2" id="try-again" type="button">Try Again</button>
+          </form>
+        </nav>
+        <!--<div class="" id="pagebrowser"></div><iframe  class="w-100" style="width: 100%; height: 500px;"></iframe>
+          -->
+        <div class="ratio ratio-16x9">
+          <iframe id="codeFrame" title="TechInnovate: Revolutionizing Business with Data Science"
+          style="border: 3px solid #a5c1fd;border-radius:3px"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            title="YouTube video" allowfullscreen>
+          </iframe>
+
+          <div class="editorFrame" id="editorFrame" style="display:none"></div>
+
+        </div>
+
+        <div class="container w-100" id="container-console" style="display: none;">
+          <!--- Browser windows -->
+          <div class="progress-bar">
+            <div class="progress mt-3">
+              <div id="myBar" class="progress-bar my-progressBar" role="progressbar" style="width: 0%;"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+
+          <!--- Console windows -->
+          <div class="status-bar w-100">
+            Line: <span id="line-number">1</span>, Column: <span id="column-number">1</span>
+          </div>
+          <!-- Console -->
+          <div class="console w-100" id="console">
+            <div class="console-header">
+              <div class="console-title">Console</div>
+              <button class="console-clear" id="clearConsole">Clear</button>
+            </div>
+            <div class="console-output" id="consoleOutput"></div>
+          </div>
+          <!-- end console -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn-save-code">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+
+{% block script %}
+<script>
+
+
+  //document.addEventListener('DOMContentLoader', (e) => {
+
+  const lightbox = GLightbox({ selector: '.glightbox' });
+  // Reference the navigation container
+  const nav = document.getElementById('mainNav');
+  const divLocalVideo = document.getElementById('localvideo')
+  const iframe = document.querySelector('iframe')
+  const videoTag = document.querySelector('video')
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+
+  //
+
+  function viewContent(course_name, topic, origin, content_file, topicModule, content_model) {
+    localStorage.setItem('course_name', course_name)
+    localStorage.setItem('course_topic', topic)
+    localStorage.setItem('content_model', content_model)
+    localStorage.setItem('topic_module', topicModule)
+    
+    if (content_model === 'content') {
+
+      if (String(origin).trim() === 'localhost' || String(origin).trim() === 'remote-server') {
+        iframe.style = 'display:none;'
+        iframe.src = '';
+        divLocalVideo.style = 'display:block;'
+        let format = 'video/mp4';
+
+        if (String(content_file).includes('.mkv')) {
+          format = 'video/x-matroska';
+        } else if (String(content_file).includes('.wav')) {
+          format = 'video/wav';
+        }
+        divLocalVideo.innerHTML = `
+            <video autoplay id="videoPlayer" class="w-100" style="border: 3px solid #a5c1fd;border-radius:3px" controls>
+                <source src="${window.location.origin}/static/${String(content_file)}" type="${format}">
+            </video> 
+            `;
+  
+      } else if (String(origin).trim() === 'youtube') {
+        
+        divLocalVideo.style = 'display:none;'
+        divLocalVideo.innerHTML = `<video autoplay id="videoPlayer" class="w-100" style="border: 3px solid #a5c1fd;border-radius:3px" controls></video>`;
+        iframe.style = 'display:block;'
+
+        const characters = ['v=', 'watch?']
+        const characters2 = ['https:', '.be']
+
+        /**
+        previous code to test: /v=/.test(content_file)
+        I should use this code in an condiction chain like
+            if(/v=/.test(content_file)){}
+        */
+        const containsCharacters = characters.some(char => String(content_file).includes(char))
+        const containsCharacters2 = characters2.some(char => String(content_file).includes(char))
+
+        if (containsCharacters) {
+
+          const urlChunks = String(content_file).split('=')
+          iframe.src = `https://www.youtube.com/embed/${String(urlChunks[1]).trim()}?autoplay=true`;
+          return;
+        }
+
+        if (containsCharacters2) {
+          const urlChunks = String(content_file).split('/')
+          iframe.src = `https://www.youtube.com/embed/${String(urlChunks[3]).trim()}?autoplay=true`;
+          return;
+        }
+
+      }
+    } else if (content_model === 'quizz') {
+      window.open(`${window.location.origin}/course/get-courses-quizz-content/view-quizz/${course_name}/${topic}?courses_module=${topicModule}`, '_blank')
+
+    }
+
+  }
+
+
+
+  //})
+
+
+</script>
+{% endblock %}

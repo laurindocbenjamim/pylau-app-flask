@@ -1,0 +1,135 @@
+{% extends 'admin/dash_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block style %}
+<style>
+  .nav-link {
+    text-decoration: underline;
+  }
+
+  .submenu .nav-link {
+    text-decoration: none;
+  }
+
+  .lessons-button {
+    padding: 0 .2rem;
+    background-color: rgb(151, 247, 143);
+    border: 1px solid #e9e7e7;
+    border-radius: 30px;
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Courses</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <a href="{{ url_for('course.post',userID=session.get('user_id'),user_token=session.get('user_token')) }}"
+        type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i> New</a>
+    </div>
+    <!--<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+        <svg class="bi"><use xlink:href="#calendar3"/></svg>
+        This week
+      </button>-->
+  </div>
+</div>
+
+
+
+<h5>All courses</h5>
+
+<div class="table-responsive small">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Code</th>
+        <th scope="col">Course</th>
+        <th scope="col">Description</th>
+        <th scope="col">Lessons</th>
+        <th scope="col">Level</th>
+        <th scope="col">Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if courses %}
+      {% for course in courses %}
+
+      <tr>
+
+        <td><a href="{{ url_for(course.course_view_url.replace(' ',''))}}" target="_blank">{{ course.course_id }}</a>
+        </td>
+        <td>{{ course.course_code }}</td>
+        <td>
+          <a
+            href="{{ url_for('course.list_course_content', courseID=course.course_id, description=course.course_description.rstrip(), user_token=session.get('user_token')) }}">
+            {{ course.course_description }}
+          </a>
+        </td>
+        <!--<td>{{ course.course_description }}</td>-->
+        <td>{{ course.course_details }}</td>
+        <td>
+          <a class="lessons-button" title="Total of lessons"><i class="fa-solid fa-file-pen "></i> {{
+            course.course_total_lessons }}</a>
+          <a class="lessons-button" title="Total of lab exercices"><i class="fa-solid fa-terminal"></i> {{
+            course.course_total_labs }}</a>
+          <a class="lessons-button" title="Total of quizzes"><i class="fa-regular fa-file-excel"></i> {{
+            course.course_total_quizzes }}</a>
+
+        </td>
+        <td>{{ course.course_level.upper() }}</td>
+        <td>{{ course.course_status }}</td>
+        <td>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Option
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item"
+                  href="{{ url_for('course.list_course_content', courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}"><i
+                    class="fa-regular fa-eye"></i> View content</a></li>
+              <li><a class="dropdown-item"
+                  href="{{ url_for('course.content_post', courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}"><i
+                    class="fa-regular fa-edit"></i> Add content</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fa-regular fa-trash-can"></i> Remove</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+              <!--<li>
+                    <a class="dropdown-item" href="{{ url_for(course.course_view_url.replace(' ',''), 
+                      courseID=course.course_id, description=course.course_description, user_token=session.get('user_token')) }}" 
+                      target="_blank" ><i class="fa-regular fa-eye"></i> 
+                      View
+                    </a>
+                  </li>-->
+              <li>
+                <a class="dropdown-item"
+                  href="{{ url_for('course.learn.this_course', 
+                      course=course.course_description,courseID=course.course_id, userID=session.get('user_id', None), user_token=session.get('user_token')) }}"
+                  target="_blank"><i class="fa-regular fa-eye"></i>
+                  View
+                </a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      {% endfor %}
+      {% else %}
+      <tr>
+        <td colspan="5" style="text-align: center;">Nothing found.</td>
+      </tr>
+      {% endif %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

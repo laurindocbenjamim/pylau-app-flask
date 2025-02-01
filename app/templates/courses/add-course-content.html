@@ -1,0 +1,832 @@
+{% extends 'courses/base-layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h5">Course's content</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      {% if course_name %}
+      <a href="{{ url_for('course.create_course_content', course=course_name)}}"
+        class="btn btn-sm btn-outline-secondary">Content</a>
+
+      <a href="{{ url_for('course.view_courses_demo', course=course_name)}}" class="btn btn-sm btn-outline-secondary"
+        target="_blank">View Demo</a>
+
+      {% endif %}
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+      <svg class="bi">
+        <use xlink:href="#calendar3" />
+      </svg>
+      This week
+    </button>
+  </div>
+</div>
+
+<div class="container">
+  <style>
+    .card {
+      background-color: rgba(2, 51, 59, 0.1);
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: #969494;
+    }
+
+    .form-control {
+      background-color: #cfd5db;
+      color: rgb(8, 8, 8);
+      border: 1px solid #444;
+      border-radius: 0px;
+    }
+
+    .form-control:focus {
+      background-color: #3b3f45;
+      color: #FFF;
+      border-color: #5a5e65;
+    }
+
+    .btn-outline-light:hover {
+      background-color: #5a5e65;
+    }
+
+
+
+    .btn-outline-light:hover {
+      background-color: #5a5e65;
+    }
+
+    .dynamic-field {
+      display: flex;
+      align-items: center;
+    }
+
+    .dynamic-field .remove-btn {
+      margin-left: 10px;
+    }
+
+    .remove-btn {
+      margin-left: 10px;
+      height: 40px;
+    }
+
+
+    .form-feedback {
+      margin-top: 10px;
+    }
+
+    .dynamic-field button {
+      height: 38px;
+      margin-top: 0.4%;
+      border-radius: 0px;
+    }
+
+    .loading {
+      display: none;
+    }
+  </style>
+
+  <div class="bd-example-snippet bd-code-snippet">
+    <div class="bd-example m-0 border-0">
+      <!-- Course Name -->
+      <div class="mb-3">
+
+        <h1 class="" id="coursesTitle">{{ course_name }}</h1>
+      </div>
+
+
+
+
+      <!-- Topics -->
+      <div class="mb-3">
+        <h2 class="" style="font-size: 1.2rem;">What you are going to learn</h2>
+
+        <div>
+
+          <div class="accordion" id="accordionExample">
+            {% if modules and modules | length > 0 %}
+            {% for module in modules %}
+            {% set collapse = module %}
+            <div class="accordion-item">
+              <h4 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#{{ collapse.replace(' ','') }}" aria-expanded="false" aria-controls="collapseTwo"
+                  style="background-color: #00202D; color: #fff">
+                  {{ module }}
+                </button>
+              </h4>
+              <div id="{{ collapse.replace(' ','') }}" class="accordion-collapse collapse"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  {% if course_content %}
+                  <ul>
+                    {% for content in course_content %}
+                    {% if content['course_module'] == module %}
+                    <li>
+
+                      {% set topic = content['course_topic'] %}
+                      {% set topic = content['course_topic'] %}
+                      {% set origin = content['file_origin'] %}
+                      {% set course_name = content['course_name'] %}
+                      {% set content_file = content['course_content_file'] %}
+                      <!-- Button to Trigger Modal -->
+                      <span
+                        onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                        class="text-dark" style="cursor: pointer;text-decoration:underline;">
+                        {{ content['course_topic']}}
+                      </span>
+
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                  </ul>
+                  {%endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+
+
+          </div>
+
+          {% if course_content %}
+          <div class="mb-3 mt-4">
+            <h2 class="" style="font-size: 1.2rem;">Others contents</h2>
+            <ul>
+              {% for content in course_content %}
+              {% if 'course_module' not in content or not content['course_module'] %}
+              {% set content_file = content['course_content_file'] %}
+              {% set topic = content['course_topic'] %}
+              {% set origin = content['file_origin'] %}
+              {% set course_name = content['course_name'] %}
+              {% set MODULE="" %}
+              <li>
+                <span
+                  onclick="editContent('{{ course_name  }}','{{ topic  }}','{{ origin  }}','{{ content_file  }}','{{ module  }}')"
+                  class="text-light" style="cursor: pointer;text-decoration:underline;">
+                  {{ content['course_topic']}}
+                </span>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% else %}
+          <p>
+            No content has been found!
+          </p>
+          {%endif%}
+
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <div class="row justify-content-left">
+    <div class="col-lg-8">
+
+      <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
+
+      <!-- Objectives -->
+      <div class="mb-3">
+
+
+        <div id="contentContainer" style="display: none;">
+          <label class="form-label">Course content</label>
+          <!-- Loading Spinner -->
+          <div class="loading-spinner d-flex col-10 justify-content-center" style="" >
+            <div style="text-align:center;display: none;" id="loading-spinner">
+              <div class="spinner-border text-light" role="status"></div>
+              <p class="mt-3">Submitting...</p>
+            </div>
+          </div>
+
+          <form id="courseForm" class="courseForm" novalidate enctype="multipart/form-data">
+            <div class="row g-1" id="courseContentContainer01">
+
+              <div class="col-12">
+                <div class="input-group">
+                  <input type="text" id="course_module" name="course_module" class="form-control mb-2"
+                    placeholder="Course module">
+
+                  <div class="invalid-feedback">
+                    Your course's module is required.
+                  </div>
+                </div>
+              </div>
+
+              <!-------->
+              <div class="col-12" id="content-module"></div>
+              <!-------->
+              <div class="col-12">
+                <div class="input-group has-validation">
+                  <input type="text" id="course_topic" name="course_topic" class="form-control mb-2" placeholder="Topic"
+                    required>
+                  <div class="invalid-feedback">
+                    Your course's topic is required.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group has-validation" id="">
+                  <input type="radio" class="btn-check option5" value="localhost" name="course_content_origin"
+                    id="option5" autocomplete="off" checked>
+                  <label class="btn btn-outline-success" for="option5">Local host</label>
+
+                  <input type="radio" class="btn-check option6" value="youtube" name="course_content_origin"
+                    id="option6" autocomplete="off">                  
+                    <label class="btn btn-outline-success" for="option6">Youtube</label>
+
+                    <input type="radio" class="btn-check option7" value="remote-server" name="course_content_origin"
+                    id="option7" autocomplete="off">
+                  <label class="btn btn-outline-success" for="option7">Remote Server</label>
+
+                  <div class="invalid-feedback">
+                    Your content origin is required.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group has-validation">
+                  <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
+                    placeholder="Develope fix problems skills" required>
+                  <input type="text" id="video-file" readonly name="video-file" class="form-control mb-2"
+                    style="font-size:.8rem; color:#198754;display:none">
+                  <div class="invalid-feedback">
+                    Your video file is required.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="my-3" id="error-block">
+              <div class="progress loading" role="progressbar" aria-label="Info striped example" aria-valuenow="100"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+              </div>
+
+              <div class="error-message" style="display: none;"></div>
+              <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-left">
+
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+              <div class="col">
+                <button type="submit" id="btn-save" class="btn btn-outline-success btn-lg btn-save">
+                  <i class="fas fa-save"></i> Save Course
+                </button>
+              </div>
+
+              <div class="col">
+                <button type="button" id="removeContentBtn" disabled class="btn btn-outline-danger btn-lg">
+                  <i class="fas fa-trash"></i> Remove Content
+                </button>
+              </div>
+              <div class="col">
+                <a href="#" id="add-quizzes" class="btn btn-outline-primary btn-lg">
+                  <i class="fas fa-plus"></i> Create Quizzes
+                </a>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="col-7 mt-3">
+        <button type="button" id="addObjectiveBtn" class="btn btn-outline-light btn-sm">
+          <i class="fas fa-plus"></i> Add Content
+        </button>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+  var autoPlay = 'autoplay'
+  const addQuizzesBTN = document.getElementById('add-quizzes')
+
+  if (localStorage.getItem(autoPlay) === null | localStorage.getItem(autoPlay) === 'null') {
+    localStorage.setItem(autoPlay, 1)
+  }
+
+  function setAutoplay(event) {
+
+    //const submenu = event.currentTarget.nextElementSibling;
+    if (String(event.currentTarget.checked) === 'true') {
+      localStorage.setItem(autoPlay, 1)
+    } else {
+      localStorage.setItem(autoPlay, 0)
+    }
+
+  }
+
+  function toggleSubmenu(event) {
+    event.preventDefault();
+    const submenu = event.currentTarget.nextElementSibling;
+    if (submenu.classList.contains('show')) {
+      submenu.classList.remove('show');
+      //event.currentTarget.add
+      setTimeout(() => {
+        submenu.style.display = 'none';
+      }, 500); // Match the transition duration
+    } else {
+      submenu.style.display = 'block';
+      setTimeout(() => {
+        submenu.classList.add('show');
+      }, 10); // Small delay to trigger the transition
+    }
+  }
+
+
+  function play(video) {
+
+    const videoTag = document.querySelector('video')
+    //videoTag.src = video
+    //alert(String(video).trim())
+    try {
+      const iframe = document.querySelector('.modal-body')
+      const div = document.createElement('div')
+
+      var videoTa = `
+      <p> Watch the video carefully and then apractice your skills by making  the exercices</p>
+          
+              <video autoplay id="videoPlayer" class="w-100" controls>
+                  <source src="http://localhost:5000/app/static/uploads/tutorials/TDD_with_Python_Application_-_product_price_PART_02a.mp4" type="video/mp4">
+                   Your browser does not support the video tag.
+                  </video>`;
+
+      div.innerHTML = videoTa
+      while (iframe.firstChild) {
+        iframe.removeChild(iframe.firstChild)
+      }
+
+      iframe.appendChild(div)
+    } catch (err) { console.log(err) }
+
+  }
+
+
+  document.getElementById('option5').addEventListener('click', (e) => {
+    const videoFile = document.getElementById('videoFile')
+    videoFile.type = 'file';
+    // Add the accept attribute 
+    videoFile.attributes('accept', 'video/*');
+  })
+
+  document.getElementById('option6').addEventListener('click', (e) => {
+    const videoFile = document.getElementById('videoFile')
+    videoFile.type = 'text';
+    // Remove the accept attribute 
+    videoFile.removeAttribute('accept');
+  })
+
+  document.getElementById('option7').addEventListener('click', (e) => {
+    const videoFile = document.getElementById('videoFile')
+    videoFile.type = 'text';
+    // Remove the accept attribute 
+    videoFile.removeAttribute('accept');
+  })
+
+
+  function editContent(course_name, topic, origin, content_file, module) {
+    let content = {
+      "course_name": course_name,
+      "file_origin": origin,
+      "course_topic": topic,
+      "course_content_file": content_file
+    }
+
+    if (module !== '') {
+      content['module'] = module
+    }
+
+    addQuizzesBTN.style = 'display:block;'
+    addQuizzesBTN.href = `${window.location.origin}/course/create-content/quizzes/${course_name}/${topic}?module=${module}`;
+    //addQuizzesBTN.addEventListener('click', (e)=>{
+    //  alert(`${window.location.origin}/course/create-content/quizzes/${course_name}/${topic}/module=${module}`)
+    //})
+    const contentContainer = document.getElementById("contentContainer");
+
+    contentContainer.style.display = 'block';
+    setTimeout(() => {
+      contentContainer.classList.add('show');
+    }, 10); // Small delay to trigger the transition
+
+    document.getElementById("course_module").value = module
+    let oldVideoFile = ""
+
+    // Select the radio button by its name and value 
+    const radioLocalOption = document.querySelector('input[name="course_content_origin"][value="localhost"]');
+    const radioRemoteServer = document.querySelector('input[name="course_content_origin"][value="remote-server"]');
+    const radioYoutubeOption = document.querySelector('input[name="course_content_origin"][value="youtube"]');
+    //let radioLocalOption = document.getElementById('option5')
+    //let radioYoutubeOption = document.getElementById('option6')
+    if (origin === 'localhost') {
+      radioYoutubeOption.checked = false
+      radioRemoteServer.checked = false
+      radioLocalOption.checked = true
+      videoFile.type = 'file'
+
+
+      const oldFile = document.getElementById('video-file')
+      oldFile.style = 'display:block;'
+      oldFile.value = content_file
+
+
+      oldVideoFile = content_file
+    } else if (origin === 'youtube') {
+      radioLocalOption.checked = false
+      radioRemoteServer.checked = false
+      radioYoutubeOption.checked = true
+      videoFile.type = 'text'
+      videoFile.value = content_file
+
+      const oldFile = document.getElementById('video-file')
+      oldFile.style = 'display:none;'
+    }else if (origin === 'remote-server') {
+      radioLocalOption.checked = false
+      radioYoutubeOption.checked = false
+      radioRemoteServer.checked = true
+      videoFile.type = 'text'
+      videoFile.value = content_file
+
+      const oldFile = document.getElementById('video-file')
+      oldFile.style = 'display:none;'
+    }
+
+    // Function to get the value of the selected radio button 
+
+    document.getElementById('course_topic').value = topic
+
+    const btnRemove = document.getElementById('removeContentBtn')
+    btnRemove.disabled = false
+
+  }
+
+  ///
+  function removeContent(course_name, topic, module, courseFileOrigin, courseFilePath) {
+    //
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+    const confirmOp = confirm("Remove this content?")
+    ///
+    if (confirmOp) {
+      removeSelectedContent(csrfToken, course_name, module, topic, courseFileOrigin, courseFilePath)
+    }
+  }
+
+
+  function displayToggleComponent(component) {
+    if (component.classList.contains('show')) {
+      component.classList.remove('show');
+      //event.currentTarget.add
+      setTimeout(() => {
+        component.style.display = 'none';
+      }, 500); // Match the transition duration
+    } else {
+      component.style.display = 'block';
+      setTimeout(() => {
+        component.classList.add('show');
+      }, 10); // Small delay to trigger the transition
+    }
+  }
+  //document.getElementById("createContentBTN").addEventListener('click', window.location.href="#courseForm")
+
+  // Add Dynamic Fields
+  document.addEventListener("DOMContentLoaded", () => {
+
+    //const btnSave = document.getElementById("btn-save")
+    const contentContainer = document.getElementById("contentContainer");
+    //const courseContentContainer01 = document.getElementById("courseContentContainer01");
+    //const contentModule = document.getElementById('content-module')
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    const form = document.getElementById('courseForm')
+    const btnRemove = document.getElementById('removeContentBtn')
+
+    // Add New Objective  
+    document.getElementById("addObjectiveBtn").addEventListener("click", () => {
+
+      displayToggleComponent(contentContainer)
+
+      const newObjective = document.createElement("div");
+      newObjective.className = "dynamic-field";
+
+      const oldFile = document.getElementById('video-file')
+      oldFile.style = 'display:none;'
+      addQuizzesBTN.style = 'display:none;'
+
+      btnRemove.disabled = true
+      form.reset();
+
+    });
+
+    // Submiting the form 
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      if (!form.checkValidity()) {
+        e.stopPropagation();
+      }
+
+      // Show Loading Spinner
+      loadingSpinner.style.display = "flex";
+      saveObject(form, csrfToken, loadingSpinner)
+    })
+
+    // Remove course content 
+    btnRemove.addEventListener('click', (e) => {
+      e.preventDefault()
+
+      const courseModule = document.getElementById("course_module").value
+      const courseTopic = document.getElementById('course_topic').value
+      const courseTitle = document.getElementById('coursesTitle').innerText
+      const courseFileOrigin = getSelectedRadioValue();
+      const courseFilePath = document.getElementById('video-file').value
+
+      if (confirm("Remove this courses's content?")) {
+        loadingSpinner.style.display = "flex";
+        removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin, courseFilePath)
+      }
+
+    });
+
+
+    document.getElementById('addModuleBtn').addEventListener('click', (e) => {
+      // Check if the module field already exists
+      if (document.getElementById("moduleField")) {
+        alert("Module field already exists!");
+        return;
+      }
+
+      // Create the module field
+      const moduleDiv = document.createElement("div");
+      moduleDiv.className = "input-group has-validation";
+      moduleDiv.id = "moduleField";
+
+      moduleDiv.innerHTML = `
+          
+          <div class="col-12">
+                    <div class="input-group">
+                    <input type="text" id="course_module" name="course_module" class="form-control mb-2"
+                placeholder="Course module" required>
+          
+                              <div class="invalid-feedback">
+                                Your course's module is required.
+                              </div>
+                              </div>
+                  </div>
+                            
+        `;
+
+      // Add remove event to the button
+      moduleDiv.querySelector(".remove-btn").addEventListener("click", () => {
+        moduleDiv.remove();
+      });
+
+      contentModule.appendChild(moduleDiv);
+
+    })
+
+    // Remove requirementsContainer
+    contentContainer.addEventListener("click", (event) => {
+      if (event.target.closest(".remove-btn")) {
+        const field = event.target.closest(".input-group");
+        field.remove();
+      }
+    });
+
+
+    // Handle Form Submission
+    // Handle Form Submission
+
+  });
+
+  // Function to get the value of the selected radio button 
+  function getSelectedRadioValue() {
+    const selectedRadio = document.querySelector('input[name="course_content_origin"]:checked'); return selectedRadio ? selectedRadio.value : null;
+  }
+
+  function saveObject(form, csrfToken, btnSave) {
+
+    const endpoint = `${window.location.origin}/course/create-content`
+
+
+    // Validate the form
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      return;
+    }
+
+    // Validate Video File
+    const inputElement = document.getElementById("videoFile");
+    let videoFile = ""
+
+    try { videoFile = inputElement.files[0]; } catch (err) { }
+    if (videoFile && typeof videoFile === 'object') {
+      if (!videoFile) {
+        document.getElementById("videoFile").classList.add("is-invalid");
+        return;
+      }
+    } else {
+      videoFile = inputElement.value;
+    }
+
+
+    //const formData = new FormData( thisForm )         
+    const headers = new Headers()
+    headers.append('X-CSRF-Token', csrfToken)
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
+    //headers.append("Content-Type", "application/json")
+    //headers.append("X-Requested-With", "XMLHttpRequest")
+
+
+    //console.log(formData)
+
+    // Gather form data
+    let courseModule = String('')
+
+    if (document.getElementById("course_module")) {
+      courseModule = document.getElementById("course_module").value
+    }
+
+
+
+    // Example usage const 
+    courseContentOrigin = getSelectedRadioValue();
+
+
+    const courseTopic = document.getElementById('course_topic').value
+    const courseTitle = document.getElementById('coursesTitle').innerText
+    let oldVideoFile = ''
+
+    try {
+      oldVideoFile = document.getElementById('video-file').value
+    } catch (err) { }
+
+    // Prepare Form Data
+    const formData = new FormData();
+    formData.append('courseModule', courseModule)
+    formData.append('courseTopic', courseTopic)
+    formData.append('courseContentOrigin', courseContentOrigin)
+    formData.append('courseTitle', courseTitle)
+    formData.append("videoFile", videoFile)
+    formData.append("oldVideoFile", oldVideoFile)
+    //Array.from(videoFiles).forEach(file => {
+    //  formData.append("videos[]", file);
+    //});
+
+
+    saveFormWithFile(endpoint, form, btnSave, formData, headers)
+
+  }
+
+
+  function displayError(thisForm, error) {
+    btnSave = document.getElementById('btn-save')
+    btnSave.style.backgroundColor = 'red'
+    btnSave.style.color = '#FFF'
+    document.querySelector('.loading').style.color = 'white'
+    document.querySelector('.error-message').style.display = 'block'
+    document.querySelector('.error-message').style.color = 'red'
+    document.querySelector('.loading').classList.remove('d-block');
+    document.querySelector('.error-message').innerHTML = error;
+    document.querySelector('.error-message').classList.add('d-block');
+  }
+
+
+  function saveFormWithFile(endpoint, form, btnSave, formData, headers) {
+
+    const loadingSpinner = document.getElementById("loading-spinner");
+    //console.log(formData.get('courseContentOrigin'))
+    fetch(endpoint, {
+      method: 'POST',
+      body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+      headers: headers
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+        }
+      })
+      .then(data => {
+        data = JSON.parse(data)
+
+        //document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
+
+        if (data.status_code === 200) {
+          document.querySelector('.error-message').style.display = 'block'
+          
+          window.open(`${endpoint}?course=${formData.get('courseTitle').replace(' ', '+')}`, '_self')
+          //document.getElementById('error-block').style.display = 'none'
+          //window.open(`${endpoint}?course=${courseName}`, '_self')
+          //btnSave.style.backgroundColor = "#0ed160"
+          //btnSave.style.color = "#FFF"
+          //form.querySelector('.sent-message').classList.add('d-block');
+          form.reset();
+          loadingSpinner.style.display = "none";
+        } else {
+          console.log(data)
+          btnSave.style.backgroundColor = "red"
+          btnSave.style.color = "#FFF"
+          throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
+        }
+        loadingSpinner.style.display = "none";
+      })
+      .catch((error) => {
+        loadingSpinner.style.display = "none";
+        const errorMessage = document.getElementById('error-message')
+        //document.getElementById('error-block').style.display = 'block'
+        displayError(errorMessage, error);
+      });
+
+
+
+  }
+
+
+  //remove content
+  function removeSelectedContent(csrfToken, courseTitle, courseModule, courseTopic, courseFileOrigin, courseFilePath) {
+    const endpoint = `${window.location.origin}/course/remove-content`
+
+    const loadingSpinner = document.getElementById("loading-spinner");
+
+    //const formData = new FormData( thisForm )         
+    const headers = new Headers()
+    headers.append('X-CSRF-Token', csrfToken)
+    headers.append("Authorization", ` Bearer ${csrfToken}`);
+    //headers.append("Content-Type", "application/json")
+    //headers.append("X-Requested-With", "XMLHttpRequest")
+    // Gather form data
+
+    // Prepare Form Data
+    const formData = new FormData();
+    formData.append('courseModule', courseModule)
+    formData.append('courseTopic', courseTopic)
+    formData.append('courseTitle', courseTitle)
+    formData.append('courseFileOrigin', courseFileOrigin)
+    formData.append('courseFilePath', courseFilePath)
+
+
+    fetch(endpoint, {
+      method: 'DELETE',
+      body: formData, //JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+      headers: headers
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+        }
+      })
+      .then(data => {
+        const dataResp = JSON.parse(data)
+        console.log(dataResp)
+        //document.getElementById('error-block').querySelector('.loading').classList.remove('d-block');
+
+        if (dataResp.status_code === 200) {
+          document.querySelector('.error-message').style.display = 'block'
+          window.open(`${window.location.origin}/course/create-content?course=${String(courseTitle).replace(' ', '+')}`, '_self')
+
+          loadingSpinner.style.display = "none";
+        } else if (dataResp.status_code === 201) {
+          loadingSpinner.style.display = "none";
+          throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
+        }
+        loadingSpinner.style.display = "none";
+      })
+      .catch((error) => {
+        loadingSpinner.style.display = "none";
+        const errorMessage = document.getElementById('error-message')
+        //document.getElementById('error-block').style.display = 'block'
+        displayError(errorMessage, error);
+      });
+
+
+
+  }
+</script>
+{% endblock %}

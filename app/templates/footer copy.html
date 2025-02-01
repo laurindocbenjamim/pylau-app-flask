@@ -1,0 +1,88 @@
+
+<footer class="py-5">
+    <div class="row">
+        <div class="col-6 col-md-2 mb-3">
+            <h5 class="text-light">Links</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Projects</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Articles</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">Contact</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light-emphasis">About</a></li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('auth.user.login')}}"
+                        class=" nav-link p-0 text-light-emphasis">Login</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-6 col-md-2 mb-3">
+            <h5 class="text-light">Social media</h5>
+            <ul class="nav flex-column">
+                <a class="nav-link fw-bold py-1 px-0" href="https://www.linkedin.com/in/laurindocbenjamim"
+                    target="_blank" style="color: #333;"><i class="fa-brands fa-linkedin fa-2x"></i> </a>
+                <li class="nav-item mb-2"></li>
+                <a class="nav-link fw-bold py-1 px-0" href="https://github.com/laurindocbenjamim"
+                    target="_blank" style="color: #333;"><i class="fa-brands fa-github-alt fa-2x"></i></a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold py-1 px-0" href="#" target="_blank" style="color: #333;"><i
+                            class="fa-brands fa-square-x-twitter fa-2x"></i></a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="col-6 col-md-2 mb-3">
+            <h5 class="text-light">Users</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold py-1 px-0" href="#" style="color: #333;"><i
+                            class="fa-brands fa-facebook fa-2x"></i></a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold py-1 px-0" href="https://youtube.com/@laurindocbenjamim?si=QBqwGf_vuu-Fvdqp" target="_blank"
+                        style="color: #333;"><i class="fa-brands fa-square-youtube fa-2x"
+                            style="color: red;"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-5 offset-md-1 mb-3">
+            <form id="subscriberForm">
+                <h5 class="text-light">Subscribe to our newsletter</h5>
+                <p class="mb-auto text-light-emphasis">Monthly digest of what's new and exciting from us.</p>
+                <br><br>
+                <div class="col-12 form-message" id="form-message">
+                    <p></p>
+                </div>
+                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                    <label for="newsletter1" class="visually-hidden">Email address</label>
+                    <input id="subscriber" name="subscriber" type="email" class="form-control"
+                        placeholder="Email address">
+                    <!--<button class="btn btn-primary" type="submit">Subscribe</button>-->
+                    <input type="submit" class="btn btn-outline-warning" value="Subscribe">
+                    <br>
+                    <div class="form-message" id="form-message">
+                        <p></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+        <p class="text-light-emphasis">&copy; 2024 <a href="{{url_for('profile.laurindo_c_benjamim')}}" target="_blank" rel="noopener noreferrer">Laurindo C. Benjamim</a>, DT. All rights reserved.</p>
+        <ul class="list-unstyled d-flex">
+            <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                        <use xlink:href="#twitter" />
+                    </svg></a></li>
+            <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                        <use xlink:href="#instagram" />
+                    </svg></a></li>
+            <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                        <use xlink:href="#facebook" />
+                    </svg></a></li>
+        </ul>
+    </div>
+</footer>

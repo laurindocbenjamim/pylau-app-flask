@@ -1,0 +1,146 @@
+{% extends "audit/layout.html" %}
+
+{% block title %}
+{% if title %}{{ title }} {% endif %}
+{% endblock %}
+
+{% block style %}
+<style>
+
+    
+    
+    .editor {
+        background-color: #1E1E1E;
+        color: #D4D4D4;
+        padding: 10px;
+        border: 1px solid #333;
+    }
+    
+    .editor .line-number {
+        color: #858585;
+    }
+    
+    .editor .keyword {
+        color: #569CD6;
+    }
+    
+    .editor .string {
+        color: #D69D85;
+    }
+    
+    .editor .comment {
+        color: #6A9955;
+    }
+    
+    .editor .active-line {
+        background-color: #2A2A2A;
+    }
+    
+
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>Log Details</h1>
+    <p>Welcome, {{ user }}!</p>
+    <div class="container">
+        <div class="content">
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    
+                    <textarea class="form-control" id="log" rows="10" style="height: 800px;">
+                        
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Simple Text Editor</h1>
+        <textarea id="editor"  class="form-control editor" rows="10"></textarea>
+        <div class="mt-3">
+          <input type="text" id="findWord" class="form-control" placeholder="Find word">
+          <button class="btn btn-primary mt-2" onclick="findWord()">Find</button>
+        </div>
+        <div class="mt-3">
+          <input type="number" id="lineNumber" class="form-control" placeholder="Go to line">
+          <button class="btn btn-primary mt-2" onclick="goToLine()">Go</button>
+        </div>
+        <div id="result" class="mt-3"></div>
+      </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    async function fetchLog() {
+        const root = window.location.origin
+        const response = await fetch(`${root}/audit/logs`);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let log = '';
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            log += decoder.decode(value);
+            document.getElementById('log').value = log;
+        }
+    }
+    fetchLog();
+
+    /*
+    function findWord() {
+        const text = $('#editor').val();
+        const word = $('#findWord').val();
+        $.post(`${root}/audit/find`, { text: text, word: word }, 
+        function(data) {
+          $('#result').html('Occurrences: ' + data.join(', '));
+        });
+      }
+
+      function goToLine() {
+        const text = $('#editor').val();
+        const line = $('#lineNumber').val();
+        $.post( `${root}/audit/goto`, { text: text, line: line }, function(data) {
+          if (data.error) {
+            $('#result').html(data.error);
+          } else {
+            $('#result').html('Line content: ' + data.line);
+          }
+        });
+      }
+        */
+
+
+      function goToLine(){
+         // Select the meta tag with the name attribute 'csrf-token'
+         const metaToken = document.querySelector('meta[name="csrf-token"]');
+        
+         // Get the content attribute value
+        const token = metaToken ? metaToken.getAttribute('content') : null;
+         
+        const text = document.getElementById('editor').value;
+        const lineNumber = document.getElementById('lineNumber').value;
+
+        const dataForm = new FormData({'text': text, 'line': lineNumber })
+        
+        fetch(`${root}/audit/goto`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          //body: dataForm
+          body: JSON.stringify({ text: text, line: lineNumber })
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('result').innerHTML = 'Occurrences: ' + data.join(', ');
+        })
+        .catch(error => console.error('Error:', error));
+      }
+
+
+</script>
+{% endblock %}

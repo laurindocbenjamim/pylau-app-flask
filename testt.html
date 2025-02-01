@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Process Diagram</title>
+    <style>
+        .component {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            text-align: center;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Process Diagram</h1>
+    
+    <div class="component" id="component1" draggable="true">Component 1</div>
+    <div class="component" id="component2" draggable="true">Component 2</div>
+    <div class="component" id="component3" draggable="true">Component 3</div>
+    
+    <script>
+        var components = document.querySelectorAll('.component');
+        
+        components.forEach(function(component) {
+            component.addEventListener('dragstart', function(event) {
+                event.dataTransfer.setData('text/plain', event.target.id);
+            });
+        });
+        
+        document.addEventListener('dragover', function(event) {
+            event.preventDefault();
+        });
+        
+        document.addEventListener('drop', function(event) {
+            event.preventDefault();
+            var componentId = event.dataTransfer.getData('text/plain');
+            var component = document.getElementById(componentId);
+            component.style.left = event.clientX + 'px';
+            component.style.top = event.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

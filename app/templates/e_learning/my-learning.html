@@ -1,0 +1,146 @@
+{% extends "e_learning/e-learning.html" %}
+
+{% block style %} 
+<style>
+
+    .navbar {
+        background-color: var(--primary-color);
+    }
+    .navbar-brand, .nav-link, .navbar-text {
+        color: #fff !important;
+    }
+    .btn-outline-light:hover {
+        color: var(--primary-color);
+    }
+    #sidebar {
+        background: #fff;
+        color: #131313;
+    }
+    #sidebar .nav-link {
+        color: #131313 !important;
+        text-decoration: underline;
+    }
+    #sidebar .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+    #sidebar .nav-link.active {
+        background-color: rgba(255,255,255,0.1);
+    }
+</style>
+
+{%endblock%}
+
+{% block content %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+    <section id="javascript-demo">
+        <h3 class="mt-5">All My Learning courses</h3>
+        <p>Try out this interactive JavaScript demo:</p>
+        <!--<div class="code-snippet">
+            <pre><code id="js-code">
+function greet() {
+const name = document.getElementById('nameInput').value;
+const greeting = `Hello, ${name}! Welcome to JavaScript learning.`;
+document.getElementById('greetingOutput').textContent = greeting;
+}
+            </code></pre>
+        </div>-->
+        
+    </section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h4">Purchased courses</h1>
+    </div>
+
+    <section id="javascript-courses">
+        <div class="container mt-5">
+        <div class="row">
+
+            {% if my_courses %}
+            {% for course in my_courses %}
+          
+            <div class="col-md-4 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fs-5"><i class="fas fa-book me-2"></i> <b>{{ course.course_description }}</b> </h5>
+                        <p class="card-text fs-6" >{{ course.course_details }}.</p>
+                        
+                        <!--<a href='{{url_for(course.course_view_url.replace(" ",""), 
+                            courseID=course.course_id, user_token=session.get("user_token",None)) }}' 
+                            class="btn btn-info btn-sm" type="button" style="color: #ffffff;">
+                            Start
+                        </a>--> 
+                        <a href="{{ url_for('course.learn.this_course', 
+                      course=course.course_description,courseID=course.course_id, userID=session.get('user_id', None), user_token=session.get('user_token')) }}" 
+                            class="btn btn-info btn-sm" type="button" style="color: #ffffff;">
+                            Start
+                        </a>                         
+
+                        {% if not course.course_is_certified %}
+                
+                        <a href="#" class="card-link" title="Uncertified course"> 
+                            <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-not-certified-48.png?raw=true" alt="warranty-card"/>
+                        </a>
+                        {% else %}
+                        <a href="#" class="card-link" title="Certified course"> 
+                            <img width="40" height="40" src="https://github.com/laurindocbenjamim/dev-images/blob/main/icons8-certified-48.png?raw=true" alt="warranty-card"/>
+                        </a>
+                        {% endif %}    
+                    </div>
+                    <div class="card-footer text-body-secondary text-end">
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fa-regular fa-circle-play" ></i> <span style="font-size: .8rem;">{{ course.course_total_lessons }} videos</span>
+                        </button>
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fa-solid fa-terminal"></i> <span style="font-size: .8rem;">{{ course.course_total_labs }} Labs</span>
+                        </button>
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fa-regular fa-file-excel"></i> <span style="font-size: .8rem;">{{ course.course_total_quizzes }} quiz</span>
+                        </button>
+                        
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+          
+            <!--
+            
+            
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-rocket me-2"></i>Advanced JavaScript</h5>
+                        <p class="card-text">Dive deep into advanced JavaScript concepts and techniques.</p>
+                        <a href="https://d-tuning.com/courses/advanced-javascript" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-cubes me-2"></i>JavaScript Frameworks</h5>
+                        <p class="card-text">Explore popular JavaScript frameworks like React, Vue, and Angular.</p>
+                        <a href="https://d-tuning.com/courses/javascript-frameworks" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+    </div>
+    </section>
+
+    
+
+    <!--<section id="javascript-resources">
+        <h3 class="mt-5">Additional Resources</h3>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><i class="fas fa-external-link-alt me-2"></i>MDN Web Docs - JavaScript</a></li>
+            <li class="list-group-item"><a href="https://javascript.info/"><i class="fas fa-external-link-alt me-2"></i>JavaScript.info</a></li>
+            <li class="list-group-item"><a href="https://www.w3schools.com/js/"><i class="fas fa-external-link-alt me-2"></i>W3Schools JavaScript Tutorial</a></li>
+        </ul>
+    </section>-->
+</main>
+{% endblock %}

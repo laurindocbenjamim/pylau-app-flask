@@ -1,0 +1,79 @@
+{% extends 'site.html' %}
+
+{% block header %}
+<h1></h1> {% block title %} {{ title }} Activate account {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+  .title{
+    font-family: "Kode Mono", monospace;
+    font-optical-sizing: auto;
+    
+    font-weight: bold;
+    font-style: normal;
+    color: #3266f5;
+  }
+
+  
+</style>
+
+
+<!--  Welcome section -->
+<section class="welcome-section">
+
+  <div class="welcome p-4 p-md-2 mb-4 rounded text-body-emphasis  center-content">
+    <div class="col-lg-7 px-0 information center-content">
+
+      <div class="col-lg-7">
+        <h2 class="title" style="text-transform: uppercase;">
+          Welcome to Data Management and Analysis Consulting
+        </h2>
+
+        {% if firstname %}
+        <h3 class="title" style="color: #4afc53;margin-top:5%;">
+          {{ firstname}} {{ lastname}}
+        </h3>
+
+        <p style="color: #FFF;">
+         
+            In order to complete the authentication process, an email has been sent to 
+            {% if email %}
+             <strong><span style="color: #4afc53;">{{ email }}</span></strong>
+            {% endif %}
+            . Check the message to activate your account
+           
+        </p>        
+
+        <p>
+            <a class="btn btn-outline-primary" href="{{ url_for('auth.user.login')}}" rel="noopener noreferrer">Sign In.</a>
+        </p>
+
+        <p>
+          If you did not received any activation email click on link below to receive a new message.
+          
+      </p>
+      <p>
+        <a class="btn btn-outline-primary" href="{{ url_for('email.activate_send', user_token=user_token)}}" rel="noopener noreferrer">Send me again.</a>
+      </p>
+        
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
+
+
+  <!--  End Services section -->
+
+</section>
+
+
+
+<!--  End welcome section -->
+
+
+{% endblock %}

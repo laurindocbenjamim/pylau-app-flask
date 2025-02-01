@@ -1,0 +1,92 @@
+{% extends 'admin/dash_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block style %}
+<style>
+  .nav-link{
+    text-decoration: underline;
+  }
+
+  .submenu .nav-link{
+    text-decoration: none;
+  }
+  .lessons-button{
+    padding: 0 .2rem;
+    background-color: rgb(151, 247, 143);
+    border: 1px solid #e9e7e7;
+    border-radius: 30px;
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Courses</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a href="{{ url_for('course.post',userID=session.get('user_id'),user_token=session.get('user_token')) }}" type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i> New</a>
+      </div>
+      <!--<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+        <svg class="bi"><use xlink:href="#calendar3"/></svg>
+        This week
+      </button>-->
+    </div>
+  </div>
+
+
+
+  <h5>All courses</h5>
+  
+  <div class="table-responsive small">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">C.Type</th>
+          <th scope="col">C.Module</th>
+          <th scope="col">C.Filename</th>
+          <th scope="col">c.Description</th>
+          <th scope="col">c.Status</th>
+          <th scope="col">Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if content %}
+        {% for course in content %}
+        
+          <tr>
+            
+            <td><a href="" >{{ course.course_content_id }}</a></td>
+            <td>{{ course.content_type }}</td>
+            <td>Module {{ course.content_module }}</td>
+            <td>
+              {% if course.content_type | trim == 'text' or course.content_type | trim == 'script' %}
+              <a
+                href="{{ url_for('course.learn.laubcode.load_root_script',fileName=course.content_description.rstrip().lower().replace(' ', '-'), courseID=course.course_id, description=course.content_description.rstrip(), user_token=session.get('user_token')) }}" target="_blank">
+                {{ course.content_description.rstrip().lower().replace(' ', '-') }}
+              </a>
+              {% else %}
+              {{ course.content_description.rstrip().lower().replace(' ', '-') }}
+              {% endif %}
+            </td>
+            <td>{{ course.content_description }}</td>
+            <td>{{ course.content_status }}</td>
+            <td>{{ course.content_date_added }}</td>
+            
+          </tr>
+        
+        {% endfor %}
+        {% else %}
+        <tr><td colspan="5" style="text-align: center;">Nothing found.</td></tr>
+        {% endif %}
+        
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}

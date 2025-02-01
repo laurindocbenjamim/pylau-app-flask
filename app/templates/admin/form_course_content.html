@@ -1,0 +1,247 @@
+{% extends 'admin/dash_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block style %}
+<style>
+  .nav-link {
+    text-decoration: underline;
+  }
+
+  .submenu .nav-link {
+    text-decoration: none;
+  }
+
+  .lessons-button {
+    padding: 0 .2rem;
+    background-color: rgb(151, 247, 143);
+    border: 1px solid #e9e7e7;
+    border-radius: 30px;
+    text-decoration: none;
+  }
+
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">New Course content</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <a href="{{ url_for('course.post',userID=session.get('user_id'),user_token=session.get('user_token')) }}"
+        type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i> New</a>
+    </div>
+  
+  </div>
+</div>
+
+
+
+<div class="container" >
+  <main>
+    <div class="py-2 text-center">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+
+
+      {% for category, message in messages %}
+      <span class="{{ category }}">
+        <p class="pb-3 mb-0 small lh-sm">{{ message }}</p>
+      </span>
+      {% endfor %}
+
+      {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="row g-5" style="display: flex; justify-content: center; align-items: center;">
+
+      <div class="col-md-5 col-lg-6" >
+        <form class="needs-validation" method="post" novalidate enctype="multipart/form-data">
+          <input type="hidden" class="form-control" readonly id="csrf_token" name="csrf_token" 
+         value="{{ csrf_token() }}">
+          <div class="row g-3">
+            
+            <div class="col-md-2">
+              <label for="course_id" class="form-label">Course ID</label>
+              <input type="number" class="form-control" id="course_id" name="course_id" value="{{ courseID }}" 
+              oninput="this.value = this.value.replace(/[^\w\s]/gi, 0)" required> 
+              <div class="invalid-feedback">
+                Total of course_id required.
+              </div>
+            </div>
+
+            <div class="col-10">
+              <label for="description" class="form-label">...</label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="description" name="description" 
+                placeholder="Description" value="{{ description }}" required maxlength="200"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '')" readonly>
+                <div class="invalid-feedback">
+                  Valid description is required.
+                </div>
+              </div>
+            </div>  
+            
+            <div class="col-12">
+              <label for="contentDescription" class="form-label">Description <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="contentDescription" name="contentDescription" 
+                placeholder="Description" value="{{ request.form.contentDescription }}" required maxlength="200"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '')">
+                <div class="invalid-feedback">
+                  Valid content description is required.
+                </div>
+              </div>
+            </div>  
+
+            <div class="col-md-5">
+              <label for="countentType" class="form-label">Content type</label>
+              <select class="form-select" id="countentType" name="countentType" required>
+                <option value="">Choose...</option>
+                
+                {% if request.form.countentType and request.form.countentType | trim == 'video' %} 
+
+                <option value="video" selected>Video</option>
+                <option value="youtube video">Youtube Video</option>
+                <option value="text">Text</option>
+                <option value="lab" >lab</option>
+
+                {% elif request.form.countentType and request.form.countentType == 'youtube-video' %} 
+
+                <option value="video" >Video</option>
+                <option value="youtube video" selected>Youtube Video</option>
+                <option value="text">Text</option>
+                <option value="lab" >lab</option>
+
+                {% elif request.form.countentType and request.form.countentType == 'text' %} 
+
+                <option value="video" >Video</option>
+                <option value="youtube video" >Youtube Video</option>
+                <option value="text" selected>Text</option>
+                <option value="lab" >lab</option>
+
+                {% elif request.form.countentType and request.form.countentType == 'lab' %} 
+
+                <option value="video" >Video</option>
+                <option value="youtube video" >Youtube Video</option>
+                <option value="text" >Text</option>
+                <option value="lab" selected>lab</option>
+
+                {% else %} 
+                <option value="video" >Video</option>
+                <option value="youtube video" >Youtube Video</option>
+                <option value="text">Text</option>
+                <option value="lab">lab</option>
+                {% endif %}
+
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid course level.
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label for="contentModule" class="form-label">Content module</label>
+              <input type="number" class="form-control" id="contentModule" name="contentModule" value="{{request.form.contentModule }}" placeholder="1" 
+              oninput="this.value = this.value.replace(/[^\w\s]/gi, 0)" required> 
+              <div class="invalid-feedback">
+                Content module required.
+              </div>
+            </div>
+
+
+            <div class="col-12">
+              <label for="thumbnail" class="form-label">Thumbnail <span class="text-body-secondary">(Optional)</span></label>
+              <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="{{request.form.thumbnail}}" 
+              maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >
+              <div class="invalid-feedback">
+                Please enter a valid thumbnail.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="contentFileName" class="form-label">Content file name <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="contentFileName" name="contentFileName" placeholder="View URL" value="{{ request.form.contentFileName }}" 
+                required maxlength="200"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '.')">
+                <div class="invalid-feedback">
+                  Valid content file name is required. 
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          
+          <h4 class="mb-3">Status</h4>
+
+          <div class="my-3">
+            {% if request.form.courseStatus | trim | int == 1 %}
+            <div class="form-check">
+              <input id="courseStatus1" name="contentStatus" type="radio" class="form-check-input" value="{{ request.form.contentStatus }}" checked >
+              <label class="form-check-label" for="courseStatus1">Enabled</label>
+            </div>
+            <div class="form-check">
+              <input id="courseStatus2" name="contentStatus" type="radio" class="form-check-input" value="0" >
+              <label class="form-check-label" for="courseStatus2">Disabled</label>
+            </div>
+            {% elif request.form.courseStatus | trim | int == 0 %}
+            <div class="form-check">
+              <input id="courseStatus3" name="contentStatus" type="radio" class="form-check-input" value="1" >
+              <label class="form-check-label" for="courseStatus3">Enabled</label>
+            </div>
+            <div class="form-check">
+              <input id="courseStatus4" name="contentStatus" type="radio" class="form-check-input" value="{{ request.form.contentStatus }}" checked >
+              <label class="form-check-label" for="courseStatus4">Disabled</label>
+            </div>
+            {% else %}
+            <div class="form-check">
+              <input id="courseStatus5" name="contentStatus" type="radio" class="form-check-input" value="1" checked>
+              <label class="form-check-label" for="courseStatus5">Enabled</label>
+            </div>
+            <div class="form-check">
+              <input id="courseStatus6" name="contentStatus" type="radio" class="form-check-input" value="0" >
+              <label class="form-check-label" for="courseStatus6">Disabled</label>
+            </div>
+            {% endif %}
+          </div>
+
+          
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>
+
+<script>
+
+  document.getElementById('courseCertified').addEventListener('change', async (e)=>{
+    e.preventDefault()
+    if(e.currentTarget.checked){
+      document.getElementById('courseCertifiedLabel').innerText = " Certified" 
+    }else{
+      document.getElementById('courseCertifiedLabel').innerText = " Uncertified"
+    }
+    
+  })
+</script>
+
+{% endblock %}

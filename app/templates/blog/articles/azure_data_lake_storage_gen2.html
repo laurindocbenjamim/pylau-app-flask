@@ -1,0 +1,219 @@
+{% extends 'site.html' %}
+{% block title %}
+{% if title %}{{ title }} {%else %} Article {% endif %}
+{% endblock %}
+
+
+{% block style %}
+
+<link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="{{ url_for('static', filename='assets/css/blog.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    <style>
+        .img-author{
+            border: 2px solid #333;
+            border-radius: 80px;
+            
+        }
+    </style>
+
+    <div class="container p-4" style="background-color: aliceblue;">
+
+     
+      <!--<div class="row mb-2">
+
+        <div class="col-md-6">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-warning-emphasis">September/2023 - Present</strong>
+              <h3 class="mb-0">Universidade Catolica Portuguesa do Porto</h3>
+              <div class="mb-1 text-body-secondary">Since September 2023</div>
+              <p class="card-text mb-auto">.</p>
+              <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                Read more
+                <svg class="bi">
+                  <use xlink:href="#chevron-right" />
+                </svg>
+              </a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="{{ url_for('static', filename='assets/img/universidade-catolica-portuguesa-do-porto-without-back-02.png') }}" width="200"
+                height="210" alt="universidade-catolica-portuguesa-image" srcset="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-warning-emphasis">January/2024 - Present</strong>
+              <h3 class="mb-0">IBM Professional Certificate</h3>
+              <h4 class="mb-0">by Cousera Platform</h4>
+              <div class="mb-1 text-body-secondary">Since January 2024</div>
+              <p class="mb-auto"></p>
+              <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                Read more
+                <svg class="bi">
+                  <use xlink:href="#chevron-right" />
+                </svg>
+              </a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="{{ url_for('static', filename='assets/img/data-engineering-essentials.png') }}" style="margin-top: 7%;" width="185" height="186"
+                alt="data-engineerind-essentials-image" srcset="">
+            </div>
+          </div>
+
+        </div>
+
+      </div>-->
+
+      <article>
+
+        <div class="row g-5">
+          <div class="col-md-8 bg-white">
+
+            <article class="blog-post">
+            
+            <div class="row mb-2" style=" margin-top: 5%;">
+                <div class="col-md-3" >
+                                           <img class="img-author" src="{{ url_for('static', filename='assets/img/Laurindo-02-removebg-preview-edited-v1.png') }}" width="130" height="150"
+                        alt="laurindo-c-benjamim" srcset="">
+                        <p style="font-size: .8rem;">Author: <a href="{{url_for('profile.laurindo_c_benjamim')}}">Laurindo C. Benjamim</a></p>
+    
+                        <p class="blog-post-meta" style="font-size: .8rem;text-decoration:underline">Posted on August 20, 2024</p>
+        
+                  </div>
+
+                <div class="col-md-8">
+                    <h1 class="display-9 link-body-emphasis mb-2" style="font-weight: 700;">
+                        Azure Data Lake Storage Gen2 in data analytics workloads
+                    </h1>
+                </div>
+
+            </div>
+            
+
+            <p>Azure Data Lake Store Gen2: is an enabling technology for multiple data analytics use case. 
+                What are the common types of analytical workload?
+                How Data Lake Storage Gen2 works with other Azure Services to support them?
+                </p>
+            
+              <p><b>Big data processing and Analytical</b></p>
+            <p>
+                <img src="https://learn.microsoft.com/en-us/training/data-ai-cert/introduction-to-azure-data-lake-storage/media/big-data.png"
+             alt="big-data" srcset="" width="200" height="215">
+            </p>
+            
+             <p>
+                Big Data are in general analytical workloads that involve massive volume of data in a variety formats that need to be processed at a fast velocity - the so-called "three v's".
+Azure Data Lake Storage Gen2 provide a scalable and secure distributed data store on which big data services such as Azure Synapse Analytics, Azure Databricks, and Azure HDInsight can apply data processing frameworks such as Apache Spark, Hive, and Hadoop. 
+The distributed nature of the storage and the processing compute enables tasks to be performed in parallel, resulting in high-performance and scalability even when processing huge amounts of data.
+
+             </p>
+
+             <p><b>Data warehousing</b></p>
+             <p>
+                <img src="https://learn.microsoft.com/en-us/training/data-ai-cert/introduction-to-azure-data-lake-storage/media/data-warehouse.png"
+             alt="big-data" srcset="" width="700" height="300">
+             </p>
+
+             <p>
+                In data warehouse the data are stored in files in a data lake with relational tables in data warehouse. A typical examples of this solution is when data is extracted from operational data stores, such as Azure SQL database or Azure Cosmos DB, and transformed into structures more suitable for analytical workloads.
+             </p>
+
+             <p>Often, the data is staged in a data lake in order to facilitate distributed processing before being loaded into a relational data warehouse.</p>
+             
+             <p>There are multiple ways to implement this kind of data warehousing architecture. The diagram shows a solution in which Azure Synapse Analytics hosts pipelines to perform extract, transform, and load (ETL) processes using Azure Data Factory technology. These processes extract data from operational data sources and load it into a data lake hosted in an Azure Data Lake Storage Gen2 container. The data is then processed and loaded into a relational data warehouse in an Azure Synapse Analytics dedicated SQL pool, from where it can support data visualization and reporting using Microsoft Power BI.</p>
+
+             <i>Real-time data analytics</i>
+
+             <p>
+                <img src="https://learn.microsoft.com/en-us/training/data-ai-cert/introduction-to-azure-data-lake-storage/media/real-time-analytics.png"
+             alt="big-data" srcset="" width="600" height="150">
+             </p>
+
+             <p>Now, you might wondering <b>where does Azure Data Lake Storage Gen2 stores data?</b></p>
+             <p><b>What option must you enable to use Azure Data Lake Storage Gen2?</b></p>
+
+
+             <p>
+                <strong>
+                    Referencies: 
+                </strong>
+             </p>
+             <p>
+                <a href="https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction">
+                    https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction
+                </a>
+             </p>
+
+            </article>
+
+
+
+          </div>
+
+          <!--------- RIGHT BAR START----------->
+          <div class="col-md-4">
+            <div class="position-sticky" style="top: 2rem;">
+              <div class="p-4 mb-3 bg-body-tertiary rounded">
+                <h4 class="fst-italic">About</h4>
+                <p class="mb-0">I love technologies. Despite I never worked for a Tech company
+                  before I'm still looking for this opportunity. That's why I'm continually studying.
+                </p>
+              </div>
+
+              <div>
+                <!--<h4 class="fst-italic">Recent posts</h4>
+                <ul class="list-unstyled">
+                  <li>
+                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                      <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                      <div class="col-lg-8">
+                        <h6 class="mb-0">Example blog post title</h6>
+                        <small class="text-body-secondary">January 15, 2023</small>
+                      </div>
+                    </a>
+                  </li>
+                  
+                </ul>-->
+              </div>
+
+              <div class="p-4">
+                <h4 class="fst-italic">Recent projects</h4>
+                <ol class="list-unstyled mb-0">
+                  <li><a href="https://www.d-tuning.com">Data Tuning</a></li>
+                </ol>
+              </div>
+
+              <div class="p-4">
+
+                <ol class="list-unstyled">
+                  <li><a href="https://www.linkedin.com/in/laurindocbenjamim" target="_blank"><i
+                        class="fa-brands fa-linkedin fa-2x"></i> LinkedIn</a></li>
+                  <li><a href="https://github.com/laurindocbenjamim" target="_blank"><i
+                        class="fa-brands fa-github fa-2x"></i> GitHub</a></li>
+                  <li><a href="https://youtube.com/@laurindocbenjamim?si=If_NcRGFnPVVtxCM"><i
+                        class="fa-brands fa-square-youtube fa-2x"></i> Youtube</a></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <!--------- END RIGHT BAR START----------->
+        </div>
+
+      </article>
+
+
+    </div>
+
+
+
+{% endblock %}

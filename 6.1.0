@@ -1,0 +1,54 @@
+Name: sentry-sdk
+Version: 2.20.0
+Summary: Python client for Sentry (https://sentry.io)
+Home-page: https://github.com/getsentry/sentry-python
+Author: Sentry Team and Contributors
+Author-email: hello@sentry.io
+License: MIT
+Location: C:\Users\pc\OneDrive\Documentos\PythonProjects\pylau-app-flask\.env_app\Lib\site-packages
+Requires: certifi, urllib3
+Required-by: 
+---
+Name: bs4
+Version: 0.0.2
+Summary: Dummy package for Beautiful Soup (beautifulsoup4)
+Home-page: 
+Author: 
+Author-email: Leonard Richardson <leonardr@segfault.org>
+License: MIT License
+Location: C:\Users\pc\OneDrive\Documentos\PythonProjects\pylau-app-flask\.env_app\Lib\site-packages
+Requires: beautifulsoup4
+Required-by: 
+---
+Name: reportlab
+Version: 4.2.5
+Summary: The Reportlab Toolkit
+Home-page: https://www.reportlab.com/
+Author: Andy Robinson, Robin Becker, the ReportLab team and the community
+Author-email: reportlab-users@lists2.reportlab.com
+License: BSD license (see license.txt for details), Copyright (c) 2000-2022, ReportLab Inc.
+Location: C:\Users\pc\OneDrive\Documentos\PythonProjects\pylau-app-flask\.env_app\Lib\site-packages
+Requires: chardet, pillow
+Required-by: 
+---
+Name: ibm_watsonx_ai
+Version: 1.2.4
+Summary: IBM watsonx.ai API Client
+Home-page: https://ibm.github.io/watsonx-ai-python-sdk
+Author: IBM
+Author-email: 
+License: BSD-3-Clause
+Location: C:\Users\pc\OneDrive\Documentos\PythonProjects\pylau-app-flask\.env_app\Lib\site-packages
+Requires: certifi, httpx, ibm-cos-sdk, importlib-metadata, lomond, packaging, pandas, requests, tabulate, urllib3
+Required-by: 
+---
+Name: ibm-watson
+Version: 9.0.0
+Summary: Client library to use the IBM Watson Services
+Home-page: https://github.com/watson-developer-cloud/python-sdk
+Author: IBM Watson
+Author-email: watdevex@us.ibm.com
+License: Apache 2.0
+Location: C:\Users\pc\OneDrive\Documentos\PythonProjects\pylau-app-flask\.env_app\Lib\site-packages
+Requires: ibm_cloud_sdk_core, python_dateutil, requests, websocket-client
+Required-by: 

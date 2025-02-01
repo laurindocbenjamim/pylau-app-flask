@@ -1,0 +1,1 @@
+from .bp_subscriber_view import bp

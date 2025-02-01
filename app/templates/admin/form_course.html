@@ -1,0 +1,268 @@
+{% extends 'admin/dash_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block style %}
+<style>
+  .nav-link {
+    text-decoration: underline;
+  }
+
+  .submenu .nav-link {
+    text-decoration: none;
+  }
+
+  .lessons-button {
+    padding: 0 .2rem;
+    background-color: rgb(151, 247, 143);
+    border: 1px solid #e9e7e7;
+    border-radius: 30px;
+    text-decoration: none;
+  }
+
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">New Course</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <a href="{{ url_for('course.post',userID=session.get('user_id'),user_token=session.get('user_token')) }}"
+        type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i> New</a>
+    </div>
+    <!--<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+        <svg class="bi"><use xlink:href="#calendar3"/></svg>
+        This week
+      </button>-->
+  </div>
+</div>
+
+
+
+<div class="container" >
+  <main>
+    <div class="py-2 text-center">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+
+
+      {% for category, message in messages %}
+      <span class="{{ category }}">
+        <p class="pb-3 mb-0 small lh-sm">{{ message }}</p>
+      </span>
+      {% endfor %}
+
+      {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="row g-5" style="display: flex; justify-content: center; align-items: center;">
+
+      <div class="col-md-5 col-lg-6" >
+        <form class="needs-validation" method="post" novalidate enctype="multipart/form-data">
+          <input type="hidden" class="form-control" readonly id="csrf_token" name="csrf_token" 
+         value="{{ csrf_token() }}">
+          <div class="row g-3">
+            
+            <div class="col-12">
+              <label for="courseDetails" class="form-label">Description <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="courseDescription" name="courseDescription" 
+                placeholder="Description" value="{{ request.form.courseDescription }}" required maxlength="200"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '')">
+                <div class="invalid-feedback">
+                  Valid description is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="courseDetails" class="form-label">Details <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="courseDetails" name="courseDetails" placeholder="Details" value="{{ request.form.courseDetails }}" 
+                required maxlength="255"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '')">
+                <div class="invalid-feedback">
+                  Valid details is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="thumbnail" class="form-label">Thumbnail <span class="text-body-secondary">(Optional)</span></label>
+              <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="{{request.form.thumbnail}}" 
+              maxlength="5000000" accept="image/.png,.jpg,.jpeg,.pdf" >
+              <div class="invalid-feedback">
+                Please enter a valid thumbnail.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="courseViewUrl" class="form-label">View URL <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="courseViewUrl" name="courseViewUrl" placeholder="View URL" value="{{ request.form.courseViewUrl }}" 
+                required maxlength="200"
+                oninput="this.value = this.value.replace(/[^\w\s]/gi, '.')">
+                <div class="invalid-feedback">
+                  Valid course view url is required. (Ex. <i>course.view.url</i>)
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-5">
+              <label for="courseLevel" class="form-label">Course's Level</label>
+              <select class="form-select" id="courseLevel" name="courseLevel" required>
+                <option value="">Choose...</option>
+                
+                {% if request.form.courseLevel and request.form.courseLevel | trim == 'beginner' %} 
+
+                <option value="beginner" selected>Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced" >Advanced</option>
+
+                {% elif request.form.courseLevel and request.form.courseLevel == 'intermediate' %} 
+
+                <option value="beginner">Beginner</option>
+                <option value="intermediate" selected>Intermediate</option>
+                <option value="advanced">Advanced</option>
+
+                {% elif request.form.courseLevel and request.form.courseLevel == 'advanced' %} 
+
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced" selected>Advanced</option>
+
+                {% else %} 
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                {% endif %}
+
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid course level.
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label for="courseTotalLessons" class="form-label">Total of lessons</label>
+              <input type="number" class="form-control" id="courseTotalLessons" name="courseTotalLessons" value="{{request.form.courseTotalLessons}}" placeholder="0" 
+              oninput="this.value = this.value.replace(/[^\w\s]/gi, 0)" required> 
+              <div class="invalid-feedback">
+                Total of lessons required.
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label for="courseTotalQuizzes" class="form-label">Total of quizzes</label>
+              <input type="number" class="form-control" id="courseTotalQuizzes" name="courseTotalQuizzes" value="{{request.form.courseTotalQuizzes}}" placeholder="0" 
+              oninput="this.value = this.value.replace(/[^\w\s]/gi, 0)" required>
+              <div class="invalid-feedback">
+                Total of quizzes required.
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label for="courseTotalLabs" class="form-label">Total of labs</label>
+              <input type="number" class="form-control" id="courseTotalLabs" name="courseTotalLabs" value="{{request.form.courseTotalLabs}}" placeholder="0" 
+              oninput="this.value = this.value.replace(/[^\w\s]/gi, 0)">
+              <div class="invalid-feedback">
+                Total of labs required.
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label for="courseTotalModules" class="form-label">Total of modules</label>
+              <input type="number" class="form-control" id="courseTotalModules" name="courseTotalModules" value="{{request.form.courseTotalModules}}" placeholder="0" 
+              oninput="this.value = this.value.replace(/[^\w\s]/gi, 0)">
+              <div class="invalid-feedback">
+                Total of modules required.
+              </div>
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          
+          <h4 class="mb-3">Status</h4>
+
+          <div class="my-3">
+            {% if request.form.courseStatus | trim | int == 1 %}
+            <div class="form-check">
+              <input id="courseStatus1" name="courseStatus" type="radio" class="form-check-input" value="{{ request.form.courseStatus }}" checked >
+              <label class="form-check-label" for="courseStatus1">Enabled</label>
+            </div>
+            <div class="form-check">
+              <input id="courseStatus2" name="courseStatus" type="radio" class="form-check-input" value="0" >
+              <label class="form-check-label" for="courseStatus2">Disabled</label>
+            </div>
+            {% elif request.form.courseStatus | trim | int == 0 %}
+            <div class="form-check">
+              <input id="courseStatus3" name="courseStatus" type="radio" class="form-check-input" value="1" >
+              <label class="form-check-label" for="courseStatus3">Enabled</label>
+            </div>
+            <div class="form-check">
+              <input id="courseStatus4" name="courseStatus" type="radio" class="form-check-input" value="{{ request.form.courseStatus }}" checked >
+              <label class="form-check-label" for="courseStatus4">Disabled</label>
+            </div>
+            {% else %}
+            <div class="form-check">
+              <input id="courseStatus5" name="courseStatus" type="radio" class="form-check-input" value="1" checked>
+              <label class="form-check-label" for="courseStatus5">Enabled</label>
+            </div>
+            <div class="form-check">
+              <input id="courseStatus6" name="courseStatus" type="radio" class="form-check-input" value="0" >
+              <label class="form-check-label" for="courseStatus6">Disabled</label>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="my-3">            
+            <div class="form-check form-switch">
+              
+              
+              <input class="form-check-input" type="checkbox" role="switch" id="courseCertified" name="courseCertified"
+              {% if request.form.courseCertified | trim == 1 %} value="1" checked {% else %} value="0" {% endif %}>
+              <label class="form-check-label" for="courseCertified" id="courseCertifiedLabel">Is certified</label>              
+              
+            </div>
+          </div>
+
+          
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>
+
+<script>
+
+  document.getElementById('courseCertified').addEventListener('change', async (e)=>{
+    e.preventDefault()
+    if(e.currentTarget.checked){
+      document.getElementById('courseCertifiedLabel').innerText = " Certified" 
+    }else{
+      document.getElementById('courseCertifiedLabel').innerText = " Uncertified"
+    }
+    
+  })
+</script>
+
+{% endblock %}

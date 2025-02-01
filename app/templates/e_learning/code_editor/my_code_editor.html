@@ -1,0 +1,369 @@
+<html>
+
+<head>
+    <base href="{{ url_for('index')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Laurindo C.Benjamim">
+    <meta name="generator" content="Laurindo C.Benjamim">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ title }} - Data Tuning</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .vertical-menu {
+            width: 650px;
+            background-color: #252526;
+            color: #d4d4d4;
+            padding-top: 60px;
+            transition: width 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .vertical-menu.collapsed {
+            width: 60px;
+        }
+
+        .vertical-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .vertical-menu li {
+            margin-bottom: 10px;
+        }
+
+        .vertical-menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            color: #d4d4d4;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .vertical-menu a:hover,
+        .vertical-menu a.active {
+            background-color: #37373d;
+        }
+
+        .vertical-menu i {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .vertical-menu span {
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .vertical-menu.collapsed span {
+            opacity: 0;
+        }
+
+        .editor-title {
+            margin: 0;
+            padding: .5rem 1.5rem;
+            min-height: 30px;
+        }
+
+        .toggle-menu {
+            position: absolute;
+            top: 50px;
+            left: 590px;
+            background-color: #252526;
+            color: #d4d4d4;
+            border: none;
+            padding: 5px 4px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, left 0.3s ease;
+        }
+
+        .toggle-menu:hover {
+            background-color: #37373d;
+        }
+
+        .vertical-menu.collapsed .toggle-menu {
+            left: 20px;
+        }
+
+        .editor-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            background-color: #2d2d2d;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toolbar select,
+        .toolbar button {
+            background-color: #3c3c3c;
+            color: #d4d4d4;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .toolbar select:hover,
+        .toolbar button:hover {
+            background-color: #4b4b4b;
+        }
+
+        #editor {
+            flex-grow: 1;
+        }
+
+        .status-bar {
+            background-color: #007acc;
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+
+        /* ------ Console css */
+        .console {
+            height: 200px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            font-family: monospace;
+            overflow-y: auto;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .console-title {
+            font-weight: bold;
+        }
+
+        .console-clear {
+            background-color: transparent;
+            color: #ecf0f1;
+            border: none;
+            cursor: pointer;
+        }
+
+        .console-clear:hover {
+            border-radius: 4px;
+            padding: .2rem .3rem;
+            background-color: #445464;
+        }
+
+        .console-output {
+            white-space: pre-wrap;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .vertical-menu {
+                width: 60px;
+            }
+
+            .vertical-menu span {
+                display: none;
+            }
+
+            .toggle-menu {
+                display: none;
+            }
+
+            .console {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="editor-title">
+        <a href="{{ url_for('course.learn.laubcode')}}">
+            <i class="fa-solid fa-terminal" style="color: #52cc00;"></i> LAUB<span style="color: #52cc00;">Code</span>
+        </a>
+    </div>
+    <div class="container">
+
+        <div class="vertical-menu" id="verticalMenu">
+            <button class="toggle-menu" id="toggleMenu">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <ul>
+                <li><a href="{{ url_for('course.learn.laubcode')}}" class="active"><i class="fas fa-code"></i><span>Code
+                            Editor</span></a></li>
+                <!--<li><a href=""><i class="fas fa-folder"></i><span>Projects</span></a></li>
+                    <li><a href=""><i class="fas fa-question-circle"></i><span>Help</span></a></li>
+                    
+                    -->
+                    <li><a ><i class="fas fa-cog"></i><span>Settings</span></a></li>
+            </ul>
+        </div>
+
+        <div class="editor-container">
+            <div class="toolbar">
+                <div>
+                    <select id="language-select">
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                    </select>
+                    <select id="theme-select">
+                        <option value="monokai">Monokai</option>
+                        <option value="github">GitHub</option>
+                        <option value="tomorrow_night">Tomorrow Night</option>
+                        <option value="solarized_dark">Solarized Dark</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="run-btn"><i class="fas fa-play"></i> Run</button>
+                    <button id="save-btn"><i class="fas fa-save"></i> Save</button>
+                </div>
+            </div>
+            <div id="editor"></div>
+            <div class="status-bar">
+                Line: <span id="line-number">1</span>, Column: <span id="column-number">1</span>
+            </div>
+            <div class="console">
+                <div class="console-header">
+                    <div class="console-title">Console</div>
+                    <button class="console-clear" id="clearConsole">Clear</button>
+                </div>
+                <div class="console-output" id="consoleOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app/debug_python_script.js')}}"></script>
+
+    <script src="{{ url_for('static', filename='app/debug_javascript_code.js')}}"></script>
+
+
+    <script>
+        const editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        /*editor.setValue(`// Welcome to the TechInnovate Code Editor!
+    // Start coding here...
+    
+    function greet(name) {
+        return \`Hello, \${name}! Welcome to TechInnovate.\`;
+    }
+    
+    console.log(greet("Developer"));`);
+    */
+
+        const verticalMenu = document.getElementById('verticalMenu');
+        const toggleMenu = document.getElementById('toggleMenu');
+        const languageSelect = document.getElementById('language-select');
+        const themeSelect = document.getElementById('theme-select');
+        const runBtn = document.getElementById('run-btn');
+        
+        const saveBtn = document.getElementById('save-btn');
+        const lineNumber = document.getElementById('line-number');
+        const columnNumber = document.getElementById('column-number');
+        const consoleOutput = document.getElementById('consoleOutput');
+        const clearConsole = document.getElementById('clearConsole')
+
+        toggleMenu.addEventListener('click', () => {
+            verticalMenu.classList.toggle('collapsed');
+            toggleMenu.querySelector('i').classList.toggle('fa-chevron-left');
+            toggleMenu.querySelector('i').classList.toggle('fa-chevron-right');
+        });
+
+        languageSelect.addEventListener('change', (e) => {
+            editor.session.setMode(`ace/mode/${e.target.value}`);
+        });
+
+        themeSelect.addEventListener('change', (e) => {
+            editor.setTheme(`ace/theme/${e.target.value}`);
+        });
+
+        runBtn.addEventListener('click', () => {
+
+            const code = editor.getValue();
+            consoleOutput.innerHTML = ''; // Clear previous output
+            
+            if (languageSelect.value === 'javascript') {
+                debug_javascript(code, consoleOutput)
+            } else if (languageSelect.value === 'python') {
+                if(code !=''){
+                    consoleOutput.innerHTML = '$RESPONSE: \n\n'
+                    debug_python_script(code, consoleOutput, languageSelect.value)
+                    //runPythonScript(code)
+                }
+                
+            }
+
+            
+        });
+
+        saveBtn.addEventListener('click', () => {
+            const code = editor.getValue();
+            localStorage.setItem('savedCode', code);
+            alert("Code saved successfully!");
+        });
+
+        clearConsole.addEventListener('click', () => {
+            //consoleOutput.innerText
+            consoleOutput.innerHTML = ''
+        })
+
+        editor.selection.on('changeCursor', () => {
+            const cursorPosition = editor.getCursorPosition();
+            lineNumber.textContent = cursorPosition.row + 1;
+            columnNumber.textContent = cursorPosition.column + 1;
+        });
+
+        
+
+       
+
+        // Load saved code if exists
+        const savedCode = localStorage.getItem('savedCode');
+        if (savedCode) {
+            editor.setValue(savedCode);
+        }
+    </script>
+</body>
+
+</html>

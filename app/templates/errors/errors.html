@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {{ title}} {% endblock%}</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .error-container {
+            text-align: center;
+        }
+        .error-image {
+            max-width: 70%;
+            height: auto;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+        .home-button {
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .error-message {
+                font-size: 1.2rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .error-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <img src="{{ image }}" alt="{{ error_code }} Error" class="error-image">
+        <div class="error-message">
+            <h1 style="font-size: 1.2rem;">{{ error_code }} {{ error_description }}</h1>
+            <p >{{ message }}</p>
+            <a href="{{ url_for('index')}}" class="btn btn-primary home-button">Go to Home Page</a>
+        </div>
+    </div>
+</body>
+</html>

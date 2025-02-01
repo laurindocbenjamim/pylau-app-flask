@@ -1,0 +1,86 @@
+import bleach
+import re
+import js2py
+
+def sanitize_html_and_js(content):
+    """
+    Sanitizes content containing both HTML and JavaScript.
+    
+    Parameters:
+    - content (str): The HTML and JavaScript content to sanitize.
+    
+    Returns:
+    - str: The sanitized content with unsafe HTML and JavaScript removed.
+    """
+    # Step 1: Sanitize HTML with bleach, allowing safe tags and attributes
+    safe_content = bleach.clean(
+        content,
+        tags=[
+            "b", "i", "u", "em", "strong", "p", "br", "ul", "li", "ol", "a", "span", "div", "img",
+            "header", "footer", "nav", "section", "article", "aside", "h1", "h2", "h3", "h4", "h5", "h6",
+            "button", "form", "input", "label", "select", "option", "textarea", "small", "table", "tr", "td", "th",
+            "thead", "tbody", "tfoot", "caption", "blockquote", "pre", "code", "hr", "figure", "figcaption"
+        ],
+        attributes={
+            "a": ["href", "title", "target", "rel"],
+            "img": ["src", "alt", "title", "width", "height"],
+            "button": ["type", "class"],
+            "input": ["type", "name", "value", "placeholder", "class"],
+            "form": ["action", "method", "class"],
+            "table": ["class", "border", "cellpadding", "cellspacing"],
+            "div": ["class", "id"],
+            "span": ["class"],
+            "header": ["class"],
+            "footer": ["class"],
+            "nav": ["class"],
+            "section": ["class"],
+            "article": ["class"],
+            "aside": ["class"],
+            "label": ["for", "class"],
+            "select": ["name", "class"],
+            "option": ["value", "class"],
+            "textarea": ["name", "rows", "cols", "class"],
+            "h1": ["class"],
+            "h2": ["class"],
+            "h3": ["class"],
+            "h4": ["class"],
+            "h5": ["class"],
+            "h6": ["class"],
+            "table": ["class"],
+            "tr": ["class"],
+            "td": ["class", "colspan", "rowspan"],
+            "th": ["class", "colspan", "rowspan"],
+        },
+        protocols=["http", "https"],
+        strip=True
+    )
+
+    # Step 2: Strip out inline JavaScript and potentially dangerous JavaScript patterns
+    # Remove any <script> tags and inline events like onclick, onmouseover, etc.
+    safe_content = re.sub(r'<script.*?>.*?</script>', '', safe_content, flags=re.DOTALL)
+    safe_content = re.sub(r'on\w+="[^"]*"', '', safe_content)
+
+    # Step 3: Check for inline JavaScript in tag attributes (e.g., href="javascript:alert(1);")
+    safe_content = re.sub(r'javascript:', '', safe_content, flags=re.IGNORECASE)
+
+    # Step 4: Parse any remaining JavaScript expressions safely
+    js_expressions = re.findall(r'<script>(.*?)</script>', content, flags=re.DOTALL)
+    for js in js_expressions:
+        try:
+            # Parse JavaScript to check for unsafe function calls (like eval or Function constructor)
+            js_ast = js2py.parse(js)
+            if "eval" in js or "Function" in js:
+                safe_content += "\n<!-- Warning: Unsafe JavaScript removed -->\n"
+        except Exception as e:
+            safe_content += f"\n<!-- Warning: JavaScript parsing error: {e} -->\n"
+
+    return safe_content
+
+# Example usage:
+input_content = '''
+<script>alert("This is an unsafe alert!");</script>
+<div onclick="alert('Click!')">Click me</div>
+<a href="javascript:alert('Hi!')">Malicious Link</a>
+'''
+
+print(sanitize_html_and_js(input_content))

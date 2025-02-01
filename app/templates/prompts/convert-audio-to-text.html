@@ -1,0 +1,108 @@
+{% extends "prompts/dashboard_prompt.html" %}
+
+{%block scripts %}
+
+<script type="module" src="{{ url_for('static', filename='app/audio_books/media-speech-to-text-conver.js') }}"></script>
+
+{% endblock %}
+
+{% block style %}
+<style>
+
+   
+    
+</style>
+
+{% endblock %}
+{% block content %}
+
+<div class="container-fluid py-3" style="font-size: .8rem;">
+    <p class=" text-black">
+     Use our application to convert <i style="color: rgb(255, 138, 42);">any Audio Speech to text format</i> using the most 
+     powefull <i style="color: rgb(255, 138, 42);">AI </i> feature.
+    </p>
+    <p class="text-black">With this resource you can drag and drop or select your media file and select the output langauge 
+      you want for the final text.
+    </p>
+  </div>
+
+    <section class="col-md-6" id="javascript-demo" style="font-size: .8rem;">
+       
+        <form method="post" enctype="multipart/form-data">
+            <p>Upload a audio file in <i><b>MP3</b></i> format</p>
+            <div class="file-upload-wrapper" >
+              <label for="audio" class="drop-container" id="dropcontainer">
+                <span class="drop-title">Drop files here</span>
+                or
+                <input type="file" id="audio" name="audio" class="form-control form-control-file sr-onl"
+               
+                 maxlength="5000000" accept="audio/*" required>
+              </label> 
+              
+            </div>
+
+            <div class="col-md-4">
+                <br>
+              <p class="fs-4 alert-link text-primary" id="selected-file"></p>
+            </div>
+            
+            <br>
+  
+            {%if error and transcription=='' %}
+            <p class="error">{{error}}</p>          
+            {%endif%}
+  
+            <br>
+            
+            <nav class="nav">
+            </nav>
+  
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+              <div class="container-fluid">
+                
+                <div class="form-control" style="max-width: 200px;margin-right:10px; text-align:left">
+                  <label for="output-language">Output language </label>
+                  <select class="form-select form-select-sm" id="output-language" name="output-language">
+                    <option value="en">English</option>                  
+                    <option value="fr">France</option>
+                    <option value="it">Italian</option>
+                    <option value="de">German</option>
+                    <option value="pt">Portugese</option>
+                    <option value="es">Spanish</option>
+                  </select>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                  <button class="btn btn-primary btn-smal" id="convert-to-text" type="submit">            
+                    <span class="spinner-border spinner-border" id="spinner" style="display: none;" aria-hidden="true"></span>
+                    <span role="status" id="convert-status-1">CONVERT TO TEXT</span>
+                    <span role="status" id="convert-status-2" style="display: none;">Loading...</span>
+                  </button>
+                  
+                </div>
+              </div>
+            </nav>
+          </form>
+  
+          <div class="form-group" style="text-align:left;" >
+            <div class="alert alert-light" role="alert">
+              <label for="exampleFormControlTextarea1">
+                {% if message %}
+                {{message}}
+                {%else%}
+                Extracted text
+                {%endif%}
+              </label>
+            </div>
+            
+            <textarea class="form-control" style="font-size: .9rem;
+        background-color: #282c34;color: rgb(211, 211, 211);" readonly rows="7">
+              {%if transcription %}
+              {{transcription}}
+              {%endif%}
+            </textarea>
+          </div>
+
+    </section>
+    
+
+{% endblock %}

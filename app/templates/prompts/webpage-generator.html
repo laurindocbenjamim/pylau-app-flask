@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    function deployHTML(htmlCode) { 
+        if (htmlCode.includes("<script>") || htmlCode.includes("<style>")) 
+            { document.body.innerHTML = htmlCode; } else { return 'Make a request'; } 
+    } 
+    // Example usage 
+    let htmlCode = "<h1>Hello World!</h1>"; deployHTML(htmlCode);
+</script>
+
+</html>

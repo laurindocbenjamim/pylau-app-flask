@@ -1,0 +1,181 @@
+{% extends "site.html" %}
+
+{% block title %}
+{% if title %}{{ title }} {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% block styles %}
+<style>
+    ul,
+    li {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .message {
+        font-size: .9rem;
+    }
+
+    .error {
+        color: rgb(247, 45, 45);
+    }
+
+    .info {
+        color: rgb(19, 122, 240);
+    }
+
+    .success {
+        color: rgb(11, 167, 11);
+    }
+
+    .danger {
+        color: rgb(255, 94, 0);
+    }
+
+
+
+
+
+    .list-group {
+        width: 100%;
+        max-width: 460px;
+        margin-inline: 1.5rem;
+    }
+
+    .form-check-input:checked+.form-checked-content {
+        opacity: .5;
+    }
+
+    .form-check-input-placeholder {
+        border-style: dashed;
+    }
+
+    [contenteditable]:focus {
+        outline: 0;
+    }
+
+    .list-group-checkable .list-group-item {
+        cursor: pointer;
+    }
+
+    .list-group-item-check {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+    }
+
+    .list-group-item-check:hover+.list-group-item {
+        background-color: var(--bs-secondary-bg);
+    }
+
+    .list-group-item-check:checked+.list-group-item {
+        color: #fff;
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+    }
+
+    .list-group-item-check[disabled]+.list-group-item,
+    .list-group-item-check:disabled+.list-group-item {
+        pointer-events: none;
+        filter: none;
+        opacity: .5;
+    }
+
+    .list-group-radio .list-group-item {
+        cursor: pointer;
+        border-radius: .5rem;
+    }
+
+    .list-group-radio .form-check-input {
+        z-index: 2;
+        margin-top: -.5em;
+    }
+
+    .list-group-radio .list-group-item:hover,
+    .list-group-radio .list-group-item:focus {
+        background-color: var(--bs-secondary-bg);
+    }
+
+    .list-group-radio .form-check-input:checked+.list-group-item {
+        background-color: var(--bs-body);
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 2px var(--bs-primary);
+    }
+
+    .list-group-radio .form-check-input[disabled]+.list-group-item,
+    .list-group-radio .form-check-input:disabled+.list-group-item {
+        pointer-events: none;
+        filter: none;
+        opacity: .5;
+    }
+</style>
+{% endblock %}
+
+
+
+
+<div class="container" style="justify-content: center; align-items: center; margin-top:1%;">
+
+    <div class="col-lg-12" style="display: flex; justify-content: center; align-items: center;">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-header p-5 pb-4 border-bottom-0" style="display: flex; flex-direction:column">
+                        <h1 class="fw-bold mb-0 fs-2">Recover your account</h1>
+                        <h1 class="fw-bold mb-0 fs-5 text-primary"><< First Step >></h1>
+                    </div>
+
+                    <div class="modal-body p-5 pt-0">
+
+                        <div class="container" style="margin-top:.3%;">
+                            <div class="col-6" style="display: block; flex-direction: column; text-align:center">
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+    
+    
+                                {% for category, message in messages %}
+                                <span class="{{ category }}">
+                                    <p class="pb-3 mb-0 small lh-sm">{{ message }}</p>
+                                </span>
+                                {% endfor %}
+    
+    
+                                {% endif %}
+                                {% endwith %}
+                            </div>
+    
+                        </div>
+
+                        <form class="needs-validation recover-account-form" id="recover-account-form" method="post" novalidate>
+                            
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control rounded-3" id="username" name="username" 
+                                value="{{ request.form.username }}"
+                                placeholder="example@gmail.com" required maxlength="100">
+                                <label for="floatingInput">Email address</label>
+                            </div>
+                            
+                            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Next</button>
+                                <small class="text-body-secondary">
+                                    <p>I don't have an account yet. <a href="{{ url_for('auth.register') }}">Sign up</a></p>
+                                </small>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+       
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<!--<script src="{{ url_for('static', filename='assets/js/checkout.js') }}"></script>-->
+
+{% endblock %}

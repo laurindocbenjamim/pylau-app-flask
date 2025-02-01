@@ -1,0 +1,44 @@
+{% extends 'site.html' %}
+{% block title %}
+{% if title %}{{ title }} {%else %} AI {% endif %}
+{% endblock %}
+
+
+{% block style %}
+
+<link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="{{ url_for('static', filename='assets/css/blog.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="col-lg-6 px-0">
+      
+
+      <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Azure Data Lake Storage Gen2 in data analytics workloads</h5>
+              <p class="card-text" style="font-size: .8rem;">The Azure Data Lake Storage Gen2 is a technology that allows professsionals like data scientists and
+                data engineers to handle large and multiple volumes of data analytics.</p>
+              <a href="{{ url_for('blog.azure_data_lake_storage_gen2')}}" class="btn btn-primary">Read more</a>
+            </div>
+          </div>
+        </div>
+
+        
+
+      </div>
+
+    </div>
+  </div>
+
+ 
+
+
+
+{% endblock %}

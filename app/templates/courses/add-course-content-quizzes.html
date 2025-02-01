@@ -1,0 +1,1036 @@
+{% extends 'courses/base-layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h5" id="course-title">
+    <a class="text-decoration-none"
+    href="{{ url_for('course.create_courses_quizes', course=course_name,topic=courses_topic, module=courses_module)}}" rel="noopener noreferrer">{{ course_name }}</a>
+  </h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      {% if course_name %}
+      <a href="{{ url_for('course.create_course_content', course=course_name)}}"
+        class="btn btn-sm btn-outline-secondary">Content</a>
+
+      <a href="{{ url_for('course.view_courses_demo', course=course_name)}}" class="btn btn-sm btn-outline-secondary"
+        target="_blank">View Demo</a>
+
+      {% endif %}
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+      <svg class="bi">
+        <use xlink:href="#calendar3" />
+      </svg>
+      This week
+    </button>
+  </div>
+</div>
+
+<div class="container">
+  <style>
+    .card {
+      background-color: rgba(2, 51, 59, 0.1);
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: #969494;
+    }
+
+    .form-control {
+      background-color: #cfd5db;
+      color: rgb(8, 8, 8);
+      border: 1px solid #444;
+      border-radius: 0px;
+    }
+
+    .form-control:focus {
+      background-color: #3b3f45;
+      color: #FFF;
+      border-color: #5a5e65;
+    }
+
+    .btn-outline-light:hover {
+      background-color: #5a5e65;
+    }
+
+
+
+    .btn-outline-light:hover {
+      background-color: #5a5e65;
+    }
+
+    .dynamic-field {
+      display: flex;
+      align-items: center;
+    }
+
+    .dynamic-field .remove-btn {
+      margin-left: 10px;
+    }
+
+    .remove-btn {
+      margin-left: 10px;
+      height: 40px;
+    }
+
+
+    .form-feedback {
+      margin-top: 10px;
+    }
+
+    .dynamic-field button {
+      height: 38px;
+      margin-top: 0.4%;
+      border-radius: 0px;
+    }
+
+    .loading {
+      display: none;
+    }
+
+    .content-section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    #chatbox {
+      height: 450px;
+      overflow-y: auto;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 20px;
+      max-width: 80%;
+    }
+
+    .user-message {
+      background-color: #17a2b8;
+      color: #fff;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .bot-message {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      align-self: flex-start;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    #user-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      padding: 20px 50px 20px 20px;
+      height: 70px;
+      border-radius: 35px;
+    }
+
+    #user-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    #send-button {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #17a2b8;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    #send-button:hover {
+      background-color: #138496;
+    }
+
+    /* ------ Console css */
+    .console {
+      height: 300px;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 10px;
+      font-family: monospace;
+      /*overflow-y: auto;*/
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .console-title {
+      font-weight: bold;
+    }
+
+    .console-clear {
+      background-color: transparent;
+      color: #ecf0f1;
+      border: none;
+      cursor: pointer;
+    }
+
+    .console-clear:hover {
+      border-radius: 4px;
+      padding: .2rem .3rem;
+      background-color: #445464;
+    }
+
+    .console-output {
+      height: 230px;
+      padding: 7px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      border-bottom: 1px solid #3b4e61;
+    }
+
+    #editor,
+    #editorFrame {
+      flex-grow: 1;
+    }
+
+    .status-bar {
+      background-color: #007acc;
+      color: #ffffff;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+    }
+
+    .progress-bar {
+      margin: 0;
+      height: 30px;
+      color: #ffffff;
+
+      padding: 5px 3px;
+      font-size: 0.7rem;
+    }
+  </style>
+
+  <div class="bd-example-snippet bd-code-snippet">
+    <div class="bd-example m-0 border-0">
+      <!-- Course Name -->
+      <div class="mb-3">
+        {% if courses_module and courses_module !='None' %}
+        <h1 class="h2" id="coursesModule">{{ courses_module}}</h1>
+        {% endif %}
+        <h1 class="h3" id="coursesTopic">{{ courses_topic }}</h1>
+      </div>
+
+
+
+
+      <!-- Topics -->
+      <div class="mb-3">
+        <h2 class="" style="font-size: 1.2rem;">Send prompts</h2>
+        <p>
+          Create your prompt to generate your quizzes
+        </p>
+
+        <div class="content-section">
+          <div id="chatbox"></div>
+          <div class="spinner-border text-primary " id="spinner" style="display: none;" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div class="input-group">
+            <input type="text" id="user-input" class="form-control" placeholder="Type your message here...">
+            <button class="btn btn-primary" type="button" id="send-button">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner d-flex">
+    <div style="display: none;">
+      <div class="spinner-border text-light" role="status"></div>
+      <p class="mt-3">Submitting...</p>
+    </div>
+  </div>
+
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!--<h2 class="text-center mb-4">Create a New Course</h2>-->
+
+      <!-- Objectives -->
+      <div class="mb-3">
+
+
+        <div id="contentContainer" style="display: none;">
+          <label class="form-label">Course content</label>
+
+          <form id="courseForm" class="courseForm" novalidate enctype="multipart/form-data">
+            <div class="row g-1" id="courseContentContainer01">
+
+              <div class="col-12">
+                <div class="input-group">
+                  <input type="text" id="course_module" name="course_module" class="form-control mb-2"
+                    placeholder="Course module">
+
+                  <div class="invalid-feedback">
+                    Your course's module is required.
+                  </div>
+                </div>
+              </div>
+
+              <!-------->
+              <div class="col-12" id="content-module"></div>
+              <!-------->
+              <div class="col-12">
+                <div class="input-group has-validation">
+                  <input type="text" id="course_topic" name="course_topic" class="form-control mb-2" placeholder="Topic"
+                    required>
+                  <div class="invalid-feedback">
+                    Your course's topic is required.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group has-validation" id="">
+                  <input type="radio" class="btn-check option5" value="localhost" name="course_content_origin"
+                    id="option5" autocomplete="off" checked>
+                  <label class="btn btn-outline-success" for="option5">Local host</label>
+
+                  <input type="radio" class="btn-check option6" value="youtube" name="course_content_origin"
+                    id="option6" autocomplete="off">
+                  <label class="btn btn-outline-success" for="option6">Youtube</label>
+                  <div class="invalid-feedback">
+                    Your content origin is required.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group has-validation">
+                  <input type="file" id="videoFile" name="video" accept="video/*" class="form-control mb-2"
+                    placeholder="Develope fix problems skills" required>
+                  <input type="text" id="video-file" readonly name="video-file" class="form-control mb-2"
+                    style="font-size:.8rem; color:#198754;display:none">
+                  <div class="invalid-feedback">
+                    Your video file is required.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="my-3" id="error-block">
+              <div class="progress loading" role="progressbar" aria-label="Info striped example" aria-valuenow="100"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+              </div>
+
+              <!--<div class="error-message text-danger" style="display: none;"></div>-->
+              <div class="sent-message text-success" style="display: none;">Your message has been sent. Thank you!</div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-left">
+
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+              <div class="col">
+                <button type="submit" id="btn-save" class="btn btn-outline-success btn-lg btn-save">
+                  <i class="fas fa-save"></i> Save Course
+                </button>
+              </div>
+
+              <div class="col">
+                <button type="button" id="removeContentBtn" disabled class="btn btn-outline-danger btn-lg">
+                  <i class="fas fa-trash"></i> Remove Content
+                </button>
+              </div>
+              <div class="col">
+                <a href="#" id="add-quizzes" class="btn btn-outline-primary btn-lg">
+                  <i class="fas fa-plus"></i> Create Quizzes
+                </a>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <div class="col-9" style="text-align:center">
+        <div class="progress-bar" style="display: none;">
+          <div class="progress mt-3">
+            <div class="progress-bar my-progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+              aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        <span class="success-message text-success"></span>
+        <span class="text-danger error-message"></span>
+        <br>
+      </div>
+      <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3">
+        <button type="button" id="addObjectiveBtn" class="btn btn-outline-warning btn-sm">
+          <i class="fas fa-plus"></i> Add Content
+        </button>
+
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Browse the Code
+        </button>
+
+        <button class="btn btn-outline-success me-2" id="defualt-quizz" type="button">Default Quizzes</button>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- Modal full screem-->
+  <!-- Button trigger modal -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">SharkScript</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <nav class="navbar bg-body-tertiary">
+            <form class="container-fluid justify-content-end">
+              <button class="btn btn-outline-primary me-2" id="edit-code" type="button">Edit code</button>
+              <button class="btn btn-outline-success me-2" id="try-again" type="button">Try Again</button>
+            </form>
+          </nav>
+          <!--<div class="" id="pagebrowser"></div><iframe  class="w-100" style="width: 100%; height: 500px;"></iframe>
+          -->
+          <div class="ratio ratio-16x9">
+            <iframe id="codeFrame" title="TechInnovate: Revolutionizing Business with Data Science"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              title="YouTube video" allowfullscreen>
+            </iframe>
+
+            <div class="editorFrame" id="editorFrame" style="display:none"></div>
+
+          </div>
+
+          <div class="container w-100" id="container-console" style="display: none;">
+            <!--- Browser windows -->
+            <div class="progress-bar">
+              <div class="progress mt-3">
+                <div id="myBar" class="progress-bar my-progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+
+            <!--- Console windows -->
+            <div class="status-bar w-100">
+              Line: <span id="line-number">1</span>, Column: <span id="column-number">1</span>
+            </div>
+            <!-- Console -->
+            <div class="console w-100" id="console">
+              <div class="console-header">
+                <div class="console-title">Console</div>
+                <button class="console-clear" id="clearConsole">Clear</button>
+              </div>
+              <div class="console-output" id="consoleOutput"></div>
+            </div>
+            <!-- end console -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="btn-save-code">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<script>
+
+
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const defaultPrompt = `
+    Create an application using javascript and bootstrap whitch contain a list of quizzes to avaluate the student knowledge regarding to the following
+python contents: variables and functions.
+
+The quiz must have TRUE or FALSE questions.
+Add questions that can be completed by using drag and drop block events.
+Create blocks with the best design as possible.
+
+Create at least 6 questions.
+When the user submit the form there must have a validation if the provided answers are correct
+If the answers provided are not correct notice the user with a message.
+Add a button to allow the user to try again.
+If the answers provided are correct show a button to move to the next step.
+If the 'next' button is clicked show other exercice to the user.
+
+Do not return to me the steps to create it instead, you create the requested task.
+    `;
+
+    let generatedCode = null
+    const tryAgainBtn = document.getElementById('try-again')
+    const editCode = document.getElementById('edit-code')
+    const chatbox = document.getElementById('chatbox');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    const loadingSpinner = document.querySelector(".loading-spinner");
+    const spinner = document.getElementById('spinner')
+    const consoleOutput = document.getElementById('consoleOutput');
+    const courseTitle = document.getElementById('course-title')
+    const coursesModule = document.getElementById('coursesModule')
+    const coursesTopic = document.getElementById('coursesTopic')
+    const containerConsole = document.getElementById('container-console')
+    const clearConsole = document.getElementById('clearConsole')
+    const progressBar = document.querySelector('.progress-bar')
+    const errorMessage = document.querySelector('.error-message')
+    //errorMessage.innerHTML = 'error message...'
+
+    try{
+      const editor = ace.edit("editorFrame");
+      editor.setTheme("ace/theme/monokai");
+      editor.session.setMode("ace/mode/javascript");
+    }catch(err){console.log(err)}
+
+    consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+
+
+    tryAgainBtn.addEventListener('click', (e) => {
+      const iframe = document.getElementById('codeFrame');
+      const frameEditor = document.getElementById('editorFrame')
+      iframe.style.display = 'block';
+
+      frameEditor.style.display = 'none';
+      containerConsole.style.display = 'none';
+      
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write(generatedCode);
+      iframe.contentWindow.document.close();
+    })
+
+    editCode.addEventListener('click', (e) => {
+      const iframe = document.getElementById('codeFrame');
+      iframe.style.display = 'none';
+      const frameEditor = document.getElementById('editorFrame')
+      frameEditor.style.display = 'block';
+      containerConsole.style.display = 'block';
+
+      if (document.getElementById('editorFrame')) {
+
+
+        editor.setHighlightActiveLine(true); // or false to disable
+
+        // Show print margin
+        editor.setShowPrintMargin(false); // or true to show
+        editor.session.setValue(generatedCode);
+      }
+
+
+    })
+
+    document.getElementById('defualt-quizz').addEventListener('click', (e) => {
+      handleUserInput(defaultPrompt)
+    })
+
+    document.getElementById('btn-save-code', (e) => {
+      e.preventDefault()
+      progressBar.style.display = "block"
+      const courseTitle = '{{ course_name }}'
+      const coursesTopic = '{{ courses_topic }}'
+      const courseModule = '{{ courses_module }}'
+
+      if (!message || !courseTitle || !courseModule || !coursesTopic) {
+        //alert(`${courseTitle} || !${courseModule} || !${coursesTopic}`)
+        return;
+      } else {
+        const endpoint = `${window.location.origin}/course/save-script-quizzes/${courseTitle}/${coursesTopic}?module=${courseModule}`;
+        const script = editor.getValue();
+
+        const formData = new FormData()
+        formData.append('script', script)
+        formData.append('course', courseTitle)
+        formData.append('module', coursesModule)
+        formData.append('topic', coursesTopic)
+               
+        
+        saveScript(endpoint, csrfToken, formData)
+      }
+    })
+
+    function toggleSubmenu(event) {
+      event.preventDefault();
+      const submenu = event.currentTarget.nextElementSibling;
+      if (submenu.classList.contains('show')) {
+        submenu.classList.remove('show');
+        //event.currentTarget.add
+        setTimeout(() => {
+          submenu.style.display = 'none';
+        }, 500); // Match the transition duration
+      } else {
+        submenu.style.display = 'block';
+        setTimeout(() => {
+          submenu.classList.add('show');
+        }, 10); // Small delay to trigger the transition
+      }
+    }
+
+    function addMessage(message, isUser = false, isScript = false) {
+      //<div id="editor" style="height: 500px; width: 100%;"></div>
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+      if (isScript) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('user-message');
+        messageElement.style = 'border-radius:0px';
+
+        const messageObj = document.querySelector('.message')
+        messageObj.style = 'height: 500px;'
+        messageObj.setAttribute('id', 'editor')
+
+        const navContainer = document.createElement('div');
+        const iconEdit = document.createElement('i');
+        iconEdit.classList.add('fa', 'fa-edit')
+        const iconSave = document.createElement('i');
+        iconSave.classList.add('fa', 'fa-play')
+
+        navContainer.classList.add('container-fluid', 'justify-content-end')
+
+        const codeSaveBtn = document.createElement('button');
+        codeSaveBtn.classList.add('btn', 'btn-outline-success', 'me-2')
+        codeSaveBtn.title = 'Save this script'
+        codeSaveBtn.appendChild(iconSave)
+        codeSaveBtn.addEventListener('click', (e) => {
+
+          const courseTitle = '{{ course_name }}'
+          const coursesTopic = '{{ courses_topic }}'
+          const courseModule = '{{ courses_module }}'
+
+          if (!message || !courseTitle || !courseModule || !coursesTopic) {
+            //alert(`${courseTitle} || !${courseModule} || !${coursesTopic}`)
+            return;
+          } else {
+            const endpoint = `${window.location.origin}/course/save-script-quizzes/${courseTitle}/${coursesTopic}?module=${courseModule}`;
+
+            const formData = new FormData()
+            formData.append('script', message)
+            formData.append('course', courseTitle)
+            formData.append('module', coursesModule)
+            formData.append('topic', coursesTopic)
+
+            saveScript(endpoint, csrfToken, formData)
+          }
+        });
+        //codeSaveBtn.textContent = "Save"
+        const codeEditBtn = document.createElement('button');
+        codeEditBtn.classList.add('btn', 'btn-outline-primary', 'me-2')
+        codeEditBtn.title = 'Open the code editor'
+        codeEditBtn.appendChild(iconEdit)
+        codeEditBtn.addEventListener('click', (e) => {
+          const frameEditor = document.getElementById('editorFrame')
+          const iframe = document.getElementById('codeFrame');
+          iframe.style.display = 'none';
+
+          // First show the modal
+          $(document).ready((e) => {
+            $('#exampleModal').modal('show');
+          });
+          frameEditor.style.display = 'block';
+          containerConsole.style.display = 'block';
+
+        });
+
+        const codeRunBtn = document.createElement('button');
+        codeRunBtn.classList.add('btn', 'btn-outline-info', 'me-2')
+        codeRunBtn.title = 'Run this script'
+        const iconRun = document.createElement('i');
+        iconRun.classList.add('fa-solid', 'fa-code')
+        codeRunBtn.appendChild(iconRun)
+        
+        codeRunBtn.addEventListener('click', (e)=>{
+          const frameEditor = document.getElementById('editorFrame')
+          const iframe = document.getElementById('codeFrame');
+          iframe.style.display = 'block';
+
+          iframe.contentWindow.document.open();
+          iframe.contentWindow.document.write(message);
+          iframe.contentWindow.document.close();
+
+          // First show the modal
+          $(document).ready((e) => {
+            $('#exampleModal').modal('show');
+          });
+          frameEditor.style.display = 'none';
+          containerConsole.style.display = 'none';
+          
+        })
+
+        
+
+        navContainer.appendChild(codeRunBtn)
+        navContainer.appendChild(codeSaveBtn)
+        navContainer.appendChild(codeEditBtn)
+
+        //messageObj.textContent = "Testin the editor";
+        chatbox.appendChild(messageObj);
+        chatbox.appendChild(navContainer)
+        chatbox.scrollTop = chatbox.scrollHeight;
+        //
+        // Initialize the Ace editor 
+        if (document.getElementById('editor')) {
+          generatedCode = message
+          const editor = ace.edit("editor");
+          editor.setTheme("ace/theme/monokai");
+          editor.session.setMode("ace/mode/javascript");
+          editor.setHighlightActiveLine(true); // or false to disable
+
+          // Show print margin
+          editor.setShowPrintMargin(false); // or true to show
+          editor.session.setValue(message);
+        }
+
+      } else {
+        messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+        messageElement.textContent = message;
+        chatbox.appendChild(messageElement);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }
+
+
+    }
+
+    function botResponse(message) {
+      const lowerMessage = message.toLowerCase();
+      if (lowerMessage.includes('experience')) {
+        return "John has over 5 years of experience in software engineering, specializing in full-stack development. He has worked on various projects involving JavaScript, React, Node.js, and Python.";
+      } else if (lowerMessage.includes('project')) {
+        return "John has worked on several exciting projects, including a scalable e-commerce platform and a machine learning-powered recommendation system. You can find more details on the Projects page.";
+      } else if (lowerMessage.includes('skill') || lowerMessage.includes('technology')) {
+        return "John's core skills include JavaScript, React, Node.js, Python, Django, SQL, MongoDB, AWS, Docker, and Git. He's also proficient in RESTful APIs and Agile methodologies.";
+      } else if (lowerMessage.includes('contact') || lowerMessage.includes('hire')) {
+        return "You can contact John via email at john.doe@example.com or connect with him on LinkedIn. He's always open to new opportunities and collaborations!";
+      } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+        return "Hello! I'm John's portfolio chatbot. How can I assist you today?";
+      } else {
+        return "I'm sorry, I don't have specific information about that. Is there anything else you'd like to know about John's experience, projects, or skills?";
+      }
+    }
+
+    function handleUserInput(message = '') {
+      spinner.style.display = 'block'
+      if (message === '') {
+        message = userInput.value.trim();
+      }
+
+      if (message) {
+        addMessage(message, false, false);
+        userInput.value = '';
+
+        setTimeout(() => {
+          const courseTitle = '{{ course_name }}'
+          const topic = '{{ courses_topic }}'
+          const courseModule = '{{ courses_module }}'
+
+          const serverResponse = submitPrompt(csrfToken, message, courseTitle, topic, courseModule)
+          if (Array.isArray(serverResponse)) {
+            console.log('========= Prompt Response ============')
+            console.log(serverResponse)
+            console.log(serverResponse[0].data)
+          } else {
+            const promise = new Promise((resolve, reject) => {
+              resolve(serverResponse)
+            })
+            promise.then(result => {
+              var data = String(result.data[1]).replace('```', '')
+              if (result.data !== "") {
+                data = String(data).replace('```', '')
+                if (/json{/.test(data)) {
+                  data = String(data).replace('json{', '')
+                }
+                data = String(data).replace('json', '')
+                //console.log(result)
+                //console.log(data)
+                data = JSON.parse(data.replace('`', ' '))
+                //console.log("Data: " + data);
+                //console.log("Data: " + data.script);
+
+                generatedCode = data.script
+                //document.getElementById('pagebrowser').innerHTML = generatedCode
+                const iframe = document.getElementById('codeFrame');
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(generatedCode);
+                iframe.contentWindow.document.close();
+
+                addMessage(generatedCode, false, true);
+                spinner.style.display = 'none'
+                ///
+                $(document).ready((e) => {
+                  $('#exampleModal').modal('show');
+                });
+
+              } else {
+                spinner.style.display = 'none'
+                console.log("Data does not match");
+              }
+            })
+              .catch(error => {
+                spinner.style.display = 'none'
+                console.error("Error:", error);
+              });
+          }
+
+
+          //const response = botResponse(generatedCode);
+          //addMessage(response);
+        }, 500);
+      }
+    }
+
+    sendButton.addEventListener('click', handleUserInput);
+    userInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        handleUserInput();
+      }
+    });
+
+    // Initial bot message
+    addMessage("Hello! I'm DTuning's assistante. How can I help you today?");
+
+
+    //
+
+
+    function submitPrompt(csrfToken, prompt, courseTitle, courseTopic, courseModule) {
+
+      const endpoint = `${window.location.origin}/course/create-content/quizzes/${courseTitle}/${courseTopic}?module=${courseModule}`;
+
+
+      if (prompt === '') {
+        errorMessage.style.display = 'block'
+        errorMessage.textContent = ' No value';
+        return;
+      }
+
+
+      //const formData = new FormData( thisForm )         
+      const headers = new Headers()
+      headers.append('X-CSRF-Token', csrfToken)
+      headers.append("Authorization", ` Bearer ${csrfToken}`);
+      //headers.append("Content-Type", "application/json")
+      //headers.append("X-Requested-With", "XMLHttpRequest")
+
+      // Prepare Form Data
+      const formData = new FormData();
+      formData.append('courseModule', courseModule)
+      formData.append('courseTopic', courseTopic)
+      formData.append('courseTitle', courseTitle)
+      formData.append('prompt', prompt)
+
+      //sendPrompt(endpoint, formData, headers)
+      const data = fetch01(endpoint, headers, formData, "POST")
+      handleFetchPromiseResponse(data)
+      return data
+    }
+
+    function  handleFetchPromiseResponse(response){
+
+      const promise = new Promise((resolve, reject)=>{
+        resolve(response)
+      })
+      promise.then((data)=>{
+        if(data.data && Array.isArray(data.data)){
+          console.log("=============Handle Fetch promise ==========")
+          if(!data.data[0] && String(data.data[1]).includes('429')){
+            
+            console.log("=============Handle Fetch promise: ERROR FOUND ==========")
+            errorMessage.style.display ='block'
+            errorMessage.textContent = 'You exceeded your current quota, please check your plan and billing details.'
+          }else{
+            errorMessage.style.display ='none'
+            console.log("=============No passed ==========")
+            //document.querySelector('.error-message').innerText = String(data.data[1])
+          }
+          //console.log(data.data)
+          //console.log(String(data.data[1]))
+        }
+        
+      }).catch(err => console.log(`Server error: ${err}`))
+    }
+    function displayError(thisForm, error) {
+      btnSave = document.getElementById('btn-save')
+      btnSave.style.backgroundColor = 'red'
+      btnSave.style.color = '#FFF'
+      document.querySelector('.loading').style.color = 'white'
+      errorMessage.style.display = 'block'
+      errorMessage.style.color = 'red'
+      document.querySelector('.loading').classList.remove('d-block');
+      errorMessage.textContent = error;
+      errorMessage.classList.add('d-block');
+    }
+
+
+    
+    async function fetch01(endpoint, fetchHeaders, formData, fetchMethod) {
+      /**
+      * return: a json object
+      */
+      const headers = new Headers()
+      headers.append('X-CSRF-Token', csrfToken)
+      headers.append("Authorization", ` Bearer ${csrfToken}`);
+
+      try {
+        var response = null
+        if (fetchMethod === "POST") {
+          response = await fetch(endpoint, {
+            method: `${fetchMethod}`,
+            headers: fetchHeaders,
+            body: formData
+          });
+        } else if (fetchMethod === "GET") {
+          response = await fetch(endpoint, {
+            method: `${fetchMethod}`,
+            headers: fetchHeaders
+          });
+        }
+
+        const data = await response.json();
+
+        return data
+      } catch (error) {
+        console.error('Error fetching suggestion:', error);
+        return false
+      }
+    };
+
+
+    /// Save the script from code editor
+    async function saveScript(endpoint, csrfToken, formData) {
+      //const progressBar = document.getElementById('myBar');
+      const progressBar = document.querySelector('.my-progressBar');
+      progressBar.style.width = '0%';
+      progressBar.setAttribute('aria-valuenow', 0);
+
+      const filename = document.getElementById('filename')
+      //const chunk = String(filename.textContent).trim().split('.')
+
+      //const endpoint = `${window.location.origin}/course/learn/laubcode/save-code/${chunk[0]}/${chunk[1]}`;
+
+      const headers = new Headers()
+      headers.append('X-CSRF-Token', csrfToken)
+      headers.append("Authorization", ` Bearer ${csrfToken}`);
+      //const formData = new FormData()
+      //formData.append("code", code)
+      //formData.append('filename', String(filename))
+
+      consoleOutput.innerHTML = '#laubcode\\editor\\main$: \n'
+      fetch(endpoint,
+        {
+          method: "POST",
+          headers: headers, // Add the CSRF token to the headers
+          body: formData,  //JSON.stringify({"comment": comment}),            
+        }
+      ).then(response => {
+        const reader = response.body.getReader();
+        const contentLength = +response.headers.get('Content-Length');
+        let receivedLength = 0;
+
+        return new ReadableStream({
+          start(controller) {
+            function push() {
+              reader.read().then(({ done, value }) => {
+                if (done) {
+                  controller.close();
+                  progressBar.style.width = '100%';
+                  progressBar.setAttribute('aria-valuenow', 100);
+                  return;
+                }
+                receivedLength += value.length;
+                const progress = (receivedLength / contentLength) * 100;
+                progressBar.style.backgroundColor = '#3cd644'
+                progressBar.style.width = progress + '%';
+                progressBar.style.color = '#fff'
+                progressBar.textContent = progress + '%';
+                progressBar.setAttribute('aria-valuenow', progress);
+                controller.enqueue(value);
+                push();
+              });
+            }
+            push();
+          }
+        });
+      })
+        .then(stream => new Response(stream))
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          //console.log(data)
+
+          if (data.status_code === 400) {
+            console.log(String(data[0].message))
+            document.querySelector('.success-message').innerHTML = `<pre class="text-danger">Failed to save the project: ${String(data.message)}</pre>`;
+            consoleOutput.innerHTML += `<pre class="text-danger">${String(data.message)}</pre>`;
+          } else if (data.status_code === 200) {
+            //console.log(data)
+            document.querySelector('.success-message').innerHTML = `<pre class="text-success">${String(data.message)}</pre>`;
+            consoleOutput.innerHTML += `<pre class="text-success">${String(data.message)}</pre>`;
+          } else {
+            consoleOutput.innerHTML += `<pre class="text-danger">${String(data.message)}</pre>`;
+          }
+
+        }).catch((err) => {
+          console.log("Error: " + err)
+          document.querySelector('.success-message').innerHTML = `<pre class="text-danger">Failed to save the project: ${String(err)}</pre>`;
+          consoleOutput.innerHTML += `<pre class="text-danger">Failed to save the project: ${String(err)}</pre>`;
+
+          progressBar.style.backgroundColor = 'red'
+        })
+    };
+
+
+  });
+
+</script>
+{% endblock %}

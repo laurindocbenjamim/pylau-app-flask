@@ -1,0 +1,93 @@
+flask
+Flask-Cors
+gunicorn
+matplotlib
+pymysql
+#mysql-connector-python
+psycopg2
+#psycopg2-binary
+requests
+seaborn
+#flask_sqlalchemy
+pyjwt
+pyotp
+qrcode
+Flask-Mail
+flask-login
+flask-bcrypt
+Flask-SQLAlchemy
+flask-migrate
+Flask-WTF
+#flask-restful
+Flask-RESTful
+Flask-Session
+Flask-Admin
+Authlib
+# Flask JWT-token
+# pip install flask-jwt-extended
+flask-jwt-extended
+bootstrap-flask
+Flask-Caching
+flask-talisman
+pylint
+pytest
+coverage
+hvac #install vault
+pycryptodome
+geocoder
+sentry-sdk[flask]
+# pip install --upgrade sentry-sdk[flask]
+#
+bs4
+reportlab
+
+# AI libraries
+ibm-watsonx-ai
+ibm-watson>=6.1.0
+
+#pip install --upgrade openai
+openai
+httpx
+#pip install --upgrade pygame
+pygame
+#!pip install --upgrade PyPDF2[full]
+PyPDF2[full]
+# pip install quart
+quart
+#pip install Flask-Limiter
+Flask-Limiter
+#pip install bleach
+bleach
+#pip install Js2Py
+#Js2Py
+#python3 -m pip install pymongo
+#npm install mongodb
+#python -m pip install "pymongo[srv]"
+pymongo[srv]
+#pip install pymongo flask-pymongo
+flask-pymongo
+# pip install unidecode
+unidecode
+flask-seasurf
+
+sphinx
+WTForms
+googletrans
+gTTS
+pytube
+openai-whisper
+torch
+python-dotenv
+yfinance
+cachetools
+phonenumbers
+email-validator
+redis
+pymupdf
+python-docx
+#PyMuPDF
+pdfplumber
+pytesseract 
+pdf2image 
+pillow
+pdfkit
