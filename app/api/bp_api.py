@@ -1,6 +1,6 @@
 
 
-import os
+import os, json
 from flask import Blueprint
 
 from datetime import datetime
@@ -18,6 +18,7 @@ from app.api.market.stock_resource import StockResource
 from app.api.market.cryptocurrency_resource import CryptoCurrencyResource
 from app.api.storage.storage_resource import StorageResources
 from app.api.storage.download_docs_resource import DownloadDocsResources
+from app.api.json_factory import handle_ai_response_json
 
 from app.api.csrf_token import CSRFToken
 from app.configs_package import csrf
@@ -25,6 +26,7 @@ from app.models.extract_files_content import ExtractorFileContent
 from app.models.pdf_reader_factory import PdfReaderFactory
 from app.models.openai_api import OpenAiApi
 from app.package_prompts.cv_customiser_prompts import CvPrompts
+from app.models.file_factory import MyGeneralFileFactory
 from app.models.docx_factory import DocxFileFactory
 
 bp_api = Blueprint('api', __name__, url_prefix='/api')
@@ -75,13 +77,14 @@ def cv_customizer_with_chat_gpt(*, client_cv, job_requirement):
     prompt=CvPrompts()
     try:
         cv_optimization_prompt=prompt.get(job_description=job_requirement, cv_content=client_cv, id=1)
+        #cv_optimization_prompt= prompt.get_refined_prompt(job_description=job_requirement, cv_content=client_cv)
         optimise=cv_optimization_prompt.format(
                             job_description=job_requirement,
                             cv_content=client_cv
                         )
         openai_api = OpenAiApi()
-        status, response=openai_api.request_with_model_4(prompt=optimise)
-        return True, response
+        
+        return openai_api.request_with_model_4(prompt=optimise)
     except Exception as e:
         return False, str(e)
 
@@ -166,23 +169,47 @@ def cv_customizer():
                 return jsonify({"status":404, "error": f"CV optimisation failed. {str(optimized_cv)}"})
             
             try:
+                current_timestamp=datetime.now().strftime('%Y%m%d%H%M%S')
+
                 if not optimized_cv or optimized_cv=='':
                     return jsonify({"status":404, "error": f"Null CV optimisation. {str(optimized_cv)}"})
-                                
-                file_name=os.path.join(filepath,"optimized_cv.md")
-                with open(file_name, "w") as f:
-                    f.write(optimized_cv)
-                    
-                doc_filename=f'cv_optimised_{datetime.now().strftime('%Y%m%d%H%M%S')}'
-                pdf_filename=f'{doc_filename}.pdf'
-                new_file_path=docx.save_as_docx(optimized_cv=optimized_cv,file_path=filepath, filename=doc_filename)            
 
+                # Parse JSON string into a Python dictionary
+                json_response_parsed=optimized_cv# json.loads(optimized_cv)               
+                file_name=os.path.join(filepath,f'optimized_cv_{current_timestamp}.md')
+                file_name_docx_base64=os.path.join(filepath,f'optimized_cv_{current_timestamp}.docx')
+
+                # Creating saving  the plain text into JSON, MD and HTML files
+                file_factory=MyGeneralFileFactory()
+
+                json_cleaned = handle_ai_response_json(json_response_parsed)
+                file_factory.create(content=json_cleaned, filepath=os.path.join(filepath,f'optimized_cv_{current_timestamp}.json'), type_of='json')
+                #return jsonify({"status": 200, "message": "Your CV was optimised successfully!", "JSON": json_response_parsed})
+
+                file_factory.create(content=json_response_parsed, filepath=file_name, type_of='md')
+                
+                file_name_html=os.path.join(filepath,f'optimized_cv_{current_timestamp}.html')
+                
+                #file_factory.create(content=json_response_parsed['cv_in_plain_text_format'], filepath=file_name_html, type_of='html')
+                
+                #file_factory.create(content=json_response_parsed['cv_in_docx_format'], filepath=file_name_docx_base64, type_of='BASE64_ENCODED_STRING_DOCX')
+
+                
+                # Creating saving  the plain text into DOCX and PDF files
+                doc_filename=f'cv_optimised_{current_timestamp}'
+                pdf_filename=f'{doc_filename}.pdf'
+                new_file_path=docx.save_as_docx(optimized_cv=json_response_parsed,file_path=filepath, filename=doc_filename)            
+                
                 res=docx.docx_to_pdf(docx_path=new_file_path, pdf_path=os.path.join(filepath,pdf_filename))
                 
                 
                 return jsonify({"status": 200, "message": "Your CV was optimised successfully!", 
+                                "json": json_cleaned,
                                 "docx_file_path": f'api/files-storage/doc/download/{doc_filename}.docx',
-                                "pdf_file_path": f'api/files-storage/doc/download/{pdf_filename}'}), 200
+                                "pdf_file_path": f'api/files-storage/doc/download/{pdf_filename}',
+                                "file_name_html": f'api/files-storage/doc/download/{file_name_html}',
+                                "file_name_docx_base64": f'api/files-storage/doc/download/{file_name_docx_base64}',
+                                }), 200
             except Exception as e:
                 return jsonify({"status":400, "error": f"Failed to optimise the CV! {str(e)}"})
     else: 

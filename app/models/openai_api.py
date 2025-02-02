@@ -90,7 +90,7 @@ class OpenAiApi(object):
                             "content": "Task, Goal, or Current Prompt:\n" + prompt,
                         },
                     ],
-                    timeout=15  # Timeout after 15 seconds
+                    #timeout=30  # Timeout after 15 seconds
                 )
             return True, response.choices[0].message.content
         except Exception as e:
