@@ -34,11 +34,11 @@ def allowed_domains_to_files_route():
 
 
 
-cors = CORS(resources={
+"""cors = CORS(resources={
         r"/videos/post": {"origins": allowed_domains_to_upload_route()},
         r"/upload": {"origins": allowed_domains_to_upload_route()},
         r"/api/csrf-token/get": {"origins": allowed_domains_to_upload_route()},
         r"/api/upload": {"origins": allowed_domains_to_upload_route()},
         r"/api/files-storage": {"origins": allowed_domains_to_files_route()},
         r"/api/*": {"origins": allowed_domains_to_api_route()},
-    })
+    })"""

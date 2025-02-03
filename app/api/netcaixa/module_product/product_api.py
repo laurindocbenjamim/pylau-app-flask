@@ -2,7 +2,7 @@
 from flask.views import MethodView
 from flask import json, jsonify, request
 from .controller import validate_words
-from app import db
+from app.configs_package.modules.load_database import db
 
 
 class ProductAPI(MethodView):

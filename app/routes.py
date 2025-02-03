@@ -92,7 +92,7 @@ def load_routes(app, db, login_manager, limiter):
         return 
     """
 
-    from app.utils import execute_sql
+    from app.utils.executesql import execute_sql
 
     @app.route('/exec-sql')
     @cross_origin(methods=['GET'])

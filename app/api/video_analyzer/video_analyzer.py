@@ -1,8 +1,7 @@
 from app.dependencies import request, current_app, jsonify, Resource
 from app.api.upload_factory.file_upload import save_uploaded_file  # Import the file upload module
-from app import csrf_global
 
-#@csrf_global.exempt # This Exclude views from protection
+
 class VideoAnalyzerResource(Resource):
     def post(self):
 

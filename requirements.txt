@@ -26,6 +26,8 @@ Authlib
 # Flask JWT-token
 # pip install flask-jwt-extended
 flask-jwt-extended
+Flask-MethodView
+Flask-SeaSurf
 bootstrap-flask
 Flask-Caching
 flask-talisman
@@ -68,7 +70,7 @@ pymongo[srv]
 flask-pymongo
 # pip install unidecode
 unidecode
-flask-seasurf
+
 
 sphinx
 WTForms

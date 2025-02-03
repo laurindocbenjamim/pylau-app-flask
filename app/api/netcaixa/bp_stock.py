@@ -3,11 +3,11 @@
 from flask import Blueprint
 from flask_cors import CORS
 
-from .module_product.productModel import Product
+from app.api.netcaixa.module_product.productModel import Product
 
 bp_product = Blueprint('stock', __name__, url_prefix='/stock')
-CORS(bp_product)
-from .module_product.product_post_put_view import ProductView
+
+from app.api.netcaixa.module_product.product_post_put_view import ProductView
 from .module_product.product_delete_view import DeleteProductView
 from .module_product.productDiscountModel import ProductDiscount
 from .module_product.product_gets_view import ProductGetsView

@@ -22,20 +22,18 @@ from app.dependencies import Limiter
 from app.dependencies import PyMongo
 from app.dependencies import get_remote_address
 from app.dependencies import Api
+from app.api.auth.login_jwt_api import User, TokenBlocklist
 
 # Import the configuration classes
-from app.configs_package import DevelopmentConfig, TestingConfig, ProductionConfig, csrf, oauth, cache, limiter
+from app.configs_package import DevelopmentConfig, TestingConfig, ProductionConfig 
+from app.configs_package import csrf, jwt, oauth, cache, limiter, login_manager
 
 from app.configs_package.modules.load_database import init_db_server  # Import the database configuration
 from app.configs_package.modules.load_database import db
 from app.routes import load_routes
 from app.blue_prints import load_blueprints
-from app.utils.cors_police import allowed_domains_to_api_route
-from app.utils.cors_police import allowed_domains_to_upload_route
-from app.utils.cors_police import allowed_domains_to_files_route
+from app.utils.cors_police import allowed_domains_to_upload_route, allowed_domains_to_api_route, allowed_domains_to_files_route
 
-mongo_connection = None
-csrf_global = None
 # Create and configure the app
 app = Flask(__name__, instance_relative_config=True)
 #pp.config['REDIS_URL'] = "redis://localhost:6379/0"
@@ -44,6 +42,7 @@ app = Flask(__name__, instance_relative_config=True)
 #limiter = Limiter(key_func=get_remote_address, default_limits=["300/day", "200/hour"], storage_uri="redis://localhost:6379/0")
 #limiter = Limiter(key_func=get_remote_address, default_limits=["300/day", "200/hour"])
 
+#login_manager = LoginManager()
 """
 
 """
@@ -60,7 +59,7 @@ def create_app(JDBC="sqlite",test_config=None):
     app.config.update(
         SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
-        SESSION_COOKIE_SAMESITE='Lax',
+        #SESSION_COOKIE_SAMESITE='Lax',
         #PERMANENT_SESSION_LIFETIME=600,
     )
 
@@ -110,23 +109,25 @@ def create_app(JDBC="sqlite",test_config=None):
         r"/api/upload": {"origins": allowed_domains_to_upload_route()},
         r"/api/files-storage": {"origins": allowed_domains_to_files_route()},
         r"/api/*": {"origins": allowed_domains_to_api_route()},
-    })
-    global csrf_global
+        r"/api-auth/*": {"origins": allowed_domains_to_api_route ()},
+        #r"/api-auth/protected": {"origins": allowed_domains_to_api_route ()},
+    },supports_credentials=True)
+    
     #csrf = CSRFProtect(app=app)
-    #csrf_global=csrf
+   
     csrf.init_app(app=app)
-
-    #
+    jwt.init_app(app=app)
     oauth.init_app(app=app)
-
     # Apply security middlewares 
     app.wsgi_app = ProxyFix(app.wsgi_app)
-
-    #
     #cache = Cache(app)
     cache.init_app(app=app)
     #cacheQuizz = Cache(config={'CACHE_TYPE': 'CourseContentQuizz'})
     #cacheQuizz.init_app(app)
+    # Login Manager is needed for the the application 
+    # to be able to log in and log out users
+    
+    login_manager.init_app(app)
     #
     #Quart(app)
 
@@ -134,11 +135,8 @@ def create_app(JDBC="sqlite",test_config=None):
     #global mongo_connection # Convert the 'mongo_connection' variable to GLOBAL
     #mongo_connection = PyMongo(app)
    
-    # Login Manager is needed for the the application 
-    # to be able to log in and log out users
-
-    login_manager = LoginManager()
-    login_manager.init_app(app)
+    
+    
     #login_manager.login_view = 'auth.user.login'
 
     # import and call the database configuration
@@ -211,3 +209,23 @@ def create_app(JDBC="sqlite",test_config=None):
         dbs = connection.list_database_names()
         return jsonify(dbs)
     return app
+
+
+
+
+# JWT configuration
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return User.query.get(identity)
+
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload):
+    jti = jwt_payload["jti"]
+    token = TokenBlocklist.query.filter_by(jti=jti).first()
+    return token is not None
+
+# Login manager
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

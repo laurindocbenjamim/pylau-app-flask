@@ -1,21 +1,55 @@
 import os
 
+from datetime import timedelta
 from flask_wtf.csrf import CSRFProtect, generate_csrf
+from flask_jwt_extended import JWTManager
+from app.dependencies import LoginManager
 from flask_seasurf import SeaSurf  # CSRF Protection
 from authlib.integrations.flask_client import OAuth
 from app.dependencies import Cache, Limiter, get_remote_address
 
 csrf=CSRFProtect()
+# Apply JWT authentication
+jwt = JWTManager()
+login_manager = LoginManager()
 # Initialize CSRF protection
 #csrf = SeaSurf()
 oauth = OAuth()
 cache = Cache()
-limiter = Limiter(key_func=get_remote_address, default_limits=["300/day", "200/hour"])
+
+limiter = Limiter(key_func=get_remote_address, default_limits=["300 per day", "100 per hour"])
 
 class Config:
     DEBUG = True
     PROPAGATE_EXCEPTIONS = True
-    SESSION_TYPE= 'filesystem'
+    HTTP_ONLY=True
+    
+    SAME_SITE="Strict"
+    SESSION_TYPE= 'filesystem'    
+
+    SECRET_KEY= os.getenv('SECRET_KEY') # KEY GENERATED WITH secrets.token_urlsafe(32) 32 byts
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+
+    # Token locations
+    JWT_TOKEN_LOCATION = ['cookies', 'headers']
+    JWT_ACCESS_COOKIE_NAME = 'access_token'
+    # Cookie names
+    JWT_ACCESS_CSRF_COOKIE_NAME = 'csrf_access_token'
+    JWT_REFRESH_CSRF_COOKIE_NAME = 'csrf_refresh_token'
+    # Cookie settings
+    JWT_COOKIE_SECURE = True # Requires HTTPS in production
+    JWT_COOKIE_HTTPONLY = True # Prevent JavaScript access
+    JWT_COOKIE_SAMESITE = 'Lax' # Strict same-site policy
+    """
+    Strict to maximize security and avoid your JWTs being included in any cross-site requests.
+    Lax if your app has login flows that involve external sites (e.g., OAuth login).
+    """
+    JWT_SESSION_COOKIE = False  # Different from session cookies
+    JWT_CSRF_CHECK_FORM = True      # Enable CSRF protection for form submissions
+    # Expiration times
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
+
     WATSON_NP_API_URI = os.environ.get('WATSON_NP_API_URI') 
     WATSON_NP_API_KEY = os.environ.get('WATSON_NP_API_KEY')
     SMTP_HOST = os.environ.get('SMTP_HOST') 
@@ -29,6 +63,7 @@ class Config:
     SQLALCHEMY_POOL_PRE_PING = True
     MAX_CONTENT_LENGTH=50 * 1024 * 1024 # 16 MB limit for file uploads
     UPLOAD_FOLDER = 'uploads'
+    UPLOAD_FOLDER_TEMP = 'temp'
     FILES_FOLDER = 'files'
     UPLOAD_VIDEO_FOLDER= 'videos'
     UPLOAD_DOCS_FOLDER= 'docs'
@@ -54,6 +89,7 @@ class Config:
 CLASS  USED ON DEVELOPMENT MODE
 """
 class DevelopmentConfig(Config):
+ 
     DATABASE_URI = "sqlite:///dtuning.db"
 
      # Configuration for MongoDB
@@ -151,7 +187,7 @@ CLASS USED ON TEST MODE
 """
 class TestingConfig(Config):
     TESTING = True    
-   
+    
     DATABASE_URI = "sqlite:///dataframe.db"
     # Configuration for MongoDB
     user="root"
@@ -168,7 +204,7 @@ class TestingConfig(Config):
     SMTP_PORT = os.environ.get('SMTP_PORT')# 587 by default
     SMTP_USER = os.environ.get('SMTP_USER')
     SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD')
-    SECRET_KEY= os.getenv('SECRET_KEY') # KEY GENERATED WITH secrets.token_urlsafe(32) 32 byts
+    
     OTP_SECRET_KEY= os.getenv('OTP_SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
@@ -194,6 +230,4 @@ CLASS  USED ON PRODUCTION MODE
 """
 class ProductionConfig(Config):
     DATABASE_URI = 'mysql://user@localhost/foo'
-    UPLOAD_FOLDER = 'uploads'
-    FILES_FOLDER = 'files'
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'webm', 'mkv', 'avi'}
+    

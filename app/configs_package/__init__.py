@@ -2,7 +2,7 @@
 from .modules.app_conf import set_app_config
 
 from app.configs_package.modules.config import DevelopmentConfig, ProductionConfig, TestingConfig, generate_csrf
-from app.configs_package.modules.config import  csrf, oauth, cache, limiter
+from app.configs_package.modules.config import  csrf, jwt, oauth, cache, limiter, login_manager
 #from .modules.load_database import db, connect_to_db_server, init_db_server
 
 from .modules.jwt_config import generate_token as generate_jwt_token, is_user_token_expired,token_required, \

@@ -2,10 +2,10 @@
 
 from app.auth_package.module_sign_up_sub.model.users import Users
 from app.token_module import UserToken
-from app.configs_package.modules.load_database import init_db_server
-from flask_login import logout_user
-from markupsafe import escape
+from app.configs_package import csrf, jwt
+
 from app.package_video_analytic.bp_video_analytic import bp_video_analytic
+from app.api.auth.login_jwt_api import jwt_api_blueprint
 #from ...utils import __get_cookies, set_header_params
 
 def load_blueprints(app, db, login_manager, limiter):
@@ -13,6 +13,11 @@ def load_blueprints(app, db, login_manager, limiter):
 
     """
     
+    # Register the Blueprint
+    app.register_blueprint(jwt_api_blueprint, url_prefix='/api-auth')
+
+    # Exempt the Blueprint from CSRF protection
+    csrf.exempt(jwt_api_blueprint)
 
     # Integrating the sitemap 
     from app.utils.views.bp_sitemap import bp_sitemap

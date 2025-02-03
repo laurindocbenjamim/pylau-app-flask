@@ -86,7 +86,7 @@ def generate_token(user):
 
     token = None
     date_serialized = datetime.now(tz=timezone.utc) + timedelta(days=1)
-    secret_key = current_app.config['SECRET_KEY']
+    secret_key = current_app.config['JWT_SECRET_KEY']
 
     payload = {
         "user": str(user), 
@@ -118,7 +118,7 @@ def expire_user_token(user):
 
     token = None
     date_serialized = datetime.now(tz=timezone.utc) - timedelta(days=1)
-    secret_key = current_app.config['SECRET_KEY']
+    secret_key = current_app.config['JWT_SECRET_KEY']
 
     payload = {
         "user": str(user), 
@@ -147,7 +147,7 @@ def expire_user_token(user):
     return None
 
 def refresh_jwt_token(token):
-    secret_key = current_app.config['SECRET_KEY']
+    secret_key = current_app.config['JWT_SECRET_KEY']
     new_token = None
     try:
         set_logger_message(f"<<refresh_jwt_token method>> START TO TRY TO DECODE TOKEN")
@@ -207,7 +207,7 @@ def refresh_jwt_token(token):
 
 # This method forces the jwt user expiration token 
 def force_jwt_token_expiration(token):
-    secret_key = current_app.config['SECRET_KEY']
+    secret_key = current_app.config['JWT_SECRET_KEY']
     new_token = ''
     
     if not token or token is None or token == new_token:
@@ -246,7 +246,7 @@ def force_jwt_token_expiration(token):
         return True, ''
 
 def is_user_token_expired(token):
-    secret_key = current_app.config['SECRET_KEY'] 
+    secret_key = current_app.config['JWT_SECRET_KEY'] 
 
     if not token or token == '':
         return True, ''     
