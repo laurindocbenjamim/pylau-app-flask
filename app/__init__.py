@@ -22,7 +22,8 @@ from app.dependencies import Limiter
 from app.dependencies import PyMongo
 from app.dependencies import get_remote_address
 from app.dependencies import Api
-from app.api.auth.login_jwt_api import User, TokenBlocklist
+from app.api.auth.login_rest_api import User
+from app.api.auth.token_block_list import TokenBlocklist
 
 # Import the configuration classes
 from app.configs_package import DevelopmentConfig, TestingConfig, ProductionConfig 
@@ -158,6 +159,7 @@ def create_app(JDBC="sqlite",test_config=None):
     load_blueprints(app=app, db=db, login_manager=login_manager, limiter=limiter)
     
     
+
     # Create a sitemap route
     @app.route("/sitemap.xml")
     @cross_origin(methods=["GET"])
@@ -224,6 +226,19 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     jti = jwt_payload["jti"]
     token = TokenBlocklist.query.filter_by(jti=jti).first()
     return token is not None
+
+# CSRF error token handling
+@jwt.invalid_token_loader
+def invalid_token_callback(error):
+    return jsonify({"error": "Invalid token"}), 401
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    return jsonify({"error": "Token has expired"}), 401
+
+@jwt.unauthorized_loader
+def unauthorized_callback(error):
+    return jsonify({"error": "Missing authorization token"}), 401
 
 # Login manager
 @login_manager.user_loader

@@ -33,11 +33,14 @@ class Config:
     # Token locations
     JWT_TOKEN_LOCATION = ['cookies', 'headers']
     JWT_ACCESS_COOKIE_NAME = 'access_token'
+    JWT_ACCESS_COOKIE_PATH = '/'
+    JWT_REFRESH_COOKIE_PATH = '/api-auth/refresh'
+    JWT_COOKIE_CSRF_PROTECT = True
     # Cookie names
     JWT_ACCESS_CSRF_COOKIE_NAME = 'csrf_access_token'
     JWT_REFRESH_CSRF_COOKIE_NAME = 'csrf_refresh_token'
     # Cookie settings
-    JWT_COOKIE_SECURE = True # Requires HTTPS in production
+    JWT_COOKIE_SECURE = False # Requires HTTPS in production
     JWT_COOKIE_HTTPONLY = True # Prevent JavaScript access
     JWT_COOKIE_SAMESITE = 'Lax' # Strict same-site policy
     """

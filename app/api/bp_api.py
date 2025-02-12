@@ -28,6 +28,7 @@ from app.models.openai_api import OpenAiApi
 from app.package_prompts.cv_customiser_prompts import CvPrompts
 from app.models.file_factory import MyGeneralFileFactory
 from app.models.docx_factory import DocxFileFactory
+from app.api.auth.register_rest_api import ResgiterRestAPI
 
 bp_api = Blueprint('api', __name__, url_prefix='/api')
 

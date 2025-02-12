@@ -12,14 +12,17 @@ db = SQLAlchemy()
 
 # This function is used to initialize the database
 def init_db_server(app):
+
+    # This function is used to migrate the database
+    Migrate(app, db)
+    
      # Init the db
     db.init_app(app)
 
     with app.app_context():
         db.create_all()
 
-    # This function is used to migrate the database
-    Migrate(app, db)
+    
 
     
     

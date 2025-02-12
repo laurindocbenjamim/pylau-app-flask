@@ -12,25 +12,25 @@ seaborn
 pyjwt
 pyotp
 qrcode
-Flask-Mail
-flask-login
-flask-bcrypt
-Flask-SQLAlchemy
-flask-migrate
-Flask-WTF
+#Flask-Mail
+#flask-login
+#flask-bcrypt
+#Flask-SQLAlchemy
+#flask-migrate
+#Flask-WTF
 #flask-restful
-Flask-RESTful
-Flask-Session
-Flask-Admin
+#Flask-RESTful
+#Flask-Session
+#Flask-Admin
 Authlib
 # Flask JWT-token
 # pip install flask-jwt-extended
-flask-jwt-extended
-Flask-MethodView
-Flask-SeaSurf
-bootstrap-flask
-Flask-Caching
-flask-talisman
+#flask-jwt-extended
+#Flask-MethodView
+#Flask-SeaSurf
+#bootstrap-flask
+#Flask-Caching
+#flask-talisman
 pylint
 pytest
 coverage
@@ -57,7 +57,7 @@ PyPDF2[full]
 # pip install quart
 quart
 #pip install Flask-Limiter
-Flask-Limiter
+#Flask-Limiter
 #pip install bleach
 bleach
 #pip install Js2Py
@@ -67,10 +67,9 @@ bleach
 #python -m pip install "pymongo[srv]"
 pymongo[srv]
 #pip install pymongo flask-pymongo
-flask-pymongo
+#flask-pymongo
 # pip install unidecode
 unidecode
-
 
 sphinx
 WTForms

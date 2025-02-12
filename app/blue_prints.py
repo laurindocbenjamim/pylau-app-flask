@@ -5,7 +5,11 @@ from app.token_module import UserToken
 from app.configs_package import csrf, jwt
 
 from app.package_video_analytic.bp_video_analytic import bp_video_analytic
-from app.api.auth.login_jwt_api import jwt_api_blueprint
+from app.api.auth.login_rest_api import login_rest_api_bp
+from app.api.auth.register_rest_api import register_rest_api_bp
+from app.api.auth.refresh_token_view import refresh_token_bp
+from app.api.auth.user_profile_rest_api import user_profile_rest_api_bp
+from app.api.auth.logout_rest_api import logout_rest_api_bp
 #from ...utils import __get_cookies, set_header_params
 
 def load_blueprints(app, db, login_manager, limiter):
@@ -14,10 +18,14 @@ def load_blueprints(app, db, login_manager, limiter):
     """
     
     # Register the Blueprint
-    app.register_blueprint(jwt_api_blueprint, url_prefix='/api-auth')
+    login_rest_api_bp.register_blueprint(refresh_token_bp)
+    login_rest_api_bp.register_blueprint(register_rest_api_bp)
+    login_rest_api_bp.register_blueprint(user_profile_rest_api_bp)
+    login_rest_api_bp.register_blueprint(logout_rest_api_bp)
+    app.register_blueprint(login_rest_api_bp, url_prefix='/api-auth')
 
     # Exempt the Blueprint from CSRF protection
-    csrf.exempt(jwt_api_blueprint)
+    csrf.exempt(login_rest_api_bp)
 
     # Integrating the sitemap 
     from app.utils.views.bp_sitemap import bp_sitemap

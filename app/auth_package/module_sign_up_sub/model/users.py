@@ -12,7 +12,7 @@ from werkzeug.security import check_password_hash
 
 from datetime import datetime, timedelta, timezone
 from app.configs_package.modules.load_database import db
-from ....configs_package.modules.logger_config import get_message as set_logger_message
+from app.configs_package.modules.logger_config import get_message as set_logger_message
 #datetime.now(tz=timezone.utc)
 
 class Users(UserMixin, db.Model):
